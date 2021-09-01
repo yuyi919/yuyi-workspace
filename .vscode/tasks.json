@@ -1,0 +1,11 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+    {
+      "type": "shell",
+      "command": ["rush version --bump --version-policy shared"],
+      "label": "rush: bump shared packages",
+      "detail": "rush version --bump --version-policy shared"
+    }
+  ]
+}
