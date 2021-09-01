@@ -1,0 +1,49 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`printNodes base use 1`] = `
+"
+import { map } from \\"lodash\\"
+export function test() {
+    let value = 0, target = {};
+    const result = map([1, 2, 3, 4, 5], (i, index, arr) => {
+        let { value: value2, v: { result: result1 } } = { value, v: { result } };
+        value += i + index + arr[index];
+        return map([1, 2, 3, 4, 5], function (i, index, arr) {
+            value += i + index + arr[index];
+            value2++;
+            return i + index + arr[index] + value2;
+        });
+    });
+    return [value, result, target];
+}"
+`;
+
+exports[`printNodes ts block 1`] = `
+"import { map } from \\"lodash\\";
+export function test() {
+    let value = 0, target = {};
+    let target_1 = [1, 2, 3, 4, 5], callbackfn__Macro = (i, index, arr) => {
+        let { value: value2, v: { result: result1 } } = { value, v: { result } };
+        let target = [1, 2, 3, 4, 5], callbackfn__Macro = function (i, index, arr) {
+            value += i + index + arr[index];
+            value2++;
+            return i + index + arr[index] + value2;
+        };
+        let i = -1, length = target.length - 1, item;
+        value += i + index + arr[index];
+        while (i < len) {
+            item = target[++i];
+            callbackfn__Macro(item, i, target);
+        }
+        return null;
+    };
+    let i = -1, length = target.length - 1, item;
+    while (i < len) {
+        item = target[++i];
+        callbackfn__Macro(item, i, target);
+    }
+    const result = null;
+    return [value, result, target];
+}
+"
+`;

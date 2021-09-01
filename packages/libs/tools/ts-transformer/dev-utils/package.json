@@ -1,0 +1,41 @@
+{
+  "name": "@yuyi919-ts-transformer/dev-utils",
+  "private": true,
+  "version": "0.0.2",
+  "keywords": [
+    "yuyi919",
+    "internal",
+    "internal-ts",
+    "internal-internal-ts-transformer",
+    "internal-internal-ts-internal-internal-ts-transformer-dev",
+    "internal-internal-ts-internal-internal-ts-transformer-internal-internal-ts-internal-internal-ts-transformer-dev-utils"
+  ],
+  "main": "dist/index.js",
+  "module": "lib/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "heft build --clean",
+    "dev": "heft build --watch",
+    "clean": "tsc --build --clean && rimraf ./dist && rimraf ./lib",
+    "test": "heft test",
+    "test:watch": "heft test --watch"
+  },
+  "sideEffect": false,
+  "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
+  "files": [
+    "dist",
+    "lib",
+    "README.md"
+  ],
+  "devDependencies": {
+    "@yuyi919/workspace-base-rig": "workspace:1.2.5",
+    "typescript": "4.1.2",
+    "jest": "~27.1.0"
+  },
+  "dependencies": {
+    "fs-extra": "^10.0.0"
+  }
+}

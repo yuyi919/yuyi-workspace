@@ -1,0 +1,20 @@
+{
+  "name": "@yuyi919/jest-extra",
+  "version": "0.0.1",
+  "main": "dist/index.js",
+  "types": "./index.d.ts",
+  "scripts": {
+    "build": ""
+  },
+  "devDependencies": {
+    "typescript": "4.1.2",
+    "@rushstack/heft-node-rig": "~1.2.5",
+    "@rushstack/heft": "~0.36.4",
+    "jest": "~27.1.0",
+    "ts-jest": "~27.0.5",
+    "@types/node": "~16.7.2",
+    "@types/heft-jest": "1.0.2"
+  },
+  "dependencies": {
+  }
+}

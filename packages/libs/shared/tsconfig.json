@@ -1,0 +1,10 @@
+{
+  "extends": "./node_modules/@yuyi919/workspace-base-rig/profiles/default/tsconfig-base.json",
+  "compilerOptions": {
+    "rootDir": "./src"
+  },
+  "references": [
+    { "path": "./packages/utils/tsconfig.json" },
+    { "path": "./packages/types/tsconfig.json" }
+  ]
+}

@@ -1,0 +1,18 @@
+{
+  "root": "apps\\shared\\workspace-helper-e2e",
+  "projectType": "application",
+  "sourceRoot": "apps\\shared\\workspace-helper-e2e/src",
+  "targets": {
+    "e2e": {
+      "executor": "@nrwl/nx-plugin:e2e",
+      "options": {
+        "target": "shared-workspace-helper:build",
+        "npmPackageName": "@yuyi919/workspace-helper",
+        "pluginOutputPath": "dist/libs/shared/workspace-helper",
+        "jestConfig": "apps/shared/workspace-helper-e2e/jest.config.js"
+      }
+    }
+  },
+  "tags": [],
+  "implicitDependencies": ["shared-workspace-helper"]
+}

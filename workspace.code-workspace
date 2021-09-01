@@ -1,0 +1,28 @@
+{
+	"folders": [
+    {
+      "name": "✨ yuyi919",
+      "path": "."
+    },
+    {
+      "name": "📦 @yuyi919/workspace",
+      "path": "packages"
+    },
+    {
+      "name": "📦 @yuyi919/workspace-base-rig",
+      "path": "packages\\libs\\tools\\workspace-base-rig"
+    },
+    {
+      "name": "⚙️ @yuyi919/nx-plugin-workspace-helper",
+      "path": "tools\\helper"
+    },
+    {
+      "name": "⚙️ @yuyi919/jest-extra",
+      "path": "tools\\jest"
+    }
+  ],
+  "settings": {
+    "eslint.packageManager": "pnpm",
+    "typescript.tsdk": "📦 @yuyi919\\workspace\\node_modules\\typescript\\lib"
+  }
+}

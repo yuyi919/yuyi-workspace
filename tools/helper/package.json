@@ -1,0 +1,44 @@
+{
+  "name": "@yuyi919/nx-plugin-workspace-helper",
+  "version": "0.0.1",
+  "main": "src/index.js",
+  "generators": "./generators.json",
+  "executors": "./executors.json",
+  "scripts": {
+    "build": "heft build --clean",
+    "dev": "heft build --watch",
+    "test": "heft test",
+    "test:watch": "heft test --watch"
+  },
+  "dependencies": {
+    "@angular-devkit/architect": "^0.1201.1",
+    "@angular-devkit/core": "^12.1.1",
+    "@angular-devkit/schematics": "^12.1.1",
+    "@nrwl/cli": "12.5.8",
+    "@nrwl/devkit": "12.5.8",
+    "@nrwl/node": "12.5.8",
+    "@nrwl/tao": "12.5.8",
+    "@nrwl/nx-plugin": "12.5.8",
+    "@nrwl/workspace": "12.5.8",
+    "@types/heft-jest": "1.0.2",
+    "@types/node": "~16.7.2",
+    "@yuyi919/workspace-base-rig": "workspace:1.2.5",
+    "fs-extra": "^10.0.0",
+    "lodash": "4.17.21",
+    "prettier": "^2.3.1",
+    "rxjs": "~6.6.3",
+    "jest": "~27.1.0",
+    "ts-jest": "~27.0.5",
+    "@types/fs-extra": "~9.0.12",
+    "comment-json": "~4.1.1"
+  },
+  "devDependencies": {
+    "@types/lodash": "^4.14.171",
+    "typescript": "4.1.2",
+    "tslib": "~2.3.1"
+  },
+  "peerDependencies": {
+    "tsdx": "^0.14.1"
+  },
+  "typings": "./src/index.d.ts"
+}

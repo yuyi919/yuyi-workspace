@@ -1,0 +1,67 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`test testResolve 1`] = `
+Object {
+  "comments": "测试0",
+  "tags": Array [],
+}
+`;
+
+exports[`test testResolve 2`] = `
+Object {
+  "comments": "测试1",
+  "tags": Array [],
+}
+`;
+
+exports[`test testResolve 3`] = `
+Object {
+  "comments": "测试2",
+  "tags": Array [],
+}
+`;
+
+exports[`test testResolve 4`] = `
+Array [
+  Array [
+    "comment\\\\test\\\\testFunction.js",
+    "export function CREATE() {
+    return {};
+}
+export const result = 1;
+",
+  ],
+  Array [
+    "comment\\\\test\\\\testFunction.d.ts",
+    "export declare function CREATE(): CREATE;
+export declare type CREATE = {};
+export declare const result = 1;
+",
+  ],
+  Array [
+    "comment\\\\test\\\\index.js",
+    "import { CREATE } from \\"./testFunction\\";
+export const a = {};
+",
+  ],
+  Array [
+    "comment\\\\test\\\\index.d.ts",
+    "import { CREATE } from \\"./testFunction\\";
+export declare type Type = 
+/**
+ * 测试0
+ */
+0
+/**
+ * 测试1
+ */
+ | 1
+/**
+ * 测试2
+ */
+ | 2;
+export declare const a: CREATE;
+",
+  ],
+]
+`;

@@ -1,0 +1,182 @@
+// DO NOT ADD COMMENTS IN THIS FILE.  They will be lost when the Rush tool resaves it.
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/rush/v5/approved-packages.schema.json",
+  "packages": [
+    {
+      "name": "@angular-devkit/architect",
+      "allowedCategories": [ "production", "tools" ]
+    },
+    {
+      "name": "@angular-devkit/core",
+      "allowedCategories": [ "production", "tools" ]
+    },
+    {
+      "name": "@angular-devkit/schematics",
+      "allowedCategories": [ "production", "tools" ]
+    },
+    {
+      "name": "@microsoft/api-extractor",
+      "allowedCategories": [ "tools" ]
+    },
+    {
+      "name": "@nrwl/cli",
+      "allowedCategories": [ "production", "tools" ]
+    },
+    {
+      "name": "@nrwl/devkit",
+      "allowedCategories": [ "production", "tools" ]
+    },
+    {
+      "name": "@nrwl/eslint-plugin-nx",
+      "allowedCategories": [ "tools" ]
+    },
+    {
+      "name": "@nrwl/jest",
+      "allowedCategories": [ "tools" ]
+    },
+    {
+      "name": "@nrwl/node",
+      "allowedCategories": [ "production", "tools" ]
+    },
+    {
+      "name": "@nrwl/nx-plugin",
+      "allowedCategories": [ "production", "tools" ]
+    },
+    {
+      "name": "@nrwl/tao",
+      "allowedCategories": [ "production", "tools" ]
+    },
+    {
+      "name": "@nrwl/workspace",
+      "allowedCategories": [ "production", "tools" ]
+    },
+    {
+      "name": "@rushstack/heft",
+      "allowedCategories": [ "production", "tools" ]
+    },
+    {
+      "name": "@rushstack/heft-jest-plugin",
+      "allowedCategories": [ "tools" ]
+    },
+    {
+      "name": "@rushstack/heft-node-rig",
+      "allowedCategories": [ "production", "tools" ]
+    },
+    {
+      "name": "@typescript-eslint/eslint-plugin",
+      "allowedCategories": [ "tools" ]
+    },
+    {
+      "name": "@typescript-eslint/parser",
+      "allowedCategories": [ "tools" ]
+    },
+    {
+      "name": "@yuyi919-tsmacro/inline-loop.tsmacro",
+      "allowedCategories": [ "production" ]
+    },
+    {
+      "name": "@yuyi919/jest-extra",
+      "allowedCategories": [ "tools" ]
+    },
+    {
+      "name": "@yuyi919/nx-plugin-workspace-helper",
+      "allowedCategories": [ "tools" ]
+    },
+    {
+      "name": "@yuyi919/shared-constant",
+      "allowedCategories": [ "production" ]
+    },
+    {
+      "name": "@yuyi919/shared-types",
+      "allowedCategories": [ "production" ]
+    },
+    {
+      "name": "@yuyi919/shared-utils",
+      "allowedCategories": [ "production" ]
+    },
+    {
+      "name": "@yuyi919/ts-transformer-awesome",
+      "allowedCategories": [ "production" ]
+    },
+    {
+      "name": "@yuyi919/ts-transformer-inline-macro",
+      "allowedCategories": [ "production" ]
+    },
+    {
+      "name": "@yuyi919/workspace-base-rig",
+      "allowedCategories": [ "production", "tools" ]
+    },
+    {
+      "name": "comment-json",
+      "allowedCategories": [ "production" ]
+    },
+    {
+      "name": "csstype",
+      "allowedCategories": [ "production" ]
+    },
+    {
+      "name": "eslint",
+      "allowedCategories": [ "tools" ]
+    },
+    {
+      "name": "eslint-config-prettier",
+      "allowedCategories": [ "tools" ]
+    },
+    {
+      "name": "fs-extra",
+      "allowedCategories": [ "production", "tools" ]
+    },
+    {
+      "name": "jest",
+      "allowedCategories": [ "production", "tools" ]
+    },
+    {
+      "name": "lodash",
+      "allowedCategories": [ "production", "tools" ]
+    },
+    {
+      "name": "lodash-es",
+      "allowedCategories": [ "production" ]
+    },
+    {
+      "name": "minimatch",
+      "allowedCategories": [ "production" ]
+    },
+    {
+      "name": "prettier",
+      "allowedCategories": [ "production", "tools" ]
+    },
+    {
+      "name": "rxjs",
+      "allowedCategories": [ "production", "tools" ]
+    },
+    {
+      "name": "ts-expose-internals",
+      "allowedCategories": [ "production", "tools" ]
+    },
+    {
+      "name": "ts-jest",
+      "allowedCategories": [ "production", "tools" ]
+    },
+    {
+      "name": "ts-node",
+      "allowedCategories": [ "production", "tools" ]
+    },
+    {
+      "name": "ts-patch",
+      "allowedCategories": [ "production", "tools" ]
+    },
+    {
+      "name": "tsdx",
+      "allowedCategories": [ "production", "tools" ]
+    },
+    {
+      "name": "tslib",
+      "allowedCategories": [ "production", "tools" ]
+    },
+    {
+      "name": "typescript",
+      "allowedCategories": [ "production", "tools" ]
+    }
+  ]
+}

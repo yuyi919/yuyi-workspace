@@ -1,0 +1,7 @@
+{
+  "extends": "./node_modules/@yuyi919/workspace-base-rig/.eslintrc.json",
+  "ignorePatterns": [],
+  "rules": {
+    "@nrwl/nx/enforce-module-boundaries": "off"
+  }
+}

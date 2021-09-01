@@ -1,0 +1,53 @@
+{
+  "name": "@yuyi919-ts-transformer/ast-utils",
+  "private": true,
+  "version": "0.0.2",
+  "keywords": [
+    "yuyi919",
+    "internal",
+    "internal-ts",
+    "internal-internal-ts-transformer",
+    "internal-internal-ts-internal-internal-ts-transformer-ast",
+    "internal-internal-ts-internal-internal-ts-transformer-internal-internal-ts-internal-internal-ts-transformer-ast-utils"
+  ],
+  "main": "dist/index.js",
+  "module": "lib/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "heft build --clean",
+    "dev": "heft build --watch",
+    "clean": "tsc --build --clean && rimraf ./dist && rimraf ./lib",
+    "test": "heft test",
+    "test:watch": "heft test --watch"
+  },
+  "sideEffect": false,
+  "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
+  "devDependencies": {
+    "@types/minimatch": "^3.0.5",
+    "@yuyi919/shared-types": "workspace:0.0.4",
+    "@yuyi919/workspace-base-rig": "workspace:1.2.5",
+    "typescript": "4.1.2",
+    "typescript-next": "npm:typescript@4.3.5",
+    "ts-node": "~9.1.1",
+    "ts-patch": "^1.4.1"
+  },
+  "files": [
+    "dist",
+    "lib",
+    "README.md"
+  ],
+  "dependencies": {
+    "fs-extra": "^10.0.0",
+    "lodash": "4.17.21",
+    "lodash-es": "4.17.21",
+    "minimatch": "^3.0.4",
+    "ts-expose-internals": "^4.3.2"
+  },
+  "peerDependencies": {
+    "ts-node": "~9.1.1",
+    "ts-patch": "^1.4.1"
+  }
+}

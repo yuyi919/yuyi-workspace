@@ -1,0 +1,34 @@
+{
+  "$schema": "./node_modules/@angular-devkit/schematics/collection-schema.json",
+  "name": "internal-nx-plugins-lerna",
+  "version": "0.0.20",
+  "extends": ["@nrwl/workspace"],
+  "generators": {
+    "library": {
+      "factory": "./src/generators/library/index",
+      "schema": "./src/generators/library/schema.json",
+      "aliases": ["lib"],
+      "description": "Create a library"
+    },
+    "internal-nx-plugins-lerna": {
+      "factory": "./src/schematics/internal-nx-plugins-lerna/schematic",
+      "schema": "./src/schematics/internal-nx-plugins-lerna/schema.json",
+      "description": "internal-nx-plugins-lerna schematic"
+    },
+    "test": {
+      "factory": "./src/generators/test/generator",
+      "schema": "./src/generators/test/schema.json",
+      "description": "test generator"
+    },
+    "format": {
+      "factory": "./src/generators/format/generator",
+      "schema": "./src/generators/format/schema.json",
+      "description": "标准化lerna项目"
+    },
+    "docker-file": {
+      "factory": "./src/generators/docker-file/generator",
+      "schema": "./src/generators/docker-file/schema.json",
+      "description": "生成docker文件"
+    }
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "extends": "./node_modules/@yuyi919/workspace-base-rig/profiles/default/tsconfig-base.json",
+  "compilerOptions": {
+    "module": "commonjs",
+    "outDir": "./src",
+    "rootDir": "./source",
+    "types": ["heft-jest", "node", "fs-extra"],
+    "allowSyntheticDefaultImports": true,
+    "declaration": true,
+    "skipLibCheck": true
+  },
+  "include": ["source/**/*.ts", "source/**/*.json"]
+}

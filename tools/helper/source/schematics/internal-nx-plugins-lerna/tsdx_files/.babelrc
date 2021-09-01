@@ -1,0 +1,16 @@
+{
+  "presets": [
+    [
+      "@yuyi919/build-tools/babel/ts",
+      {}
+    ]
+  ],
+  "plugins": [
+    [
+      "@babel/plugin-proposal-class-properties",
+      {
+        "loose": true
+      }
+    ]
+  ]
+}

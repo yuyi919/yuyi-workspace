@@ -1,0 +1,49 @@
+{
+  "name": "@yuyi919/workspace",
+  "version": "0.0.32",
+  "private": true,
+  "scripts": {
+    "build": "",
+    "dev": "",
+    "test": "",
+    "test:watch": "",
+    "prepare": "ts-patch install -s",
+    "clean": "rimraf **/*.build.log && rimraf **/.rush && rimraf **/.heft"
+  },
+  "dependencies": {
+    "@angular-devkit/architect": "^0.1201.1",
+    "@angular-devkit/core": "^12.1.1",
+    "@angular-devkit/schematics": "^12.1.1",
+    "@nrwl/cli": "12.5.8",
+    "@nrwl/devkit": "12.5.8",
+    "@nrwl/eslint-plugin-nx": "12.5.8",
+    "@nrwl/node": "12.5.8",
+    "@nrwl/nx-plugin": "12.5.8",
+    "@nrwl/tao": "12.5.8",
+    "@nrwl/workspace": "12.5.8",
+    "@types/heft-jest": "1.0.2",
+    "@types/lodash": "^4.14.171",
+    "@types/node": "~16.7.2",
+    "@typescript-eslint/eslint-plugin": "4.19.0",
+    "@typescript-eslint/parser": "4.19.0",
+    "@yuyi919/nx-plugin-workspace-helper": "workspace:0.0.1",
+    "@yuyi919/workspace-base-rig": "workspace:1.2.5",
+    "eslint": "~7.30.0",
+    "eslint-config-prettier": "8.1.0",
+    "fs-extra": "^10.0.0",
+    "jest": "~27.1.0",
+    "lodash": "4.17.21",
+    "prettier": "^2.3.1",
+    "rxjs": "~6.6.3",
+    "ts-jest": "~27.0.5",
+    "ts-patch": "^1.4.1",
+    "tslib": "~2.3.1",
+    "typescript": "4.1.2"
+  },
+  "devDependencies": {
+    "@nrwl/jest": "12.5.8"
+  },
+  "peerDependencies": {
+    "tsdx": "^0.14.1"
+  }
+}

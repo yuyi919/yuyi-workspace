@@ -1,0 +1,64 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`test 具名导入: named 1`] = `
+Array [
+  Array [
+    "macro-resolver\\\\test\\\\importSource.js",
+    "export function CREATE() {
+    return {};
+}
+export const result = 1;
+",
+  ],
+  Array [
+    "macro-resolver\\\\test\\\\importSource.d.ts",
+    "export declare function CREATE(): {};
+export declare const result = 1;
+",
+  ],
+  Array [
+    "macro-resolver\\\\test\\\\named.js",
+    "import { result } from \\"./importSource\\";
+export const a = {};
+export { result };
+",
+  ],
+  Array [
+    "macro-resolver\\\\test\\\\named.d.ts",
+    "import { result } from \\"./importSource\\";
+export declare const a: {};
+export { result };
+",
+  ],
+]
+`;
+
+exports[`test 命名空间导入 1`] = `
+Array [
+  Array [
+    "macro-resolver\\\\test\\\\importSource.js",
+    "export function CREATE() {
+    return {};
+}
+export const result = 1;
+",
+  ],
+  Array [
+    "macro-resolver\\\\test\\\\importSource.d.ts",
+    "export declare function CREATE(): {};
+export declare const result = 1;
+",
+  ],
+  Array [
+    "macro-resolver\\\\test\\\\namespaced.js",
+    "import * as T from \\"./importSource\\";
+export const a = {};
+",
+  ],
+  Array [
+    "macro-resolver\\\\test\\\\namespaced.d.ts",
+    "export declare const a: {};
+",
+  ],
+]
+`;

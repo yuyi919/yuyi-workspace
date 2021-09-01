@@ -1,0 +1,56 @@
+{
+  "npmScope": "yuyi919",
+  "affected": {
+    "defaultBase": "master"
+  },
+  "implicitDependencies": {
+    "package.json": {
+      "dependencies": "*",
+      "devDependencies": "*"
+    },
+    ".eslintrc.json": "*"
+  },
+  "tasksRunnerOptions": {
+    "default": {
+      "runner": "@nrwl/workspace/tasks-runners/default",
+      "options": {
+        "cacheableOperations": ["build", "lint", "test", "e2e"]
+      }
+    }
+  },
+  "targetDependencies": {
+    "build": [
+      {
+        "target": "build",
+        "projects": "dependencies"
+      }
+    ]
+  },
+  "projects": {
+    "shared": {
+      "tags": ["lerna-package", "shared"]
+    },
+    "shared-constant": {
+      "tags": ["lerna-package", "shared", "constant"]
+    },
+    "shared-decorator": {
+      "tags": ["shared", "decorator"]
+    },
+    "shared-types": {
+      "tags": ["lerna-package", "shared", "types"]
+    },
+    "shared-utils": {
+      "tags": ["lerna-package", "shared", "utils"]
+    },
+    "ts-transformer-ast-utils": {
+      "tags": ["lerna-package", "internal", "ts-transformer", "ast-utils"]
+    },
+    "ts-transformer-dev-utils": {
+      "tags": ["lerna-package", "internal", "ts-transformer", "dev-utils"]
+    }
+  },
+  "workspaceLayout": {
+    "appsDir": "apps",
+    "libsDir": "libs"
+  }
+}
