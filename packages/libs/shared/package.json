@@ -1,6 +1,5 @@
 {
   "name": "@yuyi919/shared",
-  "private": true,
   "version": "0.0.35",
   "license": "MIT",
   "main": "dist/index.js",
