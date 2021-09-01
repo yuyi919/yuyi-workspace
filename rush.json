@@ -497,7 +497,8 @@
     {
       "packageName": "@yuyi919/shared",
       "projectFolder": "packages/libs/shared",
-      "reviewCategory": "production"
+      "reviewCategory": "production",
+      "shouldPublish": true
     },
     {
       "packageName": "@yuyi919/shared-constant",
