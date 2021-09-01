@@ -1,6 +1,5 @@
 {
   "name": "@yuyi919/shared-utils",
-  "private": true,
   "version": "0.0.35",
   "main": "dist/index.js",
   "module": "lib/index.js",

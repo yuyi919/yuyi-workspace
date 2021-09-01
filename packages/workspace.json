@@ -238,33 +238,33 @@
       }
     },
     "shared-decorator": {
-      "root": "libs/shared/decorator",
-      "sourceRoot": "libs/shared/decorator/src",
+      "root": "libs/shared/packages/decorator",
+      "sourceRoot": "libs/shared/packages/decorator/src",
       "projectType": "library",
       "targets": {
         "build": {
           "executor": "@nrwl/node:package",
           "outputs": ["{options.outputPath}"],
           "options": {
-            "outputPath": "dist/libs/shared/decorator",
-            "tsConfig": "libs/shared/decorator/tsconfig.lib.json",
-            "packageJson": "libs/shared/decorator/package.json",
-            "main": "libs/shared/decorator/src/index.ts",
-            "assets": ["libs/shared/decorator/*.md"],
+            "outputPath": "dist/libs/shared/packages/decorator",
+            "tsConfig": "libs/shared/packages/decorator/tsconfig.lib.json",
+            "packageJson": "libs/shared/packages/decorator/package.json",
+            "main": "libs/shared/packages/decorator/src/index.ts",
+            "assets": ["libs/shared/packages/decorator/*.md"],
             "srcRootForCompilationRoot": "./dist"
           }
         },
         "lint": {
           "executor": "@nrwl/linter:eslint",
           "options": {
-            "lintFilePatterns": ["libs/shared/decorator/**/*.ts"]
+            "lintFilePatterns": ["libs/shared/packages/decorator/**/*.ts"]
           }
         },
         "test": {
           "executor": "@nrwl/jest:jest",
-          "outputs": ["coverage/libs/shared/decorator"],
+          "outputs": ["coverage/libs/shared/packages/decorator"],
           "options": {
-            "jestConfig": "libs/shared/decorator/jest.config.js",
+            "jestConfig": "libs/shared/packages/decorator/jest.config.js",
             "passWithNoTests": true
           }
         }

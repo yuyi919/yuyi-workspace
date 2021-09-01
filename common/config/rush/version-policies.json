@@ -99,4 +99,14 @@
   // 
   //   // "includeEmailInChangeFile": true
   // }
+  {
+    "definitionName": "individualVersion",
+    "policyName": "shared"
+  }, {
+    "policyName": "lockstep",
+    "definitionName": "lockStepVersion",
+    "version": "0.0.39",
+    "nextBump": "patch",
+    "mainProject": "@yuyi919/shared"
+  }
 ]

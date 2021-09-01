@@ -498,27 +498,31 @@
       "packageName": "@yuyi919/shared",
       "projectFolder": "packages/libs/shared",
       "reviewCategory": "production",
-      "shouldPublish": true
+      "versionPolicyName": "shared"
     },
     {
       "packageName": "@yuyi919/shared-constant",
       "projectFolder": "packages/libs/shared/packages/constant",
-      "reviewCategory": "production"
+      "reviewCategory": "production",
+      "versionPolicyName": "shared"
     },
     {
       "packageName": "@yuyi919/shared-decorator",
-      "projectFolder": "packages/libs/shared/decorator",
-      "reviewCategory": "production"
+      "projectFolder": "packages/libs/shared/packages/decorator",
+      "reviewCategory": "production",
+      "versionPolicyName": "shared"
     },
     {
       "packageName": "@yuyi919/shared-types",
       "projectFolder": "packages/libs/shared/packages/types",
-      "reviewCategory": "production"
+      "reviewCategory": "production",
+      "versionPolicyName": "shared"
     },
     {
       "packageName": "@yuyi919/shared-utils",
       "projectFolder": "packages/libs/shared/packages/utils",
-      "reviewCategory": "production"
+      "reviewCategory": "production",
+      "versionPolicyName": "shared"
     },
     {
       "packageName": "@yuyi919/workspace",
