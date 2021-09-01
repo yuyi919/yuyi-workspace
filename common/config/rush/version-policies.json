@@ -107,7 +107,7 @@
   {
     "policyName": "lockstep",
     "definitionName": "lockStepVersion",
-    "version": "0.0.36",
+    "version": "0.1.0",
     "nextBump": "patch",
     "mainProject": "@yuyi919/shared"
   }
