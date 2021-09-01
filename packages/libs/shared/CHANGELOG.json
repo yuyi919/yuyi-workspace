@@ -1,0 +1,17 @@
+{
+  "name": "@yuyi919/shared",
+  "entries": [
+    {
+      "version": "0.0.36",
+      "tag": "@yuyi919/shared_v0.0.36",
+      "date": "Wed, 01 Sep 2021 09:00:35 GMT",
+      "comments": {
+        "patch": [
+          {
+            "comment": " "
+          }
+        ]
+      }
+    }
+  ]
+}

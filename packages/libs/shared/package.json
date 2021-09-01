@@ -1,6 +1,6 @@
 {
   "name": "@yuyi919/shared",
-  "version": "0.0.35",
+  "version": "0.0.36",
   "license": "MIT",
   "main": "dist/index.js",
   "module": "lib/index.js",
