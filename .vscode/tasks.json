@@ -3,9 +3,19 @@
 	"tasks": [
     {
       "type": "shell",
-      "command": ["rush version --bump --version-policy shared"],
+      "command": [
+        "rush version --bump --version-policy shared"
+      ],
       "label": "rush: bump shared packages",
-      "detail": "rush version --bump --version-policy shared"
+      "detail": "rush version --bump --version-policy shared  --ensure-version-policy"
+    },
+    {
+      "type": "shell",
+      "command": [
+        "rush change --bulk --bump-type patch --message auto-bump"
+      ],
+      "label": "rush: change with \"auto\"",
+      "detail": "rush change --bulk --bump-type patch --message auto-bump"
     }
   ]
 }
