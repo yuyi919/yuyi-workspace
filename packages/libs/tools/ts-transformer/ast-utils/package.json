@@ -15,8 +15,9 @@
   "types": "dist/index.d.ts",
   "scripts": {
     "build": "heft build --clean",
+    "build:dev": "heft build",
     "dev": "heft build --watch",
-    "clean": "tsc --build --clean && rimraf ./dist && rimraf ./lib",
+    "clean": "heft clean --clear-cache",
     "test": "heft test",
     "test:watch": "heft test --watch"
   },

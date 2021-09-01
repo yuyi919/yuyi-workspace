@@ -11,6 +11,7 @@
   "types": "dist/index.d.ts",
   "scripts": {
     "build": "heft build --clean",
+    "build:dev": "heft build",
     "dev": "heft build --watch",
     "clean": "rimraf ../.tsBuildInfo/shared-static-values*.json && rimraf ./dist && rimraf ./lib",
     "test": "heft test",

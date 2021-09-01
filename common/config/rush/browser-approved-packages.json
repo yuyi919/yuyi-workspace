@@ -87,6 +87,10 @@
       "allowedCategories": [ "production" ]
     },
     {
+      "name": "@yuyi919/shared-decorator",
+      "allowedCategories": [ "production" ]
+    },
+    {
       "name": "@yuyi919/shared-types",
       "allowedCategories": [ "production" ]
     },

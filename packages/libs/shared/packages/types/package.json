@@ -6,6 +6,7 @@
   "types": "dist/index.d.ts",
   "scripts": {
     "build": "heft build --clean",
+    "build:dev": "heft build",
     "dev": "heft build --watch",
     "test": "heft test",
     "test:watch": "heft test --watch"

@@ -7,7 +7,7 @@
         "rush version --bump --version-policy shared"
       ],
       "label": "rush: bump shared packages",
-      "detail": "rush version --bump --version-policy shared  --ensure-version-policy"
+      "detail": "rush version --bump --version-policy shared --ensure-version-policy"
     },
     {
       "type": "shell",

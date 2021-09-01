@@ -28,16 +28,26 @@ export function createFiles(tree: Tree, options: NormalizedSchema, projGraph?: P
     name: options.name,
     projectRoot: options.projectRoot,
   });
+  
   writeJson(tree, packageJsonPath, {
     ...packageJson,
     scripts: {
       ...packageJson.scripts,
       build: "heft build --clean",
+      "build:dev": "heft build",
       dev: "heft build --watch",
       test: "heft test",
       "test:watch": "heft test --watch",
     },
+    main: "dist/index.js",
+    module: "lib/index.js",
+    types: "dist/index.d.ts",
+    publishConfig: {
+      access: "public",
+    },
+    files: ["dist", "lib", "README.md"],
   });
+
   const tslibJson = join(options.projectRoot + "/tsconfig.lib.json");
   tree.exists(tslibJson) && tree.delete(tslibJson);
   // if (options.unitTestRunner === "none") {
