@@ -12,7 +12,7 @@
       "$default": {
         "$source": "projectName"
       },
-      "x-prompt": "What is the name of the project for the generator?"
+      "x-prompt": "你要格式化的项目?"
     },
     "builder": {
       "type": "string",

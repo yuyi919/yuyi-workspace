@@ -51,8 +51,8 @@ export function createFiles(tree: Tree, options: NormalizedSchema, projGraph?: P
   const tslibJson = join(options.projectRoot + "/tsconfig.lib.json");
   tree.exists(tslibJson) && tree.delete(tslibJson);
   // if (options.unitTestRunner === "none") {
-  const specFile = join(options.projectRoot, `./src/lib/${nameFormats.fileName}.spec.ts`);
-  tree.exists(specFile) && tree.delete(specFile);
+  // const specFile = join(options.projectRoot, `./src/lib/${nameFormats.fileName}.spec.ts`);
+  // tree.exists(specFile) && tree.delete(specFile);
   // }
   // if (!options.publishable && !options.buildable) {
   //   tree.delete(join(options.projectRoot, "package.json"));

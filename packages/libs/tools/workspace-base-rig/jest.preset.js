@@ -2,6 +2,7 @@ const nxPreset = require("@nrwl/jest/preset");
 
 module.exports = {
   ...nxPreset,
+  resolver: require.resolve('@nrwl/jest/plugins/resolver'),
   transform: {
     "^.+\\.[tj]sx?$": "ts-jest",
   },

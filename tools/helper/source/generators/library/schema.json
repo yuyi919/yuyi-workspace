@@ -18,12 +18,13 @@
         "$source": "argv",
         "index": 0
       },
-      "x-prompt": "What name would you like to use for the library?"
+      "x-prompt": "你要创建的库的名字?"
     },
     "directory": {
       "type": "string",
       "description": "A directory where the lib is placed",
-      "alias": "d"
+      "alias": "d",
+      "x-prompt": "库的存放目录?"
     },
     "builder": {
       "type": "string",
@@ -32,6 +33,7 @@
         "tsc"
       ],
       "description": "构建使用的工具",
+      "x-prompt": "构建使用的工具?",
       "default": "tsc"
     },
     // "linter": {
