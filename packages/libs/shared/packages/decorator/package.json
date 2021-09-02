@@ -24,10 +24,13 @@
     "@types/heft-jest": "1.0.2",
     "@types/node": "~16.7.2",
     "@yuyi919/workspace-base-rig": "workspace:1.2.5",
-    "jest": "~27.1.0"
+    "jest": "~27.1.0",
+    "reflect-metadata": "^0.1.13"
   },
   "dependencies": {
     "@yuyi919/shared-types": "workspace:0.0.4"
   },
-  "peerDependencies": {}
+  "peerDependencies": {
+    "reflect-metadata": "^0.1.13"
+  }
 }

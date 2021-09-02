@@ -31,6 +31,7 @@ importers:
       jest: ~27.1.0
       lodash: 4.17.21
       prettier: ^2.3.1
+      reflect-metadata: ^0.1.13
       rxjs: ~6.6.3
       ts-jest: ~27.0.5
       ts-patch: ^1.4.1
@@ -60,6 +61,7 @@ importers:
       jest: 27.1.0
       lodash: 4.17.21
       prettier: 2.3.2
+      reflect-metadata: 0.1.13
       rxjs: 6.6.7
       ts-jest: 27.0.5_jest@27.1.0+typescript@4.1.2
       ts-patch: 1.4.4_typescript@4.1.2
@@ -193,6 +195,7 @@ importers:
       '@yuyi919/shared-types': workspace:0.0.4
       '@yuyi919/workspace-base-rig': workspace:1.2.5
       jest: ~27.1.0
+      reflect-metadata: ^0.1.13
     dependencies:
       '@yuyi919/shared-types': link:../types
     devDependencies:
@@ -200,6 +203,7 @@ importers:
       '@types/node': 16.7.7
       '@yuyi919/workspace-base-rig': link:../../../tools/workspace-base-rig
       jest: 27.1.0
+      reflect-metadata: 0.1.13
 
   ../../packages/libs/shared/packages/types:
     specifiers:
@@ -6790,7 +6794,6 @@ packages:
 
   /reflect-metadata/0.1.13:
     resolution: {integrity: sha512-Ts1Y/anZELhSsjMcU605fU9RE4Oi3p5ORujwbIKXfWa+0Zxs510Qrmrce5/Jowq3cHSZSJqBjypxmHarc+vEWg==}
-    dev: false
 
   /regex-not/1.0.2:
     resolution: {integrity: sha512-J6SDjUgDxQj5NusnOtdFxDwN/+HWykR8GELwctJ7mdqhcyy1xEc4SRFHUXvxTp661YaVKAjfRLZ9cCqS6tn32A==}

@@ -168,7 +168,7 @@
     },
     {
       "name": "reflect-metadata",
-      "allowedCategories": [ "production" ]
+      "allowedCategories": [ "production", "tools" ]
     },
     {
       "name": "rxjs",
