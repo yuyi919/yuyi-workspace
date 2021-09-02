@@ -54,7 +54,7 @@ export default function (options: Schema): Rule {
         projects[normalizedOptions.name] = appendCommand(project, {
           remove: `nx generate @nrwl/workspace:remove --projectName=${normalizedOptions.name} --forceRemove`,
         });
-        project.architect["build"] = {
+        project.targets["build"] = {
           builder: "@nrwl/workspace:run-commands",
           configurations: {
             watch: {

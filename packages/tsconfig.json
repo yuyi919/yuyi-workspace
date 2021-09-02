@@ -1,4 +1,4 @@
 {
-  "compilerOptions": {},
-  "include": []
+  "extends": "./tsconfig.base.json",
+  "compilerOptions": {}
 }

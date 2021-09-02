@@ -1,0 +1,42 @@
+{
+  "name": "@yuyi919/node-cli-utils",
+  "version": "0.0.1",
+  "devDependencies": {
+    "@types/heft-jest": "1.0.2",
+    "@types/node": "~16.7.2",
+    "@types/js-yaml": "^4.0.2",
+    "@yuyi919/workspace-base-rig": "workspace:1.2.5",
+    "jest": "~27.1.0",
+    "tslib": "~2.3.1",
+    "typescript": "4.1.2",
+    "@types/yargs": "~17.0.2"
+  },
+  "dependencies": {
+    "@yuyi919/shared-types": "0.0.4",
+    "enquirer": "^2.3.6",
+    "fs-extra": "^10.0.0",
+    "js-yaml": "^4.1.0",
+    "lodash": "4.17.21",
+    "lodash-es": "4.17.21",
+    "reflect-metadata": "^0.1.13",
+    "yargs": "^17.0.1"
+  },
+  "scripts": {
+    "build": "heft build --clean",
+    "build:dev": "heft build",
+    "dev": "heft build --watch",
+    "test": "heft test",
+    "test:watch": "heft test --watch"
+  },
+  "main": "dist/index.js",
+  "module": "lib/index.js",
+  "types": "dist/index.d.ts",
+  "publishConfig": {
+    "access": "public"
+  },
+  "files": [
+    "dist",
+    "lib",
+    "README.md"
+  ]
+}

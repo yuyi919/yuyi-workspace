@@ -1,6 +1,100 @@
 {
   "version": 2,
   "projects": {
+    "node-cli-utils": {
+      "root": "libs/node/cli-utils",
+      "sourceRoot": "libs/node/cli-utils/src",
+      "projectType": "library",
+      "targets": {
+        "build": {
+          "executor": "@nrwl/workspace:run-commands",
+          "configurations": {
+            "watch": {
+              "commands": ["npm run build --watch"]
+            }
+          },
+          "options": {
+            "commands": ["npm run build"],
+            "cwd": "libs/node/cli-utils",
+            "srcRootForCompilationRoot": "./dist"
+          }
+        },
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/node/cli-utils/**/*.ts"]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/node/cli-utils"],
+          "options": {
+            "jestConfig": "libs/node/cli-utils/jest.config.js",
+            "passWithNoTests": true
+          }
+        },
+        "command": {
+          "executor": "@nrwl/workspace:run-commands",
+          "options": {},
+          "configurations": {
+            "remove": {
+              "commands": [
+                {
+                  "command": "nx generate @nrwl/workspace:remove --projectName=node-cli-utils --forceRemove"
+                }
+              ]
+            }
+          }
+        }
+      }
+    },
+    "node-shared-logger": {
+      "root": "libs/node/shared/logger",
+      "sourceRoot": "libs/node/shared/logger/src",
+      "projectType": "library",
+      "targets": {
+        "build": {
+          "executor": "@nrwl/workspace:run-commands",
+          "configurations": {
+            "watch": {
+              "commands": ["npm run build --watch"]
+            }
+          },
+          "options": {
+            "commands": ["npm run build"],
+            "cwd": "libs/node/shared/logger",
+            "srcRootForCompilationRoot": "./dist"
+          }
+        },
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/node/shared/logger/**/*.ts"]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/node/shared/logger"],
+          "options": {
+            "jestConfig": "libs/node/shared/logger/jest.config.js",
+            "passWithNoTests": true
+          }
+        },
+        "command": {
+          "executor": "@nrwl/workspace:run-commands",
+          "options": {},
+          "configurations": {
+            "remove": {
+              "commands": [
+                {
+                  "command": "nx generate @nrwl/workspace:remove --projectName=node-shared-logger --forceRemove"
+                }
+              ]
+            }
+          }
+        }
+      }
+    },
     "workspace-base-rig": {
       "builder": "tsc",
       "root": "libs/tools/workspace-base-rig",

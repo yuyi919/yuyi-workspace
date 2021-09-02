@@ -1,3 +1,6 @@
+import { Tree } from "@nrwl/devkit";
+import * as jsonc from "comment-json";
+
 export type RushJson = {
   $schema: string;
   rushVersion: string;
@@ -54,3 +57,24 @@ export type RushJson = {
     reviewCategory?: string;
   }[];
 };
+
+export function updateRushJson(host: Tree, updater: (json: RushJson) => RushJson | void) {
+  try {
+    let rushJson: RushJson = jsonc.parse(host.read("../rush.json").toString());
+    rushJson = updater(rushJson) || rushJson;
+    const beforeAll = new String();
+    const token = Symbol.for("before-all");
+    beforeAll[token] = rushJson[token];
+    rushJson[token] = void 0;
+    const out =
+      jsonc.stringify(beforeAll, null, 2).replace(/""$/, "") +
+      "\n" +
+      jsonc.stringify(rushJson, null, 2);
+    // console.log(jsonc.stringify(rushJson.projects));
+    // console.log("before-all", out);
+    host.write("../rush.json", out);
+  } catch (error) {
+    if (error instanceof Error) console.error(error);
+    else console.log(error);
+  }
+}

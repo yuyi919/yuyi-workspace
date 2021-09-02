@@ -111,11 +111,19 @@
       "allowedCategories": [ "production", "tools" ]
     },
     {
+      "name": "colors",
+      "allowedCategories": [ "production" ]
+    },
+    {
       "name": "comment-json",
       "allowedCategories": [ "production" ]
     },
     {
       "name": "csstype",
+      "allowedCategories": [ "production" ]
+    },
+    {
+      "name": "enquirer",
       "allowedCategories": [ "production" ]
     },
     {
@@ -135,11 +143,19 @@
       "allowedCategories": [ "production", "tools" ]
     },
     {
+      "name": "js-yaml",
+      "allowedCategories": [ "production" ]
+    },
+    {
       "name": "lodash",
       "allowedCategories": [ "production", "tools" ]
     },
     {
       "name": "lodash-es",
+      "allowedCategories": [ "production" ]
+    },
+    {
+      "name": "logform",
       "allowedCategories": [ "production" ]
     },
     {
@@ -151,8 +167,16 @@
       "allowedCategories": [ "production", "tools" ]
     },
     {
+      "name": "reflect-metadata",
+      "allowedCategories": [ "production" ]
+    },
+    {
       "name": "rxjs",
       "allowedCategories": [ "production", "tools" ]
+    },
+    {
+      "name": "triple-beam",
+      "allowedCategories": [ "production" ]
     },
     {
       "name": "ts-expose-internals",
@@ -181,6 +205,14 @@
     {
       "name": "typescript",
       "allowedCategories": [ "production", "tools" ]
+    },
+    {
+      "name": "winston",
+      "allowedCategories": [ "production" ]
+    },
+    {
+      "name": "yargs",
+      "allowedCategories": [ "production" ]
     }
   ]
 }

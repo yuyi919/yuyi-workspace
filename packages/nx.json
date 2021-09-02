@@ -27,6 +27,12 @@
     ]
   },
   "projects": {
+    "node-cli-utils": {
+      "tags": ["node", "cli", "cli-utils"]
+    },
+    "node-shared-logger": {
+      "tags": ["node", "shared", "logger"]
+    },
     "shared": {
       "tags": ["lerna-package", "shared"]
     },

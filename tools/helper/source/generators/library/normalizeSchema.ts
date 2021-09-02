@@ -25,11 +25,11 @@ export function normalizeSchema(tree: Tree, options: Schema): Schema {
     linter: "eslint" as any
   };
 }
-export function normalizeOptions(tree: Tree, options: Schema): Schema & NormalizedSchema {
+export function normalizeOptions(host: Tree, options: Schema): Schema & NormalizedSchema {
   options = {
     ...options,
   };
-  const { npmScope, libsDir } = getWorkspaceLayout(tree);
+  const { npmScope, libsDir } = getWorkspaceLayout(host);
   const defaultPrefix = npmScope;
   const name = toFileName(options.name);
   const projectDirectory = options.directory ? `${toFileName(options.directory)}/${name}` : name;
@@ -51,7 +51,7 @@ export function normalizeOptions(tree: Tree, options: Schema): Schema & Normaliz
     projectDirectory,
     parsedTags,
     keywords,
-    packageManager: detectPackageManager(process.cwd()),
+    packageManager: detectPackageManager(host.root),
   };
 }
 

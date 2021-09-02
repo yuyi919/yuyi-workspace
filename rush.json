@@ -489,6 +489,16 @@
       "reviewCategory": "tools"
     },
     {
+      "packageName": "@yuyi919/node-cli-utils",
+      "projectFolder": "packages/libs/node/cli-utils",
+      "reviewCategory": "production"
+    },
+    {
+      "packageName": "@yuyi919/node-logger",
+      "projectFolder": "packages/libs/node/shared/logger",
+      "reviewCategory": "production"
+    },
+    {
       "packageName": "@yuyi919/nx-plugin-workspace-helper",
       "projectFolder": "tools/helper",
       "cyclicDependencyProjects": ["@yuyi919/nx-plugin-workspace-helper"],

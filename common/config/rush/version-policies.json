@@ -105,10 +105,9 @@
     "lockedMajor": 0
   },
   {
-    "policyName": "lockstep",
+    "policyName": "internal",
     "definitionName": "lockStepVersion",
     "version": "0.1.0",
-    "nextBump": "patch",
-    "mainProject": "@yuyi919/shared"
+    "nextBump": "patch"
   }
 ]

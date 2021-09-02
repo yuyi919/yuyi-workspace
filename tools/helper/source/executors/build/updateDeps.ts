@@ -18,6 +18,8 @@ export function createDeps(context: UpdateDepsContext, host: Tree, projGraph = c
     "jest",
     "@types/heft-jest",
     "@types/node",
+    "tslib",
+    "typescript"
   ]);
   // const outputs = getOutputsForTargetAndConfiguration(node); //.data.root
   const { packageJson, packageJsonPath } = readPackageJsonInTree(host, context.projectDir);

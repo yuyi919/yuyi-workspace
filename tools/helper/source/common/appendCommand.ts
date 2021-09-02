@@ -72,7 +72,7 @@ export function appendCommand<
   project: ProjectConfig<any, Architects, SourceCommandKey>,
   commands: Record<CommandKey, string | string[]> | ((...args: any[]) => any)
 ) {
-  const { architect } = project;
+  const { targets: architect } = project;
   const commandOpts: CommandBuilder<SourceCommandKey> = Object.assign(
     {},
     defaultTemplate,
@@ -96,6 +96,6 @@ export function appendCommand<
       } as CommandGroup;
     });
   }) as any;
-  project.architect = architect;
+  project.targets = architect;
   return project as any;
 }

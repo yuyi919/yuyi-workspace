@@ -13,21 +13,21 @@ export interface ProjectConfig<
   /**
    * 项目源目录
    */
-  sourceRoot: string;
+  sourceRoot?: string;
   /**
    * 项目类型
    */
-  projectType: ProjectType;
+  projectType?: ProjectType | "application" | "library";
   /**
    * 运行指令集合
    */
-  architect: {
+  targets: {
     build?: CommonBuilder<Builder>;
   } & Architects &
     CommandArchitect<CommandKey>;
 }
 export type CommandArchitect<Key extends string> = {
-  command: CommandBuilder<Key>;
+  command?: CommandBuilder<Key>;
 };
 export type ConfigurationsOptions<Options extends Record<string, any>> = Record<
   string,
