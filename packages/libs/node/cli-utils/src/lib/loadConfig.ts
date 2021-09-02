@@ -138,8 +138,3 @@ export function setupConfig<T, Keys extends Types.Object.Paths<T, 2>>(
 ) {
   return new ConfigManager<T, Keys>(configObj, path, options);
 }
-
-// export
-// export { configDir, configFileName } from "./configPath";
-// export { loadConfig, saveConfig } from "@yuyi919/cli-utils";
-//

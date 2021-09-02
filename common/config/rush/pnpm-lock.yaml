@@ -74,7 +74,7 @@ importers:
       '@types/js-yaml': ^4.0.2
       '@types/node': ~16.7.2
       '@types/yargs': ~17.0.2
-      '@yuyi919/shared-types': 0.0.4
+      '@yuyi919/shared-types': workspace:0.0.4
       '@yuyi919/workspace-base-rig': workspace:1.2.5
       enquirer: ^2.3.6
       fs-extra: ^10.0.0
@@ -87,7 +87,7 @@ importers:
       typescript: 4.1.2
       yargs: ^17.0.1
     dependencies:
-      '@yuyi919/shared-types': 0.0.4
+      '@yuyi919/shared-types': link:../../shared/packages/types
       enquirer: 2.3.6
       fs-extra: 10.0.0
       js-yaml: 4.1.0
@@ -190,8 +190,11 @@ importers:
     specifiers:
       '@types/heft-jest': 1.0.2
       '@types/node': ~16.7.2
+      '@yuyi919/shared-types': workspace:0.0.4
       '@yuyi919/workspace-base-rig': workspace:1.2.5
       jest: ~27.1.0
+    dependencies:
+      '@yuyi919/shared-types': link:../types
     devDependencies:
       '@types/heft-jest': 1.0.2
       '@types/node': 16.7.7
@@ -1990,12 +1993,6 @@ packages:
 
   /@xtuc/long/4.2.2:
     resolution: {integrity: sha512-NuHqBY1PB/D8xU6s/thBgOAiAP7HOYDQ32+BFZILJ8ivkUkAHQnWfn6WhL79Owj1qmUnoN/YPhktdIoucipkAQ==}
-    dev: false
-
-  /@yuyi919/shared-types/0.0.4:
-    resolution: {integrity: sha512-DkyDKXyz8dwLpMR06968VWMzzbdx7qmUozs0DXj+1/W86H7/o177ZtEVv9a6XNvtSFxpnkMgakr+t8gIAyxx7g==}
-    dependencies:
-      csstype: 3.0.8
     dev: false
 
   /abab/2.0.5:

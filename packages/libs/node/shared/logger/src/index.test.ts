@@ -1,6 +1,6 @@
 import { createLogger, LogLevel, defineAppendMeta } from "./index";
-describe("test", () => {
-  it("test", () => {
+describe("createLogger()", () => {
+  it("use logger", () => {
     const logger = createLogger("Test", {
       level: process.env.NODE_ENV !== "production" && LogLevel.Debug,
     });
@@ -12,7 +12,7 @@ describe("test", () => {
     logger.hint("测试hint");
     logger.success("测试success");
   });  
-  it("context", () => {
+  it("use logger context", () => {
     const logger = createLogger("Test", {
       level: process.env.NODE_ENV !== "production" && LogLevel.Debug,
       context: "Test Context"

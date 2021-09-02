@@ -26,6 +26,8 @@
     "@yuyi919/workspace-base-rig": "workspace:1.2.5",
     "jest": "~27.1.0"
   },
-  "dependencies": {},
+  "dependencies": {
+    "@yuyi919/shared-types": "workspace:0.0.4"
+  },
   "peerDependencies": {}
 }
