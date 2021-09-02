@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import type { Types } from "@yuyi919/shared-types";
 import "reflect-metadata";
 
@@ -33,7 +34,7 @@ export type MetaArrayItem<T, Name extends string = string, Kind extends MetaKind
 };
 function _appendMeta<T>(
   MetaKey: any,
-  target: Object,
+  target: Types.Recordable,
   kind: MetaKinds,
   meta: T,
   propertyKey: string
@@ -57,7 +58,7 @@ function _defineMeta<T>(
   );
 }
 
-function _getMeta(MetaKey: any, target: Object, propertyKey?: string): any {
+function _getMeta(MetaKey: any, target: Types.Recordable, propertyKey?: string): any {
   if (propertyKey) {
     return (Reflect.getMetadata(MetaKey, target) as MetaArrayItem<any>[])?.find(
       (o) => o.name === propertyKey
@@ -132,6 +133,7 @@ export function createStaticMetaDataDecorators<
     ...decorators,
     ...helpers,
     metaKeys,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     transform<T extends any>(plain: any, Target: Types.ConstructorType<T>) {
       const result = { ...plain } as T;
       // for (const $Target of [Target].concat(Targets)) {
