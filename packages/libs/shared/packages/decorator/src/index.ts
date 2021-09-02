@@ -1,2 +1,1 @@
-export * from "./lib/decorator";
-export * from "./factory"
+export * from "./lib/factory"
