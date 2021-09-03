@@ -4,22 +4,12 @@ import {
   ProjectGraphNode,
   ProjectType,
 } from "@nrwl/workspace/src/core/project-graph";
+import { sortObjectByKeys } from "@nrwl/workspace/src/utils/ast-utils";
 // import { getOutputsForTargetAndConfiguration } from '@nrwl/workspace/src/tasks-runner/utils';
 import { DependentBuildableProjectNode } from "@nrwl/workspace/src/utils/buildable-libs-utils";
 import { readJsonFile } from "@nrwl/workspace/src/utils/fileutils";
 import { join } from "path";
 import { PackageJSON } from "../../common/packageJsonUtils";
-
-export function sortKeyArray(keys: string[]) {
-  return keys.sort((a, b) => a.localeCompare(b));
-}
-export function sortKeys<T extends Record<string, any>>(target: T): T {
-  const returnObj = {} as T;
-  for (const key of sortKeyArray(Object.keys(target))) {
-    returnObj[key as keyof T] = target[key];
-  }
-  return returnObj;
-}
 
 /**
  * Updates the peerDependencies section in the `dist/lib/xyz/package.json` with
@@ -228,9 +218,9 @@ export function getBuildablePackageJson(
       // skip if cannot find package.json
     }
   });
-  packageJson.dependencies = sortKeys(packageJson.dependencies);
-  packageJson.devDependencies = sortKeys(packageJson.devDependencies);
-  packageJson.peerDependencies = sortKeys(packageJson.peerDependencies);
+  packageJson.dependencies = sortObjectByKeys(packageJson.dependencies);
+  packageJson.devDependencies = sortObjectByKeys(packageJson.devDependencies);
+  packageJson.peerDependencies = sortObjectByKeys(packageJson.peerDependencies);
 
   function setVersion(
     entry: DependentBuildableProjectNode,

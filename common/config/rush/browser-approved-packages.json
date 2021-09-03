@@ -79,6 +79,10 @@
       "allowedCategories": [ "tools" ]
     },
     {
+      "name": "@yuyi919/node-logger",
+      "allowedCategories": [ "production" ]
+    },
+    {
       "name": "@yuyi919/nx-plugin-workspace-helper",
       "allowedCategories": [ "tools" ]
     },

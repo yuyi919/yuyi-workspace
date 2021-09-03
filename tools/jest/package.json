@@ -4,7 +4,6 @@
   "main": "dist/index.js",
   "types": "./index.d.ts",
   "scripts": {
-    "build": ""
   },
   "devDependencies": {
     "typescript": "4.1.2",

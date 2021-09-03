@@ -3,10 +3,6 @@
   "version": "0.0.32",
   "private": true,
   "scripts": {
-    "build": "",
-    "dev": "",
-    "test": "",
-    "test:watch": "",
     "prepare": "ts-patch install -s",
     "clean": "rimraf **/*.build.log && rimraf **/.rush && rimraf **/.heft"
   },

@@ -337,16 +337,17 @@
       "projectType": "library",
       "targets": {
         "build": {
-          "executor": "@nrwl/node:package",
-          "outputs": ["{options.outputPath}"],
+          "executor": "@nrwl/workspace:run-commands",
+          "configurations": {
+            "watch": {
+              "commands": ["pnpm run build --watch"]
+            }
+          },
           "options": {
-            "outputPath": "dist/libs/shared/packages/decorator",
-            "tsConfig": "libs/shared/packages/decorator/tsconfig.lib.json",
-            "packageJson": "libs/shared/packages/decorator/package.json",
-            "main": "libs/shared/packages/decorator/src/index.ts",
-            "assets": ["libs/shared/packages/decorator/*.md"],
-            "srcRootForCompilationRoot": "./dist"
-          }
+            "commands": ["pnpm run build"],
+            "cwd": "libs/shared/packages/decorator"
+          },
+          "outputs": ["{options.cwd}"]
         },
         "lint": {
           "executor": "@nrwl/linter:eslint",

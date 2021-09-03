@@ -40,7 +40,7 @@ export function normalizeOptions(host: Tree, options: Schema): Schema & Normaliz
 
   const parsedTags = options.tags?.split(",") || [];
   const keywords = [defaultPrefix, ...parsedTags];
-
+  
   return {
     ...options,
     prefix: defaultPrefix,

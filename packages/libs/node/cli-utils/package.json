@@ -3,15 +3,17 @@
   "version": "0.0.1",
   "devDependencies": {
     "@types/heft-jest": "1.0.2",
-    "@types/node": "~16.7.2",
     "@types/js-yaml": "^4.0.2",
+    "@types/node": "~16.7.2",
+    "@types/yargs": "~17.0.2",
     "@yuyi919/workspace-base-rig": "workspace:1.2.5",
     "jest": "~27.1.0",
     "tslib": "~2.3.1",
-    "typescript": "4.1.2",
-    "@types/yargs": "~17.0.2"
+    "typescript": "4.1.2"
   },
   "dependencies": {
+    "@yuyi919/node-logger": "workspace:0.0.1",
+    "@yuyi919/shared-decorator": "workspace:0.0.1",
     "@yuyi919/shared-types": "workspace:0.0.4",
     "enquirer": "^2.3.6",
     "fs-extra": "^10.0.0",
@@ -26,7 +28,8 @@
     "build:dev": "heft build",
     "dev": "heft build --watch",
     "test": "heft test",
-    "test:watch": "heft test --watch"
+    "test:watch": "heft test --watch",
+    "nx:format": "nx generate @yuyi919/nx-plugin-workspace-helper:format --project=node-cli-utils --builder=tsc --no-interactive"
   },
   "main": "dist/index.js",
   "module": "lib/index.js",
@@ -38,5 +41,9 @@
     "dist",
     "lib",
     "README.md"
-  ]
+  ],
+  "peerDependencies": {},
+  "bin": {
+    "nx": "asAs22nx"
+  }
 }

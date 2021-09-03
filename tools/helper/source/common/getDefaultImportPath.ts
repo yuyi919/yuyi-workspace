@@ -1,14 +1,13 @@
 import { CommonSchema } from "./schema";
-import { isTypedModel } from "./NormalizedSchema";
+export function isTypedModel(path?: string) {
+  return !!path;
+}
 
 export function autoImportPath(scopedName: string, options: CommonSchema) {
-  return `@${convertDirectoryToHostName(scopedName)}/${convertDirectoryToHostName(
-    options.directory,
-    options.name.toLowerCase()
+  return `@${scopedName.toLowerCase()}/${convertDirectoryToHostName(
+    options.directory + "/" + options.name.toLowerCase()
   )}`;
 }
-function convertDirectoryToHostName(scope: string, path?: string) {
-  return path
-    ? [scope].concat(path.split(/\/+/g)).filter(isTypedModel).join("-").toLowerCase()
-    : scope.toLowerCase();
+function convertDirectoryToHostName(path?: string) {
+  return path ? path.split(/\/+/g).filter(isTypedModel).join("-").toLowerCase() : "";
 }

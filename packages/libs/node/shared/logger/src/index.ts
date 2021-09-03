@@ -3,7 +3,7 @@ import * as winston from "winston";
 import type {
   Logger as WLogger,
   LoggerOptions as winLoggerOptions,
-  LeveledLogMethod,
+  LeveledLogMethod
 } from "winston";
 import { LogLevel, logLevels } from "./format";
 import * as winstonDevConsole from "./formats";
@@ -75,10 +75,13 @@ export interface LoggerOptions extends DevConsoleFormatOptions {
 }
 
 export type LogLevelNames = keyof typeof logLevels;
-export interface Logger extends WLogger, Record<LogLevelNames, LeveledLogMethod> {}
+export interface Logger extends WLogger, Record<LogLevelNames, LeveledLogMethod> {
+  options?: any
+  winstonOption?: winLoggerOptions
+}
 
 export const DEFAULT_LOGGER_NAME = "Main";
-export function createLogger(name?: string, config?: LoggerOptions) {
+export function createLogger(name?: string, config?: LoggerOptions): Logger {
   name = name || DEFAULT_LOGGER_NAME;
   const { options, winstonOption } = winstonOptions(name, config);
   const logger = winstonDevConsole.init(winston.createLogger(winstonOption), options) as Logger;
@@ -92,4 +95,5 @@ export function createLogger(name?: string, config?: LoggerOptions) {
 }
 
 export { LogLevel, logLevels };
+export type { WLogger };
 export * from "./formats";

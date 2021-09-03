@@ -3,8 +3,8 @@ import {
   updateProjectConfiguration,
   Tree,
   readJson,
-  getWorkspacePath,
   writeJson,
+  names,
 } from "@nrwl/devkit";
 import { createProjectGraph } from "@nrwl/workspace/src/core/project-graph";
 import * as Path from "path";
@@ -15,7 +15,6 @@ import { PackageBuilder } from "../../schematics/internal-nx-plugins-lerna/schem
 import { FormatGeneratorSchema } from "./schema";
 import { formatFiles } from "./format-files";
 import { PackageJSON } from "../../common/packageJsonUtils";
-
 
 export async function updatePackageJson(
   host: Tree,
@@ -54,7 +53,11 @@ export default async function (host: Tree, options: FormatGeneratorSchema) {
       dev: "heft build --watch",
       test: "heft test",
       "test:watch": "heft test --watch",
+      "nx:format": `nx generate @yuyi919/nx-plugin-workspace-helper:format --project=${options.project} --builder=tsc --no-interactive`,
     },
+    bin: {
+      "nx": `${names("as/as22").propertyName}nx`
+    }
   });
   if (node && node.projectType === "library" && node.tags?.includes("lerna-package")) {
     console.log("builder:", builder);
@@ -104,5 +107,5 @@ export default async function (host: Tree, options: FormatGeneratorSchema) {
   //     projects: getSortedProjects(workspaceJson.projects, graph),
   //   };
   // });
-  return await formatFiles(host, graph)
+  return await formatFiles(host, graph);
 }

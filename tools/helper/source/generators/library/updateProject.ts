@@ -13,7 +13,7 @@ export function updateProject(tree: Tree, options: NormalizedSchema) {
   }
 
   const project = readProjectConfiguration(tree, options.name);
-  const { libsDir } = getWorkspaceLayout(tree);
+  // const { libsDir } = getWorkspaceLayout(tree);
   
   project.targets = project.targets || {};
   project.targets.build = {

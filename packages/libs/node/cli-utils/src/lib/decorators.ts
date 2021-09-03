@@ -3,9 +3,9 @@ import Enquirer from "enquirer";
 import { defaultsDeep, groupBy, merge, omit, get } from "lodash";
 import yargs, { Options } from "yargs";
 import { __decorate, __metadata } from "tslib";
-import { createStaticMetaDataDecorators, MetaArrayItem } from "./factory";
+import { createStaticMetaDataDecorators, MetaArrayItem } from "@yuyi919/shared-decorator";
 import { loadConfig, saveConfig } from "./loadConfig";
-import { PromptOptions, TogglePromptOptions } from "./PromptType";
+import { BasePromptOptions, PromptOptions, TogglePromptOptions } from "./PromptType";
 
 export declare function MetaDataDecorators<T>(options: T, metadata?: unknown): PropertyDecorator;
 
@@ -23,53 +23,55 @@ export const x = createStaticMetaDataDecorators("YARGS", {
   Prompt: {
     kind: "property",
     config: ({ target, propertyKey }, promptOpt?: Partial<PromptOptions>) => {
-      const { meta = {} } = (x.getMeta("Option", target, propertyKey) ||
-        {}) as MetaArrayItem<yargs.Options>;
-      const {
-        required = meta.requiresArg,
-        message = meta.description,
-        initial = meta.default,
-        type: $type,
-        ...other
-      } = promptOpt || {};
-      let type: PromptOptions["type"] | "toggle" = $type;
-      if (type === void 0) {
-        type =
-          meta.type === "string"
-            ? "text"
-            : meta.type === "number"
-            ? "numeral"
-            : meta.type === "boolean"
-            ? "toggle"
-            : "input";
-        if (type === "toggle") {
-          Object.assign(other, {
-            enabled: "是",
-            disabled: "否",
-            initial: initial ? "是" : "否",
-          });
+      return () => {
+        const { meta = {} } = (x.getMeta("Option", target, propertyKey) ||
+          {}) as MetaArrayItem<yargs.Options>;
+        const {
+          required = meta.requiresArg,
+          message = meta.description,
+          initial = meta.default,
+          type: $type,
+          ...other
+        } = promptOpt || {};
+        let type: PromptOptions["type"] | "toggle" = $type;
+        if (type === void 0) {
+          type =
+            meta.type === "string"
+              ? "text"
+              : meta.type === "number"
+              ? "numeral"
+              : meta.type === "boolean"
+              ? "toggle"
+              : "input";
+          if (type === "toggle") {
+            Object.assign(other, {
+              enabled: "是",
+              disabled: "否",
+              initial: initial ? "是" : "否",
+            });
+          }
         }
-      }
-      return {
-        required,
-        message,
-        type,
-        initial,
-        ...other,
+        return {
+          required,
+          message,
+          type,
+          initial,
+          ...other,
+        } as PromptOptions;
       };
     },
   },
   Option: {
     kind: "property",
     config: (target, options: Options) => {
-      const { config, configParser = loadConfig, ...other } = options;
+      const { config, configParser, ...other } = options;
       return {
         ...other,
         config,
         configParser: config
           ? (configPath) => {
               try {
-                return { [FROM_CONFIG]: configParser(configPath) };
+                return { [FROM_CONFIG]: (configParser || loadConfig)(configPath) };
               } catch (error) {
                 return {};
               }
@@ -92,36 +94,44 @@ export const x = createStaticMetaDataDecorators("YARGS", {
   },
 });
 
+/**
+ * 反射配置Prompt
+ * @param Target 配置的class
+ * @param initialWithCommandLine 来自命令行的参数
+ * @param namespace 配置项命名空间
+ */
 export function collectPrompt<T>(
   Target: Types.ConstructorType<T>,
-  patchInitial: Partial<T>,
+  initialWithCommandLine: Partial<T>,
   namespace?: string
 ) {
   const options: PromptOptions[] = [];
   const metas = x.getMeta("Prompt", Target);
   if (metas) {
-    for (const { name, meta } of metas) {
+    for (const { name, meta: metaFactory } of metas) {
+      const meta = metaFactory();
       const { meta: { name: groupName } = {} as any } = x.getMeta("Group", Target, name) || {};
       const namepath = [namespace, name].filter(Boolean).join(".");
       options.push({
         name: namepath,
         ...meta,
-        result: (value: any) => {
-          value = meta.result?.(value as never) ?? value;
+        result: async (value: string) => {
+          value = await ((meta as BasePromptOptions).result?.(value) ?? value);
           if (typeof value === "string" && value.length === 0) {
             return void 0;
           }
           return value;
         },
         message: [groupName ? `[${groupName}]` : void 0, meta.message].filter(Boolean).join(" "),
-        initial: get(patchInitial, namepath, meta.initial),
+        // 命令行参数优先于配置
+        initial: get(initialWithCommandLine, namepath, meta.initial),
       } as PromptOptions);
     }
   }
   const references = x.getMeta("Ref", Target);
   if (references) {
     for (const { name, meta } of references) {
-      options.push(...collectPrompt(meta(), patchInitial, name));
+      options.push(...collectPrompt(meta(), initialWithCommandLine, name));
     }
   }
   return options;
@@ -149,13 +159,34 @@ export function setupPrompt<T>(
 export function setupYargsWith<T, O extends {}>(
   yargs: yargs.Argv<O>,
   Target: Types.ConstructorType<T>,
-  namespace?: string
+  namespace?: string,
+  defaultCollection = {} as Partial<T & O>
 ): yargs.Argv<O & T> {
   const named = (name: string) => (namespace ? namespace + "." + name : name);
   const metas = x.getMeta("Option", Target);
   if (metas) {
     for (const { name, meta } of metas) {
-      yargs = yargs.options(named(name), meta);
+      const { default: initial } = meta;
+      /**
+       * 为什么要这么做？
+       * 因为配置项来源有两种，命令行或配置文件
+       * 由于命令行的传递配置的优先级最高，如果给yargs提供默认值，则对于解析得到的配置项
+       * 无法判断是未输入提供的默认值还是命令行输入
+       * 因此需要分离默认值步骤，在默认匹配配置文件之后再进行默认值的匹配
+       */
+      // 判断是否配置了默认值，且该配置项不被作为配置文件地址
+      if (initial !== void 0 && !meta.config) {
+        yargs = yargs.options(named(name), {
+          ...meta,
+          // 不将默认值传递给yargs，后续自行处理
+          default: void 0,
+          // 但是还是得展示默认值
+          defaultDescription: initial,
+        });
+        defaultCollection[name] = initial;
+      } else {
+        yargs = yargs.options(named(name), meta);
+      }
     }
   }
   for (const [groupName, propertys] of Object.entries(
@@ -169,44 +200,74 @@ export function setupYargsWith<T, O extends {}>(
   }
   const references = x.getMeta("Ref", Target);
   if (references) {
+    // console.log(Target.name, references);
     for (const { name, meta } of references) {
-      const Namespace = x.getMeta("Namespace", Target);
-      yargs = setupYargsWith(yargs, meta(), Namespace?.meta.key ?? name);
+      const refTarget = meta();
+      const namespace = x.getMeta("Namespace", refTarget);
+      const namespaceKey = namespace?.meta.key;
+      const childCollection = (defaultCollection[name as keyof (T & O)] = {} as any);
+      // console.log("Namespace", name, RefTarget.name)
+      yargs = setupYargsWith(yargs, meta(), namespaceKey || name, childCollection);
     }
   }
   return yargs as yargs.Argv<O & T>;
 }
 
-export class YargsStore<T extends { config?: string }, O extends {}> {
-  public parser: yargs.Argv<O & T & { [FROM_CONFIG]: Partial<T> }>;
-  public configObj: T;
-  public fromConfig: Partial<T>;
-  constructor(yargs: yargs.Argv<O>, public Target: Types.ConstructorType<T>) {
-    this.parser = setupYargsWith<T, O>(yargs, Target).parserConfiguration({
+export class Cli<T extends { config?: string }, O extends {}> {
+  private _parser: yargs.Argv<O & T & { [FROM_CONFIG]?: Partial<T> }>;
+  public get parser(): yargs.Argv<O & T> {
+    return this._parser;
+  }
+  public configObj: T & O;
+  public fromConfig: Partial<T & O>;
+  /**
+   *
+   * @param yargs
+   * @param Target 反射类
+   * @param defaultOptions 默认配置项
+   */
+  constructor(
+    yargs: yargs.Argv<O>,
+    public Target: Types.ConstructorType<T>,
+    private defaultOptions: Partial<T & O> = {}
+  ) {
+    this._parser = setupYargsWith<T, O>(
+      yargs,
+      Target,
+      void 0,
+      this.defaultOptions
+    ).parserConfiguration({
       "strip-aliased": true,
     }) as yargs.Argv<O & T & { [FROM_CONFIG]: Partial<T> }>;
-    let { $0, _, [FROM_CONFIG]: $fromConfig, ...other } = this.parser.parse() as any;
-    this.configObj = x.transform(other, Target);
+    let { $0, _, [FROM_CONFIG]: $fromConfig, ...other } = this._parser.help(false).parse() as any;
+    this.configObj = x.transform(other, Target) as any;
     this.fromConfig = $fromConfig;
     this.append = this.append.bind(this);
     this.setupPrompt = this.setupPrompt.bind(this);
-    defaultsDeep(this.configObj, this.fromConfig);
+    // 读取命令行参数，匹配配置文件，最后再匹配默认值
+    defaultsDeep(this.configObj, this.fromConfig, this.defaultOptions);
   }
 
   append<Namespaces extends Record<string, any>>(
     namespaces = {} as { [K in keyof Namespaces]: Types.ConstructorType<Namespaces[K]> }
   ) {
     for (const key in namespaces) {
-      this.parser = setupYargsWith(this.parser, namespaces[key], key);
       __decorate(
         [x.Ref(() => namespaces[key]), __metadata("design:type", namespaces[key])],
         this.Target.prototype,
         key
       );
+      this._parser = setupYargsWith(this._parser, this.Target, void 0, this.defaultOptions);
     }
-    return this as unknown as YargsStore<T & Namespaces, O>;
+    // 读取命令行参数，匹配配置文件，最后再匹配默认值
+    defaultsDeep(this.configObj, this.fromConfig, this.defaultOptions);
+    return this as unknown as Cli<T & Namespaces, O>;
   }
 
+  /**
+   * cli收集配置项Prompt
+   * 如果命令行参数中提供了对应参数，会取代配置的默认值（反应在Prompt展示的初始值）
+   */
   async setupPrompt() {
     const { configObj, Target } = this;
     let { config } = this.configObj;
@@ -221,9 +282,10 @@ export class YargsStore<T extends { config?: string }, O extends {}> {
         result: (v) => !v,
       } as TogglePromptOptions);
       if (create) {
-        this.fromConfig = await setupPrompt(Target, configObj as T);
+        this.fromConfig = (await setupPrompt(Target, configObj)) as T & O;
       }
-      this.fromConfig = merge(configObj, this.fromConfig);
+      // 整合配置文件内容
+      this.fromConfig = defaultsDeep(configObj, this.fromConfig, this.defaultOptions);
       if (create) saveConfig(config, omit(configObj, "config"));
     }
     return configObj;
@@ -234,6 +296,6 @@ export function setupYargs<T extends { config?: string }, O extends {}>(
   yargs: yargs.Argv<O>,
   Target: Types.ConstructorType<T>
 ) {
-  const store = new YargsStore(yargs, Target);
+  const store = new Cli<T, O & { help?: boolean }>(yargs, Target);
   return [store.configObj, store] as const;
 }

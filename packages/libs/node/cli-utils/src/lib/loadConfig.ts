@@ -79,7 +79,7 @@ export class ConfigManager<T, Keys extends string> {
     return parsed.ext ? parsed.base : `${parsed.name}.json`;
   }
 
-  util = new ConfigUtils(this);
+  util: ConfigUtils = new ConfigUtils(this);
 }
 export class ConfigUtils {
   constructor(private root: ConfigManager<any, any>) {}

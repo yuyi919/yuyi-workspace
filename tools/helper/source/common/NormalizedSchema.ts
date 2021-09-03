@@ -5,10 +5,6 @@ import { libsDir } from "@nrwl/workspace/src/utils/ast-utils";
 import { CommonSchema } from "./schema";
 import { autoImportPath } from "./getDefaultImportPath";
 
-export function isTypedModel(path?: string) {
-  return !!path;
-}
-
 export interface NormalizedSchema extends CommonSchema {
   name: string;
   prefix: string;
