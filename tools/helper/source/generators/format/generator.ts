@@ -1,53 +1,16 @@
-import {
-  readProjectConfiguration,
-  updateProjectConfiguration,
-  Tree,
-  readJson,
-  writeJson,
-} from "@nrwl/devkit";
+import { readProjectConfiguration, Tree, updateProjectConfiguration } from "@nrwl/devkit";
 import { createProjectGraph } from "@nrwl/workspace/src/core/project-graph";
+import { defaultsDeep } from "lodash";
 import * as Path from "path";
-import { formatDeps } from "../../executors/build/updateDeps";
 import { ProjectNode } from "../../executors/build/getBuildablePackageJson";
+import { formatDeps } from "../../executors/build/updateDeps";
 import { generateTscFiles } from "../../schematics/internal-nx-plugins-lerna/addLibFiles";
 import { PackageBuilder } from "../../schematics/internal-nx-plugins-lerna/schema";
-import { FormatGeneratorSchema } from "./schema";
-import { formatFiles } from "./format-files";
-import { PackageJSON } from "../../common/packageJsonUtils";
 import { updateProject } from "../library/updateProject";
-import { defaultsDeep } from "lodash";
-import { sortObjectKeysWith } from "./getSortedProjects";
+import { formatFiles } from "./format-files";
+import { updatePackageJson } from "./formatPackageJson";
+import { FormatGeneratorSchema } from "./schema";
 
-export async function updatePackageJson(
-  host: Tree,
-  jsonPath: string,
-  callback: (json: PackageJSON) => PackageJSON
-) {
-  const keywords = [
-    "name",
-    "version",
-    "description",
-    "sideEffect",
-    "main",
-    "module",
-    "types",
-    "scripts",
-    "bin",
-    "dependencies",
-    "devDependencies",
-    "peerDependencies",
-    "files",
-  ] as (keyof PackageJSON)[]
-  const workspaceJson: PackageJSON = await readJson(host, jsonPath);
-  writeJson(
-    host,
-    jsonPath,
-    sortObjectKeysWith(callback(workspaceJson), (key) =>{
-      const index = keywords.indexOf(key)
-      return index > -1 ? index : key
-    })
-  );
-}
 export default async function (host: Tree, options: FormatGeneratorSchema) {
   const project = Object.assign(
     { builder: "auto" as PackageBuilder },
@@ -69,7 +32,6 @@ export default async function (host: Tree, options: FormatGeneratorSchema) {
     // 如果该依赖项不为内部包，收集依赖
     match: (node, parent, deep) => deep < 1, // || !node.data.tags?.includes('internal')
   });
-
 
   if (node && node.projectType === "library" && node.tags?.includes("lerna-package")) {
     console.log("builder:", builder);
@@ -127,7 +89,7 @@ export default async function (host: Tree, options: FormatGeneratorSchema) {
       },
     });
   });
-  
+
   updateProject(host, {
     name: options.project,
     packageManager: "pnpm",

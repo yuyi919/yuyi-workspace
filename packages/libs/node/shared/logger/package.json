@@ -1,6 +1,8 @@
 {
   "name": "@yuyi919/node-logger",
   "version": "0.0.1",
+  "description": "",
+  "author": "",
   "main": "dist/index.js",
   "module": "lib/index.js",
   "types": "dist/index.d.ts",

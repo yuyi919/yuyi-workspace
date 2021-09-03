@@ -7,6 +7,7 @@ export type PackageJSON = {
   description: string;
   sideEffect?: boolean;
   main: string;
+  keywords?: string[]
   module?: string;
   types?: string;
   scripts: Record<string, string>;

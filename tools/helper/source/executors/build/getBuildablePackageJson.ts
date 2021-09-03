@@ -218,9 +218,6 @@ export function getBuildablePackageJson(
       // skip if cannot find package.json
     }
   });
-  packageJson.dependencies = sortObjectByKeys(packageJson.dependencies);
-  packageJson.devDependencies = sortObjectByKeys(packageJson.devDependencies);
-  packageJson.peerDependencies = sortObjectByKeys(packageJson.peerDependencies);
 
   function setVersion(
     entry: DependentBuildableProjectNode,

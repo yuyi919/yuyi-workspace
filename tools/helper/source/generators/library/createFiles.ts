@@ -3,6 +3,7 @@ import { join } from "path";
 import { NormalizedSchema } from "../../common/NormalizedSchema";
 import { formatDeps } from "../../executors/build/updateDeps";
 import { generateTscFiles } from "../../schematics/internal-nx-plugins-lerna/addLibFiles";
+import { updatePackageJson } from "../format/formatPackageJson";
 
 export function createFiles(tree: Tree, options: NormalizedSchema, projGraph?: ProjectGraph) {
   // generateTscFiles(tree, {
@@ -29,24 +30,26 @@ export function createFiles(tree: Tree, options: NormalizedSchema, projGraph?: P
     projectRoot: options.projectRoot,
   });
   
-  writeJson(tree, packageJsonPath, {
-    ...packageJson,
-    scripts: {
-      ...packageJson.scripts,
-      build: "heft build --clean",
-      "build:dev": "heft build",
-      dev: "heft build --watch",
-      test: "heft test",
-      "test:watch": "heft test --watch",
-    },
-    main: "dist/index.js",
-    module: "lib/index.js",
-    types: "dist/index.d.ts",
-    publishConfig: {
-      access: "public",
-    },
-    files: ["dist", "lib", "README.md"],
-  });
+  updatePackageJson(tree, packageJsonPath, () => {
+    return {
+      ...packageJson,
+      scripts: {
+        ...packageJson.scripts,
+        build: "heft build --clean",
+        "build:dev": "heft build",
+        dev: "heft build --watch",
+        test: "heft test",
+        "test:watch": "heft test --watch",
+      },
+      main: "dist/index.js",
+      module: "lib/index.js",
+      types: "dist/index.d.ts",
+      publishConfig: {
+        access: "public",
+      },
+      files: ["dist", "lib", "README.md"],
+    }
+  })
 
   const tslibJson = join(options.projectRoot + "/tsconfig.lib.json");
   tree.exists(tslibJson) && tree.delete(tslibJson);

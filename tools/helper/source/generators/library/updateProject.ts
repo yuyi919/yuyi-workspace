@@ -26,12 +26,16 @@ export function updateProject(
     },
   };
 
-  appendCommand(project, {
-    format: `nx generate ${`@yuyi919/nx-plugin-workspace-helper`}:format --project=${
-      options.name
-    } --no-interactive`,
-    remove: `nx generate @nrwl/workspace:remove --projectName=${options.name} --forceRemove`,
-  }, ".");
+  appendCommand(
+    project,
+    {
+      format: `nx generate ${`@yuyi919/nx-plugin-workspace-helper`}:format --project=${
+        options.name
+      } --no-interactive`,
+      remove: `nx generate @nrwl/workspace:remove --projectName=${options.name} --forceRemove`,
+    },
+    "."
+  );
 
   updateProjectConfiguration(tree, options.name, project);
 }

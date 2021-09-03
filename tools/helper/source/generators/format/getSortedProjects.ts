@@ -33,9 +33,9 @@ export function getSortedProjects(
     return [projectType, libtypeIndex, subLibTypeIndex];
   });
 }
-export function sortObjectKeysWith<O extends Record<string, any>, K extends keyof O>(
+export function sortObjectKeysWith<O extends Record<string, any>, K extends keyof O, R extends number | string | (number | string)[]>(
   collection: O,
-  walkerCast: (key: K) => number | string | (number | string)[]
+  walkerCast: (key: K) => R
 ): O {
   const sortedProjects = {} as O;
   const group = groupBy(Object.keys(collection), (key: K) => {
