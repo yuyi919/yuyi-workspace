@@ -25,6 +25,7 @@ export function normalizeSchema(tree: Tree, options: Schema): Schema {
     linter: "eslint" as any
   };
 }
+
 export function normalizeOptions(host: Tree, options: Schema): Schema & NormalizedSchema {
   options = {
     ...options,
@@ -51,7 +52,7 @@ export function normalizeOptions(host: Tree, options: Schema): Schema & Normaliz
     projectDirectory,
     parsedTags,
     keywords,
-    packageManager: detectPackageManager(host.root),
+    packageManager: "pnpm" //detectPackageManager(host.root),
   };
 }
 

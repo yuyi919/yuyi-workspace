@@ -10,13 +10,12 @@
           "executor": "@nrwl/workspace:run-commands",
           "configurations": {
             "watch": {
-              "commands": ["npm run build --watch"]
+              "commands": ["pnpm run build --watch"]
             }
           },
           "options": {
-            "commands": ["npm run build"],
-            "cwd": "libs/node/cli-utils",
-            "srcRootForCompilationRoot": "./dist"
+            "commands": ["pnpm run build"],
+            "cwd": "libs/node/cli-utils"
           }
         },
         "lint": {
@@ -38,9 +37,18 @@
           "options": {},
           "configurations": {
             "remove": {
+              "cwd": ".",
               "commands": [
                 {
                   "command": "nx generate @nrwl/workspace:remove --projectName=node-cli-utils --forceRemove"
+                }
+              ]
+            },
+            "format": {
+              "cwd": ".",
+              "commands": [
+                {
+                  "command": "nx generate @yuyi919/nx-plugin-workspace-helper:format --project=node-cli-utils --no-interactive"
                 }
               ]
             }
@@ -57,13 +65,12 @@
           "executor": "@nrwl/workspace:run-commands",
           "configurations": {
             "watch": {
-              "commands": ["npm run build --watch"]
+              "commands": ["pnpm run build --watch"]
             }
           },
           "options": {
-            "commands": ["npm run build"],
-            "cwd": "libs/node/shared/logger",
-            "srcRootForCompilationRoot": "./dist"
+            "commands": ["pnpm run build"],
+            "cwd": "libs/node/shared/logger"
           }
         },
         "lint": {
@@ -85,9 +92,18 @@
           "options": {},
           "configurations": {
             "remove": {
+              "cwd": ".",
               "commands": [
                 {
                   "command": "nx generate @nrwl/workspace:remove --projectName=node-shared-logger --forceRemove"
+                }
+              ]
+            },
+            "format": {
+              "cwd": ".",
+              "commands": [
+                {
+                  "command": "nx generate @yuyi919/nx-plugin-workspace-helper:format --project=node-shared-logger --no-interactive"
                 }
               ]
             }

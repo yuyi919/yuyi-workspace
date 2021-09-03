@@ -29,7 +29,7 @@
     "dev": "heft build --watch",
     "test": "heft test",
     "test:watch": "heft test --watch",
-    "nx:format": "nx run node-cli-utils:format"
+    "nx:format": "nx run node-cli-utils:command:format"
   },
   "main": "dist/index.js",
   "module": "lib/index.js",

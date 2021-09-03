@@ -4,7 +4,6 @@ import {
   Tree,
   readJson,
   writeJson,
-  names,
 } from "@nrwl/devkit";
 import { createProjectGraph } from "@nrwl/workspace/src/core/project-graph";
 import * as Path from "path";
@@ -15,6 +14,8 @@ import { PackageBuilder } from "../../schematics/internal-nx-plugins-lerna/schem
 import { FormatGeneratorSchema } from "./schema";
 import { formatFiles } from "./format-files";
 import { PackageJSON } from "../../common/packageJsonUtils";
+import { updateProject } from "../library/updateProject";
+import { normalizeSchema } from "../library/normalizeSchema";
 
 export async function updatePackageJson(
   host: Tree,
@@ -54,8 +55,8 @@ export default async function (host: Tree, options: FormatGeneratorSchema) {
       dev: "heft build --watch",
       test: "heft test",
       "test:watch": "heft test --watch",
-      "nx:format": `nx run ${options.project}:format`,
-    }
+      "nx:format": `nx run ${options.project}:command:format`,
+    },
   });
   if (node && node.projectType === "library" && node.tags?.includes("lerna-package")) {
     console.log("builder:", builder);
@@ -99,6 +100,12 @@ export default async function (host: Tree, options: FormatGeneratorSchema) {
       });
     }
   }
+
+  updateProject(host, {
+    name: options.project,
+    packageManager: "pnpm",
+    projectRoot: project.root,
+  });
   // await updateWorkspace(host, (workspaceJson) => {
   //   return {
   //     ...workspaceJson,

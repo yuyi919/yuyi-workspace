@@ -49,7 +49,8 @@ export function appendCommand<
   project: ProjectConfig<any, Architects, SourceCommandKey>,
   callback: (
     source: Record<SourceCommandKey, CommandBuilder<SourceCommandKey>>
-  ) => Record<CommandKey, string | string[]>
+  ) => Record<CommandKey, string | string[]>,
+  cwd?: string
 ): ProjectConfig<any, Architects, SourceCommandKey & CommandKey>;
 /**
  * 为项目追加命令行配置
@@ -62,7 +63,8 @@ export function appendCommand<
   CommandKey extends string
 >(
   project: ProjectConfig<any, Architects, SourceCommandKey>,
-  commands: Record<CommandKey, string | string[]>
+  commands: Record<CommandKey, string | string[]>,
+  cwd?: string
 ): ProjectConfig<any, Architects, SourceCommandKey & CommandKey>;
 export function appendCommand<
   Architects extends Record<string, any>,
@@ -70,7 +72,8 @@ export function appendCommand<
   CommandKey extends string
 >(
   project: ProjectConfig<any, Architects, SourceCommandKey>,
-  commands: Record<CommandKey, string | string[]> | ((...args: any[]) => any)
+  commands: Record<CommandKey, string | string[]> | ((...args: any[]) => any),
+  cwd = project.root
 ) {
   const { targets: architect } = project;
   const commandOpts: CommandBuilder<SourceCommandKey> = Object.assign(
@@ -86,6 +89,7 @@ export function appendCommand<
     Object.keys(commandList).forEach((key) => {
       const commandsOptions = commandList[key];
       configurations[key] = {
+        cwd,
         commands: (commandsOptions instanceof Array ? commandsOptions : [commandsOptions]).map(
           (command) => {
             return {
