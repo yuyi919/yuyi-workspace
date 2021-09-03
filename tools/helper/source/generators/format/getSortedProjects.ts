@@ -9,8 +9,7 @@ export function getSortedProjects(
   projects: Record<string, ProjectConfig>,
   graph: ProjectGraph
 ): Record<string, ProjectConfig> {
-  const sortedProjects = {};
-  const group = groupBy(Object.keys(projects), (key) => {
+  return sortObjectKeysWith(projects, (key) => {
     const { files, ...node } = (graph.nodes[key] as ProjectNode)?.data;
     const tags = node.nxJsonSection?.tags || node.tags || [];
     const libtypeIndex = SortedLibraryType.findIndex(
@@ -31,17 +30,28 @@ export function getSortedProjects(
       projectTypeSort[
         libtype === LibraryType.Internal ? ProjectType.Library : projects[key].projectType
       ];
-    return projectType + "|" + libtypeIndex + "|" + subLibTypeIndex;
+    return [projectType, libtypeIndex, subLibTypeIndex];
   });
-  const sortedProjectsKeys = []
-  for (const key of Object.keys(group).sort()) {
+}
+export function sortObjectKeysWith<O extends Record<string, any>, K extends keyof O>(
+  collection: O,
+  walkerCast: (key: K) => number | string | (number | string)[]
+): O {
+  const sortedProjects = {} as O;
+  const group = groupBy(Object.keys(collection), (key: K) => {
+    const lib = walkerCast(key);
+    return lib instanceof Array ? lib.join("|") : lib;
+  }) as Record<string, string[]>;
+  const sortedProjectsKeys = [];
+  let comp = (a, b) => (a == b ? a.localeCompare(b) : a - b);
+  for (const key of Object.keys(group).sort(comp)) {
     // console.log(key, group[key].sort());
     for (const name of group[key].sort()) {
-      sortedProjectsKeys.push(name)
-      sortedProjects[name] = projects[name];
+      sortedProjectsKeys.push(name);
+      sortedProjects[name as keyof O] = collection[name];
     }
   }
-  console.log("sortedWorkspaceJson", group);
+  console.log(group, sortedProjectsKeys);
   return sortedProjects;
 }
 

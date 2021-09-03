@@ -15,15 +15,38 @@ import { FormatGeneratorSchema } from "./schema";
 import { formatFiles } from "./format-files";
 import { PackageJSON } from "../../common/packageJsonUtils";
 import { updateProject } from "../library/updateProject";
-import { normalizeSchema } from "../library/normalizeSchema";
+import { defaultsDeep } from "lodash";
+import { sortObjectKeysWith } from "./getSortedProjects";
 
 export async function updatePackageJson(
   host: Tree,
   jsonPath: string,
   callback: (json: PackageJSON) => PackageJSON
 ) {
+  const keywords = [
+    "name",
+    "version",
+    "description",
+    "sideEffect",
+    "main",
+    "module",
+    "types",
+    "scripts",
+    "bin",
+    "dependencies",
+    "devDependencies",
+    "peerDependencies",
+    "files",
+  ] as (keyof PackageJSON)[]
   const workspaceJson: PackageJSON = await readJson(host, jsonPath);
-  writeJson(host, jsonPath, callback(workspaceJson));
+  writeJson(
+    host,
+    jsonPath,
+    sortObjectKeysWith(callback(workspaceJson), (key) =>{
+      const index = keywords.indexOf(key)
+      return index > -1 ? index : key
+    })
+  );
 }
 export default async function (host: Tree, options: FormatGeneratorSchema) {
   const project = Object.assign(
@@ -47,17 +70,7 @@ export default async function (host: Tree, options: FormatGeneratorSchema) {
     match: (node, parent, deep) => deep < 1, // || !node.data.tags?.includes('internal')
   });
 
-  writeJson(host, packageJsonPath, {
-    ...packageJson,
-    scripts: {
-      ...packageJson.scripts,
-      build: "heft build --clean",
-      dev: "heft build --watch",
-      test: "heft test",
-      "test:watch": "heft test --watch",
-      "nx:format": `nx run ${options.project}:command:format`,
-    },
-  });
+
   if (node && node.projectType === "library" && node.tags?.includes("lerna-package")) {
     console.log("builder:", builder);
     if (builder === "tsc") {
@@ -101,6 +114,20 @@ export default async function (host: Tree, options: FormatGeneratorSchema) {
     }
   }
 
+  updatePackageJson(host, packageJsonPath, () => {
+    return defaultsDeep({
+      ...packageJson,
+      scripts: {
+        ...packageJson.scripts,
+        build: "heft build --clean",
+        dev: "heft build --watch",
+        test: "heft test",
+        "test:watch": "heft test --watch",
+        "nx:format": `nx run ${options.project}:command:format`,
+      },
+    });
+  });
+  
   updateProject(host, {
     name: options.project,
     packageManager: "pnpm",

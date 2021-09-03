@@ -7,11 +7,13 @@ export type PackageJSON = {
   description: string;
   sideEffect?: boolean;
   main: string;
+  module?: string;
+  types?: string;
   scripts: Record<string, string>;
   devDependencies: Record<string, string>;
   dependencies: Record<string, string>;
   peerDependencies: Record<string, string>;
-  [key: string]: unknown;
+  files?: string[]
 };
 export function modifyLibPackageJson(
   options: NormalizedOptions,

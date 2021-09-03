@@ -1,20 +1,9 @@
 {
   "name": "@yuyi919/node-logger",
   "version": "0.0.1",
-  "devDependencies": {
-    "@types/heft-jest": "1.0.2",
-    "@types/node": "~16.7.2",
-    "@yuyi919/workspace-base-rig": "workspace:1.2.5",
-    "jest": "~27.1.0",
-    "tslib": "~2.3.1",
-    "typescript": "4.1.2"
-  },
-  "dependencies": {
-    "colors": "^1.4.0",
-    "logform": "^2.2.0",
-    "triple-beam": "^1.3.0",
-    "winston": "^3.3.3"
-  },
+  "main": "dist/index.js",
+  "module": "lib/index.js",
+  "types": "dist/index.d.ts",
   "scripts": {
     "build": "heft build --clean",
     "build:dev": "heft build",
@@ -24,19 +13,27 @@
     "nx": "nx",
     "nx:format": "nx run node-shared-logger:command:format"
   },
-  "main": "dist/index.js",
-  "module": "lib/index.js",
-  "types": "dist/index.d.ts",
-  "publishConfig": {
-    "access": "public"
+  "dependencies": {
+    "colors": "^1.4.0",
+    "logform": "^2.2.0",
+    "triple-beam": "^1.3.0",
+    "winston": "^3.3.3"
   },
+  "devDependencies": {
+    "@types/heft-jest": "1.0.2",
+    "@types/node": "~16.7.2",
+    "@yuyi919/workspace-base-rig": "workspace:1.2.5",
+    "jest": "~27.1.0",
+    "tslib": "~2.3.1",
+    "typescript": "4.1.2"
+  },
+  "peerDependencies": {},
   "files": [
     "dist",
     "lib",
     "README.md"
   ],
-  "peerDependencies": {},
-  "bin": {
-    "nx": "asAs22nx"
+  "publishConfig": {
+    "access": "public"
   }
 }
