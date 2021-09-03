@@ -8,7 +8,7 @@ import {
 } from "@nrwl/devkit";
 import { createProjectGraph } from "@nrwl/workspace/src/core/project-graph";
 import * as Path from "path";
-import { updateDeps } from "../../executors/build/updateDeps";
+import { formatDeps } from "../../executors/build/updateDeps";
 import { ProjectNode } from "../../executors/build/getBuildablePackageJson";
 import { generateTscFiles } from "../../schematics/internal-nx-plugins-lerna/addLibFiles";
 import { PackageBuilder } from "../../schematics/internal-nx-plugins-lerna/schema";
@@ -39,12 +39,13 @@ export default async function (host: Tree, options: FormatGeneratorSchema) {
     dependencies: deps,
     packageJson,
     packageJsonPath,
-  } = updateDeps({
+  } = formatDeps({
     workspaceRoot: process.cwd(),
     projectDir: options.project,
     // 如果该依赖项不为内部包，收集依赖
     match: (node, parent, deep) => deep < 1, // || !node.data.tags?.includes('internal')
   });
+
   writeJson(host, packageJsonPath, {
     ...packageJson,
     scripts: {
@@ -53,10 +54,7 @@ export default async function (host: Tree, options: FormatGeneratorSchema) {
       dev: "heft build --watch",
       test: "heft test",
       "test:watch": "heft test --watch",
-      "nx:format": `nx generate @yuyi919/nx-plugin-workspace-helper:format --project=${options.project} --builder=tsc --no-interactive`,
-    },
-    bin: {
-      "nx": `${names("as/as22").propertyName}nx`
+      "nx:format": `nx run ${options.project}:format`,
     }
   });
   if (node && node.projectType === "library" && node.tags?.includes("lerna-package")) {

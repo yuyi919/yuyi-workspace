@@ -21,7 +21,8 @@
     "dev": "heft build --watch",
     "test": "heft test",
     "test:watch": "heft test --watch",
-    "nx": "nx"
+    "nx": "nx",
+    "nx:format": "nx run node-shared-logger:format"
   },
   "main": "dist/index.js",
   "module": "lib/index.js",
@@ -33,5 +34,9 @@
     "dist",
     "lib",
     "README.md"
-  ]
+  ],
+  "peerDependencies": {},
+  "bin": {
+    "nx": "asAs22nx"
+  }
 }

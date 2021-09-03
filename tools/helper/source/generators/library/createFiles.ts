@@ -1,13 +1,13 @@
 import { ProjectGraph, names, Tree, writeJson } from "@nrwl/devkit";
 import { join } from "path";
 import { NormalizedSchema } from "../../common/NormalizedSchema";
-import { createDeps } from "../../executors/build/updateDeps";
+import { formatDeps } from "../../executors/build/updateDeps";
 import { generateTscFiles } from "../../schematics/internal-nx-plugins-lerna/addLibFiles";
 
 export function createFiles(tree: Tree, options: NormalizedSchema, projGraph?: ProjectGraph) {
   // generateTscFiles(tree, {
   // })
-  const { packageJson, packageJsonPath } = createDeps(
+  const { packageJson, packageJsonPath } = formatDeps(
     {
       workspaceRoot: tree.root,
       projectDir: options.projectRoot,
@@ -17,7 +17,7 @@ export function createFiles(tree: Tree, options: NormalizedSchema, projGraph?: P
     tree,
     projGraph
   );
-  const nameFormats = names(options.fileName);
+  // const nameFormats = names(options.fileName);
   // generateFiles(tree, join(__dirname, "./files/lib"), options.projectRoot, {
   //   ...options,
   //   ...nameFormats,
