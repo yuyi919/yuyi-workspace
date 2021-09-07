@@ -3,6 +3,7 @@ import { updateJsonInTree } from "@nrwl/workspace";
 import ts, { CompilerOptions } from "typescript";
 import { dirname } from "path";
 import { defaultsDeep, isEqual } from "lodash";
+import { sortObjectByKeys } from "@nrwl/tao/src/utils/object-sort";
 export interface TsConfigJson {
   extends: string;
   compilerOptions: CompilerOptions;
@@ -27,9 +28,11 @@ export function updateTsConfigReference(
   tsconfigJson: TsConfigJson,
   references: (string | TsConfigJsonReference)[] = []
 ) {
-  const { references: sourceReferences = [], ...other } = tsconfigJson;
+  const { references: sourceReferences = [], extends: extend, compilerOptions, ...other } = tsconfigJson;
   const appendReferences = references.map((ref) => (typeof ref === "string" ? { path: ref } : ref));
   return {
+    extends: extend,
+    compilerOptions: sortObjectByKeys(compilerOptions),
     ...other,
     references: [
       ...appendReferences,

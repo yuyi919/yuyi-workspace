@@ -1,5 +1,5 @@
-import { definePackageJsonBuilder, PackageJsonBuilder } from "./formatPackageJson"
-
+import { definePackageJsonBuilder } from "./formatPackageJson"
+export * from "./builder"
 export * from "./format-files"
 export * from "./formatPackageJson"
 export * from "./getSortedProjects"

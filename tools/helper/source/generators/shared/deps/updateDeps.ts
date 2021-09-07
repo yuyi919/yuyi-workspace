@@ -48,6 +48,7 @@ export function createDeps(
 ): {
   dependencies: DependentBuildableProjectNode[];
   packageJsonPath: string;
+  packageDir: string;
   packageJson: PackageJSON;
 } {
   const dependencies = toDependcyNodes(projGraph, context, deps);
@@ -56,6 +57,7 @@ export function createDeps(
   const { packageJson, packageJsonPath } = readPackageJsonInTree(host, projectNode.data.root);
   const { packageJson: workspacePackageJson } = readPackageJsonInTree(host, context.workspaceRoot);
   return {
+    packageDir: projectNode.data.root,
     packageJson: getBuildablePackageJson(context, packageJson, workspacePackageJson, dependencies),
     packageJsonPath,
     dependencies,
@@ -68,15 +70,18 @@ export function updateDeps(
 ): {
   dependencies: DependentBuildableProjectNode[];
   packageJsonPath: string;
+  packageDir: string;
   packageJson: PackageJSON;
 } {
   const { target, dependencies } = calculateProjectDependencies(projGraph, context, deps);
   // const outputs = getOutputsForTargetAndConfiguration(node); //.data.root
-  const { packageJson, packageJsonPath } = readPackageJson(getOutputPath(target));
+  const packageDir = getOutputPath(target)
+  const { packageJson, packageJsonPath } = readPackageJson(packageDir);
   const { packageJson: workspacePackageJson } = readPackageJson(context.workspaceRoot);
   // console.log(dependencies.map(o => [o.name, o.node.data]));
   console.log("target is", target.data.projectType);
   return {
+    packageDir,
     packageJson: getBuildablePackageJson(context, packageJson, workspacePackageJson, dependencies),
     packageJsonPath,
     dependencies,

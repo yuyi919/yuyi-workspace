@@ -6,25 +6,25 @@ import {
   formatDeps,
   TypedProjectGraph,
   tryDelete,
-  PackageJsonBuilder,
+  PackageConfigFilesBuilder,
   PackageConfigures,
 } from "../shared";
 import { NormalizedOptions } from "./normalizeSchema";
 
 export function createFiles(host: Tree, options: NormalizedOptions, projGraph: TypedProjectGraph) {
+  if (options.builder === "heft-tsc") {
+    tryDelete(host, join(options.projectRoot + "/tsconfig.lib.json"));
+    tryDelete(host, join(options.projectRoot + "/tsconfig.spec.json"));
+  }
   generateFilesWith(host, {
     name: options.name,
     projectRoot: options.projectRoot,
     builder: options.builder,
   });
-  const packageJsonBuilder = PackageJsonBuilder.setup(host, options.name, PackageConfigures, projGraph);
-  packageJsonBuilder.setupInit(options.builder);
-  packageJsonBuilder.writeJson(options.publishable);
+  const configsBuilder = PackageConfigFilesBuilder.setup(host, options.name, PackageConfigures, projGraph);
+  configsBuilder.setupInit(options.builder);
+  configsBuilder.writeJson(options.publishable);
 
-  if (options.builder === "heft-tsc") {
-    tryDelete(host, join(options.projectRoot + "/tsconfig.lib.json"));
-    tryDelete(host, join(options.projectRoot + "/tsconfig.spec.json"));
-  }
   // if (options.unitTestRunner === "none") {
   // const specFile = join(options.projectRoot, `./src/lib/${nameFormats.fileName}.spec.ts`);
   // tree.exists(specFile) && tree.delete(specFile);

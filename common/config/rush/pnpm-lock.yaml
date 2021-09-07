@@ -19,6 +19,7 @@ importers:
       '@nrwl/tao': 12.5.8
       '@nrwl/workspace': 12.5.8
       '@types/heft-jest': 1.0.2
+      '@types/jest': ~27.0.1
       '@types/lodash': ^4.14.171
       '@types/node': ~16.7.2
       '@typescript-eslint/eslint-plugin': 4.19.0
@@ -49,6 +50,7 @@ importers:
       '@nrwl/tao': 12.5.8
       '@nrwl/workspace': 12.5.8_prettier@2.3.2
       '@types/heft-jest': 1.0.2
+      '@types/jest': 27.0.1
       '@types/lodash': 4.14.172
       '@types/node': 16.7.7
       '@typescript-eslint/eslint-plugin': 4.19.0_62b3f128f38d10c6ea19807e237583eb
@@ -63,7 +65,7 @@ importers:
       prettier: 2.3.2
       reflect-metadata: 0.1.13
       rxjs: 6.6.7
-      ts-jest: 27.0.5_jest@27.1.0+typescript@4.1.2
+      ts-jest: 27.0.5_ea00af6d36e2dbad3885d0ff885900f7
       ts-patch: 1.4.4_typescript@4.1.2
       tslib: 2.3.1
       typescript: 4.1.2
@@ -264,9 +266,6 @@ importers:
       ts-jest: 27.0.5_jest@27.1.0+typescript@4.1.2
       tslib: 2.3.1
       typescript: 4.1.2
-
-  ../../packages/libs/shared/test:
-    specifiers: {}
 
   ../../packages/libs/tools/ts-transformer/ast-utils:
     specifiers:
@@ -7682,6 +7681,37 @@ packages:
 
   /ts-expose-internals/4.4.2:
     resolution: {integrity: sha512-Npe9xQaJBH/2bQkKNKEV5KmzAHG5MRZL+FUMamQhSAwtohDHLMrgOQD0QqWcAhUgWJOVy5+tplY5v55fTJQt+g==}
+    dev: false
+
+  /ts-jest/27.0.5_ea00af6d36e2dbad3885d0ff885900f7:
+    resolution: {integrity: sha512-lIJApzfTaSSbtlksfFNHkWOzLJuuSm4faFAfo5kvzOiRAuoN4/eKxVJ2zEAho8aecE04qX6K1pAzfH5QHL1/8w==}
+    engines: {node: ^10.13.0 || ^12.13.0 || ^14.15.0 || >=15.0.0}
+    hasBin: true
+    peerDependencies:
+      '@babel/core': '>=7.0.0-beta.0 <8'
+      '@types/jest': ^27.0.0
+      babel-jest: '>=27.0.0 <28'
+      jest: ^27.0.0
+      typescript: '>=3.8 <5.0'
+    peerDependenciesMeta:
+      '@babel/core':
+        optional: true
+      '@types/jest':
+        optional: true
+      babel-jest:
+        optional: true
+    dependencies:
+      '@types/jest': 27.0.1
+      bs-logger: 0.2.6
+      fast-json-stable-stringify: 2.1.0
+      jest: 27.1.0
+      jest-util: 27.1.0
+      json5: 2.2.0
+      lodash: 4.17.21
+      make-error: 1.3.6
+      semver: 7.3.5
+      typescript: 4.1.2
+      yargs-parser: 20.2.9
     dev: false
 
   /ts-jest/27.0.5_jest@27.1.0+typescript@4.1.2:

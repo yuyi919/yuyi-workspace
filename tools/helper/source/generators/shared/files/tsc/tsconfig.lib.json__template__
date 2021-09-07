@@ -4,7 +4,7 @@
     "module": "esnext",
     "outDir": "./lib",
     "declarationDir": "./dist",
-    "tsBuildInfoFile": "../.tsBuildInfo/<%= name %>-es.json"
+    "tsBuildInfoFile": "./node_modules/@yuyi919/workspace-base-rig/.tsBuildInfo/<%= name %>-es.json"
   },
   "exclude": ["src/**/*.spec.ts", "src/**/*.spec.tsx", "**/__test__/**"],
   "include": ["src/**/*.ts", "src/**/*.tsx"]

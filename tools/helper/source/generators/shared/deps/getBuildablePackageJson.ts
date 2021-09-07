@@ -173,7 +173,11 @@ export function getBuildablePackageJson(
         depVersion =
           "workspace:" +
           readJsonFile(
-            join(context.workspaceRoot, outputPath, outputPath.endsWith(".json") ? "" : "package.json")
+            join(
+              context.workspaceRoot,
+              outputPath,
+              outputPath.endsWith(".json") ? "" : "package.json"
+            )
           ).version;
       } else if (entry.node.type === "npm") {
         // If an npm dep is part of the workspace devDependencies, do not include it the library
