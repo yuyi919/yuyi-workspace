@@ -6,10 +6,10 @@ import { FormatGeneratorSchema } from "./schema";
 
 describe("format generator", () => {
   let appTree: Tree;
-  const options = { project: "test" } as FormatGeneratorSchema;
+  const options = { project: "shared" } as FormatGeneratorSchema;
 
   beforeEach(() => {
-    appTree = createTreeWithEmptyWorkspace();
+    appTree = createTreeWithEmptyWorkspace(2);
   });
 
   it("should run successfully", async () => {

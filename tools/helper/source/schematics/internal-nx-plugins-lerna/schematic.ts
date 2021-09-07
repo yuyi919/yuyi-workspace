@@ -55,7 +55,7 @@ export default function (options: Schema): Rule {
           remove: `nx generate @nrwl/workspace:remove --projectName=${normalizedOptions.name} --forceRemove`,
         });
         project.targets["build"] = {
-          builder: "@nrwl/workspace:run-commands",
+          executor: "@nrwl/workspace:run-commands",
           configurations: {
             watch: {
               commands: [`${normalizedOptions.packageManager} run build --watch`],

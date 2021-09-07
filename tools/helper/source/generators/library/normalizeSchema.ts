@@ -1,9 +1,24 @@
-import { detectPackageManager, getWorkspaceLayout, joinPathFragments, Tree } from "@nrwl/devkit";
-import { Schema } from "../../schematics/internal-nx-plugins-lerna/schema";
-import { getParsedTags, NormalizedSchema } from "../../common/NormalizedSchema";
+import { getWorkspaceLayout, joinPathFragments, PackageManager, Tree } from "@nrwl/devkit";
 import { toFileName } from "@nrwl/workspace";
+import { PackageBuilder } from "../../common/schema";
 import { autoImportPath } from "../../common/getDefaultImportPath";
-import { ProjectNode } from "../../executors/build/getBuildablePackageJson";
+import { getParsedTags, NormalizedSchema } from "../../common/NormalizedSchema";
+import { LibProjectNode } from "../shared";
+import { Schema } from "./schema";
+export interface NormalizedOptions {
+  publishable: boolean;
+  importPath: string;
+  builder: PackageBuilder;
+  prefix: string;
+  fileName: string;
+  name: string;
+  projectRoot: string;
+  sourceRoot: string;
+  projectDirectory: string;
+  parsedTags: string[];
+  keywords: string[];
+  packageManager: PackageManager;
+}
 
 export function normalizeSchema(tree: Tree, options: Schema): Schema {
   const { npmScope } = getWorkspaceLayout(tree);
@@ -26,10 +41,7 @@ export function normalizeSchema(tree: Tree, options: Schema): Schema {
   };
 }
 
-export function normalizeOptions(host: Tree, options: Schema): Schema & NormalizedSchema {
-  options = {
-    ...options,
-  };
+export function normalizeOptions(host: Tree, options: Schema): NormalizedOptions {
   const { npmScope, libsDir } = getWorkspaceLayout(host);
   const defaultPrefix = npmScope;
   const name = toFileName(options.name);
@@ -43,7 +55,9 @@ export function normalizeOptions(host: Tree, options: Schema): Schema & Normaliz
   const keywords = [defaultPrefix, ...parsedTags];
   
   return {
-    ...options,
+    publishable: options.publishable,
+    importPath: options.importPath || autoImportPath(npmScope, options),
+    builder: options.builder,
     prefix: defaultPrefix,
     fileName,
     name: projectName,
@@ -52,13 +66,13 @@ export function normalizeOptions(host: Tree, options: Schema): Schema & Normaliz
     projectDirectory,
     parsedTags,
     keywords,
-    packageManager: "pnpm" //detectPackageManager(host.root),
+    packageManager: "pnpm" as PackageManager //detectPackageManager(host.root),
   };
 }
 
-export function convertOptionsToProjectNode(options: Schema & NormalizedSchema): ProjectNode {
+export function convertOptionsToProjectNode(options: Schema & NormalizedSchema): LibProjectNode {
   return {
-    type: "library",
+    type: "lib",
     data: {
       projectType: "library",
       sourceRoot: joinPathFragments(options.projectRoot, "src"),

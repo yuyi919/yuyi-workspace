@@ -1,17 +1,12 @@
-import { convertNxGenerator, Tree, updateJson } from "@nrwl/devkit";
+import { convertNxGenerator, Tree } from "@nrwl/devkit";
 import { libraryGenerator as workspaceLibraryGenerator } from "@nrwl/workspace/generators";
-import { createProjectGraph } from "@nrwl/workspace/src/core/project-graph";
 import * as child_process from "child_process";
 import { isEqual } from "lodash";
 import { join } from "path";
-import { PackageJSON } from "../../common/packageJsonUtils";
-import { ProjectNode } from "../../executors/build/getBuildablePackageJson";
-import { Schema } from "../../schematics/internal-nx-plugins-lerna/schema";
-import { formatFiles } from "../format/format-files";
+import { formatFiles, formatRootPackageJson, getProjectGraph, LibProjectNode, updateProject, updateRushJson } from "../shared";
 import { createFiles } from "./createFiles";
 import { convertOptionsToProjectNode, normalizeOptions, normalizeSchema } from "./normalizeSchema";
-import { updateRushJson } from "./rushUtils";
-import { updateProject } from "./updateProject";
+import { Schema } from "./schema";
 
 export async function libraryGenerator(host: Tree, schema: Schema) {
   schema = normalizeSchema(host, schema);
@@ -38,30 +33,15 @@ export async function libraryGenerator(host: Tree, schema: Schema) {
   host.exists("jest.preset.js") && host.delete("jest.preset.js");
   updateProject(host, options);
 
-  const graph = createProjectGraph();
+  const graph = getProjectGraph();
   // 添加正准备生成的lib的预测数据
-  graph.nodes[options.name] = convertOptionsToProjectNode(options) as ProjectNode;
-  console.log(options.name, graph.nodes[options.name]);
+  graph.nodes[options.name] = convertOptionsToProjectNode(options) as LibProjectNode;
   createFiles(host, options, graph);
   // if (options.js) {
   //   updateTsConfigsToJs(host, options);
   // }
 
-  updateJson(host, "package.json", (pkg: PackageJSON) => {
-    if (pkg.devDependencies) {
-      if (pkg.dependencies) {
-        for (const key in pkg.devDependencies) {
-          if (key in pkg.dependencies) {
-            delete pkg.devDependencies[key];
-          }
-        }
-      }
-      // 移除@types/jest, 因为不需要
-      delete pkg.devDependencies["@types/jest"];
-      // console.log(pkg);
-    }
-    return pkg;
-  });
+  formatRootPackageJson(host);
 
   updateRushJson(host, (json) => {
     // 全部分类

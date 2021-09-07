@@ -4,36 +4,24 @@ import {
   ProjectGraphNode,
   ProjectType,
 } from "@nrwl/workspace/src/core/project-graph";
-import { sortObjectByKeys } from "@nrwl/workspace/src/utils/ast-utils";
 // import { getOutputsForTargetAndConfiguration } from '@nrwl/workspace/src/tasks-runner/utils';
-import { DependentBuildableProjectNode } from "@nrwl/workspace/src/utils/buildable-libs-utils";
 import { readJsonFile } from "@nrwl/workspace/src/utils/fileutils";
 import { join } from "path";
-import { PackageJSON } from "../../common/packageJsonUtils";
+import {
+  DependentBuildableProjectNode,
+  LibProjectNode,
+  NpmProjectNode,
+  TypedProjectGraphNode,
+} from "../graph";
+import { PackageJSON } from "../../../common/packageJsonUtils";
 
-/**
- * Updates the peerDependencies section in the `dist/lib/xyz/package.json` with
- * the proper dependency and version
- */
-export type ProjectGraphNodeData = {
-  root: string;
-  sourceRoot: string;
-  projectType: string;
-  tags: string[];
-  nxJsonSection?: { tags?: string[] };
-  targets: {
-    [K: string]: any;
-  };
-  builder?: "tsc" | "tsdx";
-};
-export type ProjectNode = ProjectGraphNode<ProjectGraphNodeData>;
 export type UpdateDepsContext = {
   workspaceRoot: string;
   projectDir: string;
-  match?: (pkg: ProjectGraphNode, parent: ProjectGraphNode, deep: number) => boolean;
+  match?: (pkg: TypedProjectGraphNode, parent: TypedProjectGraphNode, deep: number) => boolean;
 };
 
-function isBuildable(node: ProjectNode): boolean {
+function isBuildable(node: TypedProjectGraphNode): boolean {
   // console.log(node);
   return node.data.targets?.build;
 }
@@ -63,7 +51,8 @@ export function toDependcyNodes(
   return depNames
     .map((dep) => {
       const depNode =
-        (projGraph.nodes["npm:" + dep] as ProjectNode) || (projGraph.nodes[dep] as ProjectNode);
+        (projGraph.nodes["npm:" + dep] as NpmProjectNode) ||
+        (projGraph.nodes[dep] as LibProjectNode);
       if (depNode) {
         if (isBuildable(depNode)) {
           const libPackageJson = readJsonFile(
@@ -94,8 +83,8 @@ export function calculateProjectDependencies(
   projGraph: ProjectGraph,
   context: UpdateDepsContext,
   appendPackages: string[] = []
-): { target: ProjectNode; dependencies: DependentBuildableProjectNode[] } {
-  const target = projGraph.nodes[context.projectDir] as ProjectNode;
+): { target: LibProjectNode; dependencies: DependentBuildableProjectNode[] } {
+  const target = projGraph.nodes[context.projectDir] as LibProjectNode;
   // gather the library dependencies
   const dependencies = recursivelyCollectDependencies(
     context.projectDir,

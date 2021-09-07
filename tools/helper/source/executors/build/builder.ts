@@ -3,7 +3,7 @@ import { BuilderContext, BuilderOutput, createBuilder } from "@angular-devkit/ar
 import { Observable, of } from "rxjs";
 import { tap } from "rxjs/operators";
 import { BuildBuilderSchema } from "./schema";
-import { updateDeps } from "./updateDeps";
+import { updateDeps } from "../../generators/shared";
 
 export function runBuilder(
   options: BuildBuilderSchema,

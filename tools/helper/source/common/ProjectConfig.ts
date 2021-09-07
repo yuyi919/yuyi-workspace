@@ -1,11 +1,14 @@
+import { NxJsonProjectConfiguration, ProjectConfiguration } from "@nrwl/devkit";
 import { ProjectType } from "@nrwl/workspace";
 import { InternalBuilder, BuilderOptions } from "./getBuilder";
+import { PackageBuilder } from "./schema";
 
 export interface ProjectConfig<
   Builder extends unknown | InternalBuilder = unknown,
   Architects extends Record<string, any> = Record<string, any>,
   CommandKey extends string = string
-> {
+> extends ProjectConfiguration, NxJsonProjectConfiguration {
+  builder?: PackageBuilder
   /**
    * 项目根目录
    */
@@ -18,13 +21,6 @@ export interface ProjectConfig<
    * 项目类型
    */
   projectType?: ProjectType | "application" | "library";
-  /**
-   * 运行指令集合
-   */
-  targets: {
-    build?: CommonBuilder<Builder>;
-  } & Architects &
-    CommandArchitect<CommandKey>;
 }
 export type CommandArchitect<Key extends string> = {
   command?: CommandBuilder<Key>;

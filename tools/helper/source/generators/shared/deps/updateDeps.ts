@@ -1,7 +1,7 @@
 import { Tree } from "@nrwl/devkit";
 import { createProjectGraph, ProjectGraph } from "@nrwl/workspace/src/core/project-graph";
-import { DependentBuildableProjectNode } from "@nrwl/workspace/src/utils/buildable-libs-utils";
-import { PackageJSON } from "../../common/packageJsonUtils";
+import { DependentBuildableProjectNode } from "../graph";
+import { PackageJSON } from "../../../common/packageJsonUtils";
 import {
   calculateProjectDependencies,
   getBuildablePackageJson,

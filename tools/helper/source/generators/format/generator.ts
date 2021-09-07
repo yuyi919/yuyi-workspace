@@ -1,37 +1,31 @@
-import {
-  getProjects,
-  readJson,
-  readProjectConfiguration,
-  Tree,
-  updateProjectConfiguration,
-} from "@nrwl/devkit";
-import { createProjectGraph } from "@nrwl/workspace/src/core/project-graph";
+import { getProjects, readProjectConfiguration, Tree } from "@nrwl/devkit";
+import * as enquirer from "enquirer";
 import { defaultsDeep } from "lodash";
 import * as Path from "path";
-import { ProjectNode } from "../../executors/build/getBuildablePackageJson";
-import { formatDeps } from "../../executors/build/updateDeps";
-import { generateTscFiles } from "../../schematics/internal-nx-plugins-lerna/addLibFiles";
-import { PackageBuilder } from "../../schematics/internal-nx-plugins-lerna/schema";
-import { updateProject } from "../library/updateProject";
-import { formatFiles } from "./format-files";
-import { updatePackageJson } from "./formatPackageJson";
-import * as enquirer from "enquirer";
+import { ProjectConfig } from "../../common/ProjectConfig";
+import {
+  formatDeps,
+  formatFiles,
+  generateTscFiles,
+  getProjectGraphWith,
+  PackageBuilder,
+  ProjectGraphNodeData,
+  TypedProjectGraph,
+  updatePackageJson,
+  updateProject,
+} from "../shared";
 import { FormatGeneratorSchema } from "./schema";
 
 export default async function (host: Tree, options: FormatGeneratorSchema) {
-  const graph = createProjectGraph();
-  const projrects = Array.from(getProjects(host).entries());
-  const targets = options.project
-    ? [options.project]
-    : options.all
-    ? projrects.map((o) => o[0])
-    : [];
+  const graph = getProjectGraphWith(host);
+  const projrects = Array.from(getProjects(host).keys());
+  const targets = options.project ? [options.project] : options.all ? projrects : [];
   if (targets.length === 0) {
     const { project = [] } = await enquirer.prompt<{ project: string[] }>({
       name: "project",
       message: "请选择要格式化的项目",
       type: "multiselect",
-      choices: projrects.map((o) => o[0]).filter(name => !name.endsWith("-rig")),
+      choices: projrects.filter((name) => !name.endsWith("-rig")),
     });
     targets.push(...project);
   }
@@ -46,15 +40,21 @@ export default async function (host: Tree, options: FormatGeneratorSchema) {
   // });
   return await formatFiles(host, graph);
 }
-async function formatProject(host: Tree, options: FormatGeneratorSchema, graph) {
-  const project = Object.assign(
-    { builder: "auto" as PackageBuilder },
-    readProjectConfiguration(host, options.project)
-  );
 
-  const node = (graph.nodes[options.project] as ProjectNode)?.data;
-  const builder =
-    (options.builder && options.builder !== "auto" ? options.builder : project.builder) || "auto";
+function readProjectConfigurationWithBuilder(
+  host: Tree,
+  name: string,
+  builder?: PackageBuilder | "auto"
+) {
+  const project = readProjectConfiguration(host, name) as ProjectConfig;
+  builder = (builder && builder !== "auto" ? builder : project.builder) || "tsc";
+  return Object.assign(project, { builder }) as ProjectGraphNodeData;
+}
+
+async function formatProject(host: Tree, options: FormatGeneratorSchema, graph: TypedProjectGraph) {
+  const project = readProjectConfigurationWithBuilder(host, options.project, options.builder);
+  const node = getLibraryFromGraph(graph, options.project)?.data;
+  const { builder } = project;
 
   const {
     dependencies: deps,
@@ -70,42 +70,42 @@ async function formatProject(host: Tree, options: FormatGeneratorSchema, graph) 
     console.log("builder:", builder);
     if (builder === "tsc") {
       const tsconfigReferences = deps
-        .filter((i) => i.node.data.projectType === "library" && i.node.data.builder === "tsc")
+        .filter((i) => i.node.type === "lib" && i.node.data.builder === "tsc")
         .map((dep) => {
           const file = dep.node.data.files.find((i) => /tsconfig\.json$/.test(i.file));
           return file && Path.relative(node.root, file.file).replace(/\\/g, "/");
         })
         .filter(Boolean);
-      console.log("tsconfig references:", tsconfigReferences);
+      // console.log("tsconfig references:", tsconfigReferences);
       generateTscFiles(host, {
         name: options.project,
         projectRoot: project.root,
-        references: tsconfigReferences.map((path) => (/^\./.test(path) ? path : "./" + path))
+        references: tsconfigReferences.map((path) => (/^\./.test(path) ? path : "./" + path)),
       });
     }
     if (project.targets.build) {
-      const buildOptions = project.targets.build.options || {};
-      // 标准化outputs
-      const outputs = [
-        buildOptions.outputPath
-          ? "{options.outputPath}"
-          : buildOptions.cwd
-          ? "{options.cwd}"
-          : project.root,
-      ];
-      updateProjectConfiguration(host, options.project, {
-        ...project,
-        tags: node.tags,
-        //@ts-ignore
-        builder,
-        targets: {
-          ...project.targets,
-          build: {
-            ...project.targets.build,
-            outputs,
-          },
-        },
-      });
+      //   const buildOptions = project.targets.build.options || {};
+      //   // 标准化outputs
+      //   const outputs = [
+      //     buildOptions.outputPath
+      //       ? "{options.outputPath}"
+      //       : buildOptions.cwd
+      //       ? "{options.cwd}"
+      //       : project.root,
+      //   ];
+      //   updateProjectConfiguration(host, options.project, {
+      //     ...project,
+      //     tags: node.tags,
+      //     //@ts-ignore
+      //     builder,
+      //     targets: {
+      //       ...project.targets,
+      //       build: {
+      //         ...project.targets.build,
+      //         outputs,
+      //       },
+      //     },
+      //   });
     }
   }
 
@@ -123,9 +123,19 @@ async function formatProject(host: Tree, options: FormatGeneratorSchema, graph) 
     });
   });
 
-  updateProject(host, {
-    name: options.project,
-    packageManager: "pnpm",
-    projectRoot: project.root,
-  });
+  updateProject(
+    host,
+    {
+      name: options.project,
+      packageManager: "pnpm",
+      projectRoot: project.root,
+      builder,
+    },
+    project
+  );
+}
+function getLibraryFromGraph(graph: TypedProjectGraph, name: string) {
+  const node = graph.nodes[name];
+  if (node.type === "lib") return node;
+  throw Error(`Project[${name}]不为Library!`);
 }

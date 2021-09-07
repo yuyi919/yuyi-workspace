@@ -1,13 +1,9 @@
-import { ProjectGraph, names, Tree, writeJson } from "@nrwl/devkit";
+import { ProjectGraph, Tree } from "@nrwl/devkit";
 import { join } from "path";
-import { NormalizedSchema } from "../../common/NormalizedSchema";
-import { formatDeps } from "../../executors/build/updateDeps";
-import { generateTscFiles } from "../../schematics/internal-nx-plugins-lerna/addLibFiles";
-import { updatePackageJson } from "../format/formatPackageJson";
+import { generateTscFiles, updatePackageJson, formatDeps } from "../shared";
+import { NormalizedOptions } from "./normalizeSchema";
 
-export function createFiles(tree: Tree, options: NormalizedSchema, projGraph?: ProjectGraph) {
-  // generateTscFiles(tree, {
-  // })
+export function createFiles(tree: Tree, options: NormalizedOptions, projGraph?: ProjectGraph) {
   const { packageJson, packageJsonPath } = formatDeps(
     {
       workspaceRoot: tree.root,
@@ -18,21 +14,16 @@ export function createFiles(tree: Tree, options: NormalizedSchema, projGraph?: P
     tree,
     projGraph
   );
-  // const nameFormats = names(options.fileName);
-  // generateFiles(tree, join(__dirname, "./files/lib"), options.projectRoot, {
-  //   ...options,
-  //   ...nameFormats,
-  //   tmpl: "",
-  //   offsetFromRoot: offsetFromRoot(options.projectRoot),
-  // });
+
   generateTscFiles(tree, {
     name: options.name,
     projectRoot: options.projectRoot,
   });
-  
+
   updatePackageJson(tree, packageJsonPath, () => {
     return {
       ...packageJson,
+      private: !options.publishable,
       scripts: {
         ...packageJson.scripts,
         build: "heft build --clean",
@@ -48,8 +39,8 @@ export function createFiles(tree: Tree, options: NormalizedSchema, projGraph?: P
         access: "public",
       },
       files: ["dist", "lib", "README.md"],
-    }
-  })
+    };
+  });
 
   const tslibJson = join(options.projectRoot + "/tsconfig.lib.json");
   tree.exists(tslibJson) && tree.delete(tslibJson);
@@ -57,8 +48,8 @@ export function createFiles(tree: Tree, options: NormalizedSchema, projGraph?: P
   // const specFile = join(options.projectRoot, `./src/lib/${nameFormats.fileName}.spec.ts`);
   // tree.exists(specFile) && tree.delete(specFile);
   // }
-  // if (!options.publishable && !options.buildable) {
-  //   tree.delete(join(options.projectRoot, "package.json"));
+  // if (!options.publishable) {
+  //   // tree.delete(join(options.projectRoot, "package.json"));
   // }
   // if (options.js) {
   //   toJS(tree);

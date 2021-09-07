@@ -1,15 +1,10 @@
-import {
-  getWorkspaceLayout,
-  readProjectConfiguration,
-  Tree,
-  updateProjectConfiguration,
-} from "@nrwl/devkit";
+import { readProjectConfiguration, Tree, updateProjectConfiguration } from "@nrwl/devkit";
 import { appendCommand } from "../../common/appendCommand";
-import { NormalizedSchema } from "../../common/NormalizedSchema";
+import { NormalizedOptions } from "../library/normalizeSchema";
 
 export function updateProject(
   tree: Tree,
-  options: Pick<NormalizedSchema, "projectRoot" | "name" | "packageManager">,
+  options: Pick<NormalizedOptions, "projectRoot" | "name" | "packageManager" | "builder">,
   project = readProjectConfiguration(tree, options.name)
 ) {
   project.targets = project.targets || {};

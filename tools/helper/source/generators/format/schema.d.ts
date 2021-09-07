@@ -1,7 +1,7 @@
-import { PackageBuilder } from "../../schematics/internal-nx-plugins-lerna/schema";
+import { PackageBuilder } from "../shared";
 
 export interface FormatGeneratorSchema {
   project: string;
-  builder: PackageBuilder;
+  builder: PackageBuilder | "auto";
   all: boolean;
 }

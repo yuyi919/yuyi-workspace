@@ -1,16 +1,16 @@
-import { ProjectGraph } from "@nrwl/workspace/src/core/project-graph";
-import { ProjectNode } from "../../executors/build/getBuildablePackageJson";
 import { ProjectType } from "@nrwl/workspace";
+import { ProjectGraph } from "@nrwl/workspace/src/core/project-graph";
 import { groupBy } from "lodash";
-import { getSubType, LibraryType, SortedLibraryType } from "./LibraryType";
+import { LibProjectNode } from "./graph";
 import { ProjectConfig } from "../../common/ProjectConfig";
+import { getSubType, LibraryType, SortedLibraryType } from "./LibraryType";
 
 export function getSortedProjects(
   projects: Record<string, ProjectConfig>,
   graph: ProjectGraph
 ): Record<string, ProjectConfig> {
   return sortObjectKeysWith(projects, (key) => {
-    const { files, ...node } = (graph.nodes[key] as ProjectNode)?.data;
+    const { files, ...node } = (graph.nodes[key] as LibProjectNode)?.data;
     const tags = node.nxJsonSection?.tags || node.tags || [];
     const libtypeIndex = SortedLibraryType.findIndex(
       (type) =>
@@ -33,10 +33,11 @@ export function getSortedProjects(
     return [projectType, libtypeIndex, subLibTypeIndex];
   });
 }
-export function sortObjectKeysWith<O extends Record<string, any>, K extends keyof O, R extends number | string | (number | string)[]>(
-  collection: O,
-  walkerCast: (key: K) => R
-): O {
+export function sortObjectKeysWith<
+  O extends Record<string, any>,
+  K extends keyof O,
+  R extends number | string | (number | string)[]
+>(collection: O, walkerCast: (key: K) => R): O {
   const sortedProjects = {} as O;
   const group = groupBy(Object.keys(collection), (key: K) => {
     const lib = walkerCast(key);

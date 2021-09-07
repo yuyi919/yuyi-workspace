@@ -1,13 +1,11 @@
 import { formatFiles, readJson, readProjectConfiguration, Tree } from "@nrwl/devkit";
 import { ProjectType } from "@nrwl/workspace";
 import { createProjectGraph } from "@nrwl/workspace/src/core/project-graph";
-import {
-  calculateProjectDependencies,
-  ProjectNode,
-} from "../../executors/build/getBuildablePackageJson";
+import { calculateProjectDependencies } from "../shared/deps/getBuildablePackageJson";
+import { LibProjectNode } from "../shared";
 import { WorkspaceJson } from "../../common/ProjectConfig";
-import { PackageBuilder } from "../../schematics/internal-nx-plugins-lerna/schema";
 import { DockerFileGeneratorSchema } from "./schema";
+import { PackageBuilder } from "../../common/schema";
 
 export const projectTypeSort: Record<ProjectType, number> = [
   ProjectType.Application,
@@ -29,7 +27,7 @@ export default async function (host: Tree, options: DockerFileGeneratorSchema) {
   );
 
   const graph = createProjectGraph();
-  const node = (graph.nodes[options.project] as ProjectNode)?.data;
+  const node = (graph.nodes[options.project] as LibProjectNode)?.data;
 
   const { target, dependencies } = calculateProjectDependencies(graph, {
     workspaceRoot: process.cwd(),

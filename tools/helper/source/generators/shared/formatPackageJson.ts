@@ -1,4 +1,4 @@
-import { readJson, Tree, writeJson } from "@nrwl/devkit";
+import { readJson, Tree, updateJson, writeJson } from "@nrwl/devkit";
 import { sortObjectByKeys } from "@nrwl/workspace/src/utils/ast-utils";
 import { defaultsDeep } from "lodash";
 import { PackageJSON } from "../../common/packageJsonUtils";
@@ -49,4 +49,22 @@ export async function updatePackageJson(
       return index > -1 ? index : key;
     })
   );
+}
+
+export function formatRootPackageJson(host: Tree) {
+  updateJson(host, "package.json", (pkg: PackageJSON) => {
+    if (pkg.devDependencies) {
+      if (pkg.dependencies) {
+        for (const key in pkg.devDependencies) {
+          if (key in pkg.dependencies) {
+            delete pkg.devDependencies[key];
+          }
+        }
+      }
+      // 移除@types/jest, 因为不需要
+      delete pkg.devDependencies["@types/jest"];
+      // console.log(pkg);
+    }
+    return pkg;
+  });
 }

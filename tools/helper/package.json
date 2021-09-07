@@ -6,6 +6,7 @@
   "executors": "./executors.json",
   "scripts": {
     "build": "heft build --clean",
+    "build:dev": "heft build --clean",
     "dev": "heft build --watch",
     "test": "heft test",
     "test:watch": "heft test --watch"
@@ -31,7 +32,8 @@
     "ts-jest": "~27.0.5",
     "@types/fs-extra": "~9.0.12",
     "comment-json": "~4.1.1",
-    "enquirer": "^2.3.6"
+    "enquirer": "^2.3.6",
+    "ignore": "~5.1.8"
   },
   "devDependencies": {
     "@types/lodash": "^4.14.171",
