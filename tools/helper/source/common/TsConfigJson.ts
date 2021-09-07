@@ -4,6 +4,7 @@ import ts, { CompilerOptions } from "typescript";
 export interface TsConfigJson {
   extends: string;
   compilerOptions: CompilerOptions;
+  references: { path: string; [key: string]: any }[];
 }
 /**
  * 在生成流程中修改tsconfig文件

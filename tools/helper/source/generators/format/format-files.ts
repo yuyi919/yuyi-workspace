@@ -1,12 +1,9 @@
-import { getWorkspacePath, readJson, writeJson, ProjectGraph } from "@nrwl/devkit";
+import { getWorkspacePath, ProjectGraph, readJson, writeJson } from "@nrwl/devkit";
 import type { Tree } from "@nrwl/tao/src/shared/tree";
 import { reformattedWorkspaceJsonOrNull } from "@nrwl/tao/src/shared/workspace";
 import { sortObjectByKeys } from "@nrwl/tao/src/utils/object-sort";
 import * as path from "path";
-import { move, ensureFile, writeFile } from "fs-extra";
 import type * as Prettier from "prettier";
-import { resolveAbs } from "../../common/addFiles";
-import { join } from "path";
 import { WorkspaceJson } from "../../common/ProjectConfig";
 import { getSortedProjects } from "./getSortedProjects";
 

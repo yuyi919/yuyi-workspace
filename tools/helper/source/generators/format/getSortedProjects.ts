@@ -51,7 +51,7 @@ export function sortObjectKeysWith<O extends Record<string, any>, K extends keyo
       sortedProjects[name as keyof O] = collection[name];
     }
   }
-  console.log(group, sortedProjectsKeys);
+  // console.log(group, sortedProjectsKeys);
   return sortedProjects;
 }
 

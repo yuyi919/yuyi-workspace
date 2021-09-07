@@ -8,11 +8,7 @@
     "project": {
       "type": "string",
       "description": "The name of the project.",
-      "alias": "p",
-      "$default": {
-        "$source": "projectName"
-      },
-      "x-prompt": "你要格式化的项目?"
+      "alias": "p"
     },
     "builder": {
       "type": "string",
@@ -24,13 +20,15 @@
       "description": "构建使用的工具(不选则根据原始选项，如果原始不属于任何一种则中断操作)",
       "default": "auto"
     },
+    "all": {
+      "type": "boolean",
+      "description": "是否对所有工程进行格式化？",
+      "default": false
+    },
     "tags": {
       "type": "string",
       "description": "Add tags to the project (used for linting)",
       "alias": "t"
     }
-  },
-  "required": [
-    "project"
-  ]
+  }
 }

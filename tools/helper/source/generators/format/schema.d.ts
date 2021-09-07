@@ -3,4 +3,5 @@ import { PackageBuilder } from "../../schematics/internal-nx-plugins-lerna/schem
 export interface FormatGeneratorSchema {
   project: string;
   builder: PackageBuilder;
+  all: boolean;
 }

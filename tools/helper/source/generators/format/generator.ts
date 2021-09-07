@@ -1,4 +1,10 @@
-import { readProjectConfiguration, Tree, updateProjectConfiguration } from "@nrwl/devkit";
+import {
+  getProjects,
+  readJson,
+  readProjectConfiguration,
+  Tree,
+  updateProjectConfiguration,
+} from "@nrwl/devkit";
 import { createProjectGraph } from "@nrwl/workspace/src/core/project-graph";
 import { defaultsDeep } from "lodash";
 import * as Path from "path";
@@ -9,15 +15,43 @@ import { PackageBuilder } from "../../schematics/internal-nx-plugins-lerna/schem
 import { updateProject } from "../library/updateProject";
 import { formatFiles } from "./format-files";
 import { updatePackageJson } from "./formatPackageJson";
+import * as enquirer from "enquirer";
 import { FormatGeneratorSchema } from "./schema";
 
 export default async function (host: Tree, options: FormatGeneratorSchema) {
+  const graph = createProjectGraph();
+  const projrects = Array.from(getProjects(host).entries());
+  const targets = options.project
+    ? [options.project]
+    : options.all
+    ? projrects.map((o) => o[0])
+    : [];
+  if (targets.length === 0) {
+    const { project = [] } = await enquirer.prompt<{ project: string[] }>({
+      name: "project",
+      message: "请选择要格式化的项目",
+      type: "multiselect",
+      choices: projrects.map((o) => o[0]).filter(name => !name.endsWith("-rig")),
+    });
+    targets.push(...project);
+  }
+  await Promise.all(
+    targets.map((target) => formatProject(host, { ...options, project: target }, graph))
+  );
+  // await updateWorkspace(host, (workspaceJson) => {
+  //   return {
+  //     ...workspaceJson,
+  //     projects: getSortedProjects(workspaceJson.projects, graph),
+  //   };
+  // });
+  return await formatFiles(host, graph);
+}
+async function formatProject(host: Tree, options: FormatGeneratorSchema, graph) {
   const project = Object.assign(
     { builder: "auto" as PackageBuilder },
     readProjectConfiguration(host, options.project)
   );
 
-  const graph = createProjectGraph();
   const node = (graph.nodes[options.project] as ProjectNode)?.data;
   const builder =
     (options.builder && options.builder !== "auto" ? options.builder : project.builder) || "auto";
@@ -30,10 +64,9 @@ export default async function (host: Tree, options: FormatGeneratorSchema) {
     workspaceRoot: process.cwd(),
     projectDir: options.project,
     // 如果该依赖项不为内部包，收集依赖
-    match: (node, parent, deep) => deep < 1, // || !node.data.tags?.includes('internal')
+    match: (node, parent, deep) => deep < 1,
   });
-
-  if (node && node.projectType === "library" && node.tags?.includes("lerna-package")) {
+  if (node && node.projectType === "library") {
     console.log("builder:", builder);
     if (builder === "tsc") {
       const tsconfigReferences = deps
@@ -47,7 +80,7 @@ export default async function (host: Tree, options: FormatGeneratorSchema) {
       generateTscFiles(host, {
         name: options.project,
         projectRoot: project.root,
-        references: tsconfigReferences.map((path) => (/^\./.test(path) ? path : "./" + path)),
+        references: tsconfigReferences.map((path) => (/^\./.test(path) ? path : "./" + path))
       });
     }
     if (project.targets.build) {
@@ -95,11 +128,4 @@ export default async function (host: Tree, options: FormatGeneratorSchema) {
     packageManager: "pnpm",
     projectRoot: project.root,
   });
-  // await updateWorkspace(host, (workspaceJson) => {
-  //   return {
-  //     ...workspaceJson,
-  //     projects: getSortedProjects(workspaceJson.projects, graph),
-  //   };
-  // });
-  return await formatFiles(host, graph);
 }

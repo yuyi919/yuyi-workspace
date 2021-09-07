@@ -10,12 +10,14 @@ import {
 } from "@angular-devkit/schematics";
 import { names, offsetFromRoot } from "@nrwl/workspace";
 import * as Path from "path";
+import ts from "typescript";
 
 export type MetaProject = {
   name: string;
   projectRoot: string;
   references?: string[];
 };
+
 /**
  *
  * @param path

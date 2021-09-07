@@ -128,7 +128,7 @@
     },
     {
       "name": "enquirer",
-      "allowedCategories": [ "production" ]
+      "allowedCategories": [ "production", "tools" ]
     },
     {
       "name": "eslint",

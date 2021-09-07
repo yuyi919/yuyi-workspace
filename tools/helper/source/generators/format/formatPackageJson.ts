@@ -11,12 +11,12 @@ export async function updatePackageJson(
 ) {
   const keywords = [
     "name",
+    "private",
     "version",
     "description",
     "author",
     "keywords",
     "license",
-    "private",
     "main",
     "module",
     "types",

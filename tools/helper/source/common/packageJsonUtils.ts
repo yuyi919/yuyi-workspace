@@ -9,12 +9,16 @@ export type PackageJSON = {
   main: string;
   keywords?: string[]
   module?: string;
+  license?: string;
   types?: string;
   scripts: Record<string, string>;
   devDependencies: Record<string, string>;
   dependencies: Record<string, string>;
   peerDependencies: Record<string, string>;
-  files?: string[]
+  files?: string[];
+  publishConfig?: {
+    access?: string
+  }
 };
 export function modifyLibPackageJson(
   options: NormalizedOptions,
