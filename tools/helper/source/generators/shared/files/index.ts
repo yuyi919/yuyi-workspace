@@ -16,6 +16,7 @@ export function generateFilesWith(
     template: "",
     ...options,
     ...getOptions(options),
+    references
   });
   
   builder === "tsc" &&
@@ -32,6 +33,7 @@ export function generateTscFiles(host: Tree, options: MetaProject): void {
     template: "",
     ...options,
     ...getOptions(other),
+    references
   });
   tryUpdateJson(host, tsConfigPath, (json: TsConfigJson) => {
     return updateTsConfigReference(defaultsDeep(json, source), references);

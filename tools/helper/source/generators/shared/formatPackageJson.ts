@@ -12,7 +12,7 @@ export interface CommonPackageScripts {
   // "lint": string;
 }
 
-export async function updatePackageJson(
+export function updatePackageJson(
   host: Tree,
   jsonPath: string,
   callback: (json: PackageJSON) => PackageJSON
@@ -36,7 +36,7 @@ export async function updatePackageJson(
     "peerDependencies",
     "files",
   ] as (keyof PackageJSON)[];
-  const workspaceJson: PackageJSON = await readJson(host, jsonPath);
+  const workspaceJson = readJson<PackageJSON>(host, jsonPath);
   const packageJson = defaultsDeep(callback(workspaceJson), {
     description: "",
     author: "",
@@ -49,14 +49,14 @@ export async function updatePackageJson(
     packageJson.devDependencies = sortObjectByKeys(packageJson.devDependencies);
   if (packageJson.peerDependencies)
     packageJson.peerDependencies = sortObjectByKeys(packageJson.peerDependencies);
-  writeJson(
-    host,
-    jsonPath,
-    sortObjectKeysWith(packageJson, (key) => {
-      const index = keywords.indexOf(key);
-      return index > -1 ? index : key;
-    })
-  );
+  const result = sortObjectKeysWith(packageJson, (key) => {
+    const index = keywords.indexOf(key);
+    return index > -1 ? index : key;
+  });
+  if (!result.private) {
+    delete result["private"];
+  }
+  writeJson(host, jsonPath, result);
 }
 
 export function formatWorkspacePackageJson(host: Tree) {

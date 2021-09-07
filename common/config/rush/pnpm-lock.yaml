@@ -247,6 +247,7 @@ importers:
       lodash: 4.17.21
       lodash-es: 4.17.21
       ts-jest: ~27.0.5
+      tslib: ~2.3.1
       typescript: 4.1.2
     dependencies:
       '@yuyi919/shared-constant': link:../constant
@@ -261,7 +262,11 @@ importers:
       '@yuyi919/workspace-base-rig': link:../../../tools/workspace-base-rig
       jest: 27.1.0
       ts-jest: 27.0.5_jest@27.1.0+typescript@4.1.2
+      tslib: 2.3.1
       typescript: 4.1.2
+
+  ../../packages/libs/shared/test:
+    specifiers: {}
 
   ../../packages/libs/tools/ts-transformer/ast-utils:
     specifiers:

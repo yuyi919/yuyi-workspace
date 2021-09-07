@@ -7,15 +7,11 @@ import {
   TypedProjectGraph,
   updatePackageJson,
   updateProject,
+  getLibraryFromGraph
 } from "../shared";
 import { readProjectConfigurationWithBuilder } from "./generator";
 import { FormatGeneratorSchema } from "./schema";
 
-export function getLibraryFromGraph(graph: TypedProjectGraph, name: string) {
-  const node = graph.nodes[name];
-  if (node.type === "lib") return node;
-  throw Error(`Project[${name}]不为Library!`);
-}
 
 export async function updateFiles(
   host: Tree,
@@ -32,7 +28,7 @@ export async function updateFiles(
     packageJsonPath,
   } = formatDeps({
     workspaceRoot: process.cwd(),
-    projectDir: options.project,
+    projectName: options.project,
     // 如果该依赖项不为内部包，收集依赖
     match: (node, parent, deep) => deep < 1,
   });

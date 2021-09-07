@@ -11,6 +11,7 @@ import {
   updateProject,
   updateRushJson,
   readProjectConfiguration,
+  getProjectGraphWith,
 } from "../shared";
 import { createFiles } from "./createFiles";
 import { convertOptionsToProjectNode, normalizeOptions, normalizeSchema } from "./normalizeSchema";
@@ -41,7 +42,7 @@ export async function libraryGenerator(host: Tree, schema: Schema) {
   host.exists("jest.preset.js") && host.delete("jest.preset.js");
   updateProject(host, options, readProjectConfiguration(host, options.name));
 
-  const graph = getProjectGraph();
+  const graph = getProjectGraphWith(host);
   // 添加正准备生成的lib的预测数据
   graph.nodes[options.name] = convertOptionsToProjectNode(options) as LibProjectNode;
 

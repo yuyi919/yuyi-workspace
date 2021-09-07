@@ -117,7 +117,16 @@
       "sourceRoot": "libs/tools/workspace-base-rig/src",
       "projectType": "library",
       "generators": {},
-      "targets": {},
+      "targets": {
+        "build": {
+          "executor": "@nrwl/workspace:run-commands",
+          "options": {
+            "commands": ["pnpm run build"],
+            "cwd": "libs/tools/workspace-base-rig"
+          },
+          "outputs": ["{options.cwd}"]
+        }
+      },
       "nxJsonSection": {
         "tags": ["internal", "lerna-package"]
       }

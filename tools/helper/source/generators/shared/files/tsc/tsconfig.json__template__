@@ -6,8 +6,6 @@
   "exclude": [],
   "include": [],
   "references": [
-    <% references.forEach(function(path) { %>{ "path": "<%- path %>" },
-    <% }) %>
     { "path": "./tsconfig.lib.json" },
     { "path": "./tsconfig.cjs.json" }
   ]

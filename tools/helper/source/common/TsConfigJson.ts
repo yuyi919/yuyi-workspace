@@ -25,7 +25,7 @@ export function isEqualReference(targetA: TsConfigJsonReference, targetB: TsConf
 
 export function updateTsConfigReference(
   tsconfigJson: TsConfigJson,
-  references: (string | TsConfigJsonReference)[]
+  references: (string | TsConfigJsonReference)[] = []
 ) {
   const { references: sourceReferences = [], ...other } = tsconfigJson;
   const appendReferences = references.map((ref) => (typeof ref === "string" ? { path: ref } : ref));

@@ -1,5 +1,10 @@
 import { Tree } from "@nrwl/devkit";
-import { DependentBuildableProjectNode, getProjectGraph, TypedProjectGraph } from "../graph";
+import {
+  getLibraryFromGraph,
+  DependentBuildableProjectNode,
+  getProjectGraph,
+  TypedProjectGraph,
+} from "../graph";
 import { PackageJSON } from "../../../common/packageJsonUtils";
 import {
   calculateProjectDependencies,
@@ -20,15 +25,15 @@ const STATIC_DEPS = [
   "typescript",
 ];
 export function formatDeps(context: UpdateDepsContext, host?: Tree, projGraph?: TypedProjectGraph) {
-  if (!host) return updateDeps(context);
+  if (!host) return updateDeps(context, projGraph);
   return createDeps(context, host, projGraph);
 }
 
 /**
  * 为新项目创建
- * @param context 
- * @param host 
- * @param projGraph 
+ * @param context
+ * @param host
+ * @param projGraph
  */
 export function createDeps(
   context: UpdateDepsContext,
@@ -40,8 +45,9 @@ export function createDeps(
   packageJson: PackageJSON;
 } {
   const dependencies = toDependcyNodes(projGraph, context, STATIC_DEPS);
+  const projectNode = getLibraryFromGraph(projGraph, context.projectName);
   // const outputs = getOutputsForTargetAndConfiguration(node); //.data.root
-  const { packageJson, packageJsonPath } = readPackageJsonInTree(host, context.projectDir);
+  const { packageJson, packageJsonPath } = readPackageJsonInTree(host, projectNode.data.root);
   const { packageJson: workspacePackageJson } = readPackageJsonInTree(host, context.workspaceRoot);
   return {
     packageJson: getBuildablePackageJson(context, packageJson, workspacePackageJson, dependencies),
@@ -49,12 +55,14 @@ export function createDeps(
     dependencies,
   };
 }
-export function updateDeps(context: UpdateDepsContext): {
+export function updateDeps(
+  context: UpdateDepsContext,
+  projGraph = getProjectGraph()
+): {
   dependencies: DependentBuildableProjectNode[];
   packageJsonPath: string;
   packageJson: PackageJSON;
 } {
-  const projGraph = getProjectGraph();
   const { target, dependencies } = calculateProjectDependencies(projGraph, context, STATIC_DEPS);
   // const outputs = getOutputsForTargetAndConfiguration(node); //.data.root
   const { packageJson, packageJsonPath } = readPackageJson(

@@ -11,7 +11,7 @@ export function runBuilder(
 ): Observable<BuilderOutput> {
   updateDeps({
     workspaceRoot: context.workspaceRoot,
-    projectDir: context.target.project,
+    projectName: context.target.project,
   });
   return of({ success: true }).pipe(
     tap(() => {

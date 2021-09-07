@@ -4,6 +4,7 @@ import { NormalizedOptions } from "./NormalizedSchema";
 
 export type PackageJSON = {
   name?: string;
+  private?: boolean;
   description: string;
   sideEffect?: boolean;
   main: string;

@@ -17,7 +17,8 @@ import { PackageJSON } from "../../../common/packageJsonUtils";
 
 export type UpdateDepsContext = {
   workspaceRoot: string;
-  projectDir: string;
+  projectName: string;
+  // projectDir: string;
   match?: (pkg: TypedProjectGraphNode, parent: TypedProjectGraphNode, deep: number) => boolean;
 };
 
@@ -27,17 +28,17 @@ function isBuildable(node: TypedProjectGraphNode): boolean {
 }
 
 function recursivelyCollectDependencies(
-  project: string,
+  projectName: string,
   projGraph: ProjectGraph,
   acc: string[],
   match?: (pkg: ProjectGraphNode, parent: ProjectGraphNode, deep: number) => boolean,
   parent?: ProjectGraphNode,
   deep = -1
 ) {
-  const node = projGraph.nodes[project];
-  if (deep === -1 || (!acc.includes(project) && (match ? match(node, parent, deep) : true))) {
-    deep !== -1 && acc.push(project);
-    (projGraph.dependencies[project] || []).forEach((dependency) => {
+  const node = projGraph.nodes[projectName];
+  if (deep === -1 || (!acc.includes(projectName) && (match ? match(node, parent, deep) : true))) {
+    deep !== -1 && acc.push(projectName);
+    (projGraph.dependencies[projectName] || []).forEach((dependency) => {
       recursivelyCollectDependencies(dependency.target, projGraph, acc, match, node, deep + 1);
     });
   }
@@ -84,10 +85,10 @@ export function calculateProjectDependencies(
   context: UpdateDepsContext,
   appendPackages: string[] = []
 ): { target: LibProjectNode; dependencies: DependentBuildableProjectNode[] } {
-  const target = projGraph.nodes[context.projectDir] as LibProjectNode;
+  const target = projGraph.nodes[context.projectName] as LibProjectNode;
   // gather the library dependencies
   const dependencies = recursivelyCollectDependencies(
-    context.projectDir,
+    context.projectName,
     projGraph,
     [],
     context.match

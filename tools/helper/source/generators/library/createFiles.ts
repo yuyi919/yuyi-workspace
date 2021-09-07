@@ -3,11 +3,11 @@ import { join } from "path";
 import { generateFilesWith, updatePackageJson, formatDeps, TypedProjectGraph } from "../shared";
 import { NormalizedOptions } from "./normalizeSchema";
 
-export function createFiles(tree: Tree, options: NormalizedOptions, projGraph?: TypedProjectGraph) {
+export function createFiles(tree: Tree, options: NormalizedOptions, projGraph: TypedProjectGraph) {
   const { packageJson, packageJsonPath } = formatDeps(
     {
       workspaceRoot: tree.root,
-      projectDir: options.projectRoot,
+      projectName: options.name,
       // 如果该依赖项不为内部包，收集依赖
       // match: (node, parent, deep) => deep < 1, // || !node.data.tags?.includes('internal')
     },
@@ -18,7 +18,7 @@ export function createFiles(tree: Tree, options: NormalizedOptions, projGraph?: 
   generateFilesWith(tree, {
     name: options.name,
     projectRoot: options.projectRoot,
-    builder: options.builder
+    builder: options.builder,
   });
 
   updatePackageJson(tree, packageJsonPath, () => {
@@ -43,8 +43,10 @@ export function createFiles(tree: Tree, options: NormalizedOptions, projGraph?: 
     };
   });
 
-  const tslibJson = join(options.projectRoot + "/tsconfig.lib.json");
-  tree.exists(tslibJson) && tree.delete(tslibJson);
+  if (options.builder === "heft-tsc") {
+    const tslibJson = join(options.projectRoot + "/tsconfig.lib.json");
+    tree.exists(tslibJson) && tree.delete(tslibJson);
+  }
   // if (options.unitTestRunner === "none") {
   // const specFile = join(options.projectRoot, `./src/lib/${nameFormats.fileName}.spec.ts`);
   // tree.exists(specFile) && tree.delete(specFile);
