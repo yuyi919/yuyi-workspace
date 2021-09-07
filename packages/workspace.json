@@ -377,7 +377,7 @@
       }
     },
     "shared-utils": {
-      "builder": "tsc",
+      "builder": "heft-tsc",
       "root": "libs/shared/packages/utils",
       "sourceRoot": "libs/shared/packages/utils/src",
       "projectType": "library",

@@ -37,6 +37,7 @@
   "peerDependencies": {},
   "files": [
     "dist",
+    "lib",
     "README.md"
   ],
   "publishConfig": {

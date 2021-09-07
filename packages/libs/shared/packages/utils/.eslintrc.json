@@ -1,5 +1,5 @@
 {
-  "extends": "../../.eslintrc.json",
+  "extends": "./node_modules/@yuyi919/workspace-base-rig/.eslintrc.json",
   "ignorePatterns": [],
   "rules": {}
 }
