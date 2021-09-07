@@ -28,16 +28,16 @@ export default async function (host: Tree, options: DockerFileGeneratorSchema) {
   const graph = getProjectGraph();
   const node = (graph.nodes[options.project] as LibProjectNode)?.data;
 
-  const { target, dependencies } = calculateProjectDependencies(graph, {
-    workspaceRoot: process.cwd(),
-    projectName: options.project,
-    // 如果该依赖项不为内部包，收集依赖
-    match: (node, parent, deep) => {
-      console.log(node.name, parent.name);
-      return node.type !== "npm";
-    },
-  });
-  console.log(dependencies.map((d) => d.name));
+  // const { target, dependencies } = calculateProjectDependencies(graph, {
+  //   workspaceRoot: process.cwd(),
+  //   projectName: options.project,
+  //   // 如果该依赖项不为内部包，收集依赖
+  //   match: (node, parent, deep) => {
+  //     console.log(node.name, parent.name);
+  //     return node.type !== "npm";
+  //   },
+  // });
+  // console.log(dependencies.map((d) => d.name));
 
   await formatFiles(host);
 }

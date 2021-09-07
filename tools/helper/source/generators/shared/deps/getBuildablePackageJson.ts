@@ -14,6 +14,7 @@ import {
   TypedProjectGraphNode,
 } from "../graph";
 import { PackageJSON } from "../../../common/packageJsonUtils";
+// import { PackageJsonBuilder } from "../formatPackageJson";
 
 export type UpdateDepsContext = {
   workspaceRoot: string;
@@ -61,7 +62,7 @@ export function toDependcyNodes(
           );
           return {
             name: libPackageJson.name, // i.e. @workspace/mylib
-            outputs: [getOutputsForTargetAndConfiguration(depNode)],
+            outputs: [getOutputPath(depNode)],
             node: depNode,
           };
         } else if (depNode.type === "npm") {
@@ -100,7 +101,7 @@ export function isInternalPackage(node: ProjectGraphNode) {
     node.data?.tags?.includes("internal") || node.data?.nxJsonSection?.tags?.includes("internal")
   );
 }
-export function getOutputsForTargetAndConfiguration(node: ProjectGraphNode): string {
+export function getOutputPath(node: ProjectGraphNode): string {
   return node.data.root;
 }
 
@@ -167,12 +168,12 @@ export function getBuildablePackageJson(
       console.log("matched", packageName, entry.node.type);
       let depVersion: string;
       if (entry.node.type === ProjectType.lib && packageJson.name !== packageName) {
-        const outputs: string = getOutputsForTargetAndConfiguration(entry.node);
-        console.log("matched", packageName, outputs);
+        const outputPath: string = getOutputPath(entry.node);
+        console.log("matched", packageName, outputPath);
         depVersion =
           "workspace:" +
           readJsonFile(
-            join(context.workspaceRoot, outputs, outputs.endsWith(".json") ? "" : "package.json")
+            join(context.workspaceRoot, outputPath, outputPath.endsWith(".json") ? "" : "package.json")
           ).version;
       } else if (entry.node.type === "npm") {
         // If an npm dep is part of the workspace devDependencies, do not include it the library

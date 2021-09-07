@@ -27,17 +27,19 @@ export async function libraryGenerator(host: Tree, schema: Schema) {
   }
   console.log(options);
 
-  // const nxWorkspaceCallback =
-  await workspaceLibraryGenerator(host, {
-    ...schema,
-    importPath: options.importPath,
-    testEnvironment: "node",
-    skipFormat: true,
-    skipTsConfig: true,
-    skipBabelrc: true,
-    unitTestRunner: "jest",
-    setParserOptionsProject: false,
-  });
+  try {
+    // const nxWorkspaceCallback =
+    await workspaceLibraryGenerator(host, {
+      ...schema,
+      importPath: options.importPath,
+      testEnvironment: "node",
+      skipFormat: true,
+      skipTsConfig: true,
+      skipBabelrc: true,
+      unitTestRunner: "jest",
+      setParserOptionsProject: false,
+    });
+  } catch (error) {}
   host.exists("jest.config.js") && host.delete("jest.config.js");
   host.exists("jest.preset.js") && host.delete("jest.preset.js");
   updateProject(host, options, readProjectConfiguration(host, options.name));

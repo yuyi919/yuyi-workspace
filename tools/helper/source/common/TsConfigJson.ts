@@ -32,10 +32,10 @@ export function updateTsConfigReference(
   return {
     ...other,
     references: [
+      ...appendReferences,
       ...sourceReferences.filter(
         (item) => !appendReferences.some((i) => isEqualReference(item, i))
       ),
-      ...appendReferences,
     ],
   };
 }

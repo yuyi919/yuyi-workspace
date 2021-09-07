@@ -1,51 +1,29 @@
 import { Tree } from "@nrwl/devkit";
 import { join } from "path";
-import { generateFilesWith, updatePackageJson, formatDeps, TypedProjectGraph } from "../shared";
+import {
+  generateFilesWith,
+  updatePackageJson,
+  formatDeps,
+  TypedProjectGraph,
+  tryDelete,
+  PackageJsonBuilder,
+  PackageConfigures,
+} from "../shared";
 import { NormalizedOptions } from "./normalizeSchema";
 
-export function createFiles(tree: Tree, options: NormalizedOptions, projGraph: TypedProjectGraph) {
-  const { packageJson, packageJsonPath } = formatDeps(
-    {
-      workspaceRoot: tree.root,
-      projectName: options.name,
-      // 如果该依赖项不为内部包，收集依赖
-      // match: (node, parent, deep) => deep < 1, // || !node.data.tags?.includes('internal')
-    },
-    tree,
-    projGraph
-  );
-
-  generateFilesWith(tree, {
+export function createFiles(host: Tree, options: NormalizedOptions, projGraph: TypedProjectGraph) {
+  generateFilesWith(host, {
     name: options.name,
     projectRoot: options.projectRoot,
     builder: options.builder,
   });
-
-  updatePackageJson(tree, packageJsonPath, () => {
-    return {
-      ...packageJson,
-      private: !options.publishable,
-      scripts: {
-        ...packageJson.scripts,
-        build: "heft build --clean",
-        "build:dev": "heft build",
-        dev: "heft build --watch",
-        test: "heft test",
-        "test:watch": "heft test --watch",
-      },
-      main: "dist/index.js",
-      module: "lib/index.js",
-      types: "dist/index.d.ts",
-      publishConfig: {
-        access: "public",
-      },
-      files: ["dist", "lib", "README.md"],
-    };
-  });
+  const packageJsonBuilder = PackageJsonBuilder.setup(host, options.name, PackageConfigures, projGraph);
+  packageJsonBuilder.setupInit(options.builder);
+  packageJsonBuilder.writeJson(options.publishable);
 
   if (options.builder === "heft-tsc") {
-    const tslibJson = join(options.projectRoot + "/tsconfig.lib.json");
-    tree.exists(tslibJson) && tree.delete(tslibJson);
+    tryDelete(host, join(options.projectRoot + "/tsconfig.lib.json"));
+    tryDelete(host, join(options.projectRoot + "/tsconfig.spec.json"));
   }
   // if (options.unitTestRunner === "none") {
   // const specFile = join(options.projectRoot, `./src/lib/${nameFormats.fileName}.spec.ts`);

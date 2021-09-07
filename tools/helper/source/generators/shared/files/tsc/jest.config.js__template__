@@ -2,5 +2,10 @@ module.exports = {
   displayName: "<%= name %>",
   preset: "./node_modules/@yuyi919/workspace-base-rig/jest.preset.js",
   moduleFileExtensions: ["ts", "tsx", "js", "jsx"],
+  globals: {
+    "ts-jest": {
+      tsconfig: '<rootDir>/tsconfig.spec.json',
+    },
+  },
   coverageDirectory: "<%= offsetFromRoot %>coverage/<%= projectRoot %>",
 };

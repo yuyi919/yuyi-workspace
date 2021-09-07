@@ -125,6 +125,6 @@ export type TypedProjectGraphNode<T = {}> = LibProjectNode<T> | NpmProjectNode<T
 
 export function getLibraryFromGraph(graph: TypedProjectGraph, name: string) {
   const node = graph.nodes[name];
-  if (node.type === "lib") return node;
+  if (node?.type === "lib") return node;
   throw Error(`Project[${name}]不为Library!`);
 }

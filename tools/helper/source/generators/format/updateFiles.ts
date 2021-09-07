@@ -7,11 +7,10 @@ import {
   TypedProjectGraph,
   updatePackageJson,
   updateProject,
-  getLibraryFromGraph
+  getLibraryFromGraph,
 } from "../shared";
 import { readProjectConfigurationWithBuilder } from "./generator";
 import { FormatGeneratorSchema } from "./schema";
-
 
 export async function updateFiles(
   host: Tree,
@@ -26,12 +25,32 @@ export async function updateFiles(
     dependencies: deps,
     packageJson,
     packageJsonPath,
-  } = formatDeps({
-    workspaceRoot: process.cwd(),
-    projectName: options.project,
-    // 如果该依赖项不为内部包，收集依赖
-    match: (node, parent, deep) => deep < 1,
+  } = formatDeps(
+    {
+      workspaceRoot: host.root,
+      projectName: options.project,
+      // 如果该依赖项不为内部包，收集依赖
+      match: (node, parent, deep) => deep < 1,
+    },
+    host,
+    graph,
+    true
+  );
+
+  updatePackageJson(host, packageJsonPath, () => {
+    return defaultsDeep({
+      ...packageJson,
+      scripts: {
+        ...packageJson.scripts,
+        build: "heft build --clean",
+        "build:watch": "heft build --watch",
+        dev: "heft build --watch",
+        test: "heft test",
+        "test:watch": "heft test --watch",
+      },
+    });
   });
+
   if (node?.projectType === "library") {
     console.log("builder:", builder);
     if (builder === "tsc") {
@@ -74,21 +93,6 @@ export async function updateFiles(
       //   });
     }
   }
-
-  updatePackageJson(host, packageJsonPath, () => {
-    return defaultsDeep({
-      ...packageJson,
-      scripts: {
-        ...packageJson.scripts,
-        build: "heft build --clean",
-        "build:watch": "heft build --watch",
-        dev: "heft build --watch",
-        test: "heft test",
-        "test:watch": "heft test --watch"
-      },
-    });
-  });
-
   updateProject(
     host,
     {

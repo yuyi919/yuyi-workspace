@@ -6,7 +6,6 @@ import {
   getProjectGraphWith,
   PackageBuilder,
   LibProjectGraphNodeData,
-  TypedProjectGraph,
 } from "../shared";
 import { FormatGeneratorSchema } from "./schema";
 import { updateFiles } from "./updateFiles";

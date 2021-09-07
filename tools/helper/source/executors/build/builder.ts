@@ -3,16 +3,15 @@ import { BuilderContext, BuilderOutput, createBuilder } from "@angular-devkit/ar
 import { Observable, of } from "rxjs";
 import { tap } from "rxjs/operators";
 import { BuildBuilderSchema } from "./schema";
-import { updateDeps } from "../../generators/shared";
 
 export function runBuilder(
   options: BuildBuilderSchema,
   context: BuilderContext
 ): Observable<BuilderOutput> {
-  updateDeps({
-    workspaceRoot: context.workspaceRoot,
-    projectName: context.target.project,
-  });
+  // updateDeps({
+  //   workspaceRoot: context.workspaceRoot,
+  //   projectName: context.target.project,
+  // });
   return of({ success: true }).pipe(
     tap(() => {
       context.logger.info("Builder ran for build");

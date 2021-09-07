@@ -16,16 +16,16 @@ export function generateFilesWith(
     template: "",
     ...options,
     ...getOptions(options),
-    references
+    references,
   });
-  
+
   builder === "tsc" &&
     tryUpdateJson(host, tsConfigPath, (json: TsConfigJson) => {
       return updateTsConfigReference(defaultsDeep(json, source), references);
     });
 }
 export function generateTscFiles(host: Tree, options: MetaProject): void {
-  const { references, ...other } = options
+  const { references, ...other } = options;
   const tsConfigPath = options.projectRoot + "/tsconfig.json";
   const source = tryReadJson(host, tsConfigPath) as TsConfigJson;
   generateFiles(host, resolveAbs("./tsc", __dirname), options.projectRoot, {
@@ -33,7 +33,7 @@ export function generateTscFiles(host: Tree, options: MetaProject): void {
     template: "",
     ...options,
     ...getOptions(other),
-    references
+    references,
   });
   tryUpdateJson(host, tsConfigPath, (json: TsConfigJson) => {
     return updateTsConfigReference(defaultsDeep(json, source), references);

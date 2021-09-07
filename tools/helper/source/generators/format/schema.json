@@ -14,8 +14,9 @@
       "type": "string",
       "enum": [
         "auto",
-        "tsdx",
-        "tsc"
+        "tsc",
+        "heft-tsc",
+        "tsdx"
       ],
       "description": "构建使用的工具(不选则根据原始选项，如果原始不属于任何一种则中断操作)",
       "default": "auto"

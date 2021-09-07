@@ -1,22 +1,105 @@
-import { readJson, Tree, updateJson, writeJson } from "@nrwl/devkit";
+import { Tree, updateJson, writeJson } from "@nrwl/devkit";
 import { sortObjectByKeys } from "@nrwl/workspace/src/utils/ast-utils";
-import { defaultsDeep } from "lodash";
+import { defaultsDeep, merge } from "lodash";
 import { PackageJSON } from "../../common/packageJsonUtils";
+import { tryReadJson } from "./file-utils";
+import { STATIC_DEPS, formatDeps, UpdateDepsContext } from "./deps";
 import { sortObjectKeysWith } from "./getSortedProjects";
+import { DependentBuildableProjectNode } from "./graph";
+import { getProjectGraphWith, TypedProjectGraph } from ".";
+import { PackageBuilder } from "../../common/schema";
+export interface ConfigureItem {
+  scripts: CommonPackageScripts & Record<string, any>;
+  deps: string[];
+}
+export interface Configures extends Partial<Record<PackageBuilder, ConfigureItem>> {}
+export function definePackageJsonBuilder(configure: Configures) {
+  return configure;
+}
+
+export class PackageJsonBuilder {
+  constructor(private host: Tree, private name: string, private configure: Configures) {}
+
+  static setup(host: Tree, packageName: string, configure: Configures, graph?: TypedProjectGraph) {
+    const Builder = this;
+    const builder = new Builder(host, packageName, configure)
+    builder.projGraph = graph || getProjectGraphWith(host)
+    return builder;
+  }
+
+  projGraph!: TypedProjectGraph;
+  dependencyNodes!: DependentBuildableProjectNode[];
+  path!: string;
+  json!: PackageJSON;
+
+  scripts!: CommonPackageScripts & Record<string, any>;
+  deps!: string[];
+
+  setupInit(presetName: PackageBuilder) {
+    return this.setup(presetName)
+  }
+  setupUpdate(presetName: PackageBuilder) {
+    return this.setup(presetName, true)
+  }
+
+  private setup(presetName: PackageBuilder, update?: boolean) {
+    if (!(presetName in this.configure)) throw Error("未找到builder");
+    const { scripts, deps } = this.configure[presetName];
+    this.scripts = scripts;
+    this.deps = deps;
+
+    const {
+      dependencies: dependencyNodes,
+      packageJsonPath,
+      packageJson,
+    } = formatDeps(
+      {
+        workspaceRoot: this.host.root,
+        projectName: this.name,
+      },
+      this.host,
+      this.projGraph,
+      update,
+      this.deps.concat(STATIC_DEPS)
+    );
+    this.dependencyNodes = dependencyNodes;
+    this.json = packageJson;
+    this.path = packageJsonPath;
+    return this;
+  }
+
+  writeJson(publishable?: boolean) {
+    const { dependencies, devDependencies, peerDependencies } = this.json;
+    updatePackageJson(this.host, this.path, (json) => {
+      return merge(json, {
+        private: !publishable,
+        scripts: this.scripts,
+        main: "dist/index.js",
+        module: "lib/index.js",
+        types: "dist/index.d.ts",
+        publishConfig: {
+          access: "public",
+        },
+        dependencies,
+        devDependencies,
+        peerDependencies,
+        files: ["dist", "lib", "README.md"],
+      });
+    });
+  }
+}
 
 export interface CommonPackageScripts {
   build: string;
   "build:watch": string;
-  test: string;
   "build:dev": string;
+  dev: string;
+  test?: string;
+  "test:watch"?: string;
   // "lint": string;
 }
 
-export function updatePackageJson(
-  host: Tree,
-  jsonPath: string,
-  callback: (json: PackageJSON) => PackageJSON
-) {
+export function writePackageJson(host: Tree, jsonPath: string, json: PackageJSON) {
   const keywords = [
     "name",
     "private",
@@ -36,8 +119,7 @@ export function updatePackageJson(
     "peerDependencies",
     "files",
   ] as (keyof PackageJSON)[];
-  const workspaceJson = readJson<PackageJSON>(host, jsonPath);
-  const packageJson = defaultsDeep(callback(workspaceJson), {
+  const packageJson = defaultsDeep(json, {
     description: "",
     author: "",
   }) as PackageJSON;
@@ -57,6 +139,14 @@ export function updatePackageJson(
     delete result["private"];
   }
   writeJson(host, jsonPath, result);
+}
+export function updatePackageJson(
+  host: Tree,
+  jsonPath: string,
+  callback: (json: PackageJSON) => PackageJSON | void
+) {
+  const sourceJson = tryReadJson<PackageJSON>(host, jsonPath);
+  writePackageJson(host, jsonPath, callback(sourceJson) || sourceJson);
 }
 
 export function formatWorkspacePackageJson(host: Tree) {

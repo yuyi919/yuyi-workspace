@@ -14,7 +14,7 @@ export function tryUpdateJson<T extends object = any, U extends T = T>(
   updater: (value: T) => U,
   options?: JsonParseOptions & JsonSerializeOptions
 ) {
-  const read = tryReadJson(host, path, options);
+  const read = tryReadJson<T>(host, path, options);
   if (read) {
     const updatedValue = updater(read);
     writeJson(host, path, updatedValue, options);
@@ -25,10 +25,14 @@ export function tryRead(host: Tree, path: string) {
   return host.exists(path) && host.read(path).toString();
 }
 
-export function tryReadJson(
+export function tryDelete(host: Tree, path: string) {
+  host.exists(path) && host.delete(path)
+}
+
+export function tryReadJson<T extends object>(
   host: Tree,
   path: string,
   options?: JsonParseOptions & JsonSerializeOptions
 ) {
-  return host.exists(path) && readJson(host, path, options);
+  return host.exists(path) && readJson<T>(host, path, options);
 }
