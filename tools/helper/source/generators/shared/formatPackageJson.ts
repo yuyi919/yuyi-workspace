@@ -51,7 +51,7 @@ export async function updatePackageJson(
   );
 }
 
-export function formatRootPackageJson(host: Tree) {
+export function formatWorkspacePackageJson(host: Tree) {
   updateJson(host, "package.json", (pkg: PackageJSON) => {
     if (pkg.devDependencies) {
       if (pkg.dependencies) {

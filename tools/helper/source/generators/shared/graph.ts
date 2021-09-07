@@ -1,18 +1,25 @@
-import { FileData, ProjectGraph, ProjectGraphNode, readJson, Tree, ProjectType, ProjectGraphDependency } from "@nrwl/devkit";
-import { FsTree } from "@nrwl/tao/src/shared/tree";
-import { defaultFileHasher } from "@nrwl/workspace/src/core/hasher/file-hasher";
-import { performance } from "perf_hooks";
 import {
-  rootWorkspaceFileData,
-  readFileIfExisting,
+  FileData,
+  ProjectGraph,
+  ProjectGraphNode,
+  ProjectType,
+  readJson,
+  Tree,
+} from "@nrwl/devkit";
+import { FsTree } from "@nrwl/tao/src/shared/tree";
+import { appRootPath } from "@nrwl/tao/src/utils/app-root";
+import {
   allFilesInDir,
+  readFileIfExisting,
+  rootWorkspaceFileData,
   workspaceLayout,
 } from "@nrwl/workspace/src/core/file-utils";
+import { defaultFileHasher } from "@nrwl/workspace/src/core/hasher/file-hasher";
 import { createProjectGraph } from "@nrwl/workspace/src/core/project-graph";
-import { appRootPath } from "@nrwl/tao/src/utils/app-root";
-import { extname, relative, sep } from "path";
 import ignore from "ignore";
-import { PackageBuilder } from "../../common/schema";
+import { extname, relative, sep } from "path";
+import { performance } from "perf_hooks";
+import type { PackageBuilder } from ".";
 
 export function readWorkspaceFilesWith(appRootPath: string): FileData[] {
   function getIgnoredGlobs() {
@@ -92,8 +99,8 @@ export type DependentBuildableProjectNode = {
 };
 
 export type TypedProjectGraph<T = {}> = Omit<ProjectGraph, "nodes"> & {
-  nodes: Record<string, TypedProjectGraphNode<T>>
-}
+  nodes: Record<string, TypedProjectGraphNode<T>>;
+};
 
 export type ProjectGraphNodeData = {
   root: string;
@@ -111,5 +118,7 @@ export type NpmProjectGraphNodeData = {
   version: string;
 };
 export type LibProjectNode<T = {}> = ProjectGraphNode<ProjectGraphNodeData & T> & { type: "lib" };
-export type NpmProjectNode<T = {}> = ProjectGraphNode<NpmProjectGraphNodeData & T> & { type: "npm" };
-export type TypedProjectGraphNode<T = {}> = LibProjectNode<T> | NpmProjectNode<T>
+export type NpmProjectNode<T = {}> = ProjectGraphNode<NpmProjectGraphNodeData & T> & {
+  type: "npm";
+};
+export type TypedProjectGraphNode<T = {}> = LibProjectNode<T> | NpmProjectNode<T>;

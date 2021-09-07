@@ -1,13 +1,12 @@
 import { ProjectType } from "@nrwl/workspace";
-import { ProjectGraph } from "@nrwl/workspace/src/core/project-graph";
 import { groupBy } from "lodash";
-import { LibProjectNode } from "./graph";
+import { LibProjectNode, TypedProjectGraph } from "./graph";
 import { ProjectConfig } from "../../common/ProjectConfig";
 import { getSubType, LibraryType, SortedLibraryType } from "./LibraryType";
 
 export function getSortedProjects(
   projects: Record<string, ProjectConfig>,
-  graph: ProjectGraph
+  graph: TypedProjectGraph
 ): Record<string, ProjectConfig> {
   return sortObjectKeysWith(projects, (key) => {
     const { files, ...node } = (graph.nodes[key] as LibProjectNode)?.data;

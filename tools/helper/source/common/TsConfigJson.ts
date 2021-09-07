@@ -1,11 +1,45 @@
 import { chain } from "@angular-devkit/schematics";
 import { updateJsonInTree } from "@nrwl/workspace";
 import ts, { CompilerOptions } from "typescript";
+import { dirname } from "path";
+import { defaultsDeep, isEqual } from "lodash";
 export interface TsConfigJson {
   extends: string;
   compilerOptions: CompilerOptions;
-  references: { path: string; [key: string]: any }[];
+  references: TsConfigJsonReference[];
 }
+export interface TsConfigJsonReference {
+  path: string;
+  [key: string]: any;
+}
+
+export function getReferenceNormlized(target: TsConfigJsonReference) {
+  target.path = (target.path as string).endsWith("/tsconfig.json")
+    ? dirname(target.path)
+    : target.path;
+  return target;
+}
+export function isEqualReference(targetA: TsConfigJsonReference, targetB: TsConfigJsonReference) {
+  return isEqual(getReferenceNormlized(targetA), getReferenceNormlized(targetB));
+}
+
+export function updateTsConfigReference(
+  tsconfigJson: TsConfigJson,
+  references: (string | TsConfigJsonReference)[]
+) {
+  const { references: sourceReferences = [], ...other } = tsconfigJson;
+  const appendReferences = references.map((ref) => (typeof ref === "string" ? { path: ref } : ref));
+  return {
+    ...other,
+    references: [
+      ...sourceReferences.filter(
+        (item) => !appendReferences.some((i) => isEqualReference(item, i))
+      ),
+      ...appendReferences,
+    ],
+  };
+}
+
 /**
  * 在生成流程中修改tsconfig文件
  * @param path 相对路径（以项目root目录为基准）

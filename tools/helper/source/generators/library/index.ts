@@ -1,9 +1,16 @@
-import { convertNxGenerator, Tree } from "@nrwl/devkit";
+import { convertNxGenerator, Tree, normalizePath } from "@nrwl/devkit";
 import { libraryGenerator as workspaceLibraryGenerator } from "@nrwl/workspace/generators";
 import * as child_process from "child_process";
 import { isEqual } from "lodash";
 import { join } from "path";
-import { formatFiles, formatRootPackageJson, getProjectGraph, LibProjectNode, updateProject, updateRushJson } from "../shared";
+import {
+  formatFiles,
+  formatWorkspacePackageJson,
+  getProjectGraph,
+  LibProjectNode,
+  updateProject,
+  updateRushJson,
+} from "../shared";
 import { createFiles } from "./createFiles";
 import { convertOptionsToProjectNode, normalizeOptions, normalizeSchema } from "./normalizeSchema";
 import { Schema } from "./schema";
@@ -36,12 +43,10 @@ export async function libraryGenerator(host: Tree, schema: Schema) {
   const graph = getProjectGraph();
   // 添加正准备生成的lib的预测数据
   graph.nodes[options.name] = convertOptionsToProjectNode(options) as LibProjectNode;
-  createFiles(host, options, graph);
-  // if (options.js) {
-  //   updateTsConfigsToJs(host, options);
-  // }
 
-  formatRootPackageJson(host);
+  createFiles(host, options, graph);
+
+  formatWorkspacePackageJson(host);
 
   updateRushJson(host, (json) => {
     // 全部分类
@@ -52,8 +57,8 @@ export async function libraryGenerator(host: Tree, schema: Schema) {
     }
     const currentPackage = packages[options.importPath] || {
       packageName: options.importPath,
-      projectFolder: ("packages/" + options.projectRoot).replace(/(\\)+/g, "/"),
-      // 找到准确分类然后
+      projectFolder: normalizePath("packages/" + options.projectRoot),
+      // 找到准确分类
       reviewCategory:
         reviewCategories.find((type) => options.parsedTags.includes(type)) || "production",
     };

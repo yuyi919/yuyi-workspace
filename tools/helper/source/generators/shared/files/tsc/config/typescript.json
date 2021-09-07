@@ -1,0 +1,8 @@
+/**
+ * Configures the TypeScript plugin for Heft.  This plugin also manages linting.
+ */
+{
+  "$schema": "https://developer.microsoft.com/zh-cn/json-schemas/heft/typescript.schema.json",
+  "extends": "@yuyi919/workspace-base-rig/profiles/default/config/typescript.json",
+  "emitFolderNameForTests": "dist"
+}

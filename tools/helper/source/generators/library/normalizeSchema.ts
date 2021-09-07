@@ -37,7 +37,7 @@ export function normalizeSchema(tree: Tree, options: Schema): Schema {
     rootDir: "./dist",
     tags: parsedTags.join(","),
     importPath,
-    linter: "eslint" as any
+    linter: "eslint" as any,
   };
 }
 
@@ -53,7 +53,7 @@ export function normalizeOptions(host: Tree, options: Schema): NormalizedOptions
 
   const parsedTags = options.tags?.split(",") || [];
   const keywords = [defaultPrefix, ...parsedTags];
-  
+
   return {
     publishable: options.publishable,
     importPath: options.importPath || autoImportPath(npmScope, options),
@@ -66,11 +66,11 @@ export function normalizeOptions(host: Tree, options: Schema): NormalizedOptions
     projectDirectory,
     parsedTags,
     keywords,
-    packageManager: "pnpm" as PackageManager //detectPackageManager(host.root),
+    packageManager: "pnpm" as PackageManager, //detectPackageManager(host.root),
   };
 }
 
-export function convertOptionsToProjectNode(options: Schema & NormalizedSchema): LibProjectNode {
+export function convertOptionsToProjectNode(options: NormalizedOptions): LibProjectNode {
   return {
     type: "lib",
     data: {

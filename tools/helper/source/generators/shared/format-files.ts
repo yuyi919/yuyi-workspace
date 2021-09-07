@@ -6,12 +6,13 @@ import * as path from "path";
 import type * as Prettier from "prettier";
 import { WorkspaceJson } from "../../common/ProjectConfig";
 import { getSortedProjects } from "./getSortedProjects";
+import { TypedProjectGraph } from "./graph";
 
 /**
  * Formats all the created or updated files using Prettier
  * @param host - the file system tree
  */
-export async function formatFiles(host: Tree, graph?: ProjectGraph) {
+export async function formatFiles(host: Tree, graph?: TypedProjectGraph) {
   let prettier: typeof Prettier;
   try {
     prettier = await import("prettier");
@@ -96,7 +97,7 @@ export function updateWorkspace(host: Tree, callback: (json: WorkspaceJson) => W
     // catch noop
   }
 }
-function sortWorkspaceJson(host: Tree, graph: ProjectGraph) {
+function sortWorkspaceJson(host: Tree, graph: TypedProjectGraph) {
   updateWorkspace(host, (workspaceJson) => {
     return {
       ...workspaceJson,
