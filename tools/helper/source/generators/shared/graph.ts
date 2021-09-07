@@ -102,7 +102,7 @@ export type TypedProjectGraph<T = {}> = Omit<ProjectGraph, "nodes"> & {
   nodes: Record<string, TypedProjectGraphNode<T>>;
 };
 
-export type ProjectGraphNodeData = {
+export type LibProjectGraphNodeData = {
   root: string;
   sourceRoot?: string;
   projectType: ProjectType;
@@ -117,7 +117,7 @@ export type NpmProjectGraphNodeData = {
   packageName: string;
   version: string;
 };
-export type LibProjectNode<T = {}> = ProjectGraphNode<ProjectGraphNodeData & T> & { type: "lib" };
+export type LibProjectNode<T = {}> = ProjectGraphNode<LibProjectGraphNodeData & T> & { type: "lib" };
 export type NpmProjectNode<T = {}> = ProjectGraphNode<NpmProjectGraphNodeData & T> & {
   type: "npm";
 };

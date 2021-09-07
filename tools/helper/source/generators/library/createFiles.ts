@@ -1,9 +1,9 @@
-import { ProjectGraph, Tree } from "@nrwl/devkit";
+import { Tree } from "@nrwl/devkit";
 import { join } from "path";
-import { generateTscFiles, updatePackageJson, formatDeps } from "../shared";
+import { generateFilesWith, updatePackageJson, formatDeps, TypedProjectGraph } from "../shared";
 import { NormalizedOptions } from "./normalizeSchema";
 
-export function createFiles(tree: Tree, options: NormalizedOptions, projGraph?: ProjectGraph) {
+export function createFiles(tree: Tree, options: NormalizedOptions, projGraph?: TypedProjectGraph) {
   const { packageJson, packageJsonPath } = formatDeps(
     {
       workspaceRoot: tree.root,
@@ -15,9 +15,10 @@ export function createFiles(tree: Tree, options: NormalizedOptions, projGraph?: 
     projGraph
   );
 
-  generateTscFiles(tree, {
+  generateFilesWith(tree, {
     name: options.name,
     projectRoot: options.projectRoot,
+    builder: options.builder
   });
 
   updatePackageJson(tree, packageJsonPath, () => {

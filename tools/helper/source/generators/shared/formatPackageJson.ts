@@ -4,6 +4,14 @@ import { defaultsDeep } from "lodash";
 import { PackageJSON } from "../../common/packageJsonUtils";
 import { sortObjectKeysWith } from "./getSortedProjects";
 
+export interface CommonPackageScripts {
+  build: string;
+  "build:watch": string;
+  test: string;
+  "build:dev": string;
+  // "lint": string;
+}
+
 export async function updatePackageJson(
   host: Tree,
   jsonPath: string,

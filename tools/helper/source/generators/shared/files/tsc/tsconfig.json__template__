@@ -2,5 +2,13 @@
   "extends": "./node_modules/@yuyi919/workspace-base-rig/profiles/default/tsconfig-base.json",
   "compilerOptions": {
     "rootDir": "./src"
-  }
+  },
+  "exclude": [],
+  "include": [],
+  "references": [
+    <% references.forEach(function(path) { %>{ "path": "<%- path %>" },
+    <% }) %>
+    { "path": "./tsconfig.lib.json" },
+    { "path": "./tsconfig.cjs.json" }
+  ]
 }

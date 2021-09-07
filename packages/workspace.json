@@ -390,21 +390,33 @@
         },
         "build": {
           "executor": "@nrwl/workspace:run-commands",
-          "configurations": {},
+          "configurations": {
+            "watch": {
+              "commands": ["pnpm run build:watch"]
+            }
+          },
           "options": {
             "commands": ["pnpm run build"],
             "cwd": "libs/shared/packages/utils"
-          },
-          "outputs": ["{options.cwd}"]
+          }
         },
         "command": {
           "executor": "@nrwl/workspace:run-commands",
           "options": {},
           "configurations": {
             "remove": {
+              "cwd": ".",
               "commands": [
                 {
                   "command": "nx generate @nrwl/workspace:remove --projectName=shared-utils --forceRemove"
+                }
+              ]
+            },
+            "format": {
+              "cwd": ".",
+              "commands": [
+                {
+                  "command": "nx generate @yuyi919/nx-plugin-workspace-helper:format --project=shared-utils --no-interactive"
                 }
               ]
             }

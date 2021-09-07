@@ -1,6 +1,5 @@
 import { Tree } from "@nrwl/devkit";
-import { createProjectGraph, ProjectGraph } from "@nrwl/workspace/src/core/project-graph";
-import { DependentBuildableProjectNode } from "../graph";
+import { DependentBuildableProjectNode, getProjectGraph, TypedProjectGraph } from "../graph";
 import { PackageJSON } from "../../../common/packageJsonUtils";
 import {
   calculateProjectDependencies,
@@ -20,7 +19,7 @@ const STATIC_DEPS = [
   "tslib",
   "typescript",
 ];
-export function formatDeps(context: UpdateDepsContext, host?: Tree, projGraph?: ProjectGraph) {
+export function formatDeps(context: UpdateDepsContext, host?: Tree, projGraph?: TypedProjectGraph) {
   if (!host) return updateDeps(context);
   return createDeps(context, host, projGraph);
 }
@@ -34,7 +33,7 @@ export function formatDeps(context: UpdateDepsContext, host?: Tree, projGraph?: 
 export function createDeps(
   context: UpdateDepsContext,
   host: Tree,
-  projGraph = createProjectGraph()
+  projGraph = getProjectGraph()
 ): {
   dependencies: DependentBuildableProjectNode[];
   packageJsonPath: string;
@@ -55,7 +54,7 @@ export function updateDeps(context: UpdateDepsContext): {
   packageJsonPath: string;
   packageJson: PackageJSON;
 } {
-  const projGraph = createProjectGraph();
+  const projGraph = getProjectGraph();
   const { target, dependencies } = calculateProjectDependencies(projGraph, context, STATIC_DEPS);
   // const outputs = getOutputsForTargetAndConfiguration(node); //.data.root
   const { packageJson, packageJsonPath } = readPackageJson(

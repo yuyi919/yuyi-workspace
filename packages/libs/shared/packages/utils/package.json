@@ -1,25 +1,22 @@
 {
   "name": "@yuyi919/shared-utils",
   "version": "0.0.35",
+  "description": "",
+  "author": "",
+  "license": "MIT",
   "main": "dist/index.js",
   "module": "lib/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
-    "clean": "rimraf ../.tsBuildInfo/shared-utils*.json && rimraf ./dist && rimraf ./lib",
     "build": "heft build --clean",
     "build:dev": "heft build",
+    "build:watch": "heft build --watch",
+    "clean": "rimraf ../.tsBuildInfo/shared-utils*.json && rimraf ./dist && rimraf ./lib",
     "dev": "heft build --watch",
+    "nx:format": "nx run shared-utils:command:format",
     "test": "heft test",
     "test:watch": "heft test --watch"
   },
-  "license": "MIT",
-  "publishConfig": {
-    "access": "public"
-  },
-  "files": [
-    "dist",
-    "README.md"
-  ],
   "dependencies": {
     "@yuyi919/shared-constant": "workspace:0.0.2",
     "@yuyi919/shared-types": "workspace:0.0.4",
@@ -34,7 +31,15 @@
     "@yuyi919/workspace-base-rig": "workspace:1.2.5",
     "jest": "~27.1.0",
     "ts-jest": "~27.0.5",
+    "tslib": "~2.3.1",
     "typescript": "4.1.2"
   },
-  "peerDependencies": {}
+  "peerDependencies": {},
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "publishConfig": {
+    "access": "public"
+  }
 }

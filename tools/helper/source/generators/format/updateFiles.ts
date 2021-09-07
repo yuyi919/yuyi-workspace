@@ -8,8 +8,14 @@ import {
   updatePackageJson,
   updateProject,
 } from "../shared";
-import { getLibraryFromGraph, readProjectConfigurationWithBuilder } from "./generator";
+import { readProjectConfigurationWithBuilder } from "./generator";
 import { FormatGeneratorSchema } from "./schema";
+
+export function getLibraryFromGraph(graph: TypedProjectGraph, name: string) {
+  const node = graph.nodes[name];
+  if (node.type === "lib") return node;
+  throw Error(`Project[${name}]不为Library!`);
+}
 
 export async function updateFiles(
   host: Tree,
@@ -30,7 +36,7 @@ export async function updateFiles(
     // 如果该依赖项不为内部包，收集依赖
     match: (node, parent, deep) => deep < 1,
   });
-  if (node && node.projectType === "library") {
+  if (node?.projectType === "library") {
     console.log("builder:", builder);
     if (builder === "tsc") {
       const tsconfigReferences = deps
@@ -79,10 +85,10 @@ export async function updateFiles(
       scripts: {
         ...packageJson.scripts,
         build: "heft build --clean",
+        "build:watch": "heft build --watch",
         dev: "heft build --watch",
         test: "heft test",
-        "test:watch": "heft test --watch",
-        "nx:format": `nx run ${options.project}:command:format`,
+        "test:watch": "heft test --watch"
       },
     });
   });

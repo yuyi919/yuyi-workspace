@@ -1,8 +1,7 @@
 import { formatFiles, readJson, readProjectConfiguration, Tree } from "@nrwl/devkit";
 import { ProjectType } from "@nrwl/workspace";
-import { createProjectGraph } from "@nrwl/workspace/src/core/project-graph";
 import { calculateProjectDependencies } from "../shared/deps/getBuildablePackageJson";
-import { LibProjectNode } from "../shared";
+import { getProjectGraph, LibProjectNode } from "../shared";
 import { WorkspaceJson } from "../../common/ProjectConfig";
 import { DockerFileGeneratorSchema } from "./schema";
 import { PackageBuilder } from "../../common/schema";
@@ -26,7 +25,7 @@ export default async function (host: Tree, options: DockerFileGeneratorSchema) {
     readProjectConfiguration(host, options.project)
   );
 
-  const graph = createProjectGraph();
+  const graph = getProjectGraph();
   const node = (graph.nodes[options.project] as LibProjectNode)?.data;
 
   const { target, dependencies } = calculateProjectDependencies(graph, {

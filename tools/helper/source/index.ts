@@ -1,3 +1,4 @@
 import * as path from "path";
-
-export const root = path.join(__dirname, "..")
+import type { PackageJSON } from "./common/packageJsonUtils";
+export const root = path.join(__dirname, "..");
+export const packageJson = require("../package.json") as PackageJSON;

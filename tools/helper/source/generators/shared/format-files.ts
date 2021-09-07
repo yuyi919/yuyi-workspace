@@ -15,7 +15,7 @@ import { TypedProjectGraph } from "./graph";
 export async function formatFiles(host: Tree, graph?: TypedProjectGraph) {
   let prettier: typeof Prettier;
   try {
-    prettier = await import("prettier");
+    prettier = require("prettier");
     // eslint-disable-next-line no-empty
   } catch (e) {
     console.error(e);
