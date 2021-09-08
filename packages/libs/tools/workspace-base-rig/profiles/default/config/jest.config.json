@@ -9,6 +9,7 @@
 
   "collectCoverageFrom": [
     "src/**/*.{ts,tsx}",
+    "!src/index.ts",
     "!src/**/*.d.ts",
     "!src/**/*.test.{ts,tsx}",
     "!src/**/test/**",

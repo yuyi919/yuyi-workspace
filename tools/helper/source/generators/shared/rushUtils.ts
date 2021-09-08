@@ -1,5 +1,15 @@
 import { Tree } from "@nrwl/devkit";
 import * as jsonc from "comment-json";
+import { tryReadJson } from "../../schematics/internal-nx-plugins-lerna/addLibFiles";
+
+type RushProjectDefinition = {
+  packageName: string;
+  projectFolder: string;
+  cyclicDependencyProjects?: string[];
+  reviewCategory?: string;
+  shouldPublish?: boolean;
+  versionPolicyName?: string;
+};
 
 export type RushJson = {
   $schema: string;
@@ -50,14 +60,13 @@ export type RushJson = {
      */
     description?: string;
   }[];
-  projects: {
-    packageName: string;
-    projectFolder: string;
-    cyclicDependencyProjects?: string[];
-    reviewCategory?: string;
-  }[];
+  projects: RushProjectDefinition[];
 };
 
+export function getRushPackageDefinition(host: Tree, packageName: string): RushProjectDefinition | undefined {
+  const rushJson = tryReadJson(host, "../rush.json") as RushJson
+  return rushJson ? rushJson.projects.find(p => p.packageName === packageName) : void 0
+}
 export function updateRushJson(host: Tree, updater: (json: RushJson) => RushJson | void) {
   try {
     let rushJson: RushJson = jsonc.parse(host.read("../rush.json").toString());

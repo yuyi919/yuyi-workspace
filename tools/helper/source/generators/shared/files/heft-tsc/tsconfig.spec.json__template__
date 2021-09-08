@@ -4,12 +4,5 @@
     "outDir": "./node_modules/@yuyi919/workspace-base-rig/temp/out-tsc",
     "types": ["heft-jest", "node"]
   },
-  "include": [
-    "**/*.spec.ts",
-    "**/*.spec.tsx",
-    "**/__test__/**",
-    "**/*.spec.js",
-    "**/*.spec.jsx",
-    "**/*.d.ts"
-  ]
+  "include": ["**/*.spec.ts", "**/*.spec.tsx", "**/__test__/**", "**/*.spec.js", "**/*.spec.jsx", "**/*.d.ts"]
 }

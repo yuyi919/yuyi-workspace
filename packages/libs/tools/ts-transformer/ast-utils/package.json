@@ -2,36 +2,51 @@
   "name": "@yuyi919-ts-transformer/ast-utils",
   "private": true,
   "version": "0.0.2",
+  "description": "",
+  "author": "",
   "keywords": [
-    "yuyi919",
     "internal",
-    "internal-ts",
-    "internal-internal-ts-transformer",
     "internal-internal-ts-internal-internal-ts-transformer-ast",
-    "internal-internal-ts-internal-internal-ts-transformer-internal-internal-ts-internal-internal-ts-transformer-ast-utils"
+    "internal-internal-ts-internal-internal-ts-transformer-internal-internal-ts-internal-internal-ts-transformer-ast-utils",
+    "internal-internal-ts-transformer",
+    "internal-ts",
+    "yuyi919"
   ],
+  "license": "MIT",
   "main": "dist/index.js",
   "module": "lib/index.js",
   "types": "dist/index.d.ts",
+  "sideEffect": false,
   "scripts": {
     "build": "heft build --clean",
     "build:dev": "heft build",
-    "dev": "heft build --watch",
+    "build:watch": "heft build --watch",
     "clean": "heft clean --clear-cache",
+    "dev": "heft build --watch",
     "test": "heft test",
     "test:watch": "heft test --watch"
   },
-  "sideEffect": false,
-  "license": "MIT",
-  "publishConfig": {
-    "access": "public"
+  "dependencies": {
+    "fs-extra": "^10.0.0",
+    "lodash": "4.17.21",
+    "lodash-es": "4.17.21",
+    "minimatch": "^3.0.4",
+    "ts-expose-internals": "^4.3.2"
   },
   "devDependencies": {
+    "@types/heft-jest": "1.0.2",
     "@types/minimatch": "^3.0.5",
+    "@types/node": "~16.7.2",
     "@yuyi919/shared-types": "workspace:0.0.4",
     "@yuyi919/workspace-base-rig": "workspace:1.2.5",
+    "jest": "~27.1.0",
+    "ts-node": "~9.1.1",
+    "ts-patch": "^1.4.1",
+    "tslib": "~2.3.1",
     "typescript": "4.1.2",
-    "typescript-next": "npm:typescript@4.3.5",
+    "typescript-next": "npm:typescript@4.3.5"
+  },
+  "peerDependencies": {
     "ts-node": "~9.1.1",
     "ts-patch": "^1.4.1"
   },
@@ -40,15 +55,7 @@
     "lib",
     "README.md"
   ],
-  "dependencies": {
-    "fs-extra": "^10.0.0",
-    "lodash": "4.17.21",
-    "lodash-es": "4.17.21",
-    "minimatch": "^3.0.4",
-    "ts-expose-internals": "^4.3.2"
-  },
-  "peerDependencies": {
-    "ts-node": "~9.1.1",
-    "ts-patch": "^1.4.1"
+  "publishConfig": {
+    "access": "public"
   }
 }

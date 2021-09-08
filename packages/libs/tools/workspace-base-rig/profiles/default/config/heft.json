@@ -41,12 +41,14 @@
       /**
        * The path to the plugin package.
        */
-      "plugin": "@rushstack/heft-jest-plugin"
+      "plugin": "@rushstack/heft-jest-plugin",
 
       /**
        * An optional object that provides additional settings that may be defined by the plugin.
        */
-      // "options": { }
+      "options": {
+        // "disableConfigurationModuleResolution": true
+      }
     }
   ]
 }

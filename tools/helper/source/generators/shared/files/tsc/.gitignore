@@ -1,3 +1,6 @@
 /lib
 /dist
-.rush
+/temp
+/node_modules
+/.rush
+*.log

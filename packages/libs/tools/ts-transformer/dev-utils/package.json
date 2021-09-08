@@ -2,40 +2,48 @@
   "name": "@yuyi919-ts-transformer/dev-utils",
   "private": true,
   "version": "0.0.2",
+  "description": "",
+  "author": "",
   "keywords": [
-    "yuyi919",
     "internal",
-    "internal-ts",
-    "internal-internal-ts-transformer",
     "internal-internal-ts-internal-internal-ts-transformer-dev",
-    "internal-internal-ts-internal-internal-ts-transformer-internal-internal-ts-internal-internal-ts-transformer-dev-utils"
+    "internal-internal-ts-internal-internal-ts-transformer-internal-internal-ts-internal-internal-ts-transformer-dev-utils",
+    "internal-internal-ts-transformer",
+    "internal-ts",
+    "yuyi919"
   ],
+  "license": "MIT",
   "main": "dist/index.js",
   "module": "lib/index.js",
   "types": "dist/index.d.ts",
+  "sideEffect": false,
   "scripts": {
     "build": "heft build --clean",
-    "dev": "heft build --watch",
+    "build:dev": "heft build",
+    "build:watch": "heft build --watch",
     "clean": "tsc --build --clean && rimraf ./dist && rimraf ./lib",
+    "dev": "heft build --watch",
     "test": "heft test",
     "test:watch": "heft test --watch"
   },
-  "sideEffect": false,
-  "license": "MIT",
-  "publishConfig": {
-    "access": "public"
+  "dependencies": {
+    "fs-extra": "^10.0.0"
   },
+  "devDependencies": {
+    "@types/heft-jest": "1.0.2",
+    "@types/node": "~16.7.2",
+    "@yuyi919/workspace-base-rig": "workspace:1.2.5",
+    "jest": "~27.1.0",
+    "tslib": "~2.3.1",
+    "typescript": "4.1.2"
+  },
+  "peerDependencies": {},
   "files": [
     "dist",
     "lib",
     "README.md"
   ],
-  "devDependencies": {
-    "@yuyi919/workspace-base-rig": "workspace:1.2.5",
-    "typescript": "4.1.2",
-    "jest": "~27.1.0"
-  },
-  "dependencies": {
-    "fs-extra": "^10.0.0"
+  "publishConfig": {
+    "access": "public"
   }
 }

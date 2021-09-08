@@ -1,14 +1,7 @@
 module.exports = {
-  displayName: "shared-packages-static-value",
+  displayName: "shared-constant",
   preset: "./node_modules/@yuyi919/workspace-base-rig/jest.preset.js",
-  globals: {
-    "ts-jest": {
-      tsConfig: "<rootDir>/tsconfig.spec.json",
-    },
-  },
-  transform: {
-    "^.+\\.[tj]sx?$": "ts-jest",
-  },
   moduleFileExtensions: ["ts", "tsx", "js", "jsx"],
-  coverageDirectory: "../../../../coverage/packages/shared/packages/static-values",
+  coverageDirectory:
+    "./node_modules/@yuyi919/workspace-base-rig/coverage/libs/shared/packages/constant",
 };

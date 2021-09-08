@@ -10,6 +10,7 @@
   "scripts": {
     "build": "heft build --clean",
     "build:dev": "heft build",
+    "build:watch": "heft build --watch",
     "dev": "heft build --watch",
     "nx:format": "nx run shared:command:format",
     "test": "heft test",

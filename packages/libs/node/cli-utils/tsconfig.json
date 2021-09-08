@@ -1,8 +1,13 @@
 {
   "extends": "./node_modules/@yuyi919/workspace-base-rig/profiles/default/tsconfig-base.json",
   "compilerOptions": {
+    "esModuleInterop": true,
     "rootDir": "./src",
-    "esModuleInterop": true
+    "tsBuildInfoFile": "./node_modules/@yuyi919/workspace-base-rig/.tsBuildInfo/node-cli-utils.json"
   },
-  "references": []
+  "references": [
+    {
+      "path": "../../shared/packages/types"
+    }
+  ]
 }

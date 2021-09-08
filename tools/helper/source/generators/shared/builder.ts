@@ -1,5 +1,5 @@
 import { Tree } from "@nrwl/devkit";
-import { merge } from "lodash";
+import { merge, omit } from "lodash";
 import { getProjectGraphWith, TypedProjectGraph } from ".";
 import { PackageJSON } from "../../common/packageJsonUtils";
 import { PackageBuilder } from "../../common/schema";
@@ -9,6 +9,7 @@ import { formatDeps, STATIC_DEPS } from "./deps";
 import { tryUpdateJson } from "./file-utils";
 import { CommonPackageScripts, Configures, updatePackageJson } from "./formatPackageJson";
 import { DependentBuildableProjectNode } from "./graph";
+import { getRushPackageDefinition } from "./rushUtils";
 
 export class PackageConfigFilesBuilder {
   constructor(private host: Tree, private name: string, private configure: Configures) {}
@@ -79,8 +80,15 @@ export class PackageConfigFilesBuilder {
       })
     );
     updatePackageJson(this.host, this.packageJsonPath, (json) => {
-      return merge(json, {
-        private: !publishable,
+      if (publishable === void 0) {
+        const packageDefinition = getRushPackageDefinition(this.host, json.name);
+        if (packageDefinition) {
+          publishable =
+            packageDefinition.shouldPublish === true ||
+            packageDefinition.versionPolicyName?.length > 0;
+        }
+      }
+      const result = merge(json, {
         scripts: this.scripts,
         main: "dist/index.js",
         module: "lib/index.js",
@@ -93,6 +101,24 @@ export class PackageConfigFilesBuilder {
         peerDependencies,
         files: ["dist", "lib", "README.md"],
       });
+      if (publishable !== void 0) {
+        result.private = !publishable
+      }
+      for (const dep of this.deps) {
+        if (dep.startsWith("!")) {
+          const depName = dep.replace(/^\!/i, "");
+          result.dependencies = omit(result.dependencies, depName);
+          result.devDependencies = omit(result.devDependencies, depName);
+          console.log("remove dep", depName);
+        }
+      }
+      return result;
     });
+    // 清理日志文件
+    for (const file of this.host.children(this.rootDir)) {
+      if (file.endsWith(".log")) {
+        this.host.delete(join(this.rootDir, file));
+      }
+    }
   }
 }

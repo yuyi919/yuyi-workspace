@@ -10,7 +10,7 @@
           "executor": "@nrwl/workspace:run-commands",
           "configurations": {
             "watch": {
-              "commands": ["pnpm run build --watch"]
+              "commands": ["pnpm run build:watch"]
             }
           },
           "options": {
@@ -54,7 +54,8 @@
             }
           }
         }
-      }
+      },
+      "builder": "heft-tsc"
     },
     "node-shared-logger": {
       "root": "libs/node/shared/logger",
@@ -65,7 +66,7 @@
           "executor": "@nrwl/workspace:run-commands",
           "configurations": {
             "watch": {
-              "commands": ["pnpm run build --watch"]
+              "commands": ["pnpm run build:watch"]
             }
           },
           "options": {
@@ -109,7 +110,8 @@
             }
           }
         }
-      }
+      },
+      "builder": "heft-tsc"
     },
     "workspace-base-rig": {
       "builder": "tsc",
@@ -132,7 +134,7 @@
       }
     },
     "ts-transformer-ast-utils": {
-      "builder": "tsc",
+      "builder": "heft-tsc",
       "root": "libs/tools/ts-transformer/ast-utils",
       "sourceRoot": "libs/tools/ts-transformer/ast-utils/src",
       "projectType": "library",
@@ -155,23 +157,31 @@
           "executor": "@nrwl/workspace:run-commands",
           "configurations": {
             "watch": {
-              "commands": ["pnpm run build --watch"]
+              "commands": ["pnpm run build:watch"]
             }
           },
           "options": {
             "commands": ["pnpm run build"],
             "cwd": "libs/tools/ts-transformer/ast-utils"
-          },
-          "outputs": ["{options.cwd}"]
+          }
         },
         "command": {
           "executor": "@nrwl/workspace:run-commands",
           "options": {},
           "configurations": {
             "remove": {
+              "cwd": ".",
               "commands": [
                 {
                   "command": "nx generate @nrwl/workspace:remove --projectName=ts-transformer-ast-utils --forceRemove"
+                }
+              ]
+            },
+            "format": {
+              "cwd": ".",
+              "commands": [
+                {
+                  "command": "nx generate @yuyi919/nx-plugin-workspace-helper:format --project=ts-transformer-ast-utils --no-interactive"
                 }
               ]
             }
@@ -180,7 +190,7 @@
       }
     },
     "ts-transformer-dev-utils": {
-      "builder": "tsc",
+      "builder": "heft-tsc",
       "root": "libs/tools/ts-transformer/dev-utils",
       "sourceRoot": "libs/tools/ts-transformer/dev-utils/src",
       "projectType": "library",
@@ -203,23 +213,31 @@
           "executor": "@nrwl/workspace:run-commands",
           "configurations": {
             "watch": {
-              "commands": ["pnpm run build --watch"]
+              "commands": ["pnpm run build:watch"]
             }
           },
           "options": {
             "commands": ["pnpm run build"],
             "cwd": "libs/tools/ts-transformer/dev-utils"
-          },
-          "outputs": ["{options.cwd}"]
+          }
         },
         "command": {
           "executor": "@nrwl/workspace:run-commands",
           "options": {},
           "configurations": {
             "remove": {
+              "cwd": ".",
               "commands": [
                 {
                   "command": "nx generate @nrwl/workspace:remove --projectName=ts-transformer-dev-utils --forceRemove"
+                }
+              ]
+            },
+            "format": {
+              "cwd": ".",
+              "commands": [
+                {
+                  "command": "nx generate @yuyi919/nx-plugin-workspace-helper:format --project=ts-transformer-dev-utils --no-interactive"
                 }
               ]
             }
@@ -228,7 +246,7 @@
       }
     },
     "shared": {
-      "builder": "tsc",
+      "builder": "heft-tsc",
       "root": "libs/shared",
       "sourceRoot": "libs/shared/src",
       "projectType": "library",
@@ -252,7 +270,7 @@
           "executor": "@nrwl/workspace:run-commands",
           "configurations": {
             "watch": {
-              "commands": ["pnpm run build --watch"]
+              "commands": ["pnpm run build:watch"]
             }
           },
           "options": {
@@ -295,7 +313,7 @@
       }
     },
     "shared-constant": {
-      "builder": "tsc",
+      "builder": "heft-tsc",
       "root": "libs/shared/packages/constant",
       "sourceRoot": "libs/shared/packages/constant/src",
       "projectType": "library",
@@ -318,23 +336,31 @@
           "executor": "@nrwl/workspace:run-commands",
           "configurations": {
             "watch": {
-              "commands": ["pnpm run build --watch"]
+              "commands": ["pnpm run build:watch"]
             }
           },
           "options": {
             "commands": ["pnpm run build"],
             "cwd": "libs/shared/packages/constant"
-          },
-          "outputs": ["{options.cwd}"]
+          }
         },
         "command": {
           "executor": "@nrwl/workspace:run-commands",
           "options": {},
           "configurations": {
             "remove": {
+              "cwd": ".",
               "commands": [
                 {
-                  "command": "nx generate @nrwl/workspace:remove --projectName=shared-static-value --forceRemove"
+                  "command": "nx generate @nrwl/workspace:remove --projectName=shared-constant --forceRemove"
+                }
+              ]
+            },
+            "format": {
+              "cwd": ".",
+              "commands": [
+                {
+                  "command": "nx generate @yuyi919/nx-plugin-workspace-helper:format --project=shared-constant --no-interactive"
                 }
               ]
             }
@@ -351,14 +377,13 @@
           "executor": "@nrwl/workspace:run-commands",
           "configurations": {
             "watch": {
-              "commands": ["pnpm run build --watch"]
+              "commands": ["pnpm run build:watch"]
             }
           },
           "options": {
             "commands": ["pnpm run build"],
             "cwd": "libs/shared/packages/decorator"
-          },
-          "outputs": ["{options.cwd}"]
+          }
         },
         "lint": {
           "executor": "@nrwl/linter:eslint",
@@ -373,8 +398,31 @@
             "jestConfig": "libs/shared/packages/decorator/jest.config.js",
             "passWithNoTests": true
           }
+        },
+        "command": {
+          "executor": "@nrwl/workspace:run-commands",
+          "options": {},
+          "configurations": {
+            "format": {
+              "cwd": ".",
+              "commands": [
+                {
+                  "command": "nx generate @yuyi919/nx-plugin-workspace-helper:format --project=shared-decorator --no-interactive"
+                }
+              ]
+            },
+            "remove": {
+              "cwd": ".",
+              "commands": [
+                {
+                  "command": "nx generate @nrwl/workspace:remove --projectName=shared-decorator --forceRemove"
+                }
+              ]
+            }
+          }
         }
-      }
+      },
+      "builder": "heft-tsc"
     },
     "shared-utils": {
       "builder": "heft-tsc",
@@ -437,7 +485,7 @@
       }
     },
     "shared-types": {
-      "builder": "tsc",
+      "builder": "heft-tsc",
       "root": "libs/shared/packages/types",
       "sourceRoot": "libs/shared/packages/types/src",
       "projectType": "library",
@@ -461,23 +509,31 @@
           "executor": "@nrwl/workspace:run-commands",
           "configurations": {
             "watch": {
-              "commands": ["pnpm run build --watch"]
+              "commands": ["pnpm run build:watch"]
             }
           },
           "options": {
             "commands": ["pnpm run build"],
             "cwd": "libs/shared/packages/types"
-          },
-          "outputs": ["{options.cwd}"]
+          }
         },
         "command": {
           "executor": "@nrwl/workspace:run-commands",
           "options": {},
           "configurations": {
             "remove": {
+              "cwd": ".",
               "commands": [
                 {
                   "command": "nx generate @nrwl/workspace:remove --projectName=shared-types --forceRemove"
+                }
+              ]
+            },
+            "format": {
+              "cwd": ".",
+              "commands": [
+                {
+                  "command": "nx generate @yuyi919/nx-plugin-workspace-helper:format --project=shared-types --no-interactive"
                 }
               ]
             }

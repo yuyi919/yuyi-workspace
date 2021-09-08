@@ -1,7 +1,7 @@
 module.exports = {
-  displayName: 'internal-ts-transformer-dev-utils',
+  displayName: "ts-transformer-dev-utils",
   preset: "./node_modules/@yuyi919/workspace-base-rig/jest.preset.js",
-  moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx'],
+  moduleFileExtensions: ["ts", "tsx", "js", "jsx"],
   coverageDirectory:
-    '../../../../coverage/packages/internal/ts-transformer/dev-utils',
+    "./node_modules/@yuyi919/workspace-base-rig/coverage/libs/tools/ts-transformer/dev-utils",
 };

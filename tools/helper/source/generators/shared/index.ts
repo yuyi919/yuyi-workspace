@@ -19,7 +19,7 @@ export const PackageConfigures = definePackageJsonBuilder({
       "build:watch": "tsc --build --watch",
       dev: "tsc --build --watch",
     },
-    deps: ["@types/jest"],
+    deps: ["@types/jest", "!@types/heft-jest"],
   },
   "heft-tsc": {
     scripts: {
@@ -30,6 +30,6 @@ export const PackageConfigures = definePackageJsonBuilder({
       test: "heft test",
       "test:watch": "heft test --watch",
     },
-    deps: ["@types/heft-jest"],
+    deps: ["@types/heft-jest", "!@types/jest"],
   },
 });

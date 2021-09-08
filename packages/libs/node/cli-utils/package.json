@@ -1,5 +1,6 @@
 {
   "name": "@yuyi919/node-cli-utils",
+  "private": true,
   "version": "0.0.1",
   "description": "",
   "author": "",
@@ -9,6 +10,7 @@
   "scripts": {
     "build": "heft build --clean",
     "build:dev": "heft build",
+    "build:watch": "heft build --watch",
     "dev": "heft build --watch",
     "nx:format": "nx run node-cli-utils:command:format",
     "test": "heft test",

@@ -10,6 +10,7 @@ import {
   generateFilesWith,
   PackageConfigFilesBuilder,
   PackageConfigures,
+  getRushPackageDefinition,
 } from "../shared";
 import { readProjectConfigurationWithBuilder } from "./generator";
 import { FormatGeneratorSchema } from "./schema";
@@ -30,7 +31,7 @@ export async function updateFiles(
     graph
   );
   configsBuilder.setupUpdate(builder);
-  configsBuilder.writeJson(true);
+  configsBuilder.writeJson();
 
   // const {
   //   dependencies: deps,

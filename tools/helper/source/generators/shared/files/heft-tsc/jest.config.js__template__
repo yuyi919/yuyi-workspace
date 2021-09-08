@@ -2,5 +2,5 @@ module.exports = {
   displayName: "<%= name %>",
   preset: "./node_modules/@yuyi919/workspace-base-rig/jest.preset.js",
   moduleFileExtensions: ["ts", "tsx", "js", "jsx"],
-  coverageDirectory: "<%= offsetFromRoot %>coverage/<%= projectRoot %>",
+  coverageDirectory: "./node_modules/@yuyi919/workspace-base-rig/coverage/<%= projectRoot %>",
 };

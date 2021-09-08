@@ -1,32 +1,32 @@
 {
   "name": "@yuyi919/shared-constant",
   "version": "0.0.2",
+  "description": "",
+  "author": "",
   "keywords": [
-    "yuyi919",
+    "constant",
     "shared",
-    "constant"
+    "yuyi919"
   ],
+  "license": "MIT",
   "main": "dist/index.js",
   "module": "lib/index.js",
   "types": "dist/index.d.ts",
+  "sideEffect": false,
   "scripts": {
     "build": "heft build --clean",
     "build:dev": "heft build",
-    "dev": "heft build --watch",
+    "build:watch": "heft build --watch",
     "clean": "rimraf ../.tsBuildInfo/shared-static-values*.json && rimraf ./dist && rimraf ./lib",
+    "dev": "heft build --watch",
     "test": "heft test",
     "test:watch": "heft test --watch"
   },
-  "sideEffect": false,
-  "license": "MIT",
-  "publishConfig": {
-    "access": "public"
+  "dependencies": {
+    "@yuyi919/shared-types": "workspace:0.0.4",
+    "lodash": "4.17.21",
+    "lodash-es": "4.17.21"
   },
-  "files": [
-    "dist",
-    "lib",
-    "README.md"
-  ],
   "devDependencies": {
     "@rushstack/heft": "~0.36.4",
     "@rushstack/heft-node-rig": "~1.2.5",
@@ -35,12 +35,16 @@
     "@yuyi919/workspace-base-rig": "workspace:1.2.5",
     "jest": "~27.1.0",
     "ts-jest": "~27.0.5",
+    "tslib": "~2.3.1",
     "typescript": "4.1.2"
   },
-  "dependencies": {
-    "@yuyi919/shared-types": "workspace:0.0.4",
-    "lodash": "4.17.21",
-    "lodash-es": "4.17.21"
-  },
-  "peerDependencies": {}
+  "peerDependencies": {},
+  "files": [
+    "dist",
+    "lib",
+    "README.md"
+  ],
+  "publishConfig": {
+    "access": "public"
+  }
 }
