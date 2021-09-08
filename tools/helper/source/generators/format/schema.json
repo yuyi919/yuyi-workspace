@@ -26,6 +26,11 @@
       "description": "是否对所有工程进行格式化？",
       "default": false
     },
+    "clean": {
+      "type": "boolean",
+      "description": "清理生成日志/缓存文件",
+      "default": false
+    },
     "tags": {
       "type": "string",
       "description": "Add tags to the project (used for linting)",

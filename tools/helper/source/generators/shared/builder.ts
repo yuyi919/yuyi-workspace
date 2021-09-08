@@ -114,11 +114,5 @@ export class PackageConfigFilesBuilder {
       }
       return result;
     });
-    // 清理日志文件
-    for (const file of this.host.children(this.rootDir)) {
-      if (file.endsWith(".log")) {
-        this.host.delete(join(this.rootDir, file));
-      }
-    }
   }
 }

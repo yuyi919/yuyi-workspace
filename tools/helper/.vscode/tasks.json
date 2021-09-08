@@ -1,0 +1,13 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+    {
+      "type": "shell",
+      "command": [
+        "rushx dev"
+      ],
+      "label": "rush: 监视构建",
+      "detail": "rushx dev"
+    }
+  ]
+}

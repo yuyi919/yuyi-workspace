@@ -1,16 +1,12 @@
-import { Tree, normalizePath } from "@nrwl/devkit";
-import { defaultsDeep } from "lodash";
+import { normalizePath, Tree } from "@nrwl/devkit";
 import * as Path from "path";
 import {
-  formatDeps,
-  TypedProjectGraph,
-  updatePackageJson,
-  updateProject,
-  getLibraryFromGraph,
   generateFilesWith,
+  getLibraryFromGraph,
   PackageConfigFilesBuilder,
   PackageConfigures,
-  getRushPackageDefinition,
+  TypedProjectGraph,
+  updateProject,
 } from "../shared";
 import { readProjectConfigurationWithBuilder } from "./generator";
 import { FormatGeneratorSchema } from "./schema";
@@ -33,6 +29,12 @@ export async function updateFiles(
   configsBuilder.setupUpdate(builder);
   configsBuilder.writeJson();
 
+  // 清理日志文件
+  for (const file of host.children(node.root)) {
+    if (file.endsWith(".log") || file === "temp" || file === ".heft") {
+      host.delete(Path.join(node.root, file));
+    }
+  }
   // const {
   //   dependencies: deps,
   //   packageJson,
