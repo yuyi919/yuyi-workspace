@@ -1,0 +1,31 @@
+{
+  "name": "@yuyi919/shared",
+  "entries": [
+    {
+      "version": "0.0.36",
+      "tag": "@yuyi919/shared_v0.0.36",
+      "date": "Wed, 08 Sep 2021 04:48:53 GMT",
+      "comments": {
+        "patch": [
+          {
+            "comment": "auto-bump"
+          }
+        ],
+        "dependency": [
+          {
+            "comment": "Updating dependency \"@yuyi919/shared-constant\" from `0.0.2` to `0.0.3`"
+          },
+          {
+            "comment": "Updating dependency \"@yuyi919/shared-decorator\" from `0.0.1` to `0.0.2`"
+          },
+          {
+            "comment": "Updating dependency \"@yuyi919/shared-types\" from `0.0.4` to `0.0.5`"
+          },
+          {
+            "comment": "Updating dependency \"@yuyi919/shared-utils\" from `0.0.35` to `0.0.36`"
+          }
+        ]
+      }
+    }
+  ]
+}

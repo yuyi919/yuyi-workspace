@@ -1,6 +1,6 @@
 {
   "name": "@yuyi919/shared-constant",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "",
   "author": "",
   "keywords": [
@@ -23,7 +23,7 @@
     "test:watch": "heft test --watch"
   },
   "dependencies": {
-    "@yuyi919/shared-types": "workspace:0.0.4",
+    "@yuyi919/shared-types": "workspace:0.0.5",
     "lodash": "4.17.21",
     "lodash-es": "4.17.21"
   },

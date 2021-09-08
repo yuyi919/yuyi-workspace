@@ -33,7 +33,9 @@
     "@types/fs-extra": "~9.0.12",
     "comment-json": "~4.1.1",
     "enquirer": "^2.3.6",
-    "ignore": "~5.1.8"
+    "ignore": "~5.1.8",
+    "@microsoft/rush-lib": "~5.52.0",
+    "@rushstack/node-core-library": "~3.40.0"
   },
   "devDependencies": {
     "@types/lodash": "^4.14.171",

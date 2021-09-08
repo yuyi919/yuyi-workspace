@@ -37,7 +37,7 @@
     "@types/heft-jest": "1.0.2",
     "@types/minimatch": "^3.0.5",
     "@types/node": "~16.7.2",
-    "@yuyi919/shared-types": "workspace:0.0.4",
+    "@yuyi919/shared-types": "workspace:0.0.5",
     "@yuyi919/workspace-base-rig": "workspace:1.2.5",
     "jest": "~27.1.0",
     "ts-node": "~9.1.1",

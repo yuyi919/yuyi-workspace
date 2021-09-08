@@ -18,8 +18,8 @@
   },
   "dependencies": {
     "@yuyi919/node-logger": "workspace:0.0.1",
-    "@yuyi919/shared-decorator": "workspace:0.0.1",
-    "@yuyi919/shared-types": "workspace:0.0.4",
+    "@yuyi919/shared-decorator": "workspace:0.0.2",
+    "@yuyi919/shared-types": "workspace:0.0.5",
     "enquirer": "^2.3.6",
     "fs-extra": "^10.0.0",
     "js-yaml": "^4.1.0",

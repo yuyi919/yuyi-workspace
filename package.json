@@ -4,6 +4,8 @@
   "license": "MIT",
   "private": true,
   "scripts": {
+    "publish:with": "cross-env rush publish --apply --include-all --set-access-level public --publish --version-policy",
+    "publish:shared": "pnpm publish:with shared",
     "workspace": "pnpm workspace:ts & pnpm workspace:types_node & pnpm workspace:heft-jest & pnpm workspace:rig & pnpm workspace:jest & pnpm workspace:ts-jest",
     "workspace:ts": "rush add --all --dev -p typescript@4.1.2",
     "workspace:types_node": "rush add --all --dev -p @types/node",

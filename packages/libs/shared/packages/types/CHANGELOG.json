@@ -1,0 +1,17 @@
+{
+  "name": "@yuyi919/shared-types",
+  "entries": [
+    {
+      "version": "0.0.5",
+      "tag": "@yuyi919/shared-types_v0.0.5",
+      "date": "Wed, 08 Sep 2021 04:48:53 GMT",
+      "comments": {
+        "patch": [
+          {
+            "comment": "auto-bump"
+          }
+        ]
+      }
+    }
+  ]
+}

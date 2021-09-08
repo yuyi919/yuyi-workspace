@@ -1,0 +1,22 @@
+{
+  "name": "@yuyi919/shared-constant",
+  "entries": [
+    {
+      "version": "0.0.3",
+      "tag": "@yuyi919/shared-constant_v0.0.3",
+      "date": "Wed, 08 Sep 2021 04:48:53 GMT",
+      "comments": {
+        "patch": [
+          {
+            "comment": "auto-bump"
+          }
+        ],
+        "dependency": [
+          {
+            "comment": "Updating dependency \"@yuyi919/shared-types\" from `0.0.4` to `0.0.5`"
+          }
+        ]
+      }
+    }
+  ]
+}

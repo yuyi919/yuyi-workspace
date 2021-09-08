@@ -19,6 +19,10 @@
       "allowedCategories": [ "tools" ]
     },
     {
+      "name": "@microsoft/rush-lib",
+      "allowedCategories": [ "production" ]
+    },
+    {
       "name": "@nrwl/cli",
       "allowedCategories": [ "production", "tools" ]
     },
@@ -61,6 +65,10 @@
     {
       "name": "@rushstack/heft-node-rig",
       "allowedCategories": [ "production", "tools" ]
+    },
+    {
+      "name": "@rushstack/node-core-library",
+      "allowedCategories": [ "production" ]
     },
     {
       "name": "@typescript-eslint/eslint-plugin",

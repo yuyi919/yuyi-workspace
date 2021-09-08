@@ -1,22 +1,24 @@
 import { updateJsonInTree } from "@nrwl/workspace";
+import { IPackageJson } from "@rushstack/node-core-library";
 import { merge } from "lodash";
 import { NormalizedOptions } from "./NormalizedSchema";
 
-export type PackageJSON = {
-  name?: string;
-  private?: boolean;
-  description: string;
+export interface PackageJSON extends IPackageJson {
+  // name?: string;
+  // private?: boolean;
+  // description: string;
   sideEffect?: boolean;
-  main: string;
-  keywords?: string[]
-  module?: string;
-  license?: string;
-  types?: string;
-  scripts: Record<string, string>;
-  devDependencies: Record<string, string>;
-  dependencies: Record<string, string>;
-  peerDependencies: Record<string, string>;
+  // main: string;
+  // module?: string;
+  // license?: string;
+  // types?: string;
+  // scripts: Record<string, string>;
+  // devDependencies: Record<string, string>;
+  // dependencies: Record<string, string>;
+  // peerDependencies: Record<string, string>;
   files?: string[];
+  module?: string;
+  keywords?: string[]
   publishConfig?: {
     access?: string
   }

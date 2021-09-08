@@ -4,7 +4,15 @@
     {
       "type": "shell",
       "command": [
-        "rush version --bump --version-policy shared"
+        "rush publish -a --include-all --version-policy shared --set-access-level public -p"
+      ],
+      "label": "rush: publish Shared packages",
+      "detail": "rush publish --apply --include-all --set-access-level public --publish --version-policy shared"
+    },
+    {
+      "type": "shell",
+      "command": [
+        "rush version --bump --version-policy sharedrush publish -a --include-all --version-policy shared --set-access-level public --publish"
       ],
       "label": "rush: bump shared packages",
       "detail": "rush version --bump --version-policy shared --ensure-version-policy"
@@ -12,10 +20,10 @@
     {
       "type": "shell",
       "command": [
-        "rush change --bulk --bump-type patch --message auto-bump"
+        "rush change --bulk --bump-type patch --overwrite --message auto-bump"
       ],
       "label": "rush: change with \"auto\"",
-      "detail": "rush change --bulk --bump-type patch --message auto-bump"
+      "detail": "rush change --bulk --bump-type patch --overwrite --message auto-bump"
     },
     {
       "type": "shell",
