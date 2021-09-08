@@ -16,6 +16,14 @@
       ],
       "label": "rush: change with \"auto\"",
       "detail": "rush change --bulk --bump-type patch --message auto-bump"
+    },
+    {
+      "type": "shell",
+      "command": [
+        "rush change"
+      ],
+      "label": "rush: change",
+      "detail": "rush change"
     }
   ]
 }
