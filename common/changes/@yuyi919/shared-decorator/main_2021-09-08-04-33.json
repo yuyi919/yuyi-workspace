@@ -1,0 +1,11 @@
+{
+  "changes": [
+    {
+      "comment": "auto-bump",
+      "type": "patch",
+      "packageName": "@yuyi919/shared-decorator"
+    }
+  ],
+  "packageName": "@yuyi919/shared-decorator",
+  "email": "yuyi919606952@foxmail.com"
+}
