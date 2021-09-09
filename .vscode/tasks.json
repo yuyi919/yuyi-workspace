@@ -12,7 +12,7 @@
     {
       "type": "shell",
       "command": [
-        "rush version --bump --version-policy sharedrush publish -a --include-all --version-policy shared --set-access-level public --publish"
+        "rush version --bump --version-policy shared"
       ],
       "label": "rush: bump shared packages",
       "detail": "rush version --bump --version-policy shared --ensure-version-policy"

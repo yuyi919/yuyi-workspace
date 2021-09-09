@@ -466,7 +466,7 @@ importers:
       '@types/jest': ~27.0.1
       '@types/node': ~16.7.2
       '@vue/composition-api': ^1.0.2
-      '@yuyi919/build-tools': workspace:*
+      '@yuyi919/build-tools': workspace:0.1.10
       '@yuyi919/workspace-base-rig': workspace:1.2.5
       ant-design-vue: 1.7.5
       babel-preset-vca-jsx: ^0.3.6
