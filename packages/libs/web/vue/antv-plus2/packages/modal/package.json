@@ -12,11 +12,25 @@
     "build:watch": "tsc --build --watch",
     "dev": "tsc --build --watch"
   },
-  "dependencies": {},
+  "dependencies": {
+    "@yuyi919/vue-use": "workspace:0.0.3",
+    "@yuyi919/shared-types": "workspace:0.0.5",
+    "@yuyi919/shared-utils": "workspace:0.0.36",
+    "@yuyi919/vue-antv-plus2-action": "workspace:0.0.1",
+    "@yuyi919/vue-antv-plus2-helper": "workspace:0.0.1",
+    "@yuyi919/vue-antv-plus2-shared": "workspace:0.0.1",
+    "@yuyi919/vue-antv-plus2-theme": "workspace:0.0.1",
+    "lodash": "4.17.21",
+    "lodash-es": "4.17.21",
+    "tslib": "~2.3.1",
+    "vue-demi": "^0.11.3"
+  },
   "devDependencies": {
     "@types/jest": "~27.0.1",
     "@types/node": "~16.7.2",
+    "@vue/composition-api": "^1.0.2",
     "@yuyi919/workspace-base-rig": "workspace:1.2.5",
+    "vue": "2.6.14",
     "jest": "~27.1.0",
     "tslib": "~2.3.1",
     "typescript": "4.1.2"

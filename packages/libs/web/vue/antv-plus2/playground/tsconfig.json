@@ -1,0 +1,8 @@
+{
+  "extends": "../tsconfig.json",
+  "compilerOptions": {
+    "rootDir": ".."
+  },
+  "exclude": ["**/*.spec.ts", "**/*.spec.tsx"],
+  "include": ["../**/*.ts", "../**/*.tsx", "../**/*.vue", "./**/*.tsx", "./**/*.ts"]
+}

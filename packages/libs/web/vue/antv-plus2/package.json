@@ -11,11 +11,13 @@
     "build:dev": "tsc --build",
     "build:watch": "tsc --build --watch",
     "dev": "tsc --build --watch",
-    "preview": "vite"
+    "preview": "vite",
+    "prettier": "prettier -cw ./**/src/**"
   },
   "dependencies": {
     "@ant-design/icons": "2.0.0",
     "@ant-design/icons-vue": "2.0.0",
+    "@yuyi919/vue-use": "workspace:0.0.3",
     "@yuyi919/vue-antv-plus2-action": "workspace:0.0.1",
     "@yuyi919/vue-antv-plus2-form": "workspace:0.0.1",
     "@yuyi919/vue-antv-plus2-helper": "workspace:0.0.1",

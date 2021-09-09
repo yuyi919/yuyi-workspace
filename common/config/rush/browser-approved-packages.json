@@ -123,6 +123,10 @@
       "allowedCategories": [ "production" ]
     },
     {
+      "name": "@yuyi919/vue-use",
+      "allowedCategories": [ "production" ]
+    },
+    {
       "name": "@yuyi919/build-tools",
       "allowedCategories": [ "production" ]
     },
@@ -167,6 +171,10 @@
       "allowedCategories": [ "production" ]
     },
     {
+      "name": "@yuyi919/vue-antv-plus2-action-button",
+      "allowedCategories": [ "production" ]
+    },
+    {
       "name": "@yuyi919/vue-antv-plus2-form",
       "allowedCategories": [ "production" ]
     },
@@ -200,10 +208,6 @@
     },
     {
       "name": "@yuyi919/vue-jsx-factory",
-      "allowedCategories": [ "production" ]
-    },
-    {
-      "name": "@yuyi919/vue-use",
       "allowedCategories": [ "production" ]
     },
     {
