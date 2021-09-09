@@ -13,7 +13,9 @@
     "build:watch": "tsc --build --watch",
     "dev": "tsc --build --watch"
   },
-  "dependencies": {},
+  "dependencies": {
+    "@yuyi919/vue-use": "workspace:0.0.3"
+  },
   "devDependencies": {
     "@types/jest": "~27.0.1",
     "@types/node": "~16.7.2",

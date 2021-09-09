@@ -1,0 +1,123 @@
+.@{form-item-cls}-help-appear-active,
+.@{form-item-cls}-help-enter-active,
+.@{form-item-cls}-help-leave-active {
+  -webkit-animation-duration: 0.3s;
+  animation-duration: 0.3s;
+  -webkit-animation-fill-mode: both;
+  animation-fill-mode: both;
+  -webkit-animation-play-state: paused;
+  animation-play-state: paused;
+}
+
+.@{form-item-cls}-help-appear-active.@{form-item-cls}-help-appear-to,
+.@{form-item-cls}-help-enter-active.@{form-item-cls}-help-enter-to {
+  -webkit-animation-name: antShowHelpIn;
+  animation-name: antShowHelpIn;
+  -webkit-animation-play-state: running;
+  animation-play-state: running;
+}
+.@{form-item-cls}-help-leave-active.@{form-item-cls}-help-leave-to {
+  -webkit-animation-name: antShowHelpOut;
+  animation-name: antShowHelpOut;
+  -webkit-animation-play-state: running;
+  animation-play-state: running;
+}
+
+.@{form-item-cls}-feedback-layout-loose {
+  &:not(.@{form-item-cls}-inset) {
+    & > .@{form-item-cls}-control {
+      & > .@{form-item-cls}-help-leave,
+      & > .@{form-item-cls}-help-leave-active {
+        margin-bottom: -22px;
+      }
+    }
+  }
+}
+.@{form-item-cls}-size-small {
+  .@{form-item-cls}-feedback-layout-loose {
+    &:not(.@{form-item-cls}-inset) {
+      & > .@{form-item-cls}-control {
+        & > .@{form-item-cls}-help-leave,
+        & > .@{form-item-cls}-help-leave-active {
+          margin-bottom: -20px;
+        }
+      }
+    }
+  }
+}
+.@{form-item-cls}-feedback-layout-terse {
+  &:not(.@{form-item-cls}-inset) {
+    & > .@{form-item-cls}-control {
+      & > .@{form-item-cls}-help-leave,
+      & > .@{form-item-cls}-help-leave-active {
+        margin-bottom: -8px;
+      }
+    }
+  }
+}
+
+.@{form-item-cls}-help-appear-active,
+.@{form-item-cls}-help-enter-active,
+.@{form-item-cls}-help-leave-active {
+  opacity: 0;
+}
+
+.@{form-item-cls}-help-appear-active,
+.@{form-item-cls}-help-enter-active,
+.@{form-item-cls}-help-leave-active {
+  -webkit-animation-timing-function: cubic-bezier(0.645, 0.045, 0.355, 1);
+  animation-timing-function: cubic-bezier(0.645, 0.045, 0.355, 1);
+}
+
+@-webkit-keyframes antShowHelpIn {
+  0% {
+    -webkit-transform: translateY(-5px);
+    transform: translateY(-5px);
+    opacity: 0;
+  }
+
+  to {
+    -webkit-transform: translateY(0);
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+@keyframes antShowHelpIn {
+  0% {
+    -webkit-transform: translateY(-5px);
+    transform: translateY(-5px);
+    opacity: 0;
+  }
+
+  to {
+    -webkit-transform: translateY(0);
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@-webkit-keyframes antShowHelpOut {
+  from {
+    -webkit-transform: translateY(0);
+    transform: translateY(0);
+    opacity: 1;
+  }
+  to {
+    -webkit-transform: translateY(-5px);
+    transform: translateY(-5px);
+    opacity: 0;
+  }
+}
+
+@keyframes antShowHelpOut {
+  from {
+    -webkit-transform: translateY(0);
+    transform: translateY(0);
+    opacity: 1;
+  }
+  to {
+    -webkit-transform: translateY(-5px);
+    transform: translateY(-5px);
+    opacity: 0;
+  }
+}

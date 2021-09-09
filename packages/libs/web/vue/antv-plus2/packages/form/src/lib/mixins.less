@@ -1,0 +1,110 @@
+@import "ant-design-vue/lib/style/themes/default.less";
+
+@form-success-input-bg: @input-bg;
+
+@form-component-height: @input-height-base;
+@form-component-max-height: @input-height-lg;
+@form-feedback-icon-size: @font-size-base;
+
+@form-item-cls: ~"@{ant-prefix}-formily-item";
+@height-base: @input-height-base;
+@height-lg: @input-height-lg;
+@height-sm: @input-height-sm;
+
+.@{form-item-cls}-inset {
+  border-radius: 2px;
+  border: 1px solid @border-color-base;
+  padding-left: 12px;
+  transition: 0.3s all;
+  &:hover {
+    .hover();
+  }
+  &-active {
+    .active();
+  }
+}
+
+.wrapperInputBorderColor(@border-color, @bg-color) {
+  &.@{form-item-cls}-inset {
+    border-color: @border-color;
+    &:hover {
+      .hover(@border-color);
+    }
+    &-active {
+      .active(@border-color);
+    }
+  }
+
+  .@{ant-prefix}-select-selection,
+  .@{ant-prefix}-cascader-picker,
+  .@{ant-prefix}-time-picker-input,
+  .@{ant-prefix}-picker,
+  .@{ant-prefix}-input,
+  .@{ant-prefix}-input-number,
+  .@{ant-prefix}-input-affix-wrapper,
+  .@{ant-prefix}-input-affix-wrapper,
+  .@{ant-prefix}-input {
+    border-color: @border-color !important;
+  }
+
+  .@{ant-prefix}-select-selection,
+  .@{ant-prefix}-cascader-picker,
+  .@{ant-prefix}-time-picker-input,
+  .@{ant-prefix}-picker,
+  .@{ant-prefix}-input,
+  .@{ant-prefix}-input-number,
+  .@{ant-prefix}-input-affix-wrapper,
+  .@{ant-prefix}-input-affix-wrapper:hover,
+  .@{ant-prefix}-input:hover {
+    border-color: @border-color !important;
+  }
+
+  .@{ant-prefix}-select:not(.@{ant-prefix}-select-disabled):not(.@{ant-prefix}-select-customize-input) {
+    .@{ant-prefix}-select-selection {
+      background-color: @bg-color;
+      border-color: @border-color !important;
+    }
+
+    &.@{ant-prefix}-select-open .@{ant-prefix}-select-selection,
+    &.@{ant-prefix}-select-focused .@{ant-prefix}-select-selection {
+      .active(@border-color);
+    }
+  }
+
+  .@{ant-prefix}-input-number,
+  .@{ant-prefix}-picker {
+    background-color: @bg-color;
+    border-color: @border-color;
+
+    &-focused,
+    &:focus {
+      .active(@border-color);
+    }
+
+    &:not([disabled]):hover {
+      background-color: @bg-color;
+      border-color: @border-color;
+    }
+  }
+
+  .@{ant-prefix}-time-picker .@{ant-prefix}-time-picker-input:focus,
+  .@{ant-prefix}-calendar-picker:focus
+    .@{ant-prefix}-calendar-picker-input:not(.@{ant-prefix}-input-disabled),
+  .@{ant-prefix}-cascader-picker:focus .@{ant-prefix}-cascader-input {
+    background-color: @bg-color;
+    .active(@border-color);
+  }
+
+  .@{ant-prefix}-input-affix-wrapper-focused,
+  .@{ant-prefix}-input-affix-wrapper:focus,
+  .@{ant-prefix}-input-focused,
+  .@{ant-prefix}-input:focus {
+    .active(@border-color);
+  }
+  .@{form-item-cls}-help {
+    color: @border-color;
+  }
+  .@{form-item-cls}-feedback-icon {
+    color: @border-color;
+  }
+}
