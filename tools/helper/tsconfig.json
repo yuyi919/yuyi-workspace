@@ -9,5 +9,5 @@
     "declaration": true,
     "skipLibCheck": true
   },
-  "include": ["source/**/*.ts", "source/**/*.json"]
+  "include": ["./source/**/*.ts", "./source/**/*.json", "./node_modules/@microsoft/rush-lib/dist/rush-lib.d.ts"]
 }

@@ -117,7 +117,9 @@ export type NpmProjectGraphNodeData = {
   packageName: string;
   version: string;
 };
-export type LibProjectNode<T = {}> = ProjectGraphNode<LibProjectGraphNodeData & T> & { type: "lib" };
+export type LibProjectNode<T = {}> = ProjectGraphNode<LibProjectGraphNodeData & T> & {
+  type: "lib";
+};
 export type NpmProjectNode<T = {}> = ProjectGraphNode<NpmProjectGraphNodeData & T> & {
   type: "npm";
 };

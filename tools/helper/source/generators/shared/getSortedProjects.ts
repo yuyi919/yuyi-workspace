@@ -19,7 +19,7 @@ export function getSortedProjects(
         )
     );
     const type = SortedLibraryType[libtypeIndex];
-    console.log(key, type, tags);
+    // console.log(key, type, tags);
     const subLibTypeIndex = getSubType(type).findIndex(
       (subType: string) => tags.includes(subType) || tags.includes(type + "-" + subType)
     );

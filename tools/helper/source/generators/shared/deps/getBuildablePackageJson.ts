@@ -52,30 +52,31 @@ export function toDependcyNodes(
 ) {
   return depNames
     .map((dep) => {
-      const depNode =
-        (projGraph.nodes["npm:" + dep] as NpmProjectNode) ||
-        (projGraph.nodes[dep] as LibProjectNode);
-      if (depNode) {
-        if (isBuildable(depNode)) {
-          const libPackageJson = readJsonFile(
-            join(context.workspaceRoot, depNode.data.root, "package.json")
-          );
-          return {
-            name: libPackageJson.name, // i.e. @workspace/mylib
-            outputs: [getOutputPath(depNode)],
-            node: depNode,
-          };
-        } else if (depNode.type === "npm") {
-          return {
-            // @ts-ignore
-            name: depNode.data.packageName,
-            outputs: [],
-            node: depNode,
-          };
-        } else {
-          return null;
+      if (!dep.startsWith("!")) {
+        const depNode =
+          (projGraph.nodes["npm:" + dep] as NpmProjectNode) ||
+          (projGraph.nodes[dep] as LibProjectNode);
+        if (depNode) {
+          if (isBuildable(depNode)) {
+            const libPackageJson = readJsonFile(
+              join(context.workspaceRoot, depNode.data.root, "package.json")
+            );
+            return {
+              name: libPackageJson.name, // i.e. @workspace/mylib
+              outputs: [getOutputPath(depNode)],
+              node: depNode,
+            };
+          } else if (depNode.type === "npm") {
+            return {
+              // @ts-ignore
+              name: depNode.data.packageName,
+              outputs: [],
+              node: depNode,
+            };
+          } else {
+            return null;
+          }
         }
-      } else {
         console.log("throw", dep);
       }
     })

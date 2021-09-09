@@ -1,5 +1,4 @@
-import { getWorkspacePath, ProjectGraph, readJson, writeJson } from "@nrwl/devkit";
-import type { Tree } from "@nrwl/tao/src/shared/tree";
+import { Tree, getWorkspacePath, ProjectGraph, readJson, writeJson } from "@nrwl/devkit";
 import { reformattedWorkspaceJsonOrNull } from "@nrwl/tao/src/shared/workspace";
 import { sortObjectByKeys } from "@nrwl/tao/src/utils/object-sort";
 import * as path from "path";

@@ -10,11 +10,6 @@
       "aliases": ["lib"],
       "description": "Create a library"
     },
-    "internal-nx-plugins-lerna": {
-      "factory": "./src/schematics/internal-nx-plugins-lerna/schematic",
-      "schema": "./src/schematics/internal-nx-plugins-lerna/schema.json",
-      "description": "internal-nx-plugins-lerna schematic"
-    },
     "test": {
       "factory": "./src/generators/test/generator",
       "schema": "./src/generators/test/schema.json",

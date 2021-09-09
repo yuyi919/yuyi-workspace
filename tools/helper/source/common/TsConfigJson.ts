@@ -1,9 +1,9 @@
 import { chain } from "@angular-devkit/schematics";
 import { updateJsonInTree } from "@nrwl/workspace";
-import ts, { CompilerOptions } from "typescript";
+import { sortObjectByKeys } from "@nrwl/workspace/src/utils/ast-utils";
+import { isEqual } from "lodash";
 import { dirname } from "path";
-import { defaultsDeep, isEqual } from "lodash";
-import { sortObjectByKeys } from "@nrwl/tao/src/utils/object-sort";
+import { CompilerOptions } from "typescript";
 export interface TsConfigJson {
   extends: string;
   compilerOptions: CompilerOptions;
@@ -28,7 +28,12 @@ export function updateTsConfigReference(
   tsconfigJson: TsConfigJson,
   references: (string | TsConfigJsonReference)[] = []
 ) {
-  const { references: sourceReferences = [], extends: extend, compilerOptions, ...other } = tsconfigJson;
+  const {
+    references: sourceReferences = [],
+    extends: extend,
+    compilerOptions,
+    ...other
+  } = tsconfigJson;
   const appendReferences = references.map((ref) => (typeof ref === "string" ? { path: ref } : ref));
   return {
     extends: extend,
@@ -64,7 +69,7 @@ export function updateTsConfigInTree(
 export function updateRootTsConfigInTree(
   callback: (config: TsConfigJson, compilerOptions: CompilerOptions) => TsConfigJson | void
 ) {
-  let paths: ts.MapLike<string[]>;
+  let paths: Record<string, string[]>;
   return chain([
     updateTsConfigInTree(`tsconfig.base.json`, (json, comp) => {
       json = callback(json, comp) || json;
