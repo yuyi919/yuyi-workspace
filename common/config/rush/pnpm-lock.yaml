@@ -534,8 +534,10 @@ importers:
       '@types/jest': ~27.0.1
       '@types/node': ~16.7.2
       '@vue/composition-api': ^1.0.2
+      '@yuyi919/shared-types': workspace:0.0.5
       '@yuyi919/shared-utils': workspace:0.0.36
       '@yuyi919/vue-jsx-factory': workspace:0.0.1
+      '@yuyi919/vue-use': workspace:0.0.3
       '@yuyi919/workspace-base-rig': workspace:1.2.5
       jest: ~27.1.0
       lodash: 4.17.21
@@ -545,8 +547,10 @@ importers:
       vue: 2.6.14
       vue-demi: ^0.11.3
     dependencies:
+      '@yuyi919/shared-types': link:../../../../../shared/packages/types
       '@yuyi919/shared-utils': link:../../../../../shared/packages/utils
       '@yuyi919/vue-jsx-factory': link:../../../jsx-factory
+      '@yuyi919/vue-use': link:../../../use
       lodash: 4.17.21
       lodash-es: 4.17.21
       vue-demi: 0.11.3_707fc39252203d96c3677f8cd88683c8
@@ -702,10 +706,13 @@ importers:
     specifiers:
       '@types/jest': ~27.0.1
       '@types/node': ~16.7.2
+      '@yuyi919/vue-use': workspace:0.0.3
       '@yuyi919/workspace-base-rig': workspace:1.2.5
       jest: ~27.1.0
       tslib: ~2.3.1
       typescript: 4.1.2
+    dependencies:
+      '@yuyi919/vue-use': link:../../../use
     devDependencies:
       '@types/jest': 27.0.1
       '@types/node': 16.7.7

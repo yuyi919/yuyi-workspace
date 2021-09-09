@@ -35,7 +35,7 @@
       "@utils": ["libs/shared/packages/utils/src/index.ts"],
       "@utils/*": ["libs/shared/packages/utils/src/*"],
       "@yuyi919/vue-antv-plus2": ["libs/web/vue/antv-plus2/index.ts"],
-      "@yuyi919/vue-antv-plus2-action-button": [
+      "@yuyi919/vue-antv-plus2-action": [
         "libs/web/vue/antv-plus2/packages/action-button/src/index.ts"
       ],
       "@yuyi919/vue-antv-plus2-form": ["libs/web/vue/antv-plus2/packages/form/src/index.ts"],

@@ -1,8 +1,7 @@
 /* eslint-disable no-use-before-define */
 /* eslint-disable no-unused-expressions */
-import { reactive, Ref, ref, watch } from "vue-demi";
+import { reactive, Ref, ref, watch, onBeforeUnmount } from "vue-demi";
 import { addResizeListener, removeResizeListener } from "./resizeHandler";
-import { useEffect } from "./std";
 
 export function useElementRect<El extends HTMLElement>(
   elRef: Ref<El | null> = ref<El | null>(null) as Ref<El>
@@ -23,21 +22,21 @@ export function useElementRect<El extends HTMLElement>(
       rect[key] = next[key];
     }
   }
-  useEffect(() => {
-    watch(
-      elRef,
-      (el, prev) => {
-        if (el && el !== prev) {
-          if (prev) removeResizeListener(prev, update);
+  watch(
+    elRef,
+    (el, prev) => {
+      if (el !== prev) {
+        if (prev) removeResizeListener(prev, update);
+        if (el) {
           addResizeListener(el, update, 200);
           update();
         }
-      },
-      { immediate: true }
-    );
-    return () => {
-      elRef.value && removeResizeListener(elRef.value, update);
-    };
+      }
+    },
+    { immediate: true }
+  );
+  onBeforeUnmount(() => {
+    elRef.value && removeResizeListener(elRef.value, update);
   });
   return [rect, elRef, update] as const;
 }

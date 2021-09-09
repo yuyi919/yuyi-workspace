@@ -95,6 +95,20 @@ export function useEffect(mounted: () => () => void) {
     disposer && disposer();
   });
 }
+/**
+ * 仿react的useEffect
+ * @param mounted
+ */
+export function useLayoutEffect(mounted: () => () => void) {
+  let disposer: () => void;
+  onMounted(() => {
+    disposer = mounted();
+  });
+  onBeforeUnmount(() => {
+    disposer && disposer();
+  });
+}
+
 
 export function useEffect2<T extends any = any>(
   effectHandler: (deps: T[], prevDeps?: T[]) => () => void,

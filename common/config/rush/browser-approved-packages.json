@@ -171,10 +171,6 @@
       "allowedCategories": [ "production" ]
     },
     {
-      "name": "@yuyi919/vue-antv-plus2-action-button",
-      "allowedCategories": [ "production" ]
-    },
-    {
       "name": "@yuyi919/vue-antv-plus2-form",
       "allowedCategories": [ "production" ]
     },
