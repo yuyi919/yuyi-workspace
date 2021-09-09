@@ -1,6 +1,8 @@
 {
   "extends": "../tsconfig.base.json",
   "compilerOptions": {
+    "rootDir": "../../../../../src",
+    "outDir": "../../../../../dist",
     "types": ["heft-jest", "node"]
   },
   "include": ["../../../../../src/**/*.ts", "../../../../../src/**/*.tsx"]

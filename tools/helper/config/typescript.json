@@ -4,7 +4,7 @@
 {
   "$schema": "https://developer.microsoft.com/zh-cn/json-schemas/heft/typescript.schema.json",
   "staticAssetsToCopy": {
-    "includeGlobs": ["generators/shared/files/*/**"],
+    "includeGlobs": ["src/generators/shared/files/**"],
     "fileExtensions": [
       ".js",
       ".json",
