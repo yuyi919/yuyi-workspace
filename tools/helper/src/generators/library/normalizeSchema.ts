@@ -2,7 +2,7 @@ import { getWorkspaceLayout, joinPathFragments, PackageManager, Tree } from "@nr
 import { toFileName } from "@nrwl/workspace";
 import { PackageBuilder } from "../../common/schema";
 import { autoImportPath } from "../../common/getDefaultImportPath";
-import { getParsedTags, NormalizedSchema } from "../../common/NormalizedSchema";
+import { getParsedTags } from "../../common/NormalizedSchema";
 import { LibProjectNode } from "../shared";
 import { Schema } from "./schema";
 export interface NormalizedOptions {
@@ -20,6 +20,13 @@ export interface NormalizedOptions {
   packageManager: PackageManager;
 }
 
+function toPackageName(name: string) {
+  return toFileName(name)
+    .split("-")
+    .filter((o) => o && o !== "packages")
+    .join("-");
+}
+
 export function normalizeSchema(tree: Tree, options: Schema): Schema {
   const { npmScope } = getWorkspaceLayout(tree);
   const name = toFileName(options.name);
@@ -28,6 +35,7 @@ export function normalizeSchema(tree: Tree, options: Schema): Schema {
   const parsedTags = getParsedTags(projectDirectory, options);
   return {
     ...options,
+    name,
     directory: options.directory,
     buildable: true,
     publishable: true,

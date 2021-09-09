@@ -513,6 +513,125 @@ importers:
       vue-demi2: /vue-demi/0.11.3_707fc39252203d96c3677f8cd88683c8
       vue-template-compiler: 2.6.14
 
+  ../../packages/libs/web/vue/antv-plus2/packages/action:
+    specifiers:
+      '@types/jest': ~27.0.1
+      '@types/node': ~16.7.2
+      '@yuyi919/workspace-base-rig': workspace:1.2.5
+      jest: ~27.1.0
+      tslib: ~2.3.1
+      typescript: 4.1.2
+    devDependencies:
+      '@types/jest': 27.0.1
+      '@types/node': 16.7.7
+      '@yuyi919/workspace-base-rig': link:../../../../../tools/workspace-base-rig
+      jest: 27.1.0
+      tslib: 2.3.1
+      typescript: 4.1.2
+
+  ../../packages/libs/web/vue/antv-plus2/packages/form:
+    specifiers:
+      '@types/jest': ~27.0.1
+      '@types/node': ~16.7.2
+      '@yuyi919/workspace-base-rig': workspace:1.2.5
+      jest: ~27.1.0
+      tslib: ~2.3.1
+      typescript: 4.1.2
+    devDependencies:
+      '@types/jest': 27.0.1
+      '@types/node': 16.7.7
+      '@yuyi919/workspace-base-rig': link:../../../../../tools/workspace-base-rig
+      jest: 27.1.0
+      tslib: 2.3.1
+      typescript: 4.1.2
+
+  ../../packages/libs/web/vue/antv-plus2/packages/helper:
+    specifiers:
+      '@types/jest': ~27.0.1
+      '@types/node': ~16.7.2
+      '@yuyi919/shared-types': workspace:0.0.5
+      '@yuyi919/workspace-base-rig': workspace:1.2.5
+      jest: ~27.1.0
+      lodash: 4.17.21
+      lodash-es: 4.17.21
+      tslib: ~2.3.1
+      typescript: 4.1.2
+    dependencies:
+      '@yuyi919/shared-types': link:../../../../../shared/packages/types
+      lodash: 4.17.21
+      lodash-es: 4.17.21
+    devDependencies:
+      '@types/jest': 27.0.1
+      '@types/node': 16.7.7
+      '@yuyi919/workspace-base-rig': link:../../../../../tools/workspace-base-rig
+      jest: 27.1.0
+      tslib: 2.3.1
+      typescript: 4.1.2
+
+  ../../packages/libs/web/vue/antv-plus2/packages/modal:
+    specifiers:
+      '@types/jest': ~27.0.1
+      '@types/node': ~16.7.2
+      '@yuyi919/workspace-base-rig': workspace:1.2.5
+      jest: ~27.1.0
+      tslib: ~2.3.1
+      typescript: 4.1.2
+    devDependencies:
+      '@types/jest': 27.0.1
+      '@types/node': 16.7.7
+      '@yuyi919/workspace-base-rig': link:../../../../../tools/workspace-base-rig
+      jest: 27.1.0
+      tslib: 2.3.1
+      typescript: 4.1.2
+
+  ../../packages/libs/web/vue/antv-plus2/packages/shared:
+    specifiers:
+      '@types/jest': ~27.0.1
+      '@types/node': ~16.7.2
+      '@yuyi919/workspace-base-rig': workspace:1.2.5
+      jest: ~27.1.0
+      tslib: ~2.3.1
+      typescript: 4.1.2
+    devDependencies:
+      '@types/jest': 27.0.1
+      '@types/node': 16.7.7
+      '@yuyi919/workspace-base-rig': link:../../../../../tools/workspace-base-rig
+      jest: 27.1.0
+      tslib: 2.3.1
+      typescript: 4.1.2
+
+  ../../packages/libs/web/vue/antv-plus2/packages/table:
+    specifiers:
+      '@types/jest': ~27.0.1
+      '@types/node': ~16.7.2
+      '@yuyi919/workspace-base-rig': workspace:1.2.5
+      jest: ~27.1.0
+      tslib: ~2.3.1
+      typescript: 4.1.2
+    devDependencies:
+      '@types/jest': 27.0.1
+      '@types/node': 16.7.7
+      '@yuyi919/workspace-base-rig': link:../../../../../tools/workspace-base-rig
+      jest: 27.1.0
+      tslib: 2.3.1
+      typescript: 4.1.2
+
+  ../../packages/libs/web/vue/antv-plus2/packages/theme:
+    specifiers:
+      '@types/jest': ~27.0.1
+      '@types/node': ~16.7.2
+      '@yuyi919/workspace-base-rig': workspace:1.2.5
+      jest: ~27.1.0
+      tslib: ~2.3.1
+      typescript: 4.1.2
+    devDependencies:
+      '@types/jest': 27.0.1
+      '@types/node': 16.7.7
+      '@yuyi919/workspace-base-rig': link:../../../../../tools/workspace-base-rig
+      jest: 27.1.0
+      tslib: 2.3.1
+      typescript: 4.1.2
+
   ../../packages/libs/web/vue/jsx-factory:
     specifiers:
       '@types/jest': ~27.0.1

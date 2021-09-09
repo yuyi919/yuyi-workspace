@@ -49,7 +49,7 @@ export function normalizeOptions<T extends CommonSchema>(
 export function getParsedTags<T extends CommonSchema>(projectDirectory: string, options: T) {
   return Array.from(
     new Set<string>(
-      generateTags(projectDirectory).concat(
+      generateTags(projectDirectory.replace(/\\packages/g, "")).concat(
         options.tags ? options.tags.split(",").map((s) => s.trim()) : []
       )
     )

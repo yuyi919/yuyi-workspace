@@ -1,0 +1,10 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "module": "commonjs",
+    "outDir": "./dist",
+    "tsBuildInfoFile": "./node_modules/@yuyi919/workspace-base-rig/.tsBuildInfo/web-vue-antv-plus2-packages-helper.json"
+  },
+  "exclude": ["src/**/*.spec.ts", "src/**/*.spec.tsx", "**/__test__/**"],
+  "include": ["src/**/*.ts", "src/**/*.tsx"]
+}

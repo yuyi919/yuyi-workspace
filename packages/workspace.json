@@ -599,6 +599,391 @@
         }
       }
     },
+    "web-vue-antv-plus2-packages-action": {
+      "root": "libs/web/vue/antv-plus2/packages/action",
+      "sourceRoot": "libs/web/vue/antv-plus2/packages/action/src",
+      "projectType": "library",
+      "targets": {
+        "build": {
+          "executor": "@nrwl/workspace:run-commands",
+          "configurations": {
+            "watch": {
+              "commands": ["pnpm run build:watch"]
+            }
+          },
+          "options": {
+            "commands": ["pnpm run build"],
+            "cwd": "libs/web/vue/antv-plus2/packages/action"
+          }
+        },
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/web/vue/antv-plus2/packages/action/**/*.ts"]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/web/vue/antv-plus2/packages/action"],
+          "options": {
+            "jestConfig": "libs/web/vue/antv-plus2/packages/action/jest.config.js",
+            "passWithNoTests": true
+          }
+        },
+        "command": {
+          "executor": "@nrwl/workspace:run-commands",
+          "options": {},
+          "configurations": {
+            "format": {
+              "cwd": ".",
+              "commands": [
+                {
+                  "command": "nx generate @yuyi919/nx-plugin-workspace-helper:format --project=web-vue-antv-plus2-packages-action --no-interactive"
+                }
+              ]
+            },
+            "remove": {
+              "cwd": ".",
+              "commands": [
+                {
+                  "command": "nx generate @nrwl/workspace:remove --projectName=web-vue-antv-plus2-packages-action --forceRemove"
+                }
+              ]
+            }
+          }
+        }
+      }
+    },
+    "web-vue-antv-plus2-packages-form": {
+      "root": "libs/web/vue/antv-plus2/packages/form",
+      "sourceRoot": "libs/web/vue/antv-plus2/packages/form/src",
+      "projectType": "library",
+      "targets": {
+        "build": {
+          "executor": "@nrwl/workspace:run-commands",
+          "configurations": {
+            "watch": {
+              "commands": ["pnpm run build:watch"]
+            }
+          },
+          "options": {
+            "commands": ["pnpm run build"],
+            "cwd": "libs/web/vue/antv-plus2/packages/form"
+          }
+        },
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/web/vue/antv-plus2/packages/form/**/*.ts"]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/web/vue/antv-plus2/packages/form"],
+          "options": {
+            "jestConfig": "libs/web/vue/antv-plus2/packages/form/jest.config.js",
+            "passWithNoTests": true
+          }
+        },
+        "command": {
+          "executor": "@nrwl/workspace:run-commands",
+          "options": {},
+          "configurations": {
+            "format": {
+              "cwd": ".",
+              "commands": [
+                {
+                  "command": "nx generate @yuyi919/nx-plugin-workspace-helper:format --project=web-vue-antv-plus2-packages-form --no-interactive"
+                }
+              ]
+            },
+            "remove": {
+              "cwd": ".",
+              "commands": [
+                {
+                  "command": "nx generate @nrwl/workspace:remove --projectName=web-vue-antv-plus2-packages-form --forceRemove"
+                }
+              ]
+            }
+          }
+        }
+      }
+    },
+    "web-vue-antv-plus2-packages-helper": {
+      "root": "libs/web/vue/antv-plus2/packages/helper",
+      "sourceRoot": "libs/web/vue/antv-plus2/packages/helper/src",
+      "projectType": "library",
+      "targets": {
+        "build": {
+          "executor": "@nrwl/workspace:run-commands",
+          "configurations": {
+            "watch": {
+              "commands": ["pnpm run build:watch"]
+            }
+          },
+          "options": {
+            "commands": ["pnpm run build"],
+            "cwd": "libs/web/vue/antv-plus2/packages/helper"
+          }
+        },
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/web/vue/antv-plus2/packages/helper/**/*.ts"]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/web/vue/antv-plus2/packages/helper"],
+          "options": {
+            "jestConfig": "libs/web/vue/antv-plus2/packages/helper/jest.config.js",
+            "passWithNoTests": true
+          }
+        },
+        "command": {
+          "executor": "@nrwl/workspace:run-commands",
+          "options": {},
+          "configurations": {
+            "format": {
+              "cwd": ".",
+              "commands": [
+                {
+                  "command": "nx generate @yuyi919/nx-plugin-workspace-helper:format --project=web-vue-antv-plus2-packages-helper --no-interactive"
+                }
+              ]
+            },
+            "remove": {
+              "cwd": ".",
+              "commands": [
+                {
+                  "command": "nx generate @nrwl/workspace:remove --projectName=web-vue-antv-plus2-packages-helper --forceRemove"
+                }
+              ]
+            }
+          }
+        }
+      }
+    },
+    "web-vue-antv-plus2-packages-modal": {
+      "root": "libs/web/vue/antv-plus2/packages/modal",
+      "sourceRoot": "libs/web/vue/antv-plus2/packages/modal/src",
+      "projectType": "library",
+      "targets": {
+        "build": {
+          "executor": "@nrwl/workspace:run-commands",
+          "configurations": {
+            "watch": {
+              "commands": ["pnpm run build:watch"]
+            }
+          },
+          "options": {
+            "commands": ["pnpm run build"],
+            "cwd": "libs/web/vue/antv-plus2/packages/modal"
+          }
+        },
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/web/vue/antv-plus2/packages/modal/**/*.ts"]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/web/vue/antv-plus2/packages/modal"],
+          "options": {
+            "jestConfig": "libs/web/vue/antv-plus2/packages/modal/jest.config.js",
+            "passWithNoTests": true
+          }
+        },
+        "command": {
+          "executor": "@nrwl/workspace:run-commands",
+          "options": {},
+          "configurations": {
+            "format": {
+              "cwd": ".",
+              "commands": [
+                {
+                  "command": "nx generate @yuyi919/nx-plugin-workspace-helper:format --project=web-vue-antv-plus2-packages-modal --no-interactive"
+                }
+              ]
+            },
+            "remove": {
+              "cwd": ".",
+              "commands": [
+                {
+                  "command": "nx generate @nrwl/workspace:remove --projectName=web-vue-antv-plus2-packages-modal --forceRemove"
+                }
+              ]
+            }
+          }
+        }
+      }
+    },
+    "web-vue-antv-plus2-packages-shared": {
+      "root": "libs/web/vue/antv-plus2/packages/shared",
+      "sourceRoot": "libs/web/vue/antv-plus2/packages/shared/src",
+      "projectType": "library",
+      "targets": {
+        "build": {
+          "executor": "@nrwl/workspace:run-commands",
+          "configurations": {
+            "watch": {
+              "commands": ["pnpm run build:watch"]
+            }
+          },
+          "options": {
+            "commands": ["pnpm run build"],
+            "cwd": "libs/web/vue/antv-plus2/packages/shared"
+          }
+        },
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/web/vue/antv-plus2/packages/shared/**/*.ts"]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/web/vue/antv-plus2/packages/shared"],
+          "options": {
+            "jestConfig": "libs/web/vue/antv-plus2/packages/shared/jest.config.js",
+            "passWithNoTests": true
+          }
+        },
+        "command": {
+          "executor": "@nrwl/workspace:run-commands",
+          "options": {},
+          "configurations": {
+            "format": {
+              "cwd": ".",
+              "commands": [
+                {
+                  "command": "nx generate @yuyi919/nx-plugin-workspace-helper:format --project=web-vue-antv-plus2-packages-shared --no-interactive"
+                }
+              ]
+            },
+            "remove": {
+              "cwd": ".",
+              "commands": [
+                {
+                  "command": "nx generate @nrwl/workspace:remove --projectName=web-vue-antv-plus2-packages-shared --forceRemove"
+                }
+              ]
+            }
+          }
+        }
+      }
+    },
+    "web-vue-antv-plus2-packages-table": {
+      "root": "libs/web/vue/antv-plus2/packages/table",
+      "sourceRoot": "libs/web/vue/antv-plus2/packages/table/src",
+      "projectType": "library",
+      "targets": {
+        "build": {
+          "executor": "@nrwl/workspace:run-commands",
+          "configurations": {
+            "watch": {
+              "commands": ["pnpm run build:watch"]
+            }
+          },
+          "options": {
+            "commands": ["pnpm run build"],
+            "cwd": "libs/web/vue/antv-plus2/packages/table"
+          }
+        },
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/web/vue/antv-plus2/packages/table/**/*.ts"]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/web/vue/antv-plus2/packages/table"],
+          "options": {
+            "jestConfig": "libs/web/vue/antv-plus2/packages/table/jest.config.js",
+            "passWithNoTests": true
+          }
+        },
+        "command": {
+          "executor": "@nrwl/workspace:run-commands",
+          "options": {},
+          "configurations": {
+            "format": {
+              "cwd": ".",
+              "commands": [
+                {
+                  "command": "nx generate @yuyi919/nx-plugin-workspace-helper:format --project=web-vue-antv-plus2-packages-table --no-interactive"
+                }
+              ]
+            },
+            "remove": {
+              "cwd": ".",
+              "commands": [
+                {
+                  "command": "nx generate @nrwl/workspace:remove --projectName=web-vue-antv-plus2-packages-table --forceRemove"
+                }
+              ]
+            }
+          }
+        }
+      }
+    },
+    "web-vue-antv-plus2-packages-theme": {
+      "root": "libs/web/vue/antv-plus2/packages/theme",
+      "sourceRoot": "libs/web/vue/antv-plus2/packages/theme/src",
+      "projectType": "library",
+      "targets": {
+        "build": {
+          "executor": "@nrwl/workspace:run-commands",
+          "configurations": {
+            "watch": {
+              "commands": ["pnpm run build:watch"]
+            }
+          },
+          "options": {
+            "commands": ["pnpm run build"],
+            "cwd": "libs/web/vue/antv-plus2/packages/theme"
+          }
+        },
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/web/vue/antv-plus2/packages/theme/**/*.ts"]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/web/vue/antv-plus2/packages/theme"],
+          "options": {
+            "jestConfig": "libs/web/vue/antv-plus2/packages/theme/jest.config.js",
+            "passWithNoTests": true
+          }
+        },
+        "command": {
+          "executor": "@nrwl/workspace:run-commands",
+          "options": {},
+          "configurations": {
+            "format": {
+              "cwd": ".",
+              "commands": [
+                {
+                  "command": "nx generate @yuyi919/nx-plugin-workspace-helper:format --project=web-vue-antv-plus2-packages-theme --no-interactive"
+                }
+              ]
+            },
+            "remove": {
+              "cwd": ".",
+              "commands": [
+                {
+                  "command": "nx generate @nrwl/workspace:remove --projectName=web-vue-antv-plus2-packages-theme --forceRemove"
+                }
+              ]
+            }
+          }
+        }
+      }
+    },
     "web-vue-jsx-factory": {
       "root": "libs/web/vue/jsx-factory",
       "sourceRoot": "libs/web/vue/jsx-factory/src",

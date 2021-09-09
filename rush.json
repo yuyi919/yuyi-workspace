@@ -164,7 +164,7 @@
    * and set projectFolderMaxDepth to a large number.
    */
   // "projectFolderMinDepth": 2,
-  "projectFolderMaxDepth": 5,
+  "projectFolderMaxDepth": 7,
   /**
    * Today the npmjs.com registry enforces fairly strict naming rules for packages, but in the early
    * days there was no standard and hardly any enforcement.  A few large legacy projects are still using
@@ -541,16 +541,51 @@
       "versionPolicyName": "shared"
     },
     {
+      "packageName": "@yuyi919/vue-jsx-factory",
+      "projectFolder": "packages/libs/web/vue/jsx-factory",
+      "reviewCategory": "production",
+      "versionPolicyName": "shared"
+    },
+    {
       "packageName": "@yuyi919/web-vue-antv-plus2",
       "projectFolder": "packages/libs/web/vue/antv-plus2",
       "reviewCategory": "production",
       "versionPolicyName": "shared"
     },
     {
-      "packageName": "@yuyi919/vue-jsx-factory",
-      "projectFolder": "packages/libs/web/vue/jsx-factory",
-      "reviewCategory": "production",
-      "versionPolicyName": "shared"
+      "packageName": "@yuyi919/web-vue-antv-plus2-action",
+      "projectFolder": "packages/libs/web/vue/antv-plus2/packages/action",
+      "reviewCategory": "production"
+    },
+    {
+      "packageName": "@yuyi919/web-vue-antv-plus2-form",
+      "projectFolder": "packages/libs/web/vue/antv-plus2/packages/form",
+      "reviewCategory": "production"
+    },
+    {
+      "packageName": "@yuyi919/web-vue-antv-plus2-helper",
+      "projectFolder": "packages/libs/web/vue/antv-plus2/packages/helper",
+      "reviewCategory": "production"
+    },
+    {
+      "packageName": "@yuyi919/web-vue-antv-plus2-modal",
+      "projectFolder": "packages/libs/web/vue/antv-plus2/packages/modal",
+      "reviewCategory": "production"
+    },
+    {
+      "packageName": "@yuyi919/web-vue-antv-plus2-shared",
+      "projectFolder": "packages/libs/web/vue/antv-plus2/packages/shared",
+      "reviewCategory": "production"
+    },
+    {
+      "packageName": "@yuyi919/web-vue-antv-plus2-table",
+      "projectFolder": "packages/libs/web/vue/antv-plus2/packages/table",
+      "reviewCategory": "production"
+    },
+    {
+      "packageName": "@yuyi919/web-vue-antv-plus2-theme",
+      "projectFolder": "packages/libs/web/vue/antv-plus2/packages/theme",
+      "reviewCategory": "production"
     },
     {
       "packageName": "@yuyi919/workspace",

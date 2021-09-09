@@ -5,7 +5,7 @@ export function isTypedModel(path?: string) {
 
 export function autoImportPath(scopedName: string, options: CommonSchema) {
   return `@${scopedName.toLowerCase()}/${convertDirectoryToHostName(
-    options.directory + "/" + options.name.toLowerCase()
+    options.directory.replace(/\/packages/g, "") + "/" + options.name.toLowerCase()
   )}`;
 }
 function convertDirectoryToHostName(path?: string) {

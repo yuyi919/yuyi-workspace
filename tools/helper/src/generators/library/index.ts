@@ -25,23 +25,20 @@ import { Schema } from "./schema";
 
 export async function libraryGenerator(host: Tree, schema: Schema) {
   const graph = getProjectGraphWith(host);
-  schema = normalizeSchema(host, schema);
-  if (schema.publishable === true && !schema.importPath) {
-    throw new Error(
-      `For publishable libs you have to provide a proper "--importPath" which needs to be a valid npm package name (e.g. my-awesome-lib or @myorg/my-lib)`
-    );
-  }
-  const optionList = schema.name.split(",").map((name) => {
-    const namedSchema = { ...schema, name };
-    const options = normalizeOptions(host, namedSchema)
-    console.log(options);
+  const optionList = schema.name.split(",").map((name, index) => {
+    if (index === 0 && schema.publishable === true && !schema.importPath) {
+      throw new Error(
+        `For publishable libs you have to provide a proper "--importPath" which needs to be a valid npm package name (e.g. my-awesome-lib or @myorg/my-lib)`
+      );
+    }
+    const namedSchema = normalizeSchema(host, { ...schema, name });
+    const options = normalizeOptions(host, namedSchema);
+    console.log(namedSchema);
     return { options, schema: namedSchema };
   });
   for (const { options, schema } of optionList) {
     await generateProject(host, graph, schema, options);
   }
-
-  formatWorkspacePackageJson(host);
 
   updateRushJson(host, (json) => {
     for (const { options } of optionList) {
@@ -49,6 +46,8 @@ export async function libraryGenerator(host: Tree, schema: Schema) {
       updateRushJsonWith(json, options);
     }
   });
+
+  formatWorkspacePackageJson(host);
 
   let callback: any;
   if (!schema.skipFormat) {

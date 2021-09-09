@@ -60,6 +60,27 @@
     "web-vue-antv-plus2": {
       "tags": ["web", "vue", "antv", "antv-plus2"]
     },
+    "web-vue-antv-plus2-packages-action": {
+      "tags": ["web", "vue", "antv", "antv-plus2", "packages", "action"]
+    },
+    "web-vue-antv-plus2-packages-form": {
+      "tags": ["web", "vue", "antv", "antv-plus2", "packages", "form"]
+    },
+    "web-vue-antv-plus2-packages-helper": {
+      "tags": ["web", "vue", "antv", "antv-plus2", "packages", "helper"]
+    },
+    "web-vue-antv-plus2-packages-modal": {
+      "tags": ["web", "vue", "antv", "antv-plus2", "packages", "modal"]
+    },
+    "web-vue-antv-plus2-packages-shared": {
+      "tags": ["web", "vue", "antv", "antv-plus2", "packages", "shared"]
+    },
+    "web-vue-antv-plus2-packages-table": {
+      "tags": ["web", "vue", "antv", "antv-plus2", "packages", "table"]
+    },
+    "web-vue-antv-plus2-packages-theme": {
+      "tags": ["web", "vue", "antv", "antv-plus2", "packages", "theme"]
+    },
     "web-vue-jsx-factory": {
       "tags": ["web", "vue", "jsx", "jsx-factory"]
     }
