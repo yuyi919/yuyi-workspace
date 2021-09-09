@@ -83,6 +83,9 @@
     },
     "web-vue-jsx-factory": {
       "tags": ["web", "vue", "jsx", "jsx-factory"]
+    },
+    "web-vue-use": {
+      "tags": ["web", "vue", "use"]
     }
   },
   "workspaceLayout": {

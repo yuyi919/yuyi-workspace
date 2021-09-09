@@ -469,6 +469,13 @@ importers:
       '@types/node': ~16.7.2
       '@vue/composition-api': ^1.0.2
       '@yuyi919/build-tools': workspace:0.1.10
+      '@yuyi919/vue-antv-plus2-action': workspace:0.0.1
+      '@yuyi919/vue-antv-plus2-form': workspace:0.0.1
+      '@yuyi919/vue-antv-plus2-helper': workspace:0.0.1
+      '@yuyi919/vue-antv-plus2-modal': workspace:0.0.1
+      '@yuyi919/vue-antv-plus2-shared': workspace:0.0.1
+      '@yuyi919/vue-antv-plus2-table': workspace:0.0.1
+      '@yuyi919/vue-antv-plus2-theme': workspace:0.0.1
       '@yuyi919/vue-jsx-factory': workspace:0.0.1
       '@yuyi919/workspace-base-rig': workspace:1.2.5
       ant-design-vue: 1.7.5
@@ -489,6 +496,13 @@ importers:
     dependencies:
       '@ant-design/icons': 2.0.0
       '@ant-design/icons-vue': 2.0.0_ad2ffc6625ba3fa30d65a328fdbfee64
+      '@yuyi919/vue-antv-plus2-action': link:packages/action
+      '@yuyi919/vue-antv-plus2-form': link:packages/form
+      '@yuyi919/vue-antv-plus2-helper': link:packages/helper
+      '@yuyi919/vue-antv-plus2-modal': link:packages/modal
+      '@yuyi919/vue-antv-plus2-shared': link:packages/shared
+      '@yuyi919/vue-antv-plus2-table': link:packages/table
+      '@yuyi919/vue-antv-plus2-theme': link:packages/theme
       '@yuyi919/vue-jsx-factory': link:../jsx-factory
       lodash: 4.17.21
       lodash-es: 4.17.21
@@ -556,17 +570,21 @@ importers:
       lodash-es: 4.17.21
       tslib: ~2.3.1
       typescript: 4.1.2
+      vue: 2.6.14
+      vue-demi: ^0.11.3
     dependencies:
       '@yuyi919/shared-types': link:../../../../../shared/packages/types
       lodash: 4.17.21
       lodash-es: 4.17.21
+      tslib: 2.3.1
+      vue-demi: 0.11.3_vue@2.6.14
     devDependencies:
       '@types/jest': 27.0.1
       '@types/node': 16.7.7
       '@yuyi919/workspace-base-rig': link:../../../../../tools/workspace-base-rig
       jest: 27.1.0
-      tslib: 2.3.1
       typescript: 4.1.2
+      vue: 2.6.14
 
   ../../packages/libs/web/vue/antv-plus2/packages/modal:
     specifiers:
@@ -588,17 +606,38 @@ importers:
     specifiers:
       '@types/jest': ~27.0.1
       '@types/node': ~16.7.2
+      '@yuyi919/shared-types': workspace:0.0.5
+      '@yuyi919/shared-utils': workspace:0.0.36
+      '@yuyi919/vue-antv-plus2-helper': workspace:0.0.1
+      '@yuyi919/vue-antv-plus2-theme': workspace:0.0.1
+      '@yuyi919/vue-jsx-factory': workspace:0.0.1
+      '@yuyi919/vue-use': workspace:0.0.3
       '@yuyi919/workspace-base-rig': workspace:1.2.5
       jest: ~27.1.0
+      lodash: 4.17.21
+      lodash-es: 4.17.21
       tslib: ~2.3.1
       typescript: 4.1.2
+      vue: ^2.6.14
+      vue-demi: ^0.11.3
+    dependencies:
+      '@yuyi919/shared-types': link:../../../../../shared/packages/types
+      '@yuyi919/shared-utils': link:../../../../../shared/packages/utils
+      '@yuyi919/vue-antv-plus2-helper': link:../helper
+      '@yuyi919/vue-antv-plus2-theme': link:../theme
+      '@yuyi919/vue-jsx-factory': link:../../../jsx-factory
+      '@yuyi919/vue-use': link:../../../use
+      lodash: 4.17.21
+      lodash-es: 4.17.21
+      tslib: 2.3.1
+      vue-demi: 0.11.3_vue@2.6.14
     devDependencies:
       '@types/jest': 27.0.1
       '@types/node': 16.7.7
       '@yuyi919/workspace-base-rig': link:../../../../../tools/workspace-base-rig
       jest: 27.1.0
-      tslib: 2.3.1
       typescript: 4.1.2
+      vue: 2.6.14
 
   ../../packages/libs/web/vue/antv-plus2/packages/table:
     specifiers:
@@ -658,6 +697,45 @@ importers:
       '@vue/composition-api': 1.1.4_vue@2.6.14
       '@yuyi919/workspace-base-rig': link:../../../tools/workspace-base-rig
       jest: 27.1.0
+      typescript: 4.1.2
+      vue: 2.6.14
+
+  ../../packages/libs/web/vue/use:
+    specifiers:
+      '@type-helper/vue2': npm:vue@2
+      '@type-helper/vue3': npm:vue@3
+      '@types/jest': ~27.0.1
+      '@types/node': ~16.7.2
+      '@vue/composition-api': ^1.0.2
+      '@yuyi919/build-tools': workspace:0.1.10
+      '@yuyi919/shared-types': workspace:0.0.5
+      '@yuyi919/workspace-base-rig': workspace:1.2.5
+      jest: ~27.1.0
+      lodash: 4.17.21
+      lodash-es: 4.17.21
+      resize-observer-polyfill: ^1.5.1
+      rxjs: ~6.6.3
+      tslib: ~2.3.1
+      typescript: 4.1.2
+      vue: ^2.6.14
+      vue-demi: ^0.11.3
+    dependencies:
+      '@yuyi919/shared-types': link:../../../shared/packages/types
+      rxjs: 6.6.7
+      tslib: 2.3.1
+      vue-demi: 0.11.3_707fc39252203d96c3677f8cd88683c8
+    devDependencies:
+      '@type-helper/vue2': /vue/2.6.14
+      '@type-helper/vue3': /vue/3.2.11
+      '@types/jest': 27.0.1
+      '@types/node': 16.7.7
+      '@vue/composition-api': 1.1.4_vue@2.6.14
+      '@yuyi919/build-tools': link:../../../tools/build-tools
+      '@yuyi919/workspace-base-rig': link:../../../tools/workspace-base-rig
+      jest: 27.1.0
+      lodash: 4.17.21
+      lodash-es: 4.17.21
+      resize-observer-polyfill: 1.5.1
       typescript: 4.1.2
       vue: 2.6.14
 
@@ -4044,6 +4122,12 @@ packages:
       vue: 2.6.14
     dev: true
 
+  /@vue/reactivity/3.2.11:
+    resolution: {integrity: sha512-hEQstxPQbgGZq5qApzrvbDmRdK1KP96O/j4XrwT8fVkT1ytkFs4fH2xNEh9QKwXfybbQkLs77W7OfXCv5o6qbA==}
+    dependencies:
+      '@vue/shared': 3.2.11
+    dev: true
+
   /@vue/ref-transform/3.2.11:
     resolution: {integrity: sha512-7rX0YsfYb7+1PeKPME1tQyUQcQgt0sIXRRnPD1Vw8Zs2KIo90YLy9CrvwalcRCxGw0ScsjBEhVjJtWIT79TElg==}
     dependencies:
@@ -4052,6 +4136,21 @@ packages:
       '@vue/shared': 3.2.11
       estree-walker: 2.0.2
       magic-string: 0.25.7
+    dev: true
+
+  /@vue/runtime-core/3.2.11:
+    resolution: {integrity: sha512-horlxjWwSvModC87WdsWswzzHE5IexmKkQA65S5vFgP5hLUBW+HRyScDeuB/RRcFmqnf+ozacNCfap0kqcpODw==}
+    dependencies:
+      '@vue/reactivity': 3.2.11
+      '@vue/shared': 3.2.11
+    dev: true
+
+  /@vue/runtime-dom/3.2.11:
+    resolution: {integrity: sha512-cOK1g0INdiCbds2xrrJKrrN+pDHuLz6esUs/crdEiupDuX7IeiMbdqrAQCkYHp5P1KLWcbGlkmwfVD7HQGii0Q==}
+    dependencies:
+      '@vue/runtime-core': 3.2.11
+      '@vue/shared': 3.2.11
+      csstype: 2.6.17
     dev: true
 
   /@vue/shared/3.2.11:
@@ -6124,6 +6223,10 @@ packages:
     engines: {node: '>=8'}
     dependencies:
       cssom: 0.3.8
+
+  /csstype/2.6.17:
+    resolution: {integrity: sha512-u1wmTI1jJGzCJzWndZo8mk4wnPTZd1eOIYTYvuEyOQGfmDl3TrabCCfKnOC86FZwW/9djqTl933UF/cS425i9A==}
+    dev: true
 
   /csstype/3.0.8:
     resolution: {integrity: sha512-jXKhWqXPmlUeoQnF/EhTtTl4C9SnrxSH/jZUih3jmO6lBKr99rP3/+FmrMj4EFpOXzMtXHAZkd3x0E6h6Fgflw==}
@@ -9603,7 +9706,6 @@ packages:
 
   /lodash-es/4.17.21:
     resolution: {integrity: sha512-mKnC+QJ9pWVzv+C4/U3rRsHapFfHvQFoFB92e52xeyGMcX6/OlIl78je1u8vePzYZSkkogMPJ2yjxxsb89cxyw==}
-    dev: false
 
   /lodash.camelcase/4.3.0:
     resolution: {integrity: sha1-soqmKIorn8ZRA1x3EfZathkDMaY=}
@@ -12893,6 +12995,21 @@ packages:
       '@vue/composition-api': 1.1.4_vue@2.6.14
       vue: 2.6.14
 
+  /vue-demi/0.11.3_vue@2.6.14:
+    resolution: {integrity: sha512-DpM0TTMpclRZDV6AIacgg837zrim/C9Zn+2ztXBs9hsESJN9vC83ztjTe4KC4HgJuVle8YUjPp7HTwWtwOHfmg==}
+    engines: {node: '>=12'}
+    hasBin: true
+    requiresBuild: true
+    peerDependencies:
+      '@vue/composition-api': ^1.0.0-rc.1
+      vue: ^3.0.0-0 || ^2.6.0
+    peerDependenciesMeta:
+      '@vue/composition-api':
+        optional: true
+    dependencies:
+      vue: 2.6.14
+    dev: false
+
   /vue-ref/2.0.0:
     resolution: {integrity: sha512-uKNKpFOVeWNqS2mrBZqnpLyXJo5Q+vnkex6JvpENvhXHFNBW/SJTP8vJywLuVT3DpxwXcF9N0dyIiZ4/NpTexQ==}
     dev: true
@@ -12910,6 +13027,14 @@ packages:
 
   /vue/2.6.14:
     resolution: {integrity: sha512-x2284lgYvjOMj3Za7kqzRcUSxBboHqtgRE2zlos1qWaOye5yUmHn42LB1250NJBLRwEcdrB0JRwyPTEPhfQjiQ==}
+    dev: true
+
+  /vue/3.2.11:
+    resolution: {integrity: sha512-JkI3/eIgfk4E0f/p319TD3EZgOwBQfftgnkRsXlT7OrRyyiyoyUXn6embPGZXSBxD3LoZ9SWhJoxLhFh5AleeA==}
+    dependencies:
+      '@vue/compiler-dom': 3.2.11
+      '@vue/runtime-dom': 3.2.11
+      '@vue/shared': 3.2.11
     dev: true
 
   /w3c-hr-time/1.0.2:

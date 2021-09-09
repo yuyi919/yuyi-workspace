@@ -1,0 +1,24 @@
+// @import "~@project/theme/index.less";
+@import "../theme/index.less";
+@import "ant-design-vue/lib/button/style/mixin.less";
+
+@btn-second-background: @second-color;
+@btn-second-color: @second-color;
+@root: ~"@{component-prefix-cls}btn";
+@second-btn-cls: ~"@{root}-second";
+.ant-btn-primary.@{root}.@{second-btn-cls} {
+  .button-variant-primary(white; @btn-second-background);
+  &.ant-btn-background-ghost {
+    .button-variant-ghost(@btn-second-color; @btn-second-background);
+  }
+}
+.@{root} {
+  .anticon {
+    color: inherit !important;
+  }
+}
+
+:export {
+  root: @root;
+  second: @second-btn-cls;
+}

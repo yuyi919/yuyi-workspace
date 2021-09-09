@@ -1,5 +1,5 @@
 {
-  "name": "@yuyi919/web-vue-antv-plus2",
+  "name": "@yuyi919/vue-antv-plus2",
   "version": "0.0.1",
   "description": "",
   "author": "",
@@ -16,6 +16,13 @@
   "dependencies": {
     "@ant-design/icons": "2.0.0",
     "@ant-design/icons-vue": "2.0.0",
+    "@yuyi919/vue-antv-plus2-action": "workspace:0.0.1",
+    "@yuyi919/vue-antv-plus2-form": "workspace:0.0.1",
+    "@yuyi919/vue-antv-plus2-helper": "workspace:0.0.1",
+    "@yuyi919/vue-antv-plus2-modal": "workspace:0.0.1",
+    "@yuyi919/vue-antv-plus2-shared": "workspace:0.0.1",
+    "@yuyi919/vue-antv-plus2-table": "workspace:0.0.1",
+    "@yuyi919/vue-antv-plus2-theme": "workspace:0.0.1",
     "lodash": "4.17.21",
     "lodash-es": "4.17.21",
     "tslib": "~2.3.1",

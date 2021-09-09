@@ -119,7 +119,7 @@
       "allowedCategories": [ "production" ]
     },
     {
-      "name": "@yuyi919-vue/use",
+      "name": "@yuyi919/vue-use",
       "allowedCategories": [ "production" ]
     },
     {
@@ -160,6 +160,38 @@
     },
     {
       "name": "@yuyi919/ts-transformer-inline-macro",
+      "allowedCategories": [ "production" ]
+    },
+    {
+      "name": "@yuyi919/vue-antv-plus2-action",
+      "allowedCategories": [ "production" ]
+    },
+    {
+      "name": "@yuyi919/vue-antv-plus2-form",
+      "allowedCategories": [ "production" ]
+    },
+    {
+      "name": "@yuyi919/vue-antv-plus2-helper",
+      "allowedCategories": [ "production" ]
+    },
+    {
+      "name": "@yuyi919/vue-antv-plus2-modal",
+      "allowedCategories": [ "production" ]
+    },
+    {
+      "name": "@yuyi919/vue-antv-plus2-shared",
+      "allowedCategories": [ "production" ]
+    },
+    {
+      "name": "@yuyi919/vue-antv-plus2-stable",
+      "allowedCategories": [ "production" ]
+    },
+    {
+      "name": "@yuyi919/vue-antv-plus2-table",
+      "allowedCategories": [ "production" ]
+    },
+    {
+      "name": "@yuyi919/vue-antv-plus2-theme",
       "allowedCategories": [ "production" ]
     },
     {
@@ -301,6 +333,10 @@
     {
       "name": "reflect-metadata",
       "allowedCategories": [ "production", "tools" ]
+    },
+    {
+      "name": "resize-observer-polyfill",
+      "allowedCategories": [ "production" ]
     },
     {
       "name": "rollup",
