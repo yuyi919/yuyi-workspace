@@ -39,7 +39,9 @@
     "typescript": "4.1.2"
   },
   "devDependencies": {
-    "@nrwl/jest": "12.5.8"
+    "@nrwl/jest": "12.5.8",
+    "vue": "2.6.14",
+    "vue-template-compiler": "2.6.14"
   },
   "peerDependencies": {
     "tsdx": "^0.14.1"

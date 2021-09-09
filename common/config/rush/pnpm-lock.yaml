@@ -38,6 +38,8 @@ importers:
       ts-patch: ^1.4.1
       tslib: ~2.3.1
       typescript: 4.1.2
+      vue: 2.6.14
+      vue-template-compiler: 2.6.14
     dependencies:
       '@angular-devkit/architect': 0.1201.4
       '@angular-devkit/core': 12.2.3
@@ -71,6 +73,8 @@ importers:
       typescript: 4.1.2
     devDependencies:
       '@nrwl/jest': 12.5.8
+      vue: 2.6.14
+      vue-template-compiler: 2.6.14
 
   ../../packages/libs/node/cli-utils:
     specifiers:
@@ -318,7 +322,6 @@ importers:
       tslib: ~2.3.1
       typescript: 4.1.2
       vite: 2.4.4
-      vue: ^3.0.0
     dependencies:
       '@babel/core': 7.15.0
       '@babel/helper-module-imports': 7.14.5
@@ -363,7 +366,6 @@ importers:
       rollup-plugin-vue: 6.0.0_@vue+compiler-sfc@3.2.11
       tslib: 2.3.1
       typescript: 4.1.2
-      vue: 3.2.11
 
   ../../packages/libs/tools/ts-transformer/ast-utils:
     specifiers:
@@ -467,6 +469,7 @@ importers:
       '@types/node': ~16.7.2
       '@vue/composition-api': ^1.0.2
       '@yuyi919/build-tools': workspace:0.1.10
+      '@yuyi919/vue-jsx-factory': workspace:0.0.1
       '@yuyi919/workspace-base-rig': workspace:1.2.5
       ant-design-vue: 1.7.5
       babel-preset-vca-jsx: ^0.3.6
@@ -486,6 +489,7 @@ importers:
     dependencies:
       '@ant-design/icons': 2.0.0
       '@ant-design/icons-vue': 2.0.0_ad2ffc6625ba3fa30d65a328fdbfee64
+      '@yuyi919/vue-jsx-factory': link:../jsx-factory
       lodash: 4.17.21
       lodash-es: 4.17.21
     devDependencies:
@@ -508,6 +512,35 @@ importers:
       vue: 2.6.14
       vue-demi2: /vue-demi/0.11.3_707fc39252203d96c3677f8cd88683c8
       vue-template-compiler: 2.6.14
+
+  ../../packages/libs/web/vue/jsx-factory:
+    specifiers:
+      '@types/jest': ~27.0.1
+      '@types/node': ~16.7.2
+      '@vue/composition-api': ^1.0.2
+      '@yuyi919/workspace-base-rig': workspace:1.2.5
+      classnames: ^2.3.1
+      jest: ~27.1.0
+      lodash: 4.17.21
+      lodash-es: 4.17.21
+      tslib: ~2.3.1
+      typescript: 4.1.2
+      vue: 2.6.14
+      vue-demi: ^0.11.3
+    dependencies:
+      classnames: 2.3.1
+      lodash: 4.17.21
+      lodash-es: 4.17.21
+      vue-demi: 0.11.3_707fc39252203d96c3677f8cd88683c8
+    devDependencies:
+      '@types/jest': 27.0.1
+      '@types/node': 16.7.7
+      '@vue/composition-api': 1.1.4_vue@2.6.14
+      '@yuyi919/workspace-base-rig': link:../../../tools/workspace-base-rig
+      jest: 27.1.0
+      tslib: 2.3.1
+      typescript: 4.1.2
+      vue: 2.6.14
 
   ../../tools/helper:
     specifiers:
@@ -3892,12 +3925,6 @@ packages:
       vue: 2.6.14
     dev: true
 
-  /@vue/reactivity/3.2.11:
-    resolution: {integrity: sha512-hEQstxPQbgGZq5qApzrvbDmRdK1KP96O/j4XrwT8fVkT1ytkFs4fH2xNEh9QKwXfybbQkLs77W7OfXCv5o6qbA==}
-    dependencies:
-      '@vue/shared': 3.2.11
-    dev: true
-
   /@vue/ref-transform/3.2.11:
     resolution: {integrity: sha512-7rX0YsfYb7+1PeKPME1tQyUQcQgt0sIXRRnPD1Vw8Zs2KIo90YLy9CrvwalcRCxGw0ScsjBEhVjJtWIT79TElg==}
     dependencies:
@@ -3906,21 +3933,6 @@ packages:
       '@vue/shared': 3.2.11
       estree-walker: 2.0.2
       magic-string: 0.25.7
-    dev: true
-
-  /@vue/runtime-core/3.2.11:
-    resolution: {integrity: sha512-horlxjWwSvModC87WdsWswzzHE5IexmKkQA65S5vFgP5hLUBW+HRyScDeuB/RRcFmqnf+ozacNCfap0kqcpODw==}
-    dependencies:
-      '@vue/reactivity': 3.2.11
-      '@vue/shared': 3.2.11
-    dev: true
-
-  /@vue/runtime-dom/3.2.11:
-    resolution: {integrity: sha512-cOK1g0INdiCbds2xrrJKrrN+pDHuLz6esUs/crdEiupDuX7IeiMbdqrAQCkYHp5P1KLWcbGlkmwfVD7HQGii0Q==}
-    dependencies:
-      '@vue/runtime-core': 3.2.11
-      '@vue/shared': 3.2.11
-      csstype: 2.6.17
     dev: true
 
   /@vue/shared/3.2.11:
@@ -5618,7 +5630,6 @@ packages:
 
   /classnames/2.3.1:
     resolution: {integrity: sha512-OlQdbZ7gLfGarSqxesMesDa5uz7KFbID8Kpq/SxIoNGDqY8lSYs0D+hhtBXhcdB3rcbXArFr7vlHheLk1voeNA==}
-    dev: true
 
   /clean-stack/2.2.0:
     resolution: {integrity: sha512-4diC9HaTE+KRAMWhDhrGOECgWZxoevMc5TlkObMqNSsVU62PYzXZ/SMTjzyGAFF1YusgxGcSWTEXBhp0CPwQ1A==}
@@ -5994,10 +6005,6 @@ packages:
     engines: {node: '>=8'}
     dependencies:
       cssom: 0.3.8
-
-  /csstype/2.6.17:
-    resolution: {integrity: sha512-u1wmTI1jJGzCJzWndZo8mk4wnPTZd1eOIYTYvuEyOQGfmDl3TrabCCfKnOC86FZwW/9djqTl933UF/cS425i9A==}
-    dev: true
 
   /csstype/3.0.8:
     resolution: {integrity: sha512-jXKhWqXPmlUeoQnF/EhTtTl4C9SnrxSH/jZUih3jmO6lBKr99rP3/+FmrMj4EFpOXzMtXHAZkd3x0E6h6Fgflw==}
@@ -12766,7 +12773,6 @@ packages:
     dependencies:
       '@vue/composition-api': 1.1.4_vue@2.6.14
       vue: 2.6.14
-    dev: true
 
   /vue-ref/2.0.0:
     resolution: {integrity: sha512-uKNKpFOVeWNqS2mrBZqnpLyXJo5Q+vnkex6JvpENvhXHFNBW/SJTP8vJywLuVT3DpxwXcF9N0dyIiZ4/NpTexQ==}
@@ -12785,14 +12791,6 @@ packages:
 
   /vue/2.6.14:
     resolution: {integrity: sha512-x2284lgYvjOMj3Za7kqzRcUSxBboHqtgRE2zlos1qWaOye5yUmHn42LB1250NJBLRwEcdrB0JRwyPTEPhfQjiQ==}
-    dev: true
-
-  /vue/3.2.11:
-    resolution: {integrity: sha512-JkI3/eIgfk4E0f/p319TD3EZgOwBQfftgnkRsXlT7OrRyyiyoyUXn6embPGZXSBxD3LoZ9SWhJoxLhFh5AleeA==}
-    dependencies:
-      '@vue/compiler-dom': 3.2.11
-      '@vue/runtime-dom': 3.2.11
-      '@vue/shared': 3.2.11
     dev: true
 
   /w3c-hr-time/1.0.2:

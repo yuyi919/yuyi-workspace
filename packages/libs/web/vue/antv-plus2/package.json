@@ -10,13 +10,15 @@
     "build": "tsc --build",
     "build:dev": "tsc --build",
     "build:watch": "tsc --build --watch",
-    "dev": "tsc --build --watch"
+    "dev": "tsc --build --watch",
+    "preview": "vite"
   },
   "dependencies": {
     "@ant-design/icons": "2.0.0",
     "@ant-design/icons-vue": "2.0.0",
     "lodash": "4.17.21",
-    "lodash-es": "4.17.21"
+    "lodash-es": "4.17.21",
+    "@yuyi919/vue-jsx-factory": "workspace:0.0.1"
   },
   "devDependencies": {
     "@types/jest": "~27.0.1",

@@ -484,6 +484,12 @@
       "reviewCategory": "production"
     },
     {
+      "packageName": "@yuyi919/build-tools",
+      "projectFolder": "packages/libs/tools/build-tools",
+      "reviewCategory": "tools",
+      "versionPolicyName": "shared"
+    },
+    {
       "packageName": "@yuyi919/jest-extra",
       "projectFolder": "tools/jest",
       "reviewCategory": "tools"
@@ -535,14 +541,14 @@
       "versionPolicyName": "shared"
     },
     {
-      "packageName": "@yuyi919/build-tools",
-      "projectFolder": "packages/libs/tools/build-tools",
-      "reviewCategory": "tools",
+      "packageName": "@yuyi919/web-vue-antv-plus2",
+      "projectFolder": "packages/libs/web/vue/antv-plus2",
+      "reviewCategory": "production",
       "versionPolicyName": "shared"
     },
     {
-      "packageName": "@yuyi919/web-vue-antv-plus2",
-      "projectFolder": "packages/libs/web/vue/antv-plus2",
+      "packageName": "@yuyi919/vue-jsx-factory",
+      "projectFolder": "packages/libs/web/vue/jsx-factory",
       "reviewCategory": "production",
       "versionPolicyName": "shared"
     },

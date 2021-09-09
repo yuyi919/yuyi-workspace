@@ -163,6 +163,10 @@
       "allowedCategories": [ "production" ]
     },
     {
+      "name": "@yuyi919/vue-jsx-factory",
+      "allowedCategories": [ "production" ]
+    },
+    {
       "name": "@yuyi919/workspace-base-rig",
       "allowedCategories": [ "production", "tools" ]
     },
@@ -216,6 +220,10 @@
     },
     {
       "name": "babel-preset-vca-jsx",
+      "allowedCategories": [ "production" ]
+    },
+    {
+      "name": "classnames",
       "allowedCategories": [ "production" ]
     },
     {
@@ -380,7 +388,7 @@
     },
     {
       "name": "vue-template-compiler",
-      "allowedCategories": [ "production" ]
+      "allowedCategories": [ "production", "tools" ]
     },
     {
       "name": "winston",
