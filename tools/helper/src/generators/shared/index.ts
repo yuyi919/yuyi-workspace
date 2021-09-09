@@ -14,7 +14,7 @@ export * from "../../common/schema"
 export const PackageConfigures = definePackageJsonBuilder({
   tsc: {
     scripts: {
-      build: "tsc --build",
+      build: "tsc --build --force",
       "build:dev": "tsc --build",
       "build:watch": "tsc --build --watch",
       dev: "tsc --build --watch",

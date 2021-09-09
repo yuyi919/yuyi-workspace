@@ -535,9 +535,16 @@
       "versionPolicyName": "shared"
     },
     {
+      "packageName": "@yuyi919/build-tools",
+      "projectFolder": "packages/libs/tools/build-tools",
+      "reviewCategory": "tools",
+      "versionPolicyName": "shared"
+    },
+    {
       "packageName": "@yuyi919/web-vue-antv-plus2",
       "projectFolder": "packages/libs/web/vue/antv-plus2",
-      "reviewCategory": "production"
+      "reviewCategory": "production",
+      "versionPolicyName": "shared"
     },
     {
       "packageName": "@yuyi919/workspace",

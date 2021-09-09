@@ -1,0 +1,12 @@
+{
+  "extends": "./node_modules/@yuyi919/workspace-base-rig/profiles/tsc/tsconfig-base.json",
+  "compilerOptions": {
+    "esModuleInterop": true,
+    "rootDir": "./src"
+  },
+  "references": [
+    {
+      "path": "./tsconfig.cjs.json"
+    }
+  ]
+}

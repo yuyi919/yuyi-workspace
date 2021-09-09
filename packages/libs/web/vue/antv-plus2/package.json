@@ -36,9 +36,9 @@
     "vue-template-compiler": "2.6.14",
     "jest": "~27.1.0",
     "tslib": "~2.3.1",
-    "typescript": "4.1.2"
+    "typescript": "4.1.2",
+    "@yuyi919/build-tools": "workspace:*"
   },
-  "peerDependencies": {},
   "files": [
     "dist",
     "lib",

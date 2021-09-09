@@ -63,6 +63,26 @@
       "allowedCategories": [ "production", "tools" ]
     },
     {
+      "name": "@rollup/plugin-babel",
+      "allowedCategories": [ "tools" ]
+    },
+    {
+      "name": "@rollup/plugin-commonjs",
+      "allowedCategories": [ "tools" ]
+    },
+    {
+      "name": "@rollup/plugin-json",
+      "allowedCategories": [ "tools" ]
+    },
+    {
+      "name": "@rollup/plugin-node-resolve",
+      "allowedCategories": [ "tools" ]
+    },
+    {
+      "name": "@rollup/plugin-replace",
+      "allowedCategories": [ "tools" ]
+    },
+    {
       "name": "@rushstack/heft",
       "allowedCategories": [ "production", "tools" ]
     },
@@ -84,6 +104,10 @@
     },
     {
       "name": "@typescript-eslint/parser",
+      "allowedCategories": [ "tools" ]
+    },
+    {
+      "name": "@vue/compiler-sfc",
       "allowedCategories": [ "tools" ]
     },
     {
@@ -143,8 +167,52 @@
       "allowedCategories": [ "production", "tools" ]
     },
     {
+      "name": "ansi-escapes",
+      "allowedCategories": [ "tools" ]
+    },
+    {
       "name": "ant-design-vue",
       "allowedCategories": [ "production" ]
+    },
+    {
+      "name": "asyncro",
+      "allowedCategories": [ "tools" ]
+    },
+    {
+      "name": "babel-eslint",
+      "allowedCategories": [ "tools" ]
+    },
+    {
+      "name": "babel-plugin-annotate-pure-calls",
+      "allowedCategories": [ "tools" ]
+    },
+    {
+      "name": "babel-plugin-const-enum",
+      "allowedCategories": [ "tools" ]
+    },
+    {
+      "name": "babel-plugin-dev-expression",
+      "allowedCategories": [ "tools" ]
+    },
+    {
+      "name": "babel-plugin-import",
+      "allowedCategories": [ "tools" ]
+    },
+    {
+      "name": "babel-plugin-macros",
+      "allowedCategories": [ "tools" ]
+    },
+    {
+      "name": "babel-plugin-polyfill-regenerator",
+      "allowedCategories": [ "tools" ]
+    },
+    {
+      "name": "babel-plugin-transform-rename-import",
+      "allowedCategories": [ "tools" ]
+    },
+    {
+      "name": "babel-plugin-transform-vue-jsx",
+      "allowedCategories": [ "tools" ]
     },
     {
       "name": "babel-preset-vca-jsx",
@@ -204,7 +272,7 @@
     },
     {
       "name": "lodash-es",
-      "allowedCategories": [ "production" ]
+      "allowedCategories": [ "production", "tools" ]
     },
     {
       "name": "logform",
@@ -215,12 +283,44 @@
       "allowedCategories": [ "production" ]
     },
     {
+      "name": "pascal-case",
+      "allowedCategories": [ "tools" ]
+    },
+    {
       "name": "prettier",
       "allowedCategories": [ "production", "tools" ]
     },
     {
       "name": "reflect-metadata",
       "allowedCategories": [ "production", "tools" ]
+    },
+    {
+      "name": "rollup",
+      "allowedCategories": [ "tools" ]
+    },
+    {
+      "name": "rollup-plugin-commonjs",
+      "allowedCategories": [ "tools" ]
+    },
+    {
+      "name": "rollup-plugin-replace",
+      "allowedCategories": [ "tools" ]
+    },
+    {
+      "name": "rollup-plugin-sourcemaps",
+      "allowedCategories": [ "tools" ]
+    },
+    {
+      "name": "rollup-plugin-terser",
+      "allowedCategories": [ "tools" ]
+    },
+    {
+      "name": "rollup-plugin-typescript2",
+      "allowedCategories": [ "tools" ]
+    },
+    {
+      "name": "rollup-plugin-vue",
+      "allowedCategories": [ "tools" ]
     },
     {
       "name": "rxjs",
@@ -260,7 +360,7 @@
     },
     {
       "name": "vite",
-      "allowedCategories": [ "production" ]
+      "allowedCategories": [ "production", "tools" ]
     },
     {
       "name": "vite-plugin-imp",
@@ -272,7 +372,7 @@
     },
     {
       "name": "vue",
-      "allowedCategories": [ "production" ]
+      "allowedCategories": [ "production", "tools" ]
     },
     {
       "name": "vue-demi",

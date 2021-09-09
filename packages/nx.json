@@ -48,6 +48,9 @@
     "shared-utils": {
       "tags": ["lerna-package", "shared", "utils"]
     },
+    "internal-build-tools": {
+      "tags": ["tools", "build", "build-tools"]
+    },
     "ts-transformer-ast-utils": {
       "tags": ["lerna-package", "internal", "ts-transformer", "ast-utils"]
     },

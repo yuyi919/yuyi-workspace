@@ -598,6 +598,61 @@
           }
         }
       }
+    },
+    "internal-build-tools": {
+      "root": "libs/tools/build-tools",
+      "sourceRoot": "libs/tools/build-tools/src",
+      "projectType": "library",
+      "targets": {
+        "build": {
+          "executor": "@nrwl/workspace:run-commands",
+          "configurations": {
+            "watch": {
+              "commands": ["pnpm run build:watch"]
+            }
+          },
+          "options": {
+            "commands": ["pnpm run build"],
+            "cwd": "libs/tools/build-tools"
+          }
+        },
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/tools/build-tools/**/*.ts"]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/tools/build-tools"],
+          "options": {
+            "jestConfig": "libs/tools/build-tools/jest.config.js",
+            "passWithNoTests": true
+          }
+        },
+        "command": {
+          "executor": "@nrwl/workspace:run-commands",
+          "options": {},
+          "configurations": {
+            "format": {
+              "cwd": ".",
+              "commands": [
+                {
+                  "command": "nx generate @yuyi919/nx-plugin-workspace-helper:format --project=tools-build-tools --no-interactive"
+                }
+              ]
+            },
+            "remove": {
+              "cwd": ".",
+              "commands": [
+                {
+                  "command": "nx generate @nrwl/workspace:remove --projectName=tools-build-tools --forceRemove"
+                }
+              ]
+            }
+          }
+        }
+      }
     }
   },
   "cli": {
