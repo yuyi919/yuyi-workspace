@@ -1,0 +1,11 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`createTheme styleOverrides should warn when trying to override an internal state the wrong way 1`] = `
+Object {
+  "MuiButton": Object {
+    "styleOverrides": Object {
+      "disabled": Object {},
+    },
+  },
+}
+`;

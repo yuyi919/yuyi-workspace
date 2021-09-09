@@ -23,7 +23,7 @@
 		"ts-jest": "~27.0.5"
 	},
 	"devDependencies": {
-		"@yuyi919/jest-extra": "workspace:*",
+		"@yuyi919/jest-extra": "workspace:0.0.1",
 		"@types/node": "~16.7.2",
 		"@types/heft-jest": "1.0.2"
 	},

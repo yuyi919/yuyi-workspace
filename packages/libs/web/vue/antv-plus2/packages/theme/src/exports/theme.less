@@ -1,0 +1,86 @@
+@import "ant-design-vue/lib/style/themes/index.less";
+// @import "ant-design-vue/lib/style/core/index.less";
+
+@component-prefix-cls: ~"yuyi-";
+
+// 主色修正，见@config/theme.config.js primaryColorList
+@second-color: #2ac2bd;
+
+@primary-0: lighten(@primary-color, 44);
+@primary-1: color(~`colorPalette("@{primary-color}", 1) `); // replace tint(@primary-color, 90%)
+@primary-2: color(~`colorPalette("@{primary-color}", 2) `); // replace tint(@primary-color, 80%)
+@primary-3: color(~`colorPalette("@{primary-color}", 3) `); // unused
+@primary-4: color(~`colorPalette("@{primary-color}", 4) `); // unused
+@primary-5: color(
+  ~`colorPalette("@{primary-color}", 5) `
+); // color used to control the text color in many active and hover states, replace tint(@primary-color, 20%)
+@primary-6: @primary-color; // color used to control the text color of active buttons, don't use, use @primary-color
+@primary-7: color(~`colorPalette("@{primary-color}", 7) `); // replace shade(@primary-color, 5%)
+@primary-8: color(~`colorPalette("@{primary-color}", 8) `); // unused
+@primary-9: color(~`colorPalette("@{primary-color}", 9) `); // unused
+@primary-10: color(~`colorPalette("@{primary-color}", 10) `); // unused
+
+@second-0: lighten(@second-color, 44);
+@second-1: color(~`colorPalette("@{second-color}", 1) `); // replace tint(@primary-color, 90%)
+@second-2: color(~`colorPalette("@{second-color}", 2) `); // replace tint(@primary-color, 80%)
+@second-3: color(~`colorPalette("@{second-color}", 3) `); // unused
+@second-4: color(~`colorPalette("@{second-color}", 4) `); // unused
+@second-5: color(
+  ~`colorPalette("@{second-color}", 5) `
+); // color used to control the text color in many active and hover states, replace tint(@primary-color, 20%)
+@second-6: @second-color; // color used to control the text color of active buttons, don't use, use @primary-color
+@second-7: color(~`colorPalette("@{second-color}", 7) `); // replace shade(@primary-color, 5%)
+@second-8: color(~`colorPalette("@{second-color}", 8) `); // unused
+@second-9: color(~`colorPalette("@{second-color}", 9) `); // unused
+@second-10: color(~`colorPalette("@{second-color}", 10) `); // unused
+
+.keyframes (@prefix,@name,@content) when (@prefix=def) {
+  @keyframes @name {
+    @content();
+  }
+}
+.keyframes (@prefix,@name,@content) when (@prefix=moz) {
+  @-moz-keyframes @name {
+    @content();
+  }
+}
+.keyframes (@prefix,@name,@content) when (@prefix=o) {
+  @-o-keyframes @name {
+    @content();
+  }
+}
+.keyframes (@prefix,@name,@content) when (@prefix=webkit) {
+  @-webkit-keyframes @name {
+    @content();
+  }
+}
+.keyframes (@prefix,@name,@content) when (@prefix=all) {
+  .keyframes(moz,@name,@content);
+  .keyframes(o,@name,@content);
+  .keyframes(webkit,@name,@content);
+  .keyframes(def,@name,@content);
+}
+
+.link(@padding, @color: @primary-color) {
+  position: relative !important;
+  color: @color;
+  &::after {
+    content: "";
+    position: absolute;
+    left: 50%;
+    bottom: 0;
+    width: calc(100% - @padding * 2);
+    height: 1px;
+    background-color: @color;
+    transform-origin: center;
+    transform: translate(-50%, 0) scaleX(0);
+    transition: transform 0.1s ease-in-out;
+  }
+  &:hover::after {
+    transform: translate(-50%, 0) scaleX(1);
+  }
+}
+
+.ant-tooltip-inner > a {
+  .link(0px, white);
+}

@@ -1,3 +1,3 @@
-export function webVueAntvPlus2PackagesTheme(): string {
-  return "web-vue-antv-plus2-packages-theme";
+export function theme(): string {
+  return "theme";
 }

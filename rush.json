@@ -582,6 +582,11 @@
       "reviewCategory": "production"
     },
     {
+      "packageName": "@yuyi919/vue-jss",
+      "projectFolder": "packages/libs/web/vue/jss",
+      "reviewCategory": "production"
+    },
+    {
       "packageName": "@yuyi919/vue-jsx-factory",
       "projectFolder": "packages/libs/web/vue/jsx-factory",
       "reviewCategory": "production",

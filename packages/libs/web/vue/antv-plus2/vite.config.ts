@@ -11,12 +11,13 @@ const VariablesOutput = require("less-plugin-variables-output");
 export default defineViteConfig({
   // preset: "babel-ts",
   hooks: (_, utils) => {
-    const paths = loadTsconfigPaths("./tsconfig.json");
+    const paths = loadTsconfigPaths("../../../../tsconfig.base.json");
     return {
       logLevel: "info",
       resolve: {
         alias: {
           ...paths,
+          "lodash": "lodash-es",
           "/src/*": utils.pathResolve("./src", true),
           "/src/": utils.pathResolve("./index.ts"),
           "@ant-design/icons/lib/dist": "@ant-design/icons/lib/index.es.js",
@@ -62,7 +63,7 @@ export default defineViteConfig({
       ],
       optimizeDeps: {
         exclude: ["@yuyi919-vue/jss", "vue-demi", "vue-demi2", "@vue/composition-api"],
-        include: ["tslib", "vue", "ant-design-vue/es/style.js"],
+        include: ["tslib", "lodash-es", "vue", "ant-design-vue/es/style.js"],
       },
       css: {
         modules: {

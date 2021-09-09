@@ -1,6 +1,7 @@
 /* eslint-disable @nrwl/nx/enforce-module-boundaries */
 /* eslint-disable @typescript-eslint/no-empty-interface */
 import { ConfigProvider, Button, Input, Skeleton, Drawer } from "ant-design-vue";
+import { HintFlag } from "../src"
 import { createApp } from "vue-demi2";
 // @ts-ignore
 import zhCN from "ant-design-vue/es/locale/zh_CN";
@@ -18,7 +19,7 @@ const app = createApp({
     return () => {
       return (
         <config-provider locale={zhCN}>
-          <app /><span>1</span>
+          <HintFlag /><span>1</span>
         </config-provider>
       );
     };

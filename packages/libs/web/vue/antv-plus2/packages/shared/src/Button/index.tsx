@@ -2,9 +2,9 @@
 /* eslint-disable @typescript-eslint/no-namespace */
 /* eslint-disable @typescript-eslint/no-empty-interface */
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { defineComponent, h } from "@vue/composition-api";
-import { InheritHooks, useInherit, useNamedRef } from "@yuyi919/vue-use";
+import { defineComponent } from "@vue/composition-api";
 import { extractProps, VueComponent2 } from "@yuyi919/vue-antv-plus2-helper";
+import { InheritHooks, useInherit, useNamedRef } from "@yuyi919/vue-use";
 import { Button as AntButton } from "ant-design-vue";
 import { HintFlag } from "../HintFlag";
 import { ButtonProps } from "./ButtonProps";
@@ -56,3 +56,4 @@ export const Button: VueComponent2<ButtonProps, { click: PointerEvent }> = defin
 
 export { ButtonProps };
 export type { ButtonProps as IButtonProps };
+

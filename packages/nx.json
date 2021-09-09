@@ -81,6 +81,9 @@
     "web-vue-antv-plus2-packages-theme": {
       "tags": ["web", "vue", "antv", "antv-plus2", "packages", "theme"]
     },
+    "web-vue-jss": {
+      "tags": ["web", "vue", "jss"]
+    },
     "web-vue-jsx-factory": {
       "tags": ["web", "vue", "jsx", "jsx-factory"]
     },

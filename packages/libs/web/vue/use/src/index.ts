@@ -1,4 +1,3 @@
-// export * from "@yuyi919-vue-use/querypage";
 export * from "./context";
 export * from "./resizeHandler";
 export * from "./useElementRect";

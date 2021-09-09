@@ -6,6 +6,7 @@
     "types": ["jest", "node"]
   },
   "include": [
+    "@yuyi919/jest-extra/index.d.ts",
     "src/**/*.spec.ts",
     "src/**/*.spec.tsx",
     "src/**/*.spec.js",

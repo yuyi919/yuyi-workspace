@@ -1,7 +1,7 @@
-import { webVueAntvPlus2PackagesTheme } from "./theme";
+import { theme } from "./theme";
 
-describe("webVueAntvPlus2PackagesTheme", () => {
+describe("theme", () => {
   it("should work", () => {
-    expect(webVueAntvPlus2PackagesTheme()).toEqual("web-vue-antv-plus2-packages-theme");
+    expect(theme()).toEqual("theme");
   });
 });

@@ -2,7 +2,7 @@
 /* eslint-disable @typescript-eslint/ban-types */
 /* eslint-disable @typescript-eslint/no-empty-interface */
 import { defineComponent, reactive } from "@vue/composition-api";
-import { createUseStyles } from "@yuyi919-vue/jss";
+import { createUseStyles } from "@yuyi919/vue-jss";
 import { useNamedRef } from "@yuyi919/vue-use";
 import { extractProps } from "@yuyi919/vue-antv-plus2-helper";
 import { Popover } from "ant-design-vue";

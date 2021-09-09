@@ -119,7 +119,7 @@
       "allowedCategories": [ "production" ]
     },
     {
-      "name": "@yuyi919/vue-use",
+      "name": "@yuyi919-vue/jss",
       "allowedCategories": [ "production" ]
     },
     {
@@ -128,7 +128,7 @@
     },
     {
       "name": "@yuyi919/jest-extra",
-      "allowedCategories": [ "tools" ]
+      "allowedCategories": [ "production", "tools" ]
     },
     {
       "name": "@yuyi919/node-logger",
@@ -195,7 +195,15 @@
       "allowedCategories": [ "production" ]
     },
     {
+      "name": "@yuyi919/vue-jss",
+      "allowedCategories": [ "production" ]
+    },
+    {
       "name": "@yuyi919/vue-jsx-factory",
+      "allowedCategories": [ "production" ]
+    },
+    {
+      "name": "@yuyi919/vue-use",
       "allowedCategories": [ "production" ]
     },
     {
@@ -255,6 +263,10 @@
       "allowedCategories": [ "production" ]
     },
     {
+      "name": "chroma.ts",
+      "allowedCategories": [ "production" ]
+    },
+    {
       "name": "classnames",
       "allowedCategories": [ "production" ]
     },
@@ -296,6 +308,14 @@
     },
     {
       "name": "js-yaml",
+      "allowedCategories": [ "production" ]
+    },
+    {
+      "name": "jss",
+      "allowedCategories": [ "production" ]
+    },
+    {
+      "name": "jss-preset-default",
       "allowedCategories": [ "production" ]
     },
     {
@@ -371,6 +391,10 @@
       "allowedCategories": [ "production", "tools" ]
     },
     {
+      "name": "tiny-warning",
+      "allowedCategories": [ "production" ]
+    },
+    {
       "name": "triple-beam",
       "allowedCategories": [ "production" ]
     },
@@ -420,6 +444,10 @@
     },
     {
       "name": "vue-demi",
+      "allowedCategories": [ "production" ]
+    },
+    {
+      "name": "vue-styled-components",
       "allowedCategories": [ "production" ]
     },
     {
