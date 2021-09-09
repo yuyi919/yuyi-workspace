@@ -6,75 +6,48 @@ import { join } from "path";
 import {
   formatFiles,
   formatWorkspacePackageJson,
-  getProjectGraph,
+  RushJson,
   LibProjectNode,
   updateProject,
   updateRushJson,
   readProjectConfiguration,
   getProjectGraphWith,
+  TypedProjectGraph,
 } from "../shared";
 import { createFiles } from "./createFiles";
-import { convertOptionsToProjectNode, normalizeOptions, normalizeSchema } from "./normalizeSchema";
+import {
+  convertOptionsToProjectNode,
+  NormalizedOptions,
+  normalizeOptions,
+  normalizeSchema,
+} from "./normalizeSchema";
 import { Schema } from "./schema";
 
 export async function libraryGenerator(host: Tree, schema: Schema) {
+  const graph = getProjectGraphWith(host);
   schema = normalizeSchema(host, schema);
-  const options = normalizeOptions(host, schema);
-  if (options.publishable === true && !options.importPath) {
+  if (schema.publishable === true && !schema.importPath) {
     throw new Error(
       `For publishable libs you have to provide a proper "--importPath" which needs to be a valid npm package name (e.g. my-awesome-lib or @myorg/my-lib)`
     );
   }
-  console.log(schema);
-
-  try {
-    // const nxWorkspaceCallback =
-    await workspaceLibraryGenerator(host, {
-      ...schema,
-      importPath: options.importPath,
-      testEnvironment: "node",
-      skipFormat: true,
-      skipTsConfig: true,
-      skipBabelrc: true,
-      unitTestRunner: "jest",
-      setParserOptionsProject: false,
-    });
-  } catch (error) {}
-  host.exists("jest.config.js") && host.delete("jest.config.js");
-  host.exists("jest.preset.js") && host.delete("jest.preset.js");
-  updateProject(host, options, readProjectConfiguration(host, options.name));
-
-  const graph = getProjectGraphWith(host);
-  // 添加正准备生成的lib的预测数据
-  graph.nodes[options.name] = convertOptionsToProjectNode(options) as LibProjectNode;
-
-  createFiles(host, options, graph);
+  const optionList = schema.name.split(",").map((name) => {
+    const namedSchema = { ...schema, name };
+    const options = normalizeOptions(host, namedSchema)
+    console.log(options);
+    return { options, schema: namedSchema };
+  });
+  for (const { options, schema } of optionList) {
+    await generateProject(host, graph, schema, options);
+  }
 
   formatWorkspacePackageJson(host);
 
   updateRushJson(host, (json) => {
-    // 全部分类
-    const reviewCategories = json.approvedPackagesPolicy?.reviewCategories || [];
-    const packages = {};
-    for (const project of json.projects) {
-      packages[project.packageName] = project;
+    for (const { options } of optionList) {
+      // 全部分类
+      updateRushJsonWith(json, options);
     }
-    const currentPackage = packages[options.importPath] || {
-      packageName: options.importPath,
-      projectFolder: normalizePath("packages/" + options.projectRoot),
-      // 找到准确分类
-      reviewCategory:
-        reviewCategories.find((type) => options.parsedTags.includes(type)) || "production",
-    };
-    const changedCurrent = !isEqual(currentPackage, packages[options.importPath]);
-    packages[options.importPath] = currentPackage;
-    const sourceKeys = Object.keys(packages);
-    const updateKeys = sourceKeys.sort();
-    const sorted = !isEqual(sourceKeys, updateKeys);
-    if (!changedCurrent && !sorted) {
-      throw "rush.json has no changed";
-    }
-    json.projects = updateKeys.map((path) => packages[path]);
   });
 
   let callback: any;
@@ -95,3 +68,56 @@ export async function libraryGenerator(host: Tree, schema: Schema) {
 }
 export const librarySchematic = convertNxGenerator(libraryGenerator);
 export default libraryGenerator;
+
+function updateRushJsonWith(json: RushJson, options: NormalizedOptions) {
+  const reviewCategories = json.approvedPackagesPolicy?.reviewCategories || [];
+  const packages = {};
+  for (const project of json.projects) {
+    packages[project.packageName] = project;
+  }
+  const currentPackage = packages[options.importPath] || {
+    packageName: options.importPath,
+    projectFolder: normalizePath("packages/" + options.projectRoot),
+    // 找到准确分类
+    reviewCategory:
+      reviewCategories.find((type) => options.parsedTags.includes(type)) || "production",
+  };
+  const changedCurrent = !isEqual(currentPackage, packages[options.importPath]);
+  packages[options.importPath] = currentPackage;
+  const sourceKeys = Object.keys(packages);
+  const updateKeys = sourceKeys.sort();
+  const sorted = !isEqual(sourceKeys, updateKeys);
+  if (!changedCurrent && !sorted) {
+    throw "rush.json has no changed";
+  }
+  json.projects = updateKeys.map((path) => packages[path]);
+}
+
+async function generateProject(
+  host: Tree,
+  graph: TypedProjectGraph,
+  schema: Schema,
+  options: NormalizedOptions
+) {
+  try {
+    // const nxWorkspaceCallback =
+    await workspaceLibraryGenerator(host, {
+      ...schema,
+      importPath: options.importPath,
+      testEnvironment: "node",
+      skipFormat: true,
+      skipTsConfig: true,
+      skipBabelrc: true,
+      unitTestRunner: "jest",
+      setParserOptionsProject: false,
+    });
+  } catch (error) {}
+  host.exists("jest.config.js") && host.delete("jest.config.js");
+  host.exists("jest.preset.js") && host.delete("jest.preset.js");
+  updateProject(host, options, readProjectConfiguration(host, options.name));
+
+  // 添加正准备生成的lib的预测数据
+  graph.nodes[options.name] = convertOptionsToProjectNode(options) as LibProjectNode;
+
+  createFiles(host, options, graph);
+}

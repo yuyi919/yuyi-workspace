@@ -492,6 +492,7 @@ importers:
       '@yuyi919/vue-jsx-factory': link:../jsx-factory
       lodash: 4.17.21
       lodash-es: 4.17.21
+      tslib: 2.3.1
     devDependencies:
       '@babel/core': 7.15.0
       '@types/jest': 27.0.1
@@ -504,7 +505,6 @@ importers:
       jest: 27.1.0
       less: 3.12.2
       less-plugin-variables-output: 1.2.0
-      tslib: 2.3.1
       typescript: 4.1.2
       vite: 2.4.4
       vite-plugin-imp: 2.0.8_vite@2.4.4
@@ -531,6 +531,7 @@ importers:
       classnames: 2.3.1
       lodash: 4.17.21
       lodash-es: 4.17.21
+      tslib: 2.3.1
       vue-demi: 0.11.3_707fc39252203d96c3677f8cd88683c8
     devDependencies:
       '@types/jest': 27.0.1
@@ -538,7 +539,6 @@ importers:
       '@vue/composition-api': 1.1.4_vue@2.6.14
       '@yuyi919/workspace-base-rig': link:../../../tools/workspace-base-rig
       jest: 27.1.0
-      tslib: 2.3.1
       typescript: 4.1.2
       vue: 2.6.14
 
