@@ -114,7 +114,7 @@
       "builder": "heft-tsc"
     },
     "workspace-base-rig": {
-      "builder": "tsc",
+      "builder": "none",
       "root": "libs/tools/workspace-base-rig",
       "sourceRoot": "libs/tools/workspace-base-rig/src",
       "projectType": "library",
@@ -122,11 +122,37 @@
       "targets": {
         "build": {
           "executor": "@nrwl/workspace:run-commands",
+          "configurations": {
+            "watch": {
+              "commands": ["pnpm run build:watch"]
+            }
+          },
           "options": {
             "commands": ["pnpm run build"],
             "cwd": "libs/tools/workspace-base-rig"
-          },
-          "outputs": ["{options.cwd}"]
+          }
+        },
+        "command": {
+          "executor": "@nrwl/workspace:run-commands",
+          "options": {},
+          "configurations": {
+            "format": {
+              "cwd": ".",
+              "commands": [
+                {
+                  "command": "nx generate @yuyi919/nx-plugin-workspace-helper:format --project=workspace-base-rig --no-interactive"
+                }
+              ]
+            },
+            "remove": {
+              "cwd": ".",
+              "commands": [
+                {
+                  "command": "nx generate @nrwl/workspace:remove --projectName=workspace-base-rig --forceRemove"
+                }
+              ]
+            }
+          }
         }
       },
       "nxJsonSection": {

@@ -32,7 +32,6 @@
   },
   "devDependencies": {
     "@babel/core": "^7.0.0",
-    "@nrwl/workspace": "12.5.8",
     "@types/jest": "~27.0.1",
     "@types/node": "~16.7.2",
     "@vue/composition-api": "^1.0.2",

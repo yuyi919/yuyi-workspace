@@ -22,7 +22,7 @@ export class PackageConfigFilesBuilder {
   }
 
   projGraph!: TypedProjectGraph;
-  dependencyNodes!: DependentBuildableProjectNode[];
+  dependencyNodes: DependentBuildableProjectNode[] = [];
   rootDir!: string;
   packageJsonPath!: string;
   packageJson!: PackageJSON;
@@ -38,7 +38,7 @@ export class PackageConfigFilesBuilder {
   }
 
   private setup(presetName: PackageBuilder, update?: boolean) {
-    if (!(presetName in this.configure)) throw Error("未找到builder");
+    if (!(presetName in this.configure)) return
     const { scripts, deps } = this.configure[presetName];
     this.scripts = scripts;
     this.deps = deps;
@@ -67,6 +67,7 @@ export class PackageConfigFilesBuilder {
   }
 
   writeJson(publishable?: boolean) {
+    if (!this.packageJson) return
     const { dependencies, devDependencies, peerDependencies } = this.packageJson;
     tryUpdateJson(
       this.host,

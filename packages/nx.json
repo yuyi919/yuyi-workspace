@@ -89,7 +89,8 @@
     },
     "web-vue-use": {
       "tags": ["web", "vue", "use"]
-    }
+    },
+    "workspace-base-rig": {}
   },
   "workspaceLayout": {
     "appsDir": "apps",
