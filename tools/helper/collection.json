@@ -5,24 +5,24 @@
   "extends": ["@nrwl/workspace"],
   "schematics": {
     "library": {
-      "factory": "./src/generators/library/index#librarySchematic",
-      "schema": "./src/generators/library/schema.json",
+      "factory": "./dist/generators/library/index#librarySchematic",
+      "schema": "./dist/generators/library/schema.json",
       "aliases": ["lib"],
       "description": "Create a library"
     },
     "test": {
-      "factory": "./src/generators/test/generator",
-      "schema": "./src/generators/test/schema.json",
+      "factory": "./dist/generators/test/generator",
+      "schema": "./dist/generators/test/schema.json",
       "description": "test generator"
     },
     "format": {
-      "factory": "./src/generators/format/generator",
-      "schema": "./src/generators/format/schema.json",
+      "factory": "./dist/generators/format/generator",
+      "schema": "./dist/generators/format/schema.json",
       "description": "标准化lerna项目"
     },
     "docker-file": {
-      "factory": "./src/generators/docker-file/generator",
-      "schema": "./src/generators/docker-file/schema.json",
+      "factory": "./dist/generators/docker-file/generator",
+      "schema": "./dist/generators/docker-file/schema.json",
       "description": "生成docker文件"
     }
   }

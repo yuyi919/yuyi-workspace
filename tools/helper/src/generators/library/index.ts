@@ -25,7 +25,7 @@ export async function libraryGenerator(host: Tree, schema: Schema) {
       `For publishable libs you have to provide a proper "--importPath" which needs to be a valid npm package name (e.g. my-awesome-lib or @myorg/my-lib)`
     );
   }
-  console.log(options);
+  console.log(schema);
 
   try {
     // const nxWorkspaceCallback =
@@ -83,10 +83,12 @@ export async function libraryGenerator(host: Tree, schema: Schema) {
   }
   return async () => {
     callback && (await callback());
-    child_process.execSync("rush update", {
-      cwd: join(host.root, ".."),
-      stdio: [0, 1, 2],
-    });
+    if (!schema.skipInstall) {
+      child_process.execSync("rush update", {
+        cwd: join(host.root, ".."),
+        stdio: [0, 1, 2],
+      });
+    }
     // console.log(readJsonFile(join(host.root, "../rush.json")));
     // nxWorkspaceCallback && (await nxWorkspaceCallback());
   };

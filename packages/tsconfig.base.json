@@ -16,7 +16,7 @@
     "rootDir": ".",
     "target": "es2015",
     "module": "esnext",
-    "types": ["jest", "node", "@yuyi919/jest-extra"],
+    "types": ["jest", "node"],
     "lib": ["dom", "es2020", "esnext", "es6"],
     "skipLibCheck": true,
     "allowSyntheticDefaultImports": true,

@@ -1,0 +1,40 @@
+{
+  "$schema": "http://json-schema.org/schema",
+  "cli": "nx",
+  "id": "Format",
+  "title": "",
+  "type": "object",
+  "properties": {
+    "project": {
+      "type": "string",
+      "description": "The name of the project.",
+      "alias": "p"
+    },
+    "builder": {
+      "type": "string",
+      "enum": [
+        "auto",
+        "tsc",
+        "heft-tsc",
+        "tsdx"
+      ],
+      "description": "构建使用的工具(不选则根据原始选项，如果原始不属于任何一种则中断操作)",
+      "default": "auto"
+    },
+    "all": {
+      "type": "boolean",
+      "description": "是否对所有工程进行格式化？",
+      "default": false
+    },
+    "clean": {
+      "type": "boolean",
+      "description": "清理生成日志/缓存文件",
+      "default": false
+    },
+    "tags": {
+      "type": "string",
+      "description": "Add tags to the project (used for linting)",
+      "alias": "t"
+    }
+  }
+}

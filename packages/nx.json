@@ -53,6 +53,9 @@
     },
     "ts-transformer-dev-utils": {
       "tags": ["lerna-package", "internal", "ts-transformer", "dev-utils"]
+    },
+    "web-vue-antv-plus2": {
+      "tags": ["web", "vue", "antv", "antv-plus2"]
     }
   },
   "workspaceLayout": {

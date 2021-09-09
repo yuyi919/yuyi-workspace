@@ -52,12 +52,12 @@ export function getOptions(options: MetaProject) {
 }
 
 export function resolveFile(files: string, dirname: string) {
-  const resovePath = Path.join(Path.relative(dirname, dirname.replace(/src/, "source")), files);
+  const resovePath = Path.join(Path.relative(dirname, dirname.replace(/dist/, "src")), files);
   console.log(Path.join(dirname, resovePath));
   return resovePath;
 }
 
 export function resolveAbs(files: string, dirname = __dirname) {
-  const resovePath = Path.join(dirname.replace(/src/, "source"), files);
+  const resovePath = Path.join(dirname.replace(/dist/, "src"), files);
   return resovePath;
 }

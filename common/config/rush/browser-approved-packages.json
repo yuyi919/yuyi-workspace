@@ -15,6 +15,14 @@
       "allowedCategories": [ "production", "tools" ]
     },
     {
+      "name": "@ant-design/icons",
+      "allowedCategories": [ "production" ]
+    },
+    {
+      "name": "@ant-design/icons-vue",
+      "allowedCategories": [ "production" ]
+    },
+    {
       "name": "@microsoft/api-extractor",
       "allowedCategories": [ "tools" ]
     },
@@ -79,7 +87,19 @@
       "allowedCategories": [ "tools" ]
     },
     {
+      "name": "@vue/composition-api",
+      "allowedCategories": [ "production" ]
+    },
+    {
       "name": "@yuyi919-tsmacro/inline-loop.tsmacro",
+      "allowedCategories": [ "production" ]
+    },
+    {
+      "name": "@yuyi919-vue/use",
+      "allowedCategories": [ "production" ]
+    },
+    {
+      "name": "@yuyi919/build-tools",
       "allowedCategories": [ "production" ]
     },
     {
@@ -123,6 +143,14 @@
       "allowedCategories": [ "production", "tools" ]
     },
     {
+      "name": "ant-design-vue",
+      "allowedCategories": [ "production" ]
+    },
+    {
+      "name": "babel-preset-vca-jsx",
+      "allowedCategories": [ "production" ]
+    },
+    {
       "name": "colors",
       "allowedCategories": [ "production" ]
     },
@@ -160,6 +188,14 @@
     },
     {
       "name": "js-yaml",
+      "allowedCategories": [ "production" ]
+    },
+    {
+      "name": "less",
+      "allowedCategories": [ "production" ]
+    },
+    {
+      "name": "less-plugin-variables-output",
       "allowedCategories": [ "production" ]
     },
     {
@@ -221,6 +257,30 @@
     {
       "name": "typescript",
       "allowedCategories": [ "production", "tools" ]
+    },
+    {
+      "name": "vite",
+      "allowedCategories": [ "production" ]
+    },
+    {
+      "name": "vite-plugin-imp",
+      "allowedCategories": [ "production" ]
+    },
+    {
+      "name": "vite-plugin-vue2",
+      "allowedCategories": [ "production" ]
+    },
+    {
+      "name": "vue",
+      "allowedCategories": [ "production" ]
+    },
+    {
+      "name": "vue-demi",
+      "allowedCategories": [ "production" ]
+    },
+    {
+      "name": "vue-template-compiler",
+      "allowedCategories": [ "production" ]
     },
     {
       "name": "winston",

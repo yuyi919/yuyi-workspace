@@ -64,6 +64,10 @@
       "type": "string",
       "description": "The library name used to import it, like @myorg/my-awesome-lib. Must be a valid npm name."
     },
+    "skipInstall": {
+      "type": "boolean",
+      "description": "跳过Rush update"
+    },
     "testEnvironment": {
       "type": "string",
       "enum": [
