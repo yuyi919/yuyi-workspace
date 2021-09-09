@@ -1,15 +1,42 @@
 {
   "extends": "./node_modules/@yuyi919/workspace-base-rig/profiles/tsc/tsconfig-base.json",
   "compilerOptions": {
-    "strict": true,
     "declaration": true,
-    "target": "ES2019",
-    "module": "esnext",
     "jsx": "react-jsx",
+    "jsxImportSource": "@yuyi919/vue-jsx-factory",
+    "module": "esnext",
     "rootDir": "./src",
-    "jsxImportSource": "@yuyi919/vue-jsx-factory"
+    "strict": true,
+    "target": "ES2019"
   },
   "references": [
+    {
+      "path": "./packages/theme"
+    },
+    {
+      "path": "../use"
+    },
+    {
+      "path": "./packages/table"
+    },
+    {
+      "path": "./packages/action"
+    },
+    {
+      "path": "./packages/helper"
+    },
+    {
+      "path": "./packages/modal"
+    },
+    {
+      "path": "./packages/form"
+    },
+    {
+      "path": "./packages/shared"
+    },
+    {
+      "path": "../../../tools/build-tools"
+    },
     {
       "path": "./tsconfig.lib.json"
     },

@@ -1,5 +1,6 @@
 {
   "name": "@yuyi919/vue-antv-plus2-table",
+  "private": true,
   "version": "0.0.1",
   "description": "",
   "author": "",

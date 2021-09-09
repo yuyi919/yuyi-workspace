@@ -6,6 +6,6 @@
     "declarationDir": "./dist",
     "tsBuildInfoFile": "./node_modules/@yuyi919/workspace-base-rig/.tsBuildInfo/<%= name %>-es.json"
   },
-  "exclude": ["src/**/*.spec.ts", "src/**/*.spec.tsx", "**/__test__/**"],
+  "exclude": ["src/**/*.spec.ts", "src/**/*.test.ts", "src/**/*.spec.tsx", "src/**/*.test.tsx", "**/__test__/**"],
   "include": ["src/**/*.ts", "src/**/*.tsx"]
 }

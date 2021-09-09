@@ -1,5 +1,6 @@
 {
   "name": "@yuyi919/vue-antv-plus2-form",
+  "private": true,
   "version": "0.0.1",
   "description": "",
   "author": "",
@@ -23,10 +24,10 @@
     "@types/node": "~16.7.2",
     "@vue/composition-api": "^1.0.2",
     "@yuyi919/workspace-base-rig": "workspace:1.2.5",
-    "vue": "2.6.14",
     "jest": "~27.1.0",
     "tslib": "~2.3.1",
-    "typescript": "4.1.2"
+    "typescript": "4.1.2",
+    "vue": "2.6.14"
   },
   "peerDependencies": {},
   "files": [

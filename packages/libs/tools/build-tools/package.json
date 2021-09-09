@@ -4,6 +4,7 @@
   "description": "",
   "author": "",
   "main": "dist/index.js",
+  "module": "lib/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
     "build": "tsc --build --force",
@@ -48,21 +49,26 @@
   "devDependencies": {
     "@types/jest": "~27.0.1",
     "@types/node": "~16.7.2",
+    "@vue/compiler-sfc": "^3.0.0",
     "@yuyi919/workspace-base-rig": "workspace:1.2.5",
     "jest": "~27.1.0",
+    "rollup-plugin-vue": "^6.0.0-beta.10",
     "tslib": "~2.3.1",
-    "vite": "2.4.4",
     "typescript": "4.1.2",
-    "@vue/compiler-sfc": "^3.0.0",
-    "rollup-plugin-vue": "^6.0.0-beta.10"
-  },
-  "optionalDependencies": {
     "vite": "2.4.4"
   },
   "peerDependencies": {
-    "rollup-plugin-vue": "^6.0.0-beta.10",
     "@vue/compiler-sfc": ">=3.0.0",
+    "rollup-plugin-vue": "^6.0.0-beta.10",
     "vue": "^2.0.0 || >=3.0.0"
+  },
+  "files": [
+    "dist",
+    "lib",
+    "README.md"
+  ],
+  "optionalDependencies": {
+    "vite": "2.4.4"
   },
   "peerDependenciesMeta": {
     "rollup-plugin-vue": {
@@ -75,11 +81,6 @@
       "optional": true
     }
   },
-  "files": [
-    "dist",
-    "lib",
-    "README.md"
-  ],
   "publishConfig": {
     "access": "public"
   }

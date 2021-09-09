@@ -1,5 +1,6 @@
 {
   "name": "@yuyi919/vue-antv-plus2-action",
+  "private": true,
   "version": "0.0.1",
   "description": "",
   "author": "",
@@ -22,12 +23,12 @@
   "devDependencies": {
     "@types/jest": "~27.0.1",
     "@types/node": "~16.7.2",
+    "@vue/composition-api": "^1.0.2",
     "@yuyi919/workspace-base-rig": "workspace:1.2.5",
     "jest": "~27.1.0",
     "tslib": "~2.3.1",
-    "@vue/composition-api": "^1.0.2",
-    "vue": "2.6.14",
-    "typescript": "4.1.2"
+    "typescript": "4.1.2",
+    "vue": "2.6.14"
   },
   "peerDependencies": {},
   "files": [

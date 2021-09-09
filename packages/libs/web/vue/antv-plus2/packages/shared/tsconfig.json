@@ -1,14 +1,29 @@
 {
   "extends": "./node_modules/@yuyi919/workspace-base-rig/profiles/tsc/tsconfig-base.json",
   "compilerOptions": {
+    "jsx": "react-jsx",
+    "jsxImportSource": "@yuyi919/vue-jsx-factory",
+    "module": "esnext",
     "rootDir": "./src",
     "strict": true,
-    "target": "ES2019",
-    "module": "esnext",
-    "jsx": "react-jsx",
-    "jsxImportSource": "@yuyi919/vue-jsx-factory"
+    "target": "ES2019"
   },
   "references": [
+    {
+      "path": "../theme"
+    },
+    {
+      "path": "../helper"
+    },
+    {
+      "path": "../../../use"
+    },
+    {
+      "path": "../../../jsx-factory"
+    },
+    {
+      "path": "../../../jss"
+    },
     {
       "path": "./tsconfig.lib.json"
     },

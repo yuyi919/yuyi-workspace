@@ -597,7 +597,8 @@
             }
           }
         }
-      }
+      },
+      "builder": "tsc"
     },
     "web-vue-antv-plus2-packages-action": {
       "root": "libs/web/vue/antv-plus2/packages/action",
@@ -652,7 +653,8 @@
             }
           }
         }
-      }
+      },
+      "builder": "tsc"
     },
     "web-vue-antv-plus2-packages-form": {
       "root": "libs/web/vue/antv-plus2/packages/form",
@@ -707,7 +709,8 @@
             }
           }
         }
-      }
+      },
+      "builder": "tsc"
     },
     "web-vue-antv-plus2-packages-helper": {
       "root": "libs/web/vue/antv-plus2/packages/helper",
@@ -762,7 +765,8 @@
             }
           }
         }
-      }
+      },
+      "builder": "tsc"
     },
     "web-vue-antv-plus2-packages-modal": {
       "root": "libs/web/vue/antv-plus2/packages/modal",
@@ -817,7 +821,8 @@
             }
           }
         }
-      }
+      },
+      "builder": "tsc"
     },
     "web-vue-antv-plus2-packages-shared": {
       "root": "libs/web/vue/antv-plus2/packages/shared",
@@ -872,7 +877,8 @@
             }
           }
         }
-      }
+      },
+      "builder": "tsc"
     },
     "web-vue-antv-plus2-packages-table": {
       "root": "libs/web/vue/antv-plus2/packages/table",
@@ -927,7 +933,8 @@
             }
           }
         }
-      }
+      },
+      "builder": "tsc"
     },
     "web-vue-antv-plus2-packages-theme": {
       "root": "libs/web/vue/antv-plus2/packages/theme",
@@ -982,7 +989,8 @@
             }
           }
         }
-      }
+      },
+      "builder": "tsc"
     },
     "web-vue-jss": {
       "root": "libs/web/vue/jss",
@@ -1037,7 +1045,8 @@
             }
           }
         }
-      }
+      },
+      "builder": "tsc"
     },
     "web-vue-jsx-factory": {
       "root": "libs/web/vue/jsx-factory",
@@ -1092,7 +1101,8 @@
             }
           }
         }
-      }
+      },
+      "builder": "tsc"
     },
     "web-vue-use": {
       "root": "libs/web/vue/use",
@@ -1147,7 +1157,8 @@
             }
           }
         }
-      }
+      },
+      "builder": "tsc"
     },
     "internal-build-tools": {
       "root": "libs/tools/build-tools",
@@ -1188,7 +1199,7 @@
               "cwd": ".",
               "commands": [
                 {
-                  "command": "nx generate @yuyi919/nx-plugin-workspace-helper:format --project=tools-build-tools --no-interactive"
+                  "command": "nx generate @yuyi919/nx-plugin-workspace-helper:format --project=internal-build-tools --no-interactive"
                 }
               ]
             },
@@ -1196,13 +1207,14 @@
               "cwd": ".",
               "commands": [
                 {
-                  "command": "nx generate @nrwl/workspace:remove --projectName=tools-build-tools --forceRemove"
+                  "command": "nx generate @nrwl/workspace:remove --projectName=internal-build-tools --forceRemove"
                 }
               ]
             }
           }
         }
-      }
+      },
+      "builder": "tsc"
     }
   },
   "cli": {

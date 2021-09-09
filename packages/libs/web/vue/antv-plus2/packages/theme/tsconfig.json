@@ -1,14 +1,22 @@
 {
   "extends": "./node_modules/@yuyi919/workspace-base-rig/profiles/tsc/tsconfig-base.json",
   "compilerOptions": {
-    "rootDir": "./src",
-    "strict": true,
+    "disableSolutionSearching": false,
     "esModuleInterop": true,
     "moduleResolution": "node",
-    "disableSolutionSearching": false
+    "rootDir": "./src",
+    "strict": true
   },
   "references": [
-    { "path": "../helper" },
+    {
+      "path": "../../../use"
+    },
+    {
+      "path": "../helper"
+    },
+    {
+      "path": "../../../jsx-factory"
+    },
     {
       "path": "./tsconfig.lib.json"
     },
