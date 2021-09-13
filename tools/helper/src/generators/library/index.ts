@@ -70,7 +70,7 @@ export default libraryGenerator;
 
 function updateRushJsonWith(json: RushJson, options: NormalizedOptions) {
   const reviewCategories = json.approvedPackagesPolicy?.reviewCategories || [];
-  const packages = {};
+  const packages = {} as Record<string, typeof json.projects[number]>;
   for (const project of json.projects) {
     packages[project.packageName] = project;
   }
@@ -80,7 +80,10 @@ function updateRushJsonWith(json: RushJson, options: NormalizedOptions) {
     // 找到准确分类
     reviewCategory:
       reviewCategories.find((type) => options.parsedTags.includes(type)) || "production",
-  };
+  } as typeof json.projects[number];
+  if (options.publishable) {
+    currentPackage.versionPolicyName = "shared"
+  }
   const changedCurrent = !isEqual(currentPackage, packages[options.importPath]);
   packages[options.importPath] = currentPackage;
   const sourceKeys = Object.keys(packages);

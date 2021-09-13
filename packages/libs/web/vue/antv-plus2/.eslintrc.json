@@ -1,12 +1,10 @@
 {
   "extends": "./node_modules/@yuyi919/workspace-base-rig/.eslintrc.json",
-  "ignorePatterns": [],
+  "ignorePatterns": ["playground/*"],
   "overrides": [
     {
       "files": ["*.ts", "*.tsx", "*.js", "*.jsx"],
-      "rules": {
-        "@typescript-eslint/no-explicit-any": 0
-      }
+      "rules": {}
     },
     {
       "files": ["*.ts", "*.tsx"],

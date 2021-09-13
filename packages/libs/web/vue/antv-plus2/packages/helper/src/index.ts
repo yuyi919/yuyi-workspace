@@ -16,9 +16,9 @@ export type StaticMembers<
 
 export type VueComponent2<
   Props,
-  Events = {},
-  ScopedSlots = {},
-  Publics = {},
+  Events = Types.Recordable,
+  ScopedSlots = Types.Recordable,
+  Publics = Types.Recordable,
   Static extends typeof Vue = typeof Vue
 > = VueConstructor<
   TsxComponentInstance<

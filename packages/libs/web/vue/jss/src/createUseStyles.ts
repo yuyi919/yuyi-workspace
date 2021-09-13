@@ -1,4 +1,5 @@
-import { Classes, GenerateId } from "jss";
+import Types from "@yuyi919/shared-types";
+import { Classes, GenerateId, StyleSheet } from "jss";
 import {
   computed,
   ComputedRef,
@@ -61,7 +62,7 @@ export interface DefaultTheme {}
 // ): (data?: unknown) => Classes<C>
 
 function createUseStyles<Theme = DefaultTheme, C extends string = string>(
-  styles: Styles<Theme, {}, C>,
+  styles: Styles<Theme, Types.IObj, C>,
   options: CreateUseStylesOptions<Theme> = {}
 ): (data?: unknown) => ComputedRef<Classes<C>> {
   const { index = getSheetIndex(), theming, name, ...sheetOptions } = options;
@@ -70,7 +71,7 @@ function createUseStyles<Theme = DefaultTheme, C extends string = string>(
     typeof styles === "function" ? (theming ? theming.useTheme : useDefaultTheme) : useDefaultTheme;
 
   return function useStyles(data?: any) {
-    const theme = useTheme();
+    const theme = useTheme() as Ref<Theme>;
 
     const context = injectJssContext();
 
@@ -79,17 +80,17 @@ function createUseStyles<Theme = DefaultTheme, C extends string = string>(
      * 这里必须使用 shallowRef，默认的 `ref.value` 返回的是一个proxy
      * 在存储meta的时候存的是 StyleSheet 对象，但是我们那proxy去取就会导致取不到
      */
-    const sheet: Ref<any> = shallowRef();
+    const sheet: Ref<StyleSheet> = shallowRef();
     const dynamicRules: Ref<DynamicRules | null> = shallowRef(null);
 
     watch(
       [context, theme],
-      ([c, t], [pc, pt]) => {
+      ([,], [pc, pt]) => {
         const sheetInstance = createStyleSheet({
           context: context.value,
           styles,
           name,
-          theme: theme.value as any,
+          theme: theme.value,
           index,
           sheetOptions,
         });
@@ -97,7 +98,7 @@ function createUseStyles<Theme = DefaultTheme, C extends string = string>(
         if (sheet.value && sheetInstance !== sheet.value) {
           unmanageSheet({
             index,
-            context: pc as any,
+            context: pc,
             sheet: sheet.value,
             theme: pt,
           });

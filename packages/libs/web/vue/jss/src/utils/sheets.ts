@@ -6,6 +6,7 @@ import type { Context, DynamicRules, Styles } from "../types";
 import { getManager } from "./managers";
 import defaultJss from "../jss";
 import { addMeta, getMeta } from "./sheetsMeta";
+import Types from "@yuyi919/shared-types";
 
 interface Options<Theme> {
   context: Context;
@@ -28,8 +29,9 @@ const getStyles = <Theme>(options: Options<Theme>) => {
       options.name || "Hook"
     } />'s styles function doesn't rely on the "theme" argument. We recommend declaring styles as an object instead.`
   );
-
-  return styles(options.theme);
+  const themedStyle = styles(options.theme)
+  console.log("themedStyle", themedStyle)
+  return themedStyle;
 };
 
 function getSheetOptions<Theme>(options: Options<Theme>, link: boolean) {
@@ -57,7 +59,7 @@ function getSheetOptions<Theme>(options: Options<Theme>, link: boolean) {
   };
 }
 
-export const createStyleSheet = <Theme>(options: Options<Theme>) => {
+export const createStyleSheet = <Theme extends Types.IObj>(options: Options<Theme>) => {
   if (options.context.disableStylesGeneration) {
     return undefined;
   }
@@ -71,7 +73,7 @@ export const createStyleSheet = <Theme>(options: Options<Theme>) => {
 
   const jss = options.context.jss || defaultJss;
   const styles = getStyles(options);
-  const dynamicStyles: any = getDynamicStyles(styles);
+  const dynamicStyles = getDynamicStyles(styles);
   const sheet = jss.createStyleSheet(styles, getSheetOptions(options, dynamicStyles !== null));
 
   addMeta(sheet, {
@@ -107,7 +109,7 @@ export const addDynamicRules = (
   data: any
 ): DynamicRules | null => {
   const meta = getMeta(sheet);
-
+  console.log(meta)
   if (!meta) {
     return null;
   }

@@ -41,9 +41,6 @@ export default defineComponent({
           >
             点击确认
           </Button>
-          <FormDemo />
-          {/* <ModalDialogDemo />
-          <GridDemo /> */}
           <Demo title="测试" desc="测试">
             {(["left", "right", "default", "center", "top", "bottom", null] as const).map(
               (placement) => (
@@ -66,6 +63,9 @@ export default defineComponent({
               )
             )}
           </Demo>
+          <FormDemo />
+          {/* <ModalDialogDemo />
+          <GridDemo /> */}
         </div>
       );
     };

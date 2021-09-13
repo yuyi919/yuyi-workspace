@@ -149,10 +149,10 @@ export default {
   .inner {
     margin-left: -24px;
     width: calc(100% + 48px);
-    .ant-divider-inner-text {
-      margin-bottom: -10px;
-      vertical-align: bottom;
-    }
+    //   .ant-divider-inner-text {
+    //     margin-bottom: -10px;
+    //     vertical-align: bottom;
+    //   }
   }
 
   .action-item {

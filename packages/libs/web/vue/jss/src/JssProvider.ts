@@ -74,41 +74,7 @@ const JssProvider = defineComponent({
     const generateId = ref({});
 
     const context = computed(() => {
-      const { classNamePrefix, jss, generateId, disableStylesGeneration, media, id, registry } =
-        props;
-
-      const context: JssContent = {
-        manager,
-      };
-
-      if (registry) {
-        context.registry = registry;
-      }
-
-      if (id !== undefined) {
-        context.id = id;
-      }
-
-      context.generateId = generateId;
-
-      if (classNamePrefix) {
-        context.classNamePrefix =
-          (context.classNamePrefix ? context.classNamePrefix : "") + classNamePrefix;
-      }
-
-      if (media !== undefined) {
-        context.media = media;
-      }
-
-      if (jss) {
-        context.jss = jss;
-      }
-
-      if (disableStylesGeneration !== undefined) {
-        context.disableStylesGeneration = disableStylesGeneration;
-      }
-
-      return context;
+      return createContextInstance(props, manager);
     });
 
     watch(
@@ -146,3 +112,51 @@ const JssProvider = defineComponent({
 // ]
 
 export default JssProvider;
+
+function createContextInstance(
+  props: {
+    disableStylesGeneration: boolean;
+    media?: string;
+    generateId?: GenerateId;
+    classNamePrefix?: string;
+    jss?: Jss;
+    registry?: SheetsRegistry;
+    id?: unknown;
+  },
+  manager: any
+) {
+  const { classNamePrefix, jss, generateId, disableStylesGeneration, media, id, registry } = props;
+
+  const context: JssContent = {
+    manager,
+  };
+
+  if (registry) {
+    context.registry = registry;
+  }
+
+  if (id !== undefined) {
+    context.id = id;
+  }
+
+  context.generateId = generateId;
+
+  if (classNamePrefix) {
+    context.classNamePrefix =
+      (context.classNamePrefix ? context.classNamePrefix : "") + classNamePrefix;
+  }
+
+  if (media !== undefined) {
+    context.media = media;
+  }
+
+  if (jss) {
+    context.jss = jss;
+  }
+
+  if (disableStylesGeneration !== undefined) {
+    context.disableStylesGeneration = disableStylesGeneration;
+  }
+
+  return context;
+}

@@ -120,6 +120,11 @@ export class NormalizeModalProps extends PropsMixins(ClassesProps) {
    */
   @Prop({ type: Boolean, default: true })
   footerBorder?: boolean;
+
+  @Prop({ type: Object })
+  parentModal?: {
+    getInnerModal(): any
+  };
 }
 
 export type { NormalizeModalProps as INormalizeModalProps };

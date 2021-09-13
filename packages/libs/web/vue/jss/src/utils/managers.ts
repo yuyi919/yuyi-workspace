@@ -1,5 +1,6 @@
 // @flow
 
+import Types from "@yuyi919/shared-types";
 import { SheetsManager, StyleSheet } from "jss";
 import type { Context } from "../types";
 
@@ -10,7 +11,7 @@ type Options<Theme> = {
   theme: Theme;
 };
 
-const defaultManagers = new Map();
+const defaultManagers = new Map<number, SheetsManager>();
 
 export const getManager = (context: Context, managerId: number) => {
   // If `managers` map is present in the context, we use it in order to
@@ -32,7 +33,7 @@ export const getManager = (context: Context, managerId: number) => {
   return manager;
 };
 
-export const manageSheet = <Theme>(options: Options<Theme>) => {
+export const manageSheet = <Theme extends Types.IObj>(options: Options<Theme>) => {
   const { sheet, context, index, theme } = options;
   if (!sheet) {
     return;
@@ -45,7 +46,7 @@ export const manageSheet = <Theme>(options: Options<Theme>) => {
   }
 };
 
-export const unmanageSheet = <Theme>(options: Options<Theme>) => {
+export const unmanageSheet = <Theme extends Types.IObj>(options: Options<Theme>) => {
   if (!options.sheet) {
     return;
   }

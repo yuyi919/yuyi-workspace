@@ -2,12 +2,12 @@
 /* eslint-disable no-async-promise-executor */
 import Types from "@yuyi919/shared-types";
 import { castComputed, castObject, expect$ } from "@yuyi919/shared-utils";
-import { isVueComponent, mixins, VueComponent2 } from "../helper";
 import { cloneDeep, defaults, defaultsDeep, merge } from "lodash";
-import Vue, { VNode, VueConstructor, VNodeChildren } from "vue";
+import Vue, { VNode, VNodeChildren, VueConstructor } from "vue";
 import { getCurrentInstance } from "vue-demi";
+import { isVueComponent, VueComponent2 } from "../helper";
 import type { ConfirmOptions } from "./confirm";
-import { IModalAction } from "./context";
+import { IModalAction, InnerModalContext } from "./context";
 import { createProtalModal, IPortalModalOptions } from "./portal";
 
 export type RendererOrCallback<T extends VueConstructor = VueConstructor> =
@@ -52,12 +52,18 @@ function getContentLoader<P extends ICommonModalProps<any>>(
       const { handleOnClose, forceUpdate, loadData, ...other } = props;
       let Render = await loadComponent(renderer);
       if (Render) {
-        Render = mixins(Render, {
+        Render = {
+          extends: Render,
           setup() {
+            const innerModal = InnerModalContext.inject();
             instance = getCurrentInstance()!.proxy;
-            return {};
+            return {
+              getInnerModal() {
+                return innerModal.value;
+              },
+            };
           },
-        } as any);
+        } as any;
         resolve(
           Render &&
             (() => (
@@ -162,16 +168,22 @@ function convertModalProps(props: Partial<ICustomModalProps>) {
   const { confirmSubmit, confirmCancel, confirmClose } = base;
   return Object.assign(base, {
     isSubmit,
-    confirmSubmit: getConfirmOption(confirmSubmit, "确认提交"),
-    confirmClose: getConfirmOption(confirmClose, "确认关闭"),
-    confirmCancel: getConfirmOption(confirmCancel, "确认" + base.cancelText),
+    confirmSubmit: getConfirmOption(confirmSubmit, "确认提交", base.placement),
+    confirmClose: getConfirmOption(confirmClose, "确认关闭", base.placement),
+    confirmCancel: getConfirmOption(confirmCancel, "确认" + base.cancelText, base.placement),
   });
 }
-function getConfirmOption(confirm: any, defaultInfo: string): ConfirmOptions | false {
+function getConfirmOption(
+  confirm: any,
+  defaultText: string,
+  placement?: any
+): ConfirmOptions | false {
   return confirm !== false
     ? ((expect$.is.OBJ.filter(confirm) || {
         title: "提示",
-        content: expect$.is.str.filter(confirm) || defaultInfo,
+        // placement,
+        // getContainer: null,
+        content: expect$.is.str.filter(confirm) || defaultText,
       }) as ConfirmOptions)
     : false;
 }
@@ -439,7 +451,12 @@ export class ModalManager implements IModalManager {
         return context.reject(new ModalEvent("cancel")), doClose && doClose();
       },
       onClose: async (doClose) => {
-        if (isSubmit && confirmClose && !(await this.confirm(confirmClose))) return;
+        if (
+          isSubmit &&
+          confirmClose &&
+          !(await this.confirm({ ...(confirmClose as any), parentModal: contentLoader.getRef() }))
+        )
+          return;
         const handle = other.onClose?.();
         if (handle instanceof Promise) await handle;
         // contentLoader.getRef<SubmitData>().$destroy();

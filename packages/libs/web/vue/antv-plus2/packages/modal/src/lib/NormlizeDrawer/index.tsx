@@ -1,8 +1,17 @@
-import { computed, defineComponent, onUnmounted, reactive, watch } from "@vue/composition-api";
-import { useChildren, useInherit, useNamedRef, useQuerySelector } from "@yuyi919/vue-use";
 import { extractProps } from "@yuyi919/vue-antv-plus2-helper";
+import { useChildren, useInherit, useNamedRef, useQuerySelector } from "@yuyi919/vue-use";
 import { Drawer, IDrawerProps } from "ant-design-vue";
+import {
+  computed,
+  defineComponent,
+  nextTick,
+  onUnmounted,
+  provide,
+  reactive,
+  watch,
+} from "vue-demi";
 import { AutoSizer, AutoSizerAction } from "../../shared";
+import { InnerModalContext } from "../context";
 import { useContentRender } from "../hooks";
 import { INormalizeModalProps, NormalizeModalProps } from "../NormalizeModalProps";
 import { PADDING, useClasses, useStyles } from "./styles";
@@ -11,6 +20,17 @@ export const NormlizeDrawer = defineComponent({
   props: extractProps(NormalizeModalProps),
   emits: ["close", "change"],
   setup(props, context) {
+    const modalRef = useNamedRef("inner_model");
+    const innerModalRef = InnerModalContext.inject();
+    watch(
+      () => modalRef.value,
+      (el) => {
+        nextTick(() => {
+          innerModalRef.value = el;
+        });
+      }
+    );
+    provide("parentDrawer", props.parentModal?.getInnerModal())
     const [getInherit, inheritEvent] = useInherit(context, ["close", "change"]);
     const sizerRef = useNamedRef<AutoSizerAction>("sizerRef");
     /**
@@ -86,6 +106,7 @@ export const NormlizeDrawer = defineComponent({
       inheritEvent.close(e);
       inheritEvent.change(false);
     }
+
     const [renderScrollbar, windowSize] = useContentRender(props, headerSelector);
     return () => {
       const {
@@ -104,6 +125,7 @@ export const NormlizeDrawer = defineComponent({
       const { drawer, autoSizer } = controlProps.value;
       return (
         <Drawer
+          ref={modalRef}
           class={[classes.root, classNames?.root]}
           onClose={handleClose}
           {...{

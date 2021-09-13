@@ -8,5 +8,5 @@ export { createTheme as createMuiTheme } from "./styles";
 export * from "./theme";
 export * from "./utils";
 
-export type PaletteMode = 'light' | 'dark';
+export type PaletteMode = "light" | "dark";
 export default ThemeUtils;

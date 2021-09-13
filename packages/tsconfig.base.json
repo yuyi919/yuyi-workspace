@@ -34,9 +34,10 @@
       "@types/*": ["libs/shared/packages/types/src/*"],
       "@utils": ["libs/shared/packages/utils/src/index.ts"],
       "@utils/*": ["libs/shared/packages/utils/src/*"],
-      "@yuyi919/vue-antv-plus2": ["libs/web/vue/antv-plus2/index.ts"],
+      "@yuyi919/vue-jss": ["libs/web/vue/jss/src/index.ts"],
+      "@yuyi919/vue-antv-plus2": ["libs/web/vue/antv-plus2/src/index.ts"],
       "@yuyi919/vue-antv-plus2-action": [
-        "libs/web/vue/antv-plus2/packages/action-button/src/index.ts"
+        "libs/web/vue/antv-plus2/packages/action/src/index.ts"
       ],
       "@yuyi919/vue-antv-plus2-form": ["libs/web/vue/antv-plus2/packages/form/src/index.ts"],
       "@yuyi919/vue-antv-plus2-helper": ["libs/web/vue/antv-plus2/packages/helper/src/index.ts"],

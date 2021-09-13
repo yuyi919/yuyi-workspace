@@ -1,4 +1,4 @@
-import { computed, defineComponent } from "@vue/composition-api";
+import { computed, defineComponent, ref } from "vue-demi";
 import { useInherit, useNamedRef } from "@yuyi919/vue-use";
 import { extractProps, useSlot } from "../helper";
 import { IColProps } from "ant-design-vue";
@@ -9,6 +9,7 @@ import { NormlizeDrawer } from "./NormlizeDrawer";
 import { NormlizeModal } from "./NormlizeModal";
 import { IModalProps, ModalProps } from "./props";
 import { useClasses, useStyles } from "./styles";
+import { InnerModalContext } from "./context";
 
 export function getGridProps(props: IColProps) {
   return pick(props, "md", "lg", "sm", "span", "xs", "xl", "xxl");
@@ -22,6 +23,8 @@ export const Modal = defineComponent({
   },
   emits: ["ok", "cancel", "close", "change"],
   setup(props: IModalProps, context) {
+    const innerModal = ref();
+    InnerModalContext.provide(innerModal);
     const classes = useClasses(useStyles(props));
     const actionsRef = useNamedRef("actionsRef");
     const [getInherit, inheritEvent] = useInherit(context, ["cancel", "close", "ok"]);
