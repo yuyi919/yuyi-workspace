@@ -1,13 +1,11 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import * as CSS from "csstype";
 import Types from "@yuyi919/shared-types";
-import createUseStyles from "./createUseStyles";
-import { defaults, defaultsDeep, kebabCase } from "lodash";
+import * as CSS from "csstype";
+import { createUseStylesHooks } from "./createUseStylesHook";
 import { createThemeHelper } from "./helper";
-import { addDynamicRules, createStyleSheet } from "./utils/sheets";
 import { define } from "./helper/merge";
-
+import { createHooksApi } from "./hooks";
 // Disable automatic export
 export {};
 
@@ -15,7 +13,7 @@ export {};
 type JSSNormalCssProperties = CSS.Properties<number | string>;
 // type JSSFontface = CSS.AtRule.FontFace & { fallbacks?: CSS.AtRule.FontFace[] };
 
-export type PropsFunc<Props extends Types.IObj, T> = (props: Props) => T;
+export type PropsFunc<Props extends Types.IObj, T> = (props: Props) => T | [T, "!important"];
 
 /**
  * Allows the user to augment the properties available
@@ -36,11 +34,7 @@ export interface CSSProperties extends BaseCSSProperties {
   [k: string]: unknown | CSSProperties;
 }
 
-type BaseCreateStyleValue<Props extends keyof BaseCSSProperties> =
-  | BaseCSSProperties[Props]
-  | BaseCSSProperties[Props][]
-  | [BaseCSSProperties[Props][], "!important"]
-  | BaseCSSProperties[Props][][];
+type BaseCreateStyleValue<Props extends keyof BaseCSSProperties> = BaseCSSProperties[Props];
 export type BaseCreateStyle<Props extends Types.IObj> = {
   [P in keyof BaseCSSProperties]:
     | BaseCreateStyleValue<P>
@@ -215,7 +209,7 @@ export const sheet = useFactory({
   }))
   .defaults({
     color: "red",
-    background: [["url(image1.png)", "url(image2.png)"], "!important"],
+    background: "url(image1.png) url(image2.png) !important",
   })
   .selectConcat("sizeLg", (style) => {
     style
@@ -225,26 +219,51 @@ export const sheet = useFactory({
       .end();
   })
   .end();
+
 export const theme = { borderRadius: 5, color: void 0 };
-const sheet2 = createStyleSheet({
-  context: {},
-  theme,
-  styles: sheet.export(),
-  index: 0,
-  sheetOptions: {
-    generateId: (rule, sheet?) => {
-      // console.log(rule, sheet);
-      return (sheet?.options.classNamePrefix || "") + kebabCase(rule.key.replace("\\", ""));
-    },
+const { useBlock, createStyles, useElement, useTheme } = createHooksApi<ITheme>(theme);
+
+function useButton() {
+  const theme = useTheme();
+  const button = useBlock("button")
+    .append<{ size: number }>({
+      color: theme.color,
+      fontSize: (props) => props.size,
+    })
+    .defaults({
+      color: "red",
+      background: (props) => ["url(image1.png) url(image2.png)", "!important"],
+    });
+
+  const buttonText = useElement(button, "text").append({
+    color: "white",
+    fontSize: 12,
+  });
+  return {
+    button,
+    buttonText,
+  };
+}
+
+export const createStyleHooks = createStyles(useButton, {
+  generateId: (rule, sheet) => {
+    console.log(rule, sheet);
+    return ((sheet && sheet.options.classNamePrefix) || "") + rule.key.replace("\\", "");
   },
 });
-addDynamicRules(sheet2, { size: 5 });
-// console.log(sheet.keys, sheet.sheets, sheet2.options);
-// console.log(sheet2.toString());
-export const useSheet = createUseStyles((theme: ITheme) => ({
-  button: {
-    color: theme.color,
-    fontSize: (props) => props.size,
-    "@global": {},
-  },
-}));
+
+let size = 5;
+for (let i = 0; i < 5; i++) {
+  const hooks = createStyleHooks({ size });
+  hooks.init(theme, {});
+  hooks.update({ size: size++ });
+  console.log(sheet.keys, sheet.sheets, hooks.getClasses());
+  // console.log(hooks.sheet.toString());
+}
+// export const useSheet = createUseStyles((theme: ITheme) => ({
+//   button: {
+//     color: theme.color,
+//     fontSize: (props) => props.size,
+//     "@global": {},
+//   },
+// }));

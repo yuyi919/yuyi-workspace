@@ -7,20 +7,20 @@ import { SpinningProps } from "./props";
 export class SpinningHook extends HookFactory<SpinningProps> {
   constructor(context: SetupContext, props: SpinningProps) {
     super(context, props);
-    watch(() => this.localSpinning!, this.onSpinningUpdated, { immediate: true });
-    watch(() => this.props.spinning!, this.setSpinning, { immediate: true });
+    watch(() => this.localSpinning!, this.onSpinningUpdated.bind(this), { immediate: true });
+    watch(() => this.props.spinning!, this.setSpinning.bind(this), { immediate: true });
   }
 
   public localSpinning = false;
 
-  setSpinning = (spinning: boolean) => {
+  setSpinning(spinning: boolean) {
     if (spinning !== this.localSpinning) {
       // console.log('spinning changed', spinning)
       this.localSpinning = spinning;
     }
   };
 
-  onSpinningUpdated = (spinning: boolean) => {
+  onSpinningUpdated(spinning: boolean) {
     /**
      * 更新加载中标志状态
      * @type { boolean }

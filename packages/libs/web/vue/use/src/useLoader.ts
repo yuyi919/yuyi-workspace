@@ -1,3 +1,5 @@
+/* eslint-disable prefer-rest-params */
+/* eslint-disable prefer-spread */
 /* eslint-disable no-throw-literal */
 /* eslint-disable no-redeclare */
 import { reactive, Ref, ref } from "vue-demi";

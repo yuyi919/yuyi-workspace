@@ -35,6 +35,7 @@
       "@utils": ["libs/shared/packages/utils/src/index.ts"],
       "@utils/*": ["libs/shared/packages/utils/src/*"],
       "@yuyi919/vue-jss": ["libs/web/vue/jss/src/index.ts"],
+      "@yuyi919/vue-use": ["libs/web/vue/use/src/index.ts"],
       "@yuyi919/vue-antv-plus2": ["libs/web/vue/antv-plus2/src/index.ts"],
       "@yuyi919/vue-antv-plus2-action": [
         "libs/web/vue/antv-plus2/packages/action/src/index.ts"

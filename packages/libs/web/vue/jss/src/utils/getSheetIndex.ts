@@ -1,5 +1,3 @@
-// @flow
-
 /**
  * Global index counter to preserve source order.
  * As we create the style sheet during componentWillMount lifecycle,
@@ -13,8 +11,22 @@
  * We start at [Number.MIN_SAFE_INTEGER] to always insert sheets from react-jss first before any
  * sheet which might be inserted manually by the user.
  */
-let index = Number.MIN_SAFE_INTEGER || -1e9;
+let indexCounter = Number.MIN_SAFE_INTEGER || -1e9;
 
-const getSheetIndex = () => index++;
+export function increment() {
+  indexCounter += 1;
 
-export default getSheetIndex;
+  if (process.env.NODE_ENV !== 'production') {
+    if (indexCounter >= 0) {
+      console.warn(
+        [
+          'MUI: You might have a memory leak.',
+          'The indexCounter is not supposed to grow that much.',
+        ].join('\n'),
+      );
+    }
+  }
+
+  return indexCounter;
+}
+

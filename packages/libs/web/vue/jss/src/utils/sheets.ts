@@ -20,6 +20,7 @@ interface Options<Theme> {
 const getStyles = <Theme>(options: Options<Theme>) => {
   const { styles } = options;
   if (typeof styles !== "function") {
+    // console.log("unthemedStyle", styles)
     return styles;
   }
 
@@ -30,12 +31,12 @@ const getStyles = <Theme>(options: Options<Theme>) => {
     } />'s styles function doesn't rely on the "theme" argument. We recommend declaring styles as an object instead.`
   );
   const themedStyle = styles(options.theme)
-  console.log("themedStyle", themedStyle)
+  // console.log("themedStyle", themedStyle)
   return themedStyle;
 };
 
 function getSheetOptions<Theme>(options: Options<Theme>, link: boolean) {
-  let minify;
+  let minify: boolean;
   if (options.context.id && options.context.id.minify != null) {
     minify = options.context.id.minify;
   }
@@ -109,7 +110,6 @@ export const addDynamicRules = (
   data: any
 ): DynamicRules | null => {
   const meta = getMeta(sheet);
-  console.log(meta)
   if (!meta) {
     return null;
   }

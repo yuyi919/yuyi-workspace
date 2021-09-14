@@ -1,4 +1,4 @@
-import type { Types } from "@yuyi919/shared-types";
+/* eslint-disable @typescript-eslint/ban-types */
 import Vue, { VueConstructor } from "vue";
 import type { VCProps } from "./prop-util";
 import { TsxComponentInstance } from "./TsxTypeInfo";
@@ -16,9 +16,9 @@ export type StaticMembers<
 
 export type VueComponent2<
   Props,
-  Events = Types.Recordable,
-  ScopedSlots = Types.Recordable,
-  Publics = Types.Recordable,
+  Events = {},
+  ScopedSlots = {},
+  Publics = {},
   Static extends typeof Vue = typeof Vue
 > = VueConstructor<
   TsxComponentInstance<
@@ -46,13 +46,7 @@ export type VueComponent2<
   // }
   {
     [K in keyof VueConstructorStaticMembers<Static>]: Static[K] extends VueConstructor<any>
-      ? VueComponent2<
-          VCProps<InstanceType<Static[K]> & Vue, false>,
-          Types.Recordable,
-          Types.Recordable,
-          Types.Recordable,
-          Static[K]
-        >
+      ? VueComponent2<VCProps<InstanceType<Static[K]> & Vue, false>, {}, {}, {}, Static[K]>
       : Static[K];
   };
 

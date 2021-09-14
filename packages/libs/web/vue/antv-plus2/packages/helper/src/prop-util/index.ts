@@ -271,7 +271,7 @@ export type VCProps<
   RequiredKey extends keyof ExcludeVueTypes<T> | false | undefined = undefined
 > = AutoRequired<ExcludeVueTypes<T>, RequiredKey>;
 
-export abstract class HookFactory<Props = {}> {
+export abstract class HookFactory<Props = Types.Recordable> {
   $instance = getCurrentInstance()!.proxy as Vue & Props;
   constructor(protected context: SetupContext, public props: Props = {} as Props) {}
   protected $emit(eventName: string, args?: any, ...other: any[]) {
@@ -286,10 +286,10 @@ export abstract class HookFactory<Props = {}> {
   get $refs() {
     return this.$instance.$refs;
   }
-  $once(event: string | string[], callback: Function) {
+  $once(event: string | string[], callback: Types.Function.Base) {
     return this.$instance.$once(event, callback);
   }
-  $on(event: string | string[], callback: Function) {
+  $on(event: string | string[], callback: Types.Function.Base) {
     return this.$instance.$on(event, callback);
   }
   public $install?(props: Props): void | (() => void);

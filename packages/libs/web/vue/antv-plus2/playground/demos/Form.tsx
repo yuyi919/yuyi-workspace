@@ -124,7 +124,9 @@ export const FormDemo = defineComponent({
       xl: 1200,
       xxl: 1600,
     }).between("sm", "lg");
-    watch(matches, console.log, { immediate: true });
+    watch(matches, matched => {
+      console.log("matched", matched)
+    }, { immediate: true });
     const pending = ref(true);
     return () => {
       return (

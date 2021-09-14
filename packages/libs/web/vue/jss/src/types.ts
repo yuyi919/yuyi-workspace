@@ -35,6 +35,7 @@ export type DynamicRules = {
   [key: string]: Rule;
 };
 
+// eslint-disable-next-line @typescript-eslint/ban-types
 export type StaticStyle = {};
 export type DynamicStyle<Theme> = (style: { theme: Theme }) => StaticStyle;
 

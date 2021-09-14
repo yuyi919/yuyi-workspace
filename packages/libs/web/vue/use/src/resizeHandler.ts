@@ -1,5 +1,7 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable no-unused-expressions */
 import { throttle } from "lodash";
+import type { DebouncedFunc } from "lodash";
 import ResizeObserver from "resize-observer-polyfill";
 
 /* istanbul ignore next */
@@ -15,7 +17,7 @@ const resizeHandler = function (entries: any) {
 };
 const isServer = typeof window === "undefined";
 
-const cacheMap = new WeakMap<() => any, () => any>();
+const cacheMap = new WeakMap<() => any, DebouncedFunc<() => any>>();
 
 if (!isServer) {
   // @ts-ignore
@@ -44,11 +46,18 @@ export function addResizeListener<E extends HTMLElement>(
 }
 
 /* istanbul ignore next */
-export function removeResizeListener<E extends HTMLElement>(element: undefined | null | E | E[], fn: () => any): void {
+export function removeResizeListener<E extends HTMLElement>(
+  element: undefined | null | E | E[],
+  fn: () => any
+): void {
   if (isServer) return;
   if (element instanceof Array) return element.forEach((e) => removeResizeListener(e, fn));
   if (!(element as any) || !(element as any).__resizeListeners__) return;
-  fn = cacheMap.get(fn) || fn;
+  const throttleFunc = cacheMap.get(fn);
+  if (throttleFunc) {
+    fn = throttleFunc;
+    throttleFunc.cancel();
+  }
   (element as any).__resizeListeners__.splice((element as any).__resizeListeners__.indexOf(fn), 1);
   if (!(element as any).__resizeListeners__.length) {
     (element as any).__ro__.disconnect();

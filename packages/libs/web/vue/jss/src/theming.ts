@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/ban-types */
 import warning from "tiny-warning";
 import { computed, defineComponent, inject, PropType, provide, Ref, ref } from "vue-demi";
 import isObject from "./utils/is-object";
@@ -13,7 +14,7 @@ export interface Theming<Theme> {
   contextKey: string | Symbol;
 }
 
-const createTheming = function createTheming<Theme>(
+export function createTheming<Theme>(
   contextKey: Symbol | string,
   defaultTheme: Theme
 ): Theming<Theme> {
@@ -67,8 +68,9 @@ const createTheming = function createTheming<Theme>(
     useTheme,
     contextKey,
   };
-};
+}
 
-const { ThemeProvider, useTheme } = createTheming<{}>("__vue_jss_provide_key__", defaultTheme);
-
-export { ThemeProvider, useTheme, createTheming };
+export const { ThemeProvider, useTheme } = createTheming<any>(
+  "__vue_jss_provide_key__",
+  defaultTheme
+);

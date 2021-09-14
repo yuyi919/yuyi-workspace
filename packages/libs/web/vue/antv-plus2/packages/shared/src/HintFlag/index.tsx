@@ -9,16 +9,23 @@ import { Popover } from "ant-design-vue";
 import { HintFlagProps } from "./props";
 
 const useStyles = createUseStyles({
-  root: {},
-  labelContainer: {},
-  "root labelContainer": {
-    verticalAlign: "top",
-    display: "inline-block",
-    width: "100%",
-    "&:not(.disabled)": {
-      width: "calc(100% - 20px)",
+  root: {
+    "& span": {
+      verticalAlign: "top",
+    },
+    "@global span": {
+      verticalAlign: "top",
+    },
+    "& $labelContainer": {
+      verticalAlign: "top",
+      display: "inline-block",
+      width: "100%",
+      "&:not(.disabled)": {
+        width: "calc(100% - 20px)",
+      },
     },
   },
+  labelContainer: {},
 });
 export function convertTextMuitiple(text: string) {
   return (

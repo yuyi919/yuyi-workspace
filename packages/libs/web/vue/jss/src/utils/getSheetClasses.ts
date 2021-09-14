@@ -2,7 +2,11 @@ import type { StyleSheet, Classes } from "jss";
 import type { DynamicRules } from "../types";
 import { getMeta } from "./sheetsMeta";
 
-const getSheetClasses = (sheet: StyleSheet, dynamicRules: DynamicRules) => {
+const getSheetClasses = (
+  sheet: StyleSheet,
+  dynamicRules: DynamicRules,
+  keyMap?: Record<string, string>
+) => {
   if (!dynamicRules) {
     return sheet.classes;
   }
@@ -14,11 +18,12 @@ const getSheetClasses = (sheet: StyleSheet, dynamicRules: DynamicRules) => {
     return sheet.classes;
   }
 
+  // console.log(dynamicRules)
   for (const key in meta.styles) {
-    classes[key] = sheet.classes[key];
-
+    const readKey = (keyMap && keyMap[key]) || key;
+    classes[readKey] = sheet.classes[key];
     if (key in dynamicRules) {
-      classes[key] += ` ${sheet.classes[dynamicRules[key].key]}`;
+      classes[readKey] += ` ${sheet.classes[dynamicRules[key].key]}`;
     }
   }
 

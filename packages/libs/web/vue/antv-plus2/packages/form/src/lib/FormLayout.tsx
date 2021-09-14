@@ -42,7 +42,7 @@ export const FormLayout = Object.assign(
           const normalizedProps = normlize(props, (prop, value, option) => {
             return value;
           });
-          console.log(normalizedProps);
+          // console.log(normalizedProps);
           return normalizedProps.shallow ? normalizedProps : void 0;
         })
       );

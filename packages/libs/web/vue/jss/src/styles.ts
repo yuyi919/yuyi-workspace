@@ -10,7 +10,7 @@ export {};
 type JSSNormalCssProperties = CSS.Properties<number | string>;
 // type JSSFontface = CSS.AtRule.FontFace & { fallbacks?: CSS.AtRule.FontFace[] };
 
-export type PropsFunc<Props extends Types.IObj, T> = (props: Props) => T;
+export type PropsFunc<Props extends Types.IObj, T> = (props: Props) => T | [T, "!important"];
 
 /**
  * Allows the user to augment the properties available
@@ -51,7 +51,10 @@ export interface CreateCSSProperties<Props extends Types.IObj = Types.IObj>
  *
  * if only `CSSProperties` are matched `Props` are inferred to `any`
  */
-export type StyleRules<Props extends Types.IObj = Types.IObj, ClassKey extends string = string> = Record<
+export type StyleRules<
+  Props extends Types.IObj = Types.IObj,
+  ClassKey extends string = string
+> = Record<
   ClassKey,
   // JSS property bag
   | CSSProperties
@@ -64,9 +67,11 @@ export type StyleRules<Props extends Types.IObj = Types.IObj, ClassKey extends s
 /**
  * @internal
  */
-export type StyleRulesCallback<Theme, Props extends Types.IObj, ClassKey extends string = string> = (
-  theme: Theme
-) => StyleRules<Props, ClassKey>;
+export type StyleRulesCallback<
+  Theme,
+  Props extends Types.IObj,
+  ClassKey extends string = string
+> = (theme: Theme) => StyleRules<Props, ClassKey>;
 
 export type Styles<Theme, Props extends Types.IObj, ClassKey extends string = string> =
   | StyleRules<Props, ClassKey>
