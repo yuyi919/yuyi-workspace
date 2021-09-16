@@ -56,6 +56,9 @@ export interface TransitionsOptions {
     props: string | string[],
     options?: Partial<{ duration: number | string; easing: string; delay: number | string }>
   ) => string;
+  /**
+   * @internal
+   */
   getAutoHeightDuration?: (height: number) => number;
 }
 
@@ -87,11 +90,21 @@ export declare function create(
   props: string | string[],
   options?: Partial<{ duration: number | string; easing: string; delay: number | string }>
 ): string;
+/**
+ * @internal
+ * @param props
+ * @param options
+ */
+export declare function createJs(
+  props: string | string[],
+  options?: Partial<{ duration: number | string; easing: string; delay: number | string }>
+): string;
 
 export interface Transitions {
   easing: Easing;
   duration: Duration;
   create: typeof create;
+  createJs: typeof createJs;
   getAutoHeightDuration: typeof getAutoHeightDuration;
 }
 
@@ -118,6 +131,55 @@ export function createTransitions<O extends Types.Recordable>(
     ...inputTransitions.duration,
   };
 
+  const createJs = (
+    props: string | string[] = ["all"],
+    options: Partial<{ duration: number | string; easing: string; delay: number | string }> = {}
+  ) => {
+    const {
+      duration: durationOption = mergedDuration.standard,
+      easing: easingOption = mergedEasing.easeInOut,
+      delay = 0,
+      ...other
+    } = options;
+
+    if (process.env.NODE_ENV !== "production") {
+      const isString = (value: any) => typeof value === "string";
+      // IE11 support, replace with Number.isNaN
+      // eslint-disable-next-line no-restricted-globals
+      const isNumber = (value: any) =>
+        !isNaN(typeof value === "number" ? value : parseFloat(value));
+      if (!isString(props) && !Array.isArray(props)) {
+        console.error('Material-UI: Argument "props" must be a string or Array.');
+      }
+
+      if (!isNumber(durationOption) && !isString(durationOption)) {
+        console.error(
+          `Material-UI: Argument "duration" must be a number or a string but found ${durationOption}.`
+        );
+      }
+
+      if (!isString(easingOption)) {
+        console.error('Material-UI: Argument "easing" must be a string.');
+      }
+
+      if (!isNumber(delay) && !isString(delay)) {
+        console.error('Material-UI: Argument "delay" must be a number or a string.');
+      }
+
+      if (Object.keys(other).length !== 0) {
+        console.error(`Material-UI: Unrecognized argument(s) [${Object.keys(other).join(",")}].`);
+      }
+    }
+
+    return (Array.isArray(props) ? props : [props])
+      .map(
+        (animatedProp) =>
+          `${animatedProp} ${
+            typeof durationOption === "string" ? durationOption : formatMs(durationOption)
+          } ${easingOption} ${typeof delay === "string" ? delay : formatMs(delay)}`
+      )
+      .join(",");
+  };
   const create = (
     props: string | string[] = ["all"],
     options: Partial<{ duration: number | string; easing: string; delay: number | string }> = {}
@@ -171,6 +233,7 @@ export function createTransitions<O extends Types.Recordable>(
   return {
     getAutoHeightDuration,
     create,
+    createJs,
     ...inputTransitions,
     easing: mergedEasing,
     duration: mergedDuration,

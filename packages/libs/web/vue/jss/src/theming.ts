@@ -59,7 +59,7 @@ export function createTheming<Theme>(
 
   const useTheme = (): Ref<Theme> => {
     const theme: Ref<Theme> = inject(contextKey, ref(defaultTheme) as Ref<Theme>);
-
+    console.log("useTheme", theme)
     return theme;
   };
 

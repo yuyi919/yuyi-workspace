@@ -30,6 +30,8 @@ export type KeyframePoint<P extends number = number> =
   | [percent: P, style: CSSProperties]
   | CSSProperties;
 
+export function style2Str(style: CSSProperties): string;
+export function style2Str(style: any): string;
 export function style2Str(style: CSSProperties) {
   return Object.keys(style)
     .map((key) => `${kebabCase(key)}:${style[key as keyof CSSProperties]}`)

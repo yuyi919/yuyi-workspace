@@ -1,9 +1,17 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { createUseStylesWithHook } from "./createUseStyles";
+import Types from "@yuyi919/shared-types";
+import { Classes } from "jss";
+import { ComputedRef } from "vue-demi";
+import {
+  createUseStyles as _createUseStyles,
+  CreateUseStylesOptions,
+  createUseStylesWithHook,
+} from "./createUseStyles";
 import { CreateUseStylesHookOptions, createUseStylesHooks } from "./createUseStylesHook";
 import { BaseCreateStyle } from "./Factory";
 import { define } from "./helper/merge";
+import { defineClasses, defineStyles, StyleObjectThemedCallback, Styles } from "./styles";
 import { createTheming } from "./theming";
 
 export class StylesApi<Role, P = any, N extends string = string> {
@@ -86,11 +94,25 @@ export type ExtractStylesApi<Target extends Record<string, StylesApi<any>>> = {
 const defaultName = "__hooks_jss_provide_key__";
 let i = 0;
 export function createHooksApi<ITheme>(defaultTheme: ITheme, themeName?: string) {
-  const themeing = createTheming(themeName || defaultName + i++, defaultTheme);
+  const ThemeContext = createTheming(themeName || defaultName + i++, defaultTheme);
   const context: HookContext<ITheme> = {
     theme: void 0,
   };
-  function createStyles<R extends Record<string, StylesApi<any>>>(
+  function createUseStyles<Props extends Types.IObj, C extends string = string>(
+    styles: Styles<ITheme, Props, C>,
+    options: CreateUseStylesOptions<ITheme> = {}
+  ): (data?: Props) => ComputedRef<Classes<C>> {
+    return _createUseStyles(
+      styles,
+      options.theming ? options : { ...options, theming: ThemeContext }
+    );
+  }
+  function createThemedMixins<Props extends Types.IObj, Args extends any[]>(
+    styles: StyleObjectThemedCallback<ITheme, Props, Args>
+  ): StyleObjectThemedCallback<ITheme, Props, Args> {
+    return styles;
+  }
+  function createStylesHook<R extends Record<string, StylesApi<any>>>(
     hooks: () => R,
     options?: CreateUseStylesHookOptions
   ) {
@@ -119,11 +141,11 @@ export function createHooksApi<ITheme>(defaultTheme: ITheme, themeName?: string)
       keyMap
     );
   }
-  function createUseStyles<R extends Record<string, StylesApi<any>>>(
+  function createUseStylesHook<R extends Record<string, StylesApi<any>>>(
     hooks: () => R,
     options?: CreateUseStylesHookOptions
   ) {
-    return createUseStylesWithHook(createStyles(hooks, options), themeing);
+    return createUseStylesWithHook(createStylesHook(hooks, options), ThemeContext);
   }
   function useBlock<N extends string>(name: N) {
     return new IBlock<any, N>(name);
@@ -136,8 +158,13 @@ export function createHooksApi<ITheme>(defaultTheme: ITheme, themeName?: string)
     return context.theme;
   }
   return {
+    ThemeContext,
     createUseStyles,
-    createStyles,
+    defineClasses,
+    defineStyles,
+    createThemedMixins,
+    createUseStylesHook,
+    createStylesHook,
     useBlock,
     useElement,
     useTheme,

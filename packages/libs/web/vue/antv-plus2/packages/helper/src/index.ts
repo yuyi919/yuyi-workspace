@@ -60,9 +60,12 @@ export * from "./optionResolver";
 export * from "./prop-util";
 export * from "./TsxTypeInfo";
 export * from "./slot";
+export * from "./transition";
+export * from "./KeyCode";
 export * as DomUtils from "./dom";
 
 import type * as base from "../types/base.d";
 import type * as builtin from "../types/builtin-components.d";
 import type * as dom from "../types/dom.d";
 export type { base, builtin, dom };
+export function noop() {}

@@ -1,35 +1,6 @@
 import { getDynamicStyles } from "jss";
 import { castArray, defaultsDeep, merge, mergeWith } from "lodash";
 
-const button0 = {
-  padding: "20px",
-  background: "blue",
-};
-const getBack = {
-  background: (data) => {
-    return data.background;
-  },
-};
-const redButton = define({
-  padding: "10px",
-  extend: [
-    {
-      padding: "5px",
-    },
-    getBack,
-  ],
-});
-const extend = [button0, redButton];
-const styles = {
-  button0,
-  button1: appendExtends(
-    {
-      // padding: "20px",
-      // background: () => "white"
-    },
-    extend
-  ),
-};
 function getDynamicStylesWith(styles) {
   const { extend, ...i } = styles;
   return getDynamicStyles(i);
@@ -68,7 +39,3 @@ export function define({ extend, ...styles }: any, factoryArg?: any) {
     ...defaultsDeep(styles, dynamicExtends),
   };
 }
-
-console.log(styles);
-
-export default styles;

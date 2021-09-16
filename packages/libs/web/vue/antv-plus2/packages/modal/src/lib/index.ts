@@ -8,6 +8,7 @@ export * from "./props";
 export * from "./context";
 export * from "./Manager";
 export * from "./confirm";
+export * from "./dialog";
 
 export default function install(vue: typeof Vue) {
   vue.prototype.$customModal = function $customModal(this: Vue, config: IPortalModalOptions) {

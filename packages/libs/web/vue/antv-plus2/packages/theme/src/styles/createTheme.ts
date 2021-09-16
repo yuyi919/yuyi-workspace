@@ -40,12 +40,29 @@ export interface Theme extends BaseTheme {
   zIndex: ZIndex;
   unstable_strictMode?: boolean;
 }
+export function createTheme(options?: ThemeOptions): Theme;
 /**
  * Generate a theme base on the options received.
  * @param options Takes an incomplete theme object and adds the missing parts.
  * @param args Deep merge the arguments with the about to be returned theme.
  * @returns A complete, ready to use theme object.
  */
+export function createTheme<MergeOptions extends Types.Recordable>(
+  options?: MergeOptions & ThemeOptions
+): Theme & MergeOptions;
+/**
+ * Generate a theme base on the options received.
+ * @param options Takes an incomplete theme object and adds the missing parts.
+ * @param args Deep merge the arguments with the about to be returned theme.
+ * @returns A complete, ready to use theme object.
+ */
+export function createTheme<
+  MergeOptions extends Types.Recordable,
+  AppendOptions extends Types.Recordable
+>(
+  options?: MergeOptions & ThemeOptions,
+  ...args: AppendOptions[]
+): Theme & MergeOptions & AppendOptions;
 export function createTheme<
   MergeOptions extends Types.Recordable,
   AppendOptions extends Types.Recordable

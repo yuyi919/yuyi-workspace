@@ -30,7 +30,7 @@ const getStyles = <Theme>(options: Options<Theme>) => {
       options.name || "Hook"
     } />'s styles function doesn't rely on the "theme" argument. We recommend declaring styles as an object instead.`
   );
-  const themedStyle = styles(options.theme)
+  const themedStyle = styles(options.theme);
   // console.log("themedStyle", themedStyle)
   return themedStyle;
 };
@@ -41,17 +41,27 @@ function getSheetOptions<Theme>(options: Options<Theme>, link: boolean) {
     minify = options.context.id.minify;
   }
 
-  let classNamePrefix = options.context.classNamePrefix || "";
-  if (options.name && !minify) {
-    classNamePrefix += `${options.name.replace(/\s/g, "-")}-`;
-  }
+  const classNamePrefix = options.context.classNamePrefix || "";
+  // if (options.name && !minify) {
+  //   classNamePrefix += `${options.name.replace(/\s/g, "-")}-`;
+  // }
 
   let meta = "";
   if (options.name) meta = `${options.name}, `;
   meta += typeof options.styles === "function" ? "Themed" : "Unthemed";
 
+  console.log({
+    ...options.sheetOptions,
+    name: options.name,
+    index: options.index,
+    meta,
+    classNamePrefix,
+    link,
+    generateId: options.sheetOptions.generateId || options.context.generateId,
+  });
   return {
     ...options.sheetOptions,
+    name: options.name,
     index: options.index,
     meta,
     classNamePrefix,

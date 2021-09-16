@@ -39,6 +39,7 @@ export function createUseStylesHooks<
   keyMap?: Record<string, string>
 ) {
   const { name, ...sheetOptions } = options;
+  // const sheetOptions = options
   const index = increment();
   return <Data extends InheritData>(initialData: Data): StyleHooks<Theme, Data, ClassKey> => {
     let sheet: StyleSheet,

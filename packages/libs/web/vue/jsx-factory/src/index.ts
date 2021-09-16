@@ -1,7 +1,11 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import Vue, { VNodeChildren, VueConstructor } from "vue";
-import { h, isVue2 } from "vue-demi";
+import { h, isVue2, isRef } from "vue-demi";
+import { VNodeDirective } from "vue/types/umd";
+import { VueRef } from "./lib/vue-ref";
 import { mergeJsxProps, VNodeData } from "./mergeJsxProps";
+
+Vue.use(VueRef);
 export interface ExtendIntrinsicAttributes {
   ["v-slot"]?: string;
   /**
@@ -19,6 +23,7 @@ export interface ExtendIntrinsicAttributes {
   hook?: VNodeData["hook"];
   on?: VNodeData["on"];
   nativeOn?: VNodeData["nativeOn"];
+  directives?: VNodeDirective[];
   id?: string;
   refInFor?: boolean;
   domPropsInnerHTML?: string;
@@ -95,6 +100,7 @@ export const getJArgumentsWithOptions = (
     [ON]: on,
     [MODEL]: model,
     [V_MODEL]: vModel = model,
+    directives,
     key,
     mergeJsxProps: _mergeJsxPropsArgs,
     [NATIVEON]: nativeOn,
@@ -104,11 +110,14 @@ export const getJArgumentsWithOptions = (
     ...OTHER
   } = options;
   const props = getAttributes(OTHER, eventNames);
+  const useNativeRef = (ref && !isVue2) || typeof ref === "string";
+  const useCallbackRef = ref instanceof Function;
+  const useNamedRef = ref && !useNativeRef && !useCallbackRef && !isRef(ref);
   const data = mergeJsxProps(
     {
       [CLASS_NAME]: className,
       [STYLE]: style,
-      [REF]: (isVue2 && ref?.name) || ref,
+      [REF]: useNativeRef ? ref : useNamedRef ? ref?.name : void 0,
       [SLOT]: vSlot || slot,
       [SCOPED_SLOTS]: scopedSlots,
       [ON]: mapEventNamesToHandlerPairs(options, eventNames),
@@ -117,14 +126,21 @@ export const getJArgumentsWithOptions = (
         innerHTML: domPropsInnerHTML,
       },
       key,
+      directives: directives || [],
       [elementIsAComponent ? PROPS : ATTRS]: props,
     },
     { props: _props, attrs, nativeOn, on, scopedSlots: boxSlots(slots) },
     ...(_mergeJsxPropsArgs || [])
   );
+  if (isVue2 && (useCallbackRef || ref instanceof Object) && !useNamedRef) {
+    data.directives.push({
+      name: "ref",
+      value: useCallbackRef ? ref : (el) => (ref.value = el),
+    });
+  }
   return {
     data,
-    children: _children ? [_children, children] : children,
+    children: _children ? ({ 0: _children, 1: children }) as any : children,
   };
 };
 export function jsxEsbuild(

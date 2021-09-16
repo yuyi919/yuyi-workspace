@@ -11,7 +11,7 @@ export function getSlot(
   name: string = "default",
   ...names: string[]
 ) {
-  const { $slots, $scopedSlots, slots = $slots, scopedSlots = $scopedSlots } = source;
+  const { $slots, $scopedSlots, slots = () => $slots, scopedSlots = $scopedSlots } = source;
   const scopedSlotName = names.concat([name]).find((name) => scopedSlots[name]);
   // @ts-ignore
   const scopedSlot = scopedSlots[scopedSlotName];

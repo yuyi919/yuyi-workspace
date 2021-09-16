@@ -9,6 +9,7 @@ import { Types } from "@yuyi919/shared-types";
 import { cloneDeep, omit } from "lodash";
 import Vue, { ComponentOptions } from "vue";
 import { getFromVueComponent } from "../optionResolver";
+import { default as PropTypes, initDefaultProps } from "./prop-types";
 
 export type VModelDefine<K extends string = string> = {
   prop?: K;
@@ -342,3 +343,5 @@ export function PropsMixins(...Ctors: TPropProvider<any>[]) {
   //@ts-ignore
   return Vue.extend({ mixins: Ctors }) as TPropProvider<T>;
 }
+
+export { PropTypes, initDefaultProps };

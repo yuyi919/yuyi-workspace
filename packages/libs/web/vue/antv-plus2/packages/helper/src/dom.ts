@@ -1,19 +1,19 @@
 const isServer = typeof window === "undefined";
 /* istanbul ignore next */
 export const on: {
-  (element: HTMLElement | Document, event: string, handler: EventListener): void;
-  (element: HTMLElement | Document, event: string, handler: (e: any) => void): void;
+  (element: HTMLElement | Document, event: string, handler: EventListener, options?: boolean | AddEventListenerOptions): void;
+  (element: HTMLElement | Document, event: string, handler: (e: any) => void, options?: boolean | AddEventListenerOptions): void;
 } = (() => {
   if (!isServer && document.addEventListener) {
-    return function (element: HTMLElement | Document, event: string, handler: EventListener) {
+    return function (element: HTMLElement | Document, event: string, handler: EventListener, options?: boolean | AddEventListenerOptions) {
       if (element && event && handler) {
-        element.addEventListener(event, handler, false);
+        element.addEventListener(event, handler, options ?? false);
       }
     };
   } else {
-    return function (element: HTMLElement | Document, event: string, handler: EventListener) {
+    return function (element: HTMLElement | Document, event: string, handler: EventListener, options?: boolean | AddEventListenerOptions) {
       if (element && event && handler) {
-        (element as any).attachEvent("on" + event, handler);
+        (element as any).attachEvent("on" + event, handler, options);
       }
     };
   }
@@ -21,19 +21,19 @@ export const on: {
 
 /* istanbul ignore next */
 export const off: {
-  (element: HTMLElement | Document, event: string, handler: EventListener): void;
-  (element: HTMLElement | Document, event: string, handler: (e: any) => void): void;
+  (element: HTMLElement | Document, event: string, handler: EventListener, options?: boolean | AddEventListenerOptions): void;
+  (element: HTMLElement | Document, event: string, handler: (e: any) => void, options?: boolean | AddEventListenerOptions): void;
 } = (() => {
   if (!isServer && document.removeEventListener) {
-    return function (element: HTMLElement | Document, event: string, handler: EventListener) {
+    return function (element: HTMLElement | Document, event: string, handler: EventListener, options?: boolean | AddEventListenerOptions) {
       if (element && event) {
-        element.removeEventListener(event, handler, false);
+        element.removeEventListener(event, handler, options ?? false);
       }
     };
   } else {
-    return function (element: HTMLElement | Document, event: string, handler: EventListener) {
+    return function (element: HTMLElement | Document, event: string, handler: EventListener, options?: boolean | AddEventListenerOptions) {
       if (element && event) {
-        (element as any).detachEvent("on" + event, handler);
+        (element as any).detachEvent("on" + event, handler, options);
       }
     };
   }
@@ -77,4 +77,68 @@ export function scrollbarWidth() {
   _scrollBarWidth = widthNoScroll - widthWithScroll;
 
   return _scrollBarWidth;
+}
+
+let cached: number;
+export function getScrollBarSize(fresh?: boolean) {
+  if (fresh || cached === undefined) {
+    const inner = document.createElement("div");
+    inner.style.width = "100%";
+    inner.style.height = "200px";
+
+    const outer = document.createElement("div");
+    const outerStyle = outer.style;
+
+    outerStyle.position = "absolute";
+    outerStyle.top = 0 as unknown as string;
+    outerStyle.left = 0 as unknown as string;
+    outerStyle.pointerEvents = "none";
+    outerStyle.visibility = "hidden";
+    outerStyle.width = "200px";
+    outerStyle.height = "150px";
+    outerStyle.overflow = "hidden";
+
+    outer.appendChild(inner);
+
+    document.body.appendChild(outer);
+
+    const widthContained = inner.offsetWidth;
+    outer.style.overflow = "scroll";
+    let widthScroll = inner.offsetWidth;
+
+    if (widthContained === widthScroll) {
+      widthScroll = outer.clientWidth;
+    }
+
+    document.body.removeChild(outer);
+
+    cached = widthContained - widthScroll;
+  }
+  return cached;
+}
+
+export function switchScrollingEffect(close?: boolean) {
+  const bodyIsOverflowing =
+    document.body.scrollHeight > (window.innerHeight || document.documentElement.clientHeight) &&
+    window.innerWidth > document.body.offsetWidth;
+  if (!bodyIsOverflowing) {
+    return;
+  }
+  if (close) {
+    document.body.style.position = "";
+    document.body.style.width = "";
+    return;
+  }
+  const scrollBarSize = getScrollBarSize();
+  if (scrollBarSize) {
+    document.body.style.position = "relative";
+    document.body.style.width = `calc(100% - ${scrollBarSize}px)`;
+  }
+}
+export function contains(root: Node | null | undefined, n?: Node) {
+  if (!root) {
+    return false;
+  }
+
+  return root.contains(n);
 }

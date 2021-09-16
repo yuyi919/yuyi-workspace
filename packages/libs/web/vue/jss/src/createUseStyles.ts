@@ -53,7 +53,7 @@ export function createUseStylesWithHook<Theme = DefaultTheme, ClassKey extends s
     return classes;
   };
 }
-function createUseStyles<Theme = DefaultTheme, C extends string = string>(
+export function createUseStyles<Theme = DefaultTheme, C extends string = string>(
   styles: Styles<Theme, Types.IObj, C>,
   options: CreateUseStylesOptions<Theme> = {}
 ): (data?: unknown) => ComputedRef<Classes<C>> {
@@ -157,4 +157,4 @@ function createUseStyles<Theme = DefaultTheme, C extends string = string>(
   // };
 }
 
-export default createUseStyles;
+// export default createUseStyles;

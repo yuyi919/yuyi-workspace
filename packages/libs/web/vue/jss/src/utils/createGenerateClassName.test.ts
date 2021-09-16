@@ -12,11 +12,11 @@ describe("createGenerateClassName", () => {
         {
           options: {
             theme: {},
-            classNamePrefix: "classNamePrefix",
+            classNamePrefix: "p",
           },
         }
       )
-    ).toBe("classNamePrefix-key-1");
+    ).toBe("p-key-1");
   });
 
   it("should increase the counter", () => {
@@ -28,11 +28,11 @@ describe("createGenerateClassName", () => {
         },
         {
           options: {
-            classNamePrefix: "classNamePrefix",
+            classNamePrefix: "p",
           },
         }
       )
-    ).toBe("classNamePrefix-key-1");
+    ).toBe("p-key-1");
     expect(
       generateClassName(
         {
@@ -40,11 +40,11 @@ describe("createGenerateClassName", () => {
         },
         {
           options: {
-            classNamePrefix: "classNamePrefix",
+            classNamePrefix: "p",
           },
         }
       )
-    ).toBe("classNamePrefix-key-2");
+    ).toBe("p-key-2");
   });
 
   it("should work without a classNamePrefix", () => {
@@ -66,56 +66,56 @@ describe("createGenerateClassName", () => {
         { key: "root" },
         {
           options: {
-            name: "MuiButton",
+            name: "CButton",
             theme: {},
           },
         }
       )
-    ).toBe("MuiButton-root");
+    ).toBe("CButton-root");
     expect(
       generateClassName(
         { key: "root" },
         {
           options: {
-            name: "MuiButton",
+            name: "CButton",
             theme: {
               [nested]: true,
             },
           },
         }
       )
-    ).toBe("MuiButton-root-1");
+    ).toBe("CButton-root-1");
     expect(
       generateClassName(
         { key: "root" },
         {
           options: {
-            name: "MuiButton",
+            name: "CButton",
             theme: {
               [nested]: true,
             },
           },
         }
       )
-    ).toBe("MuiButton-root-2");
+    ).toBe("CButton-root-2");
     expect(
       generateClassName(
         { key: "disabled" },
         {
           options: {
-            name: "MuiButton",
+            name: "CButton",
             theme: {},
           },
         }
       )
-    ).toBe("Mui-disabled");
+    ).toBe("g-disabled");
   });
 
   describe("production", () => {
     let nodeEnv;
     const env = process.env;
 
-    before(function beforeHook() {
+    beforeEach(function () {
       // Only run the test on node.
       if (!/jsdom/.test(window.navigator.userAgent)) {
         this.skip();
@@ -124,7 +124,7 @@ describe("createGenerateClassName", () => {
       env.NODE_ENV = "production";
     });
 
-    after(() => {
+    afterEach(() => {
       env.NODE_ENV = nodeEnv;
     });
 

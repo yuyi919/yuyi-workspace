@@ -7,7 +7,7 @@ import Types from "@yuyi919/shared-types";
 export {};
 
 // private JSS type that should be public
-type JSSNormalCssProperties = CSS.Properties<number | string>;
+export type JSSNormalCssProperties = CSS.Properties<number | string>;
 // type JSSFontface = CSS.AtRule.FontFace & { fallbacks?: CSS.AtRule.FontFace[] };
 
 export type PropsFunc<Props extends Types.IObj, T> = (props: Props) => T | [T, "!important"];
@@ -43,6 +43,11 @@ export interface CreateCSSProperties<Props extends Types.IObj = Types.IObj>
     | CreateCSSProperties<Props>;
 }
 
+export type StyleObject<Props extends Types.IObj = Types.IObj> =  // JSS property bag
+  | CSSProperties
+  // JSS property bag where values are based on props
+  | CreateCSSProperties<Props>;
+
 /**
  * This is basically the API of JSS. It defines a Map<string, CSS>,
  * where
@@ -56,10 +61,7 @@ export type StyleRules<
   ClassKey extends string = string
 > = Record<
   ClassKey,
-  // JSS property bag
-  | CSSProperties
-  // JSS property bag where values are based on props
-  | CreateCSSProperties<Props>
+  | StyleObject<Props>
   // JSS property bag based on props
   | PropsFunc<Props, CreateCSSProperties<Props>>
 >;
@@ -73,8 +75,49 @@ export type StyleRulesCallback<
   ClassKey extends string = string
 > = (theme: Theme) => StyleRules<Props, ClassKey>;
 
+export type StyleObjectCallback<Props extends Types.IObj, Args extends any[]> = (
+  ...args: Args
+) => StyleObject<Props>;
+export type StyleObjectThemedCallback<Theme, Props extends Types.IObj, Args extends any[]> = (
+  theme: Theme,
+  ...args: Args
+) => StyleObject<Props>;
+
+export type StyleMixin<Theme, Props extends Types.IObj, Args extends any[]> =
+  | StyleObject<Props>
+  | StyleObjectCallback<Props, Args>
+  | StyleObjectThemedCallback<Theme, Props, Args>;
+
 export type Styles<Theme, Props extends Types.IObj, ClassKey extends string = string> =
   | StyleRules<Props, ClassKey>
   | StyleRulesCallback<Theme, Props, ClassKey>;
 
 export type ClassNameMap<ClassKey extends string = string> = Record<ClassKey, string>;
+
+export function defineStyles<Props extends Types.IObj>(
+  styles: StyleObject<Props>
+): StyleObject<Props>;
+export function defineStyles<Props extends Types.IObj, Args extends any[]>(
+  styles: StyleObjectCallback<Props, Args>
+): StyleObjectCallback<Props, Args>;
+export function defineStyles<Props extends Types.IObj>(
+  styles: BaseCreateCSSProperties<Props>
+): BaseCreateCSSProperties<Props>;
+export function defineStyles<T extends BaseCSSProperties>(
+  styles: T
+): {
+  [K in keyof T]: K extends keyof BaseCSSProperties ? BaseCSSProperties[K] : T[K];
+};
+export function defineStyles(styles: any) {
+  return styles;
+}
+
+export function defineClasses<Props extends Types.IObj, ClassKey extends string = string>(
+  styles: StyleRules<Props, ClassKey>
+): StyleRules<Props, ClassKey>;
+export function defineClasses<Theme, Props extends Types.IObj, ClassKey extends string = string>(
+  styles: StyleRulesCallback<Theme, Props, ClassKey>
+): StyleRulesCallback<Theme, Props, ClassKey>;
+export function defineClasses(styles: any) {
+  return styles;
+}

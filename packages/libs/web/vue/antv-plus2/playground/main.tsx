@@ -1,6 +1,6 @@
 /* eslint-disable @nrwl/nx/enforce-module-boundaries */
 /* eslint-disable @typescript-eslint/no-empty-interface */
-import { ConfigProvider, Button, Input, Skeleton, Drawer } from "ant-design-vue";
+import { Icon, ConfigProvider, Button, Input, Skeleton, Radio, Drawer } from "ant-design-vue";
 import { createApp } from "vue-demi2";
 // @ts-ignore
 import zhCN from "ant-design-vue/es/locale/zh_CN";
@@ -28,7 +28,9 @@ app.use(ConfigProvider);
 app.use(Button);
 app.use(Skeleton);
 app.use(Drawer);
-app.use(Input)
+app.use(Input);
+app.use(Icon);
+app.use(Radio)
 app.mount("#app");
 
 console.log(app);

@@ -48,9 +48,9 @@
     "vite-plugin-vue2": "^1.7.3",
     "vue": "2.6.14",
     "vue-demi2": "npm:vue-demi@0.11.3",
-    "vue-template-compiler": "2.6.14"
+    "vue-template-compiler": "2.6.14",
+    "@yuyi919/vue-jss": "workspace:0.0.3"
   },
-  "peerDependencies": {},
   "files": [
     "dist",
     "lib",

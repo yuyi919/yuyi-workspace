@@ -21,9 +21,20 @@ export type OnEvents<On> = {
     : never;
 };
 
+export type TsxTypeInfoHook<
+  Props extends Record<string, any>,
+  Events extends Record<string, any> = Record<string, any>,
+  ScopedSlotArgs extends Record<string, any> = Record<string, any>
+> = {
+  props: Props;
+  on: EventHandlers<Events>;
+  slots: InnerScopedSlots<ScopedSlotArgs>;
+};
+
 export type TsxTypeInfo<
   Props extends Record<string, any>,
-  Events extends Record<string, any> = Record<string, any>
+  Events extends Record<string, any> = Record<string, any>,
+  ScopedSlotArgs extends Record<string, any> = Record<string, any>
 > = {
   props: Props;
   events: Events;
@@ -32,6 +43,7 @@ export type TsxTypeInfo<
       ? Events[Extract<ToOnEventNameMap<Events>, { SourceKey: any; OnName: K }>["SourceKey"]]
       : never;
   };
+  scopedSlots: InnerScopedSlots<ScopedSlotArgs>;
   attributes: Props & {
     props?: Partial<Props>;
     vModel?: any;

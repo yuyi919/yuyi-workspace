@@ -123,10 +123,6 @@
       "allowedCategories": [ "production" ]
     },
     {
-      "name": "@yuyi919/vue-use",
-      "allowedCategories": [ "production" ]
-    },
-    {
       "name": "@yuyi919/build-tools",
       "allowedCategories": [ "production" ]
     },
@@ -204,6 +200,10 @@
     },
     {
       "name": "@yuyi919/vue-jsx-factory",
+      "allowedCategories": [ "production" ]
+    },
+    {
+      "name": "@yuyi919/vue-use",
       "allowedCategories": [ "production" ]
     },
     {
@@ -453,6 +453,10 @@
     {
       "name": "vue-template-compiler",
       "allowedCategories": [ "production", "tools" ]
+    },
+    {
+      "name": "vue-types",
+      "allowedCategories": [ "production" ]
     },
     {
       "name": "winston",

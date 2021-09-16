@@ -1,4 +1,4 @@
-export { default as createUseStyles } from "./createUseStyles";
+export { createUseStyles } from "./createUseStyles";
 
 // TODO:
 export { default as JssProvider } from "./JssProvider";
@@ -8,6 +8,7 @@ export { SheetsRegistry, createGenerateId } from "jss";
 
 export * from "./theming";
 export * from "./Factory";
+export * from "./hooks";
 // import { default as jss } from "./jss";
 // import stt from "./helper/merge"
 // // JSS Setup

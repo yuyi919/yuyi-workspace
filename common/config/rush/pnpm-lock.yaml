@@ -476,6 +476,7 @@ importers:
       '@yuyi919/vue-antv-plus2-shared': workspace:0.0.1
       '@yuyi919/vue-antv-plus2-table': workspace:0.0.1
       '@yuyi919/vue-antv-plus2-theme': workspace:0.0.1
+      '@yuyi919/vue-jss': workspace:0.0.3
       '@yuyi919/vue-jsx-factory': workspace:0.0.1
       '@yuyi919/vue-use': workspace:0.0.3
       '@yuyi919/workspace-base-rig': workspace:1.2.5
@@ -515,6 +516,7 @@ importers:
       '@types/node': 16.7.7
       '@vue/composition-api': 1.1.4_vue@2.6.14
       '@yuyi919/build-tools': link:../../../tools/build-tools
+      '@yuyi919/vue-jss': link:../jss
       '@yuyi919/workspace-base-rig': link:../../../tools/workspace-base-rig
       ant-design-vue: 1.7.5_9065e7474e033a8e4b95615fc8e6c36c
       babel-preset-vca-jsx: 0.3.6_@babel+core@7.15.0
@@ -608,12 +610,14 @@ importers:
       typescript: 4.1.2
       vue: 2.6.14
       vue-demi: ^0.11.3
+      vue-types: ~4.1.0
     dependencies:
       '@yuyi919/shared-types': link:../../../../../shared/packages/types
       lodash: 4.17.21
       lodash-es: 4.17.21
       tslib: 2.3.1
       vue-demi: 0.11.3_vue@2.6.14
+      vue-types: 4.1.0_vue@2.6.14
     devDependencies:
       '@types/jest': 27.0.1
       '@types/node': 16.7.7
@@ -8383,6 +8387,11 @@ packages:
     dependencies:
       isobject: 3.0.1
 
+  /is-plain-object/5.0.0:
+    resolution: {integrity: sha512-VRSzKkbMm5jMDoKLbltAkFQ5Qr7VDiTFGXxYFXXowVj387GeGNOCsOH6Msy00SGZ3Fp84b1Naa1psqgcCIEP5Q==}
+    engines: {node: '>=0.10.0'}
+    dev: false
+
   /is-potential-custom-element-name/1.0.1:
     resolution: {integrity: sha512-bCYeRA2rVibKZd+s2625gGnGF/t7DSqDs4dP7CrLA1m7jKWz6pps0LpYLJN8Q64HtmPKJ1hrN3nzPNKFEKOUiQ==}
 
@@ -13419,6 +13428,16 @@ packages:
   /vue-template-es2015-compiler/1.9.1:
     resolution: {integrity: sha512-4gDntzrifFnCEvyoO8PqyJDmguXgVPxKiIxrBKjIowvL9l+N66196+72XVYR8BBf1Uv1Fgt3bGevJ+sEmxfZzw==}
     dev: true
+
+  /vue-types/4.1.0_vue@2.6.14:
+    resolution: {integrity: sha512-oPAeKKx5vY5Q8c7lMQPQyrBIbmWQGael5XEHqO1f+Y3V/RUZNuISz7KxI4woGjh79Vy/gDDaPX9j9zKYpaaA2g==}
+    engines: {node: '>=12.16.0'}
+    peerDependencies:
+      vue: ^2.0.0 || ^3.0.0
+    dependencies:
+      is-plain-object: 5.0.0
+      vue: 2.6.14
+    dev: false
 
   /vue/2.6.14:
     resolution: {integrity: sha512-x2284lgYvjOMj3Za7kqzRcUSxBboHqtgRE2zlos1qWaOye5yUmHn42LB1250NJBLRwEcdrB0JRwyPTEPhfQjiQ==}

@@ -12,7 +12,6 @@ type Options<Theme> = {
 };
 
 const defaultManagers = new Map<number, SheetsManager>();
-
 export const getManager = (context: Context, managerId: number) => {
   // If `managers` map is present in the context, we use it in order to
   // let JssProvider reset them when new response has to render server-side.
