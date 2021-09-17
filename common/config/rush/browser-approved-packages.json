@@ -447,6 +447,10 @@
       "allowedCategories": [ "production" ]
     },
     {
+      "name": "vue-frag",
+      "allowedCategories": [ "production" ]
+    },
+    {
       "name": "vue-styled-components",
       "allowedCategories": [ "production" ]
     },

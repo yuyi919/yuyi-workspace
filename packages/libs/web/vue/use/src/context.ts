@@ -5,8 +5,8 @@ import type { Component } from "@type-helper/vue2";
 
 export type ContextFactoryManager<T> = {
   provide<T>(target: T): T;
-  inject(): T | null;
-  inject(defaultValue: T | null): T | null;
+  inject(): T;
+  inject(defaultValue: T | null): T;
   inject(defaultValue: (() => T | null) | null, treatDefaultAsFactory: true): T;
   inject(defaultValue: T | null | null, treatDefaultAsFactory?: false): T;
   readonly Provider: Component<{ value: T }>;

@@ -1,6 +1,6 @@
 import { DomUtils, extractProps, initDefaultProps } from "@yuyi919/vue-antv-plus2-helper";
 import { NativeScrollbarMixins } from "@yuyi919/vue-antv-plus2-shared";
-import { createUseClasses, createUseStyles, styled } from "@yuyi919/vue-antv-plus2-theme";
+import { createUseClasses, styled } from "@yuyi919/vue-antv-plus2-theme";
 import { createContext } from "@yuyi919/vue-use";
 import {
   computed,
@@ -106,6 +106,7 @@ const useStyles = styled.makeUse`
     }
   }
 `;
+
 export const Dialog = defineComponent({
   install: () => {},
   name: "Dialog",
@@ -126,7 +127,10 @@ export const Dialog = defineComponent({
       // confirmLoading: false,
       // okType: "primary",
     }),
-    centered: Boolean,
+    centered: {
+      type: Boolean,
+      required: false
+    },
     scrollBehavior: String,
   },
   setup(props, context) {

@@ -1,0 +1,11 @@
+{
+  "extends": "./node_modules/@yuyi919/workspace-base-rig/profiles/tsc/tsconfig-base.json",
+  "compilerOptions": {
+    "outDir": "./dist",
+    "rootDir": "./src",
+    "emitDeclarationOnly": true,
+    "tsBuildInfoFile": "./node_modules/@yuyi919/workspace-base-rig/.tsBuildInfo/<%= name %>.json"
+  },
+  "exclude": ["**/*.spec.ts"],
+  "include": ["src/**/*.ts"]
+}

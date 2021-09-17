@@ -79,73 +79,77 @@ export default defineComponent({
     ];
     const radio = ref<string>();
     watch(radio, (data) => {
-      const find = radioOptions.find(o => o.label === data)?.value
+      const find = radioOptions.find((o) => o.label === data)?.value;
       if (find) {
-        console.log(store, find)
-        store.centered = find.centered
-        store.scrollBehavior = find.scrollBehavior
+        console.log(store, find);
+        store.centered = find.centered;
+        store.scrollBehavior = find.scrollBehavior;
       }
     });
     return () => {
       return (
-        <div style={{ width: "80vw", margin: "0 auto" }}>
-          {/* {dialog.render()} */}
-          <Modal.Dialog props={store} {...dialogData}>
-            <a-radio-group vModel={{ value: radio.value, callback: (v: any) => (radio.value = v) }}>
-              {radioOptions.map((o) => (
-                <a-radio value={o.label}>{o.label}</a-radio>
-              ))}
-            </a-radio-group>
-            <div style="height: 1000px"></div>
-          </Modal.Dialog>
-          <Button
-            onClick={() => {
-              store.visible = true;
-            }}
-          >
-            点击
-          </Button>
-          <Button
-            type="second"
-            size="large"
-            ghost
-            hint="test"
-            onClick={async (e) => {
-              const result = await manager.callModal(
-                { title: "测试", placement: "left", confirmSubmit: true, confirmCancel: true },
-                "aaaaaaaaa"
-              );
-              console.log("result", result); //.log("clicl", e);
-            }}
-          >
-            点击确认
-          </Button>
-          <Demo title="测试" desc="测试">
-            {(["left", "right", "default", "center", "top", "bottom", null] as const).map(
-              (placement) => (
-                <Button
-                  onClick={() =>
-                    manager.callModal(
-                      {
-                        title: "测试",
-                        placement,
-                        confirmSubmit: true,
-                        confirmCancel: true,
-                        confirmClose: true,
-                      },
-                      () => import("./readme.txt")
-                    )
-                  }
-                >
-                  {placement || "None"}
-                </Button>
-              )
-            )}
-          </Demo>
-          <FormDemo />
-          {/* <ModalDialogDemo />
+        <>
+          <div style={{ width: "80vw", margin: "0 auto" }}>
+            {/* {dialog.render()} */}
+            <Modal.Dialog props={store} {...dialogData}>
+              <a-radio-group
+                vModel={{ value: radio.value, callback: (v: any) => (radio.value = v) }}
+              >
+                {radioOptions.map((o) => (
+                  <a-radio value={o.label}>{o.label}</a-radio>
+                ))}
+              </a-radio-group>
+              <div style="height: 1000px"></div>
+            </Modal.Dialog>
+            <Button
+              onClick={() => {
+                store.visible = true;
+              }}
+            >
+              点击
+            </Button>
+            <Button
+              type="second"
+              size="large"
+              ghost
+              hint="test"
+              onClick={async (e) => {
+                const result = await manager.callModal(
+                  { title: "测试", placement: "left", confirmSubmit: true, confirmCancel: true },
+                  "aaaaaaaaa"
+                );
+                console.log("result", result); //.log("clicl", e);
+              }}
+            >
+              点击确认
+            </Button>
+            <Demo title="测试" desc="测试">
+              {(["left", "right", "default", "center", "top", "bottom", null] as const).map(
+                (placement) => (
+                  <Button
+                    onClick={() =>
+                      manager.callModal(
+                        {
+                          title: "测试",
+                          placement,
+                          confirmSubmit: true,
+                          confirmCancel: true,
+                          confirmClose: true,
+                        },
+                        () => import("./readme.txt")
+                      )
+                    }
+                  >
+                    {placement || "None"}
+                  </Button>
+                )
+              )}
+            </Demo>
+            <FormDemo />
+            {/* <ModalDialogDemo />
           <GridDemo /> */}
-        </div>
+          </div>
+        </>
       );
     };
   },

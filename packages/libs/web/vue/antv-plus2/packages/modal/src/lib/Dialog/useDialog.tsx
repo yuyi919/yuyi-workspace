@@ -245,9 +245,9 @@ export function useDialog(props: DialogProps, options?: DialogOptions) {
   const wrapStyle = computed(computedFunc.getWrapStyle);
   const maskStyle = computed(computedFunc.getMaskStyle);
   function useMaskWrapper() {
-    const state = reactive({
-      dialogMouseDown: ref<boolean>(),
-    });
+    const state = {
+      dialogMouseDown: void 0 as unknown as boolean,
+    };
     // const temp = {} as {
     //   timeoutId: number;
     // };
@@ -579,13 +579,11 @@ export function useDialog(props: DialogProps, options?: DialogOptions) {
     },
     render() {
       const { prefixCls, maskClosable, visible, wrapClassName, title, wrapProps } = props;
-      const style = wrapStyle.value;
+      const style = { ...wrapStyle.value };
       // clear hide display
       // and only set display after async anim, not here for hide
       if (visible) {
         style.display = null;
-      } else {
-        style.display = "none";
       }
       return (
         <div class={`${prefixCls}-root`}>

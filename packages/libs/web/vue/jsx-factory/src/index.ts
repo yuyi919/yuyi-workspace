@@ -1,11 +1,13 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import Vue, { VNodeChildren, VueConstructor } from "vue";
+import Vue, { VNodeChildren, VueConstructor, VNodeDirective } from "vue";
 import { h, isVue2, isRef } from "vue-demi";
-import { VNodeDirective } from "vue/types/umd";
+import frag from "vue-frag";
+
 import { VueRef } from "./lib/vue-ref";
 import { mergeJsxProps, VNodeData } from "./mergeJsxProps";
 
 Vue.use(VueRef);
+Vue.directive("frag", frag);
 export interface ExtendIntrinsicAttributes {
   ["v-slot"]?: string;
   /**
@@ -110,14 +112,15 @@ export const getJArgumentsWithOptions = (
     ...OTHER
   } = options;
   const props = getAttributes(OTHER, eventNames);
-  const useNativeRef = (ref && !isVue2) || typeof ref === "string";
   const useCallbackRef = ref instanceof Function;
-  const useNamedRef = ref && !useNativeRef && !useCallbackRef && !isRef(ref);
+  const useNativeRef = !useCallbackRef && ((ref && !isVue2) || typeof ref === "string");
+  const useRefObj = !useNativeRef && !useCallbackRef && isRef(ref);
+  const useNamedRef = ref && !useNativeRef && !useCallbackRef && !useRefObj;
   const data = mergeJsxProps(
     {
       [CLASS_NAME]: className,
       [STYLE]: style,
-      [REF]: useNativeRef ? ref : useNamedRef ? ref?.name : void 0,
+      [REF]: useNativeRef ? ref : useNamedRef ? ref.name : void 0,
       [SLOT]: vSlot || slot,
       [SCOPED_SLOTS]: scopedSlots,
       [ON]: mapEventNamesToHandlerPairs(options, eventNames),
@@ -132,15 +135,15 @@ export const getJArgumentsWithOptions = (
     { props: _props, attrs, nativeOn, on, scopedSlots: boxSlots(slots) },
     ...(_mergeJsxPropsArgs || [])
   );
-  if (isVue2 && (useCallbackRef || ref instanceof Object) && !useNamedRef) {
-    data.directives.push({
+  if (isVue2 && (useCallbackRef || useRefObj)) {
+    data.directives[data.directives.length] = {
       name: "ref",
       value: useCallbackRef ? ref : (el) => (ref.value = el),
-    });
+    };
   }
   return {
     data,
-    children: _children ? ({ 0: _children, 1: children }) as any : children,
+    children: _children ? ({ 0: _children, 1: children } as any) : children,
   };
 };
 export function jsxEsbuild(
@@ -160,7 +163,7 @@ export function jsxEsbuild(
   }
   return h(element, children);
 }
-
+const fragFunction = { directives: [{ name: "frag" }] };
 export function jsx(element: Element, props: Options | null, key?: string) {
   if (props) {
     const { children, ...options } = props;
@@ -170,12 +173,12 @@ export function jsx(element: Element, props: Options | null, key?: string) {
       children || []
     );
     if (element === Fragment) {
-      return renderChildren;
+      return h("div", fragFunction, [renderChildren]);
     }
     return h(element, data, renderChildren instanceof Array ? renderChildren : [renderChildren]);
   }
   if (element === Fragment) {
-    return [];
+    return h("div", fragFunction, []);
   }
   return h(element);
 }

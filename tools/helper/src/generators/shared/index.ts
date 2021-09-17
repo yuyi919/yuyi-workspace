@@ -32,4 +32,14 @@ export const PackageConfigures = definePackageJsonBuilder({
     },
     deps: ["@types/heft-jest", "!@types/jest"],
   },
+  "tsdx": {
+    scripts: {
+      build: `tsdx build && tsc run types`,
+      "build:dev": `tsdx build && tsc run types`,
+      "build:watch": `tsdx build && tsc run types`,
+      dev: `tsdx watch --transpileOnly --onSuccess "tsc run types"`,
+      types: "tsc --build --force",
+    },
+    deps: ["@types/jest", "tsdx"],
+  },
 });

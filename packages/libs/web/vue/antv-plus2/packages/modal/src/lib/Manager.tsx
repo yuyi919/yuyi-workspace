@@ -182,7 +182,7 @@ function getConfirmOption(
     ? ((expect$.is.OBJ.filter(confirm) || {
         title: "提示",
         // placement,
-        // getContainer: null,
+        // getContainer: false,
         content: expect$.is.str.filter(confirm) || defaultText,
       }) as ConfirmOptions)
     : false;
@@ -335,6 +335,7 @@ export class ModalManager implements IModalManager {
     props: TModalConfig,
     renderer?: RendererOrCallback
   ): Promise<SubmitData | undefined> & IModalAction<ICustomModalProps>;
+
   /**
    *
    * 此方法重载已废弃
@@ -363,6 +364,7 @@ export class ModalManager implements IModalManager {
     const { confirm } = await import("./confirm");
     return confirm(...args);
   }
+
   public async alert(...args: Types.Function.ExtractArgs<typeof import("./confirm").alert>) {
     const { alert } = await import("./confirm");
     return alert(...args);

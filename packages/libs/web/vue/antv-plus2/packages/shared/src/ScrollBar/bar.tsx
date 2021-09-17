@@ -86,7 +86,7 @@ export function useThrottleHandle<T extends (...args: any[]) => any>(
       { immediate: true }
     );
     onUnmounted(() => (innerMethod as Cancelable)?.cancel?.());
-    return Object.freeze(
+    return (
       Object.assign(
         function (this: any, ...args: any[]) {
           return innerMethod.apply(this, args);
