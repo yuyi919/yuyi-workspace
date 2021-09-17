@@ -1,8 +1,0 @@
-/lib
-/dist
-/temp
-/node_modules
-# Heft
-/.heft
-/.rush
-*.log
