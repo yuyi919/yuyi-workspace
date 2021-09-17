@@ -240,7 +240,7 @@
     },
     {
       "name": "babel-plugin-import",
-      "allowedCategories": [ "tools" ]
+      "allowedCategories": [ "production", "tools" ]
     },
     {
       "name": "babel-plugin-macros",
