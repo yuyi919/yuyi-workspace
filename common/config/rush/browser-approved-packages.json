@@ -395,7 +395,15 @@
       "allowedCategories": [ "production", "tools" ]
     },
     {
+      "name": "serve-static",
+      "allowedCategories": [ "production" ]
+    },
+    {
       "name": "solid-js",
+      "allowedCategories": [ "production" ]
+    },
+    {
+      "name": "solid-styled-components",
       "allowedCategories": [ "production" ]
     },
     {

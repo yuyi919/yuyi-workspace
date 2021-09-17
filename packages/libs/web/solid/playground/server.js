@@ -74,7 +74,7 @@ async function createServer(root = process.cwd(), isProd = process.env.NODE_ENV 
         .replace(`<!--ssr-outlet-->`, appHtml);
       res.status(200).set({ "Content-Type": "text/html" }).end(html);
     } catch (e) {
-      vite?.ssrFixStacktrace(e);
+      vite && vite.ssrFixStacktrace(e);
       console.error(e);
       res.status(500).end(e.stack);
     }

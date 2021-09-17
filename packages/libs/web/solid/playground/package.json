@@ -20,7 +20,8 @@
     "types:dev": "tsc --build"
   },
   "dependencies": {
-    "solid-js": "^1.1.1"
+    "solid-js": "^1.1.1",
+    "solid-styled-components": "~0.27.3"
   },
   "devDependencies": {
     "@types/jest": "~27.0.1",

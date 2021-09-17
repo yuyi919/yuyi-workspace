@@ -474,6 +474,7 @@ importers:
       jest: ~27.1.0
       serve-static: ~1.14.1
       solid-js: ^1.1.1
+      solid-styled-components: ~0.27.3
       tsdx: ^0.14.1
       tslib: ~2.3.1
       typescript: 4.1.2
@@ -482,6 +483,7 @@ importers:
       vite-plugin-solid: ^2.0.3
     dependencies:
       solid-js: 1.1.4
+      solid-styled-components: 0.27.3_solid-js@1.1.4
     devDependencies:
       '@types/jest': 27.0.1
       '@types/node': 16.7.7
@@ -6397,7 +6399,6 @@ packages:
 
   /csstype/2.6.17:
     resolution: {integrity: sha512-u1wmTI1jJGzCJzWndZo8mk4wnPTZd1eOIYTYvuEyOQGfmDl3TrabCCfKnOC86FZwW/9djqTl933UF/cS425i9A==}
-    dev: true
 
   /csstype/3.0.8:
     resolution: {integrity: sha512-jXKhWqXPmlUeoQnF/EhTtTl4C9SnrxSH/jZUih3jmO6lBKr99rP3/+FmrMj4EFpOXzMtXHAZkd3x0E6h6Fgflw==}
@@ -7853,6 +7854,14 @@ packages:
 
   /globrex/0.1.2:
     resolution: {integrity: sha512-uHJgbwAMwNFf5mLst7IWLNg14x1CkeqglJb/K3doi4dw6q2IvAAmM/Y81kevy83wP+Sst+nutFTYOGg3d1lsxg==}
+
+  /goober/2.0.41_csstype@2.6.17:
+    resolution: {integrity: sha512-kwjegMT5018zWydhOQlQneCgCtrKJaPsru7TaBWmTYV0nsMeUrM6L6O8JmNYb9UbPMgWcmtf+9p4Y3oJabIH1A==}
+    peerDependencies:
+      csstype: ^2.6.2
+    dependencies:
+      csstype: 2.6.17
+    dev: false
 
   /graceful-fs/4.2.4:
     resolution: {integrity: sha512-WjKPNJF79dtJAVniUlGGWHYGz2jWxT6VhN/4m1NdkbZ2nOsEF+cI1Edgql5zCRhs/VsQYRvrXctxktVXZUkixw==}
@@ -12307,6 +12316,16 @@ packages:
     dependencies:
       solid-js: 1.1.4
     dev: true
+
+  /solid-styled-components/0.27.3_solid-js@1.1.4:
+    resolution: {integrity: sha512-0TXTNeLp4zn6xyuKgNKgcuIjCzxnIyUtTSbOPC6k5/2F5REarGyJMCp00NToRfaOJskXk+ERcntNSew5SznN3g==}
+    peerDependencies:
+      solid-js: ^1.0.0
+    dependencies:
+      csstype: 2.6.17
+      goober: 2.0.41_csstype@2.6.17
+      solid-js: 1.1.4
+    dev: false
 
   /sort-keys/4.2.0:
     resolution: {integrity: sha512-aUYIEU/UviqPgc8mHR6IW1EGxkAXpeRETYcrzg8cLAvUPZcpAlleSXHV2mY7G12GphSH6Gzv+4MMVSSkbdteHg==}
