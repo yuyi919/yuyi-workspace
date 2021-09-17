@@ -69,7 +69,9 @@ export default (async ({ mode }) => {
       // sourcemap: true,
       minify: false,
     },
-
+    optimizeDeps: {
+      exclude: ["solid-styled-components"]
+    },
     server: {
       // host: Configuration.defaults.development.host,
       port: 3000, // Configuration.defaults.development.port,

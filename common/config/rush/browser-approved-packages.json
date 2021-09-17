@@ -303,6 +303,10 @@
       "allowedCategories": [ "production", "tools" ]
     },
     {
+      "name": "goober",
+      "allowedCategories": [ "production" ]
+    },
+    {
       "name": "ignore",
       "allowedCategories": [ "production" ]
     },
