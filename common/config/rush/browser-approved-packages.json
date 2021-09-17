@@ -295,6 +295,10 @@
       "allowedCategories": [ "tools" ]
     },
     {
+      "name": "express",
+      "allowedCategories": [ "production" ]
+    },
+    {
       "name": "fs-extra",
       "allowedCategories": [ "production", "tools" ]
     },
@@ -433,6 +437,14 @@
     {
       "name": "vite",
       "allowedCategories": [ "production", "tools" ]
+    },
+    {
+      "name": "vite-dts",
+      "allowedCategories": [ "production" ]
+    },
+    {
+      "name": "vite-plugin-dts",
+      "allowedCategories": [ "production" ]
     },
     {
       "name": "vite-plugin-imp",

@@ -8,10 +8,16 @@
   "types": "dist/index.d.ts",
   "scripts": {
     "build": "tsdx build && pnpm run types",
-    "build:dev": "tsdx build && pnpm run types",
-    "build:watch": "tsdx build && pnpm run types",
+    "build:dev": "tsdx build && pnpm run types:dev",
+    "build:watch": "tsdx build && pnpm run types:dev",
+    "build:client": "vite build --outDir dist/client",
+    "build:server": "vite build --outDir dist/server --ssr src/server.tsx",
+    "build:full": "yarn build:client && yarn build:server",
     "dev": "tsdx watch --transpileOnly --onSuccess \"pnpm run types\"",
-    "types": "tsc --build --force"
+    "serve:dev": "node server.js",
+    "serve": "cross-env NODE_ENV=production node server.js",
+    "types": "tsc --build --force",
+    "types:dev": "tsc --build"
   },
   "dependencies": {
     "solid-js": "^1.1.1"
@@ -26,7 +32,10 @@
     "tslib": "~2.3.1",
     "typescript": "4.1.2",
     "vite": "^2.5.1",
-    "vite-plugin-solid": "^2.0.3"
+    "vite-plugin-solid": "^2.0.3",
+    "vite-plugin-dts": "~0.8.0",
+    "express": "~4.17.1",
+    "serve-static": "~1.14.1"
   },
   "files": [
     "dist",
