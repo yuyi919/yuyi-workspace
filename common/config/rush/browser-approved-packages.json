@@ -391,6 +391,10 @@
       "allowedCategories": [ "production", "tools" ]
     },
     {
+      "name": "solid-js",
+      "allowedCategories": [ "production" ]
+    },
+    {
       "name": "tiny-warning",
       "allowedCategories": [ "production" ]
     },
@@ -432,6 +436,10 @@
     },
     {
       "name": "vite-plugin-imp",
+      "allowedCategories": [ "production" ]
+    },
+    {
+      "name": "vite-plugin-solid",
       "allowedCategories": [ "production" ]
     },
     {

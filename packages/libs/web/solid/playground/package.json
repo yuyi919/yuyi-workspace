@@ -13,6 +13,9 @@
     "dev": "tsdx watch --transpileOnly --onSuccess \"pnpm run types\"",
     "types": "tsc --build --force"
   },
+  "dependencies": {
+    "solid-js": "^1.1.1"
+  },
   "devDependencies": {
     "@types/jest": "~27.0.1",
     "@types/node": "~16.7.2",
@@ -21,7 +24,9 @@
     "jest": "~27.1.0",
     "tsdx": "^0.14.1",
     "tslib": "~2.3.1",
-    "typescript": "4.1.2"
+    "typescript": "4.1.2",
+    "vite": "^2.5.1",
+    "vite-plugin-solid": "^2.0.3"
   },
   "files": [
     "dist",
