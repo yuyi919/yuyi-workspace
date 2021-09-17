@@ -2,8 +2,6 @@ import { Tree } from "@nrwl/devkit";
 import { join } from "path";
 import {
   generateFilesWith,
-  updatePackageJson,
-  formatDeps,
   TypedProjectGraph,
   tryDelete,
   PackageConfigFilesBuilder,

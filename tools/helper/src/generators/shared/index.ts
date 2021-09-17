@@ -33,6 +33,9 @@ export const PackageConfigures = definePackageJsonBuilder({
     deps: ["@types/heft-jest", "!@types/jest"],
   },
   "tsdx": {
+    entry: {
+      module: `dist/\${packageJson.name.split("/").pop()}.esm.js`,
+    },
     scripts: {
       build: `tsdx build && tsc run types`,
       "build:dev": `tsdx build && tsc run types`,

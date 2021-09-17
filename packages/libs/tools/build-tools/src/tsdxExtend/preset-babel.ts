@@ -7,7 +7,7 @@ export function PluginBabel(extendConfig: ExtendConfig, options: TsdxOptions) {
   const plugins = [];
   if (options.format !== "esm") {
     plugins.push([
-      "babel-plugin-import",
+      require.resolve("babel-plugin-import"),
       {
         libraryName: "lodash",
         libraryDirectory: "",
@@ -17,7 +17,7 @@ export function PluginBabel(extendConfig: ExtendConfig, options: TsdxOptions) {
       "lodash",
     ]);
     plugins.push([
-      "babel-plugin-import",
+      require.resolve("babel-plugin-import"),
       {
         libraryName: "ant-design-vue",
         libraryDirectory: "es",

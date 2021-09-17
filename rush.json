@@ -598,6 +598,12 @@
       "reviewCategory": "production"
     },
     {
+      "packageName": "@yuyi919/web-solid-playground",
+      "projectFolder": "packages/libs/web/solid/playground",
+      "reviewCategory": "production",
+      "versionPolicyName": "shared"
+    },
+    {
       "packageName": "@yuyi919/workspace",
       "projectFolder": "packages",
       "reviewCategory": "tools"

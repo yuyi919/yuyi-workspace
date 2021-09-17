@@ -1,0 +1,27 @@
+{
+  "presets": [
+    [
+      "@babel/preset-typescript",
+      {
+        "allowNamespaces": false
+      }
+    ]
+  ],
+  "plugins": [
+    [
+      "const-enum",
+      {
+        "transform": "constObject"
+      }
+    ],
+    [
+      "import",
+      {
+        "libraryName": "lodash",
+        "libraryDirectory": "",
+        "camel2DashComponentName": false,
+        "style": false
+      }
+    ]
+  ]
+}

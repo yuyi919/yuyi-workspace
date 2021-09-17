@@ -1,5 +1,5 @@
 import { Tree } from "@nrwl/devkit";
-import { merge, omit } from "lodash";
+import { merge, omit, defaults, template } from "lodash";
 import { getProjectGraphWith, TypedProjectGraph } from ".";
 import { PackageJSON } from "../../common/packageJsonUtils";
 import { PackageBuilder } from "../../common/schema";
@@ -7,7 +7,12 @@ import { join } from "path";
 import { EslintConfig } from "../../common/updateEslintConfig";
 import { formatDeps, STATIC_DEPS } from "./deps";
 import { tryUpdateJson } from "./file-utils";
-import { CommonPackageScripts, Configures, updatePackageJson } from "./formatPackageJson";
+import {
+  ConfigureItem,
+  CommonPackageScripts,
+  Configures,
+  updatePackageJson,
+} from "./formatPackageJson";
 import { DependentBuildableProjectNode } from "./graph";
 import { getRushPackageDefinition } from "./rushUtils";
 
@@ -29,6 +34,7 @@ export class PackageConfigFilesBuilder {
 
   scripts!: CommonPackageScripts & Record<string, any>;
   deps!: string[];
+  entry!: ConfigureItem["entry"];
 
   setupInit(presetName: PackageBuilder) {
     return this.setup(presetName);
@@ -38,11 +44,15 @@ export class PackageConfigFilesBuilder {
   }
 
   private setup(presetName: PackageBuilder, update?: boolean) {
-    if (!(presetName in this.configure)) return
-    const { scripts, deps } = this.configure[presetName];
+    if (!(presetName in this.configure)) return;
+    const { scripts, deps, entry } = this.configure[presetName];
     this.scripts = scripts;
     this.deps = deps;
-
+    this.entry = defaults(entry, {
+      main: "dist/index.js",
+      module: "lib/index.js",
+      types: "dist/index.d.ts",
+    });
     const {
       dependencies: dependencyNodes,
       packageJsonPath,
@@ -63,11 +73,18 @@ export class PackageConfigFilesBuilder {
     this.packageJson = packageJson;
     this.packageJsonPath = packageJsonPath;
     this.rootDir = packageDir;
+
+    
+    if (entry) {
+      for (const key in entry) entry[key] && (this.entry[key] = template(this.entry[key])(this));
+    }
+    console.log(this.packageJson)
+    console.log(this.entry)
     return this;
   }
 
   writeJson(publishable?: boolean) {
-    if (!this.packageJson) return
+    if (!this.packageJson) return;
     const { dependencies, devDependencies, peerDependencies } = this.packageJson;
     tryUpdateJson(
       this.host,
@@ -91,9 +108,7 @@ export class PackageConfigFilesBuilder {
       }
       const result = merge(json, {
         scripts: this.scripts,
-        main: "dist/index.js",
-        module: "lib/index.js",
-        types: "dist/index.d.ts",
+        ...this.entry,
         publishConfig: {
           access: "public",
         },
@@ -103,7 +118,7 @@ export class PackageConfigFilesBuilder {
         files: ["dist", "lib", "README.md"],
       });
       if (publishable !== void 0) {
-        result.private = !publishable
+        result.private = !publishable;
       }
       for (const dep of this.deps) {
         if (dep.startsWith("!")) {

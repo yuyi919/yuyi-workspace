@@ -1,0 +1,34 @@
+{
+  "name": "@yuyi919/web-solid-playground",
+  "version": "0.0.1",
+  "description": "",
+  "author": "",
+  "main": "dist/index.js",
+  "module": "dist/web-solid-playground.esm.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsdx build && pnpm run types",
+    "build:dev": "tsdx build && pnpm run types",
+    "build:watch": "tsdx build && pnpm run types",
+    "dev": "tsdx watch --transpileOnly --onSuccess \"pnpm run types\"",
+    "types": "tsc --build --force"
+  },
+  "devDependencies": {
+    "@types/jest": "~27.0.1",
+    "@types/node": "~16.7.2",
+    "@yuyi919/build-tools": "workspace:0.1.10",
+    "@yuyi919/workspace-base-rig": "workspace:1.2.5",
+    "jest": "~27.1.0",
+    "tsdx": "^0.14.1",
+    "tslib": "~2.3.1",
+    "typescript": "4.1.2"
+  },
+  "files": [
+    "dist",
+    "lib",
+    "README.md"
+  ],
+  "publishConfig": {
+    "access": "public"
+  }
+}

@@ -8,6 +8,11 @@ import { PackageBuilder } from "../../common/schema";
 export interface ConfigureItem {
   scripts: CommonPackageScripts & Record<string, any>;
   deps: string[];
+  entry?: {
+    main?: string,
+    module?: string,
+    types?: string
+  } 
 }
 export interface Configures extends Partial<Record<PackageBuilder, ConfigureItem>> {}
 export function definePackageJsonBuilder(configure: Configures) {
