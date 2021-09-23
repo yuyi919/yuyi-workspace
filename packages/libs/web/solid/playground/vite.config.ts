@@ -55,7 +55,7 @@ export default (async ({ mode }) => {
       //   },
       // }),
     ],
-
+    publicDir: "./src/assets",
     build: {
       // assetsInlineLimit: 0,
       // cssCodeSplit: false,
@@ -64,13 +64,24 @@ export default (async ({ mode }) => {
       // target: "es2017",
       manifest: true,
       ssrManifest: true,
-      
+
       // polyfillDynamicImport: false,
-      // sourcemap: true,
       minify: false,
+      sourcemap: true,
+      // lib: {
+      //   entry: path.resolve(__dirname, "src/index.tsx"),
+      //   fileName: "index",
+      //   formats: ["cjs", "es"],
+      // },
+      // rollupOptions: {
+      //   // external: ["solid-js", "solid-js/web"],
+      // },
     },
     optimizeDeps: {
-      exclude: ["solid-styled-components"]
+      // exclude: ["solid-styled-components"],
+    },
+    define: {
+      "typeof window": JSON.stringify(process.env.IS_CLIENT !== "true" ? "undefined" : "object"),
     },
     server: {
       // host: Configuration.defaults.development.host,

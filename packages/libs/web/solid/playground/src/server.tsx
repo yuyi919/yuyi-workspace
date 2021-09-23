@@ -1,16 +1,20 @@
 // @ts-ignore
-import { NoHydration, HydrationScript, renderToStringAsync } from "solid-js/web";
+import { NoHydration, HydrationScript, resolveSSRNode, renderToStringAsync } from "solid-js/web";
 import { extractCss } from "goober";
 import App from "./App";
+
+const root = () => {
+  return <App />;
+};
+// console.log(resolveSSRNode(root()));
 export async function render(url: string, manifest: any, pipe?: boolean) {
   // if (pipe) {
-  const html = await renderToStringAsync(() => <App />);
+  const html = await renderToStringAsync(root);
   const preloadLinks = await renderToStringAsync(() => (
     <>
       {/* <style innerText={css}></style> */}
       <NoHydration>
         <style id="_goober">{extractCss()}</style>
-        <link as="style" rel="preload" href="/src/assets/index.css"></link>
       </NoHydration>
       <HydrationScript />
     </>

@@ -288,11 +288,19 @@
     },
     {
       "name": "eslint",
-      "allowedCategories": [ "tools" ]
+      "allowedCategories": [ "production", "tools" ]
     },
     {
       "name": "eslint-config-prettier",
       "allowedCategories": [ "tools" ]
+    },
+    {
+      "name": "eslint-plugin-solid",
+      "allowedCategories": [ "production" ]
+    },
+    {
+      "name": "eslint-utils",
+      "allowedCategories": [ "production" ]
     },
     {
       "name": "express",

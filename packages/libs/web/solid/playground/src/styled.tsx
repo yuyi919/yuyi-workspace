@@ -1,10 +1,9 @@
 // @ts-nocheck
-/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable prefer-rest-params */
 /* eslint-disable prefer-spread */
 import { Properties as CSSProperties } from "csstype";
 import { JSX } from "solid-js";
-import { css, setup as gooberSetup } from "goober";
+import { css, extractCss, setup as gooberSetup } from "goober";
 import {
   mergeProps,
   splitProps,
@@ -13,9 +12,21 @@ import {
   Component,
   createComponent,
   untrack,
+  createEffect,
 } from "solid-js";
-import { spread, ssr, ssrSpread, isServer, getHydrationKey } from "solid-js/web";
+import {
+  runHydrationEvents,
+  spread,
+  ssr,
+  ssrSpread,
+  insert,
+  template,
+  getNextElement,
+  ssrHydrationKey,
+  escape,
+} from "solid-js/web";
 
+const isServer = typeof window === "undefined";
 export interface CSSAttribute extends CSSProperties {
   [key: string]: CSSAttribute | string | number | undefined;
 }
@@ -69,18 +80,37 @@ type Tagged<T> = <P>(
 ) => ((props: P & T) => JSX.Element) & {
   className: (props: P & T) => string;
 };
+export function styled<T extends Record<string, any>>(tag: (props: T) => JSX.Element): Tagged<T>;
+export function styled<T extends keyof JSX.IntrinsicElements>(
+  tag: T
+): Tagged<JSX.IntrinsicElements[T]>;
 export function styled<T extends keyof JSX.IntrinsicElements>(
   tag: T | ((props: JSX.IntrinsicElements[T]) => JSX.Element)
 ): Tagged<JSX.IntrinsicElements[T]> {
-  const _ctx = this || {};
+  const _ctx = {} as any;
   return (...args) => {
     const Styled: Component = (props: JSX.IntrinsicElements[T]) => {
+      // let first: boolean = true;
       const theme = useContext(ThemeContext);
       const withTheme = mergeProps(props, { theme });
+
+      if (!isServer) {
+        // _ctx.target = document.head
+        // document.head.appendChild(_ctx.target);
+      }
+
       const clone = mergeProps(withTheme, {
         get className() {
+          // if (!isServer) {
+          //   if (!first) {
+          //     // extractCss(_ctx.target);
+          //   } else if (first) {
+          //     first = false;
+          //   }
+          // }
           const pClassName = withTheme.className,
             append = "className" in withTheme && /^go[0-9]+/.test(pClassName);
+          // console.log(extractCss(_ctx.target));
           // Call `css` with the append flag and pass the props
           const className = css.apply(
             { target: _ctx.target, o: append, p: withTheme, g: _ctx.g },
@@ -97,13 +127,13 @@ export function styled<T extends keyof JSX.IntrinsicElements>(
       } else if (isServer) {
         const [local, others] = splitProps(newProps, ["children"]);
         el = ssr(
-          [`<${createTag} `, ">", `</${createTag}>`],
-          ssrSpread(others),
+          [`<${createTag}`, " ", ">", `</${createTag}>`],
+          ssrHydrationKey(),
+          ssrSpread(others, false, true),
           local.children || ""
         );
       } else {
-        el = document.createElement(createTag);
-        spread(el, mergeProps(newProps, { key: getHydrationKey() }));
+        el = createNodeWithTagName<T>(createTag, newProps);
       }
       return el;
     };
@@ -115,6 +145,44 @@ export function styled<T extends keyof JSX.IntrinsicElements>(
     return Styled;
   };
 }
+
+export function renderClass(content) {
+  let el: any;
+  if (isServer) {
+    const [local, others] = splitProps({}, ["children"]);
+    el = ssr(
+      [`<style`, " ", ">", `</style>`],
+      ssrHydrationKey(),
+      ssrSpread(others, false, true),
+      local.children || ""
+    );
+  } else {
+    const _tmpl$ = template(`<style></style>`);
+    el = getNextElement(_tmpl$);
+    insert(el, content, undefined, Array.prototype.slice.call(el.childNodes, 0));
+    console.log(_tmpl$, el);
+  }
+  return el;
+}
+export function createNodeWithTagName<T extends keyof JSX.IntrinsicElements>(
+  createTag: any,
+  newProps: Pick<
+    JSX.IntrinsicElements[T] & { theme: unknown } & { readonly className: string },
+    | Exclude<
+        keyof JSX.IntrinsicElements[T],
+        keyof JSX.IntrinsicElements[T] | "theme" | "className"
+      >
+    | Exclude<"theme", keyof JSX.IntrinsicElements[T] | "theme" | "className">
+    | Exclude<"className", keyof JSX.IntrinsicElements[T] | "theme" | "className">
+  >
+) {
+  const dom = getNextElement(template(`<${createTag}></${createTag}>`));
+  spread(dom, newProps, false, true);
+  insert(dom, () => newProps.children, void 0, Array.prototype.slice.call(dom.childNodes, 0));
+  runHydrationEvents();
+  return dom;
+}
+
 export function createGlobalStyles() {
   const fn = styled.call({ g: 1 } as any, "div").apply(null, arguments);
   return function GlobalStyles(props: any) {

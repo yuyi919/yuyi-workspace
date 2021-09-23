@@ -25,9 +25,12 @@ async function createServer(root = process.cwd(), isProd = process.env.NODE_ENV 
       root,
       logLevel: isTest ? "error" : "info",
       // configFile: "./vite.config-ssr.js",
+      define: false,
+      esbuild: {
+      },
       build: {
         ssrManifest: true,
-        manifest: true
+        manifest: true,
       },
       server: {
         middlewareMode: "ssr",

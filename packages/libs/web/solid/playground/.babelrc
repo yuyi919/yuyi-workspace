@@ -1,5 +1,3 @@
 {
-  "presets": [["@yuyi919/build-tools/babel/ts", {}]],
-  "plugins": [
-  ]
+  "presets": [["@yuyi919/build-tools/babel/ts-oop", {}]]
 }
