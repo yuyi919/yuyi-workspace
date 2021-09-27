@@ -45,6 +45,9 @@
     "shared-decorator": {
       "tags": ["shared", "decorator"]
     },
+    "shared-packages-logger": {
+      "tags": ["shared", "packages", "logger"]
+    },
     "shared-types": {
       "tags": ["lerna-package", "shared", "types"]
     },

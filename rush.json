@@ -547,6 +547,12 @@
       "versionPolicyName": "shared"
     },
     {
+      "packageName": "@yuyi919/shared-logger",
+      "projectFolder": "packages/libs/shared/packages/logger",
+      "reviewCategory": "production",
+      "versionPolicyName": "shared"
+    },
+    {
       "packageName": "@yuyi919/shared-types",
       "projectFolder": "packages/libs/shared/packages/types",
       "reviewCategory": "production",

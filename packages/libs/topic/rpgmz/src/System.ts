@@ -17,9 +17,9 @@ const modules: Record<string, SystemModule> = {};
 //@ts-ignore
 export const System = {
   register(name: string, requires: string[], module: (...args: any[]) => SystemModule | void) {
-    if (name.indexOf("@yuyi919/rpgmz-")===0) {
-      System.register(name.replace("@yuyi919/rpgmz-", "@yuyi919-rmmz/"), requires, module)
-    }
+    // if (name.indexOf("@yuyi919/rpgmz-")===0) {
+    //   System.register(name.replace("@yuyi919/rpgmz-", "@yuyi919-rmmz/"), requires, module)
+    // }
     if (!modules[name]) {
       const exports = {} as any;
       //@ts-ignore

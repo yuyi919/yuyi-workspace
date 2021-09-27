@@ -1,5 +1,5 @@
-import type { Game_Interpreter, PluginManager } from "@yuyi919-rmmz/core";
-import type Core from "@yuyi919-rmmz/core";
+import type { Game_Interpreter, PluginManager } from "@yuyi919/rpgmz-core";
+import type Core from "@yuyi919/rpgmz-core";
 import { ConstructorType } from "./metaData";
 import { transformToClass } from "./utils";
 export type Global = typeof Core & typeof window & typeof globalThis;

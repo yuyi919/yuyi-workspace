@@ -115,6 +115,10 @@
       "allowedCategories": [ "production" ]
     },
     {
+      "name": "@yuyi919-rmmz/core",
+      "allowedCategories": [ "production" ]
+    },
+    {
       "name": "@yuyi919-ts-transformer/ast-utils",
       "allowedCategories": [ "production" ]
     },
@@ -164,6 +168,10 @@
     },
     {
       "name": "@yuyi919/shared-decorator",
+      "allowedCategories": [ "production" ]
+    },
+    {
+      "name": "@yuyi919/shared-logger",
       "allowedCategories": [ "production" ]
     },
     {
@@ -275,6 +283,10 @@
       "allowedCategories": [ "tools" ]
     },
     {
+      "name": "babel-plugin-transform-typescript-metadata",
+      "allowedCategories": [ "production" ]
+    },
+    {
       "name": "babel-plugin-transform-vue-jsx",
       "allowedCategories": [ "tools" ]
     },
@@ -336,6 +348,10 @@
     },
     {
       "name": "goober",
+      "allowedCategories": [ "production" ]
+    },
+    {
+      "name": "gulp",
       "allowedCategories": [ "production" ]
     },
     {
@@ -425,6 +441,14 @@
     {
       "name": "rollup-plugin-commonjs",
       "allowedCategories": [ "tools" ]
+    },
+    {
+      "name": "rollup-plugin-multi-input",
+      "allowedCategories": [ "production" ]
+    },
+    {
+      "name": "rollup-plugin-node-polyfills",
+      "allowedCategories": [ "production" ]
     },
     {
       "name": "rollup-plugin-replace",

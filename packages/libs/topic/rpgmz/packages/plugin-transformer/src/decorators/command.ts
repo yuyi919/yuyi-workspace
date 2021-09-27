@@ -1,4 +1,4 @@
-import * as RMMZ from "@yuyi919-rmmz/core";
+import * as RMMZ from "@yuyi919/rpgmz-core";
 import { createDeepMap } from "./createDeepMap";
 import env, { Global } from "./helper";
 import { Struct } from "./structs";

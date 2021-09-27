@@ -69,7 +69,7 @@ export default defineViteConfig({
           less: {
             modifyVars: {
               // reference:  Avoid repeated references
-              hack: `true; @import (reference) "${resolve("src/App/design/config.less")}";`,
+              // hack: `true; @import (reference) "${resolve("src/App/design/config.less")}";`,
               // ...modifyVars,
             },
             javascriptEnabled: true,
