@@ -173,15 +173,21 @@ export default Yuyi919.createPlugin(
       );
     });
 
-    Yuyi919.registerFunc("clearActionSequence", ({ $dataSkills }) => {
+    /**
+     * 清理动作序列的设定
+     */
+    Yuyi919.registerFunc("clearActionSequence", ({ Game_Action, $dataSkills }) => {
       $dataSkills.forEach((k) => {
         if (k) {
-          k.effects = k.effects.filter((i) => i.code !== 44);
-          delete k.meta["Custom Action Sequence"];
+          // 清理公共事件
+          k.effects = k.effects.filter((i) => i.code !== Game_Action.EFFECT_COMMON_EVENT);
+          // 清理标签Custom Action Sequence以及带来的副作用
           k.note = k.note.replace("Custom Action Sequence", "");
+          delete k.meta["Custom Action Sequence"];
         }
       });
     });
+    
     const updateBackgroundOpacity = Yuyi919.registerFunc(
       "updateBackgroundOpacity",
       ({ BattleManager, Graphics, SceneManager }, opacity: number = 0, duration: number = 30) => {

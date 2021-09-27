@@ -1,5 +1,5 @@
 import Core from "@yuyi919/rpgmz-core";
-export type GlobalObj = typeof globalThis.Core & typeof globalThis & Window;
+export type GlobalObj = typeof Core & typeof globalThis & Window;
 
 let localGlobal: GlobalObj;
 

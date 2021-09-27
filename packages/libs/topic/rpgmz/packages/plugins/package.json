@@ -9,7 +9,7 @@
   "scripts": {
     "build": "tsdx build --minify --format=esm && gulp deploy",
     "build:dev": "tsdx build --format=esm && gulp deploy",
-    "build:watch": "tsdx build --format=esm && gulp deploy",
+    "build:watch": "tsdx watch --format=esm --transpileOnly --onSuccess \"pnpm gulp deploy\"",
     "dev": "tsdx watch --transpileOnly --onSuccess \"pnpm gulp deploy\""
   },
   "dependencies": {

@@ -418,7 +418,7 @@ export class TachieConfig implements ITachieConfig {
   }
 }
 
-export let global: Readonly<Yuyi919.Global>;
+export let global: Readonly<Yuyi919.GlobalObj>;
 export class ExStandingPicture {
   static Env = Env;
   static init = Env.init;
@@ -451,7 +451,7 @@ export class ExStandingPicture {
   }
 }
 
-function checkFocusPicture(global: Readonly<Yuyi919.Global>) {
+function checkFocusPicture(global: Readonly<Yuyi919.GlobalObj>) {
   const processEscapeNumber: RegExpMatchArray | null = Core.$gameMessage
     .allText()
     .match(/\\FF\[(\w+)\]/);

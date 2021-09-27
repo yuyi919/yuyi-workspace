@@ -17,7 +17,7 @@ import {
   x,
 } from "@yuyi919/rpgmz-plugin-transformer";
 import { memoize } from "lodash";
-import { action, configure, observable } from "mobx";
+import { computed, action, configure, observable } from "mobx";
 import { DiceCaller, DiceConfig, TextboxConfig, TextSeConfig } from "./structs";
 import { colors, getSpeaker, randomInt } from "./utils";
 configure({
@@ -83,6 +83,7 @@ export class PluginAdvCore {
     this.textboxConfigId = id;
   }
 
+  @computed
   get currentTextboxConfig() {
     return this.textboxConfigList[this.textboxConfigId];
   }
