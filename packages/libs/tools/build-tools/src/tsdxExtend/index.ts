@@ -87,6 +87,7 @@ export function extendTsdxConfig(extendConfig: ExtendConfig = {}) {
     plugins: prePlugins,
     bundleDeps,
     excludeDundleDeps = [],
+    babelHelpers,
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     transpiler = "all",
     extractErrors,
