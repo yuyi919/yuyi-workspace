@@ -10,7 +10,7 @@ import {
 import { NormalizedOptions } from "./normalizeSchema";
 
 export function createFiles(host: Tree, options: NormalizedOptions, projGraph: TypedProjectGraph) {
-  if (options.builder === "heft-tsc") {
+  if (options.builder !== "tsc") {
     tryDelete(host, join(options.projectRoot + "/tsconfig.lib.json"));
     tryDelete(host, join(options.projectRoot + "/tsconfig.spec.json"));
   }
