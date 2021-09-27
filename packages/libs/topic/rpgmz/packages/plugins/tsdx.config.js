@@ -19,7 +19,7 @@ module.exports = extendTsdxConfig({
     // "@yuyi919/rpgmz-plugin-transformer",
     // // "class-transformer",
     // "reflect-metadata",
-    "lodash-es"
+    "lodash-es",
   ],
   excludeDundleDeps: [],
   extractErrors: undefined,
@@ -40,7 +40,7 @@ module.exports = extendTsdxConfig({
       // Core: "globalThis",
     },
   },
-  treeshake: false,
+  treeshake: true,
   shimMissingExports: true,
   experimentalOptimizeChunks: true,
   manualChunks: false,
@@ -53,6 +53,7 @@ module.exports = extendTsdxConfig({
     declaration: false,
     declarationMap: false,
     removeComments: false,
+    target: "es2017",
   },
   plugins: [
     multiInput({

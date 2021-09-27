@@ -8,7 +8,7 @@ export { Easing };
 export { callCommandWith, transformToClass } from "@yuyi919/rpgmz-plugin-transformer";
 export function registerFunc<Args extends any[], Result>(
   name: string,
-  callback: (global: import("./Global").Global, ...args: Args) => Result
+  callback: (global: import("./Global").GlobalObj, ...args: Args) => Result
 ): (...args: Args) => Result {
   return (Yuyi919[name] = function (...args: Args) {
     return callback(globalThis as any, ...args);

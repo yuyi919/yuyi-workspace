@@ -2,10 +2,10 @@
 /* eslint-disable no-case-declarations */
 import Core, { TextState, Window_Message, Scene_Battle } from "@yuyi919/rpgmz-core";
 import { createConstructor } from "@yuyi919/rpgmz-plugin-transformer";
-import { initGlobal } from "../core/Global";
+import { init } from "../core/Yuyi919";
 import { randomInt, getSpeaker, colors } from "./utils";
 
-const { registerCommand, getParameters } = initGlobal(globalThis);
+const { registerCommand, getParameters } = init(globalThis);
 //
 // process parameters
 //

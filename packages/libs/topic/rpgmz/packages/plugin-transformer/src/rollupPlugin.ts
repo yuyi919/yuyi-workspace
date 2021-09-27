@@ -26,10 +26,10 @@ export const transformHook = async (code: string, id: string, cache: Cache) => {
     Object.assign(cache.collect, collectMap);
     cache.file_collect[id] = collectMap;
   }
-  const str = new MagicString(`\r\n${code}`)
+  const str = new MagicString(`\r\n${code}`);
   return {
     code: str.toString(),
-    map: str.generateMap({ hires: true })
+    map: str.generateMap({ hires: true }),
   };
 };
 
@@ -62,7 +62,6 @@ export function createPlugin(options?: {
   const nameCache = {};
   const chunkFileNames = "plugin.libs.js";
   const libChunks: OutputChunk[] = [];
-  const libCodes = [];
   return {
     name: "rollup-plugin-extract-rmmz-plugin-desc",
     outputOptions({ ...option }) {
@@ -81,22 +80,23 @@ export function createPlugin(options?: {
         const prefix = pkg.author;
         if (file.type === "chunk") {
           const pluginName = nameCache[key];
+          // console.log(key)
           if (nameCache[key]) {
+            delete bundle[key];
             nameCache[key] = pluginName;
             const writeCode = `${top}${file.code.replace(
               /('|")\.\/plugin\.libs([0-9]*)(\.js|)('|")/g,
               (name: string) => `"${getPluginName(name.replace(/^('|")|('|")$/g, ""), prefix)}"`
             )}`;
-            const next = cloneDeep(file);
+            const next = file;
             // console.log(key, pluginName);
             if (/^plugin\.libs([0-9]*)\.js$/.test(key)) {
+              console.log("generateBundle", key, "=>", nameCache[chunkFileNames]);
               libChunks.push(next);
-              libCodes.push(writeCode);
               //  else if (libChunks) {
               //   nextBundle.code = libChunks.code + nextBundle.code;
               // }
               // nextBundle.fileName = nameCache[chunkFileNames];
-              console.info("generateBundle", key, "=>", nameCache[chunkFileNames]);
             } else {
               const nextBundle = {
                 ...next,
@@ -105,33 +105,38 @@ export function createPlugin(options?: {
               };
               bundle[pluginName] = nextBundle;
             }
-            delete bundle[key];
           }
         }
       }
-      if (libChunks && libCodes.length > 0) {
-        writeJSON(
-          join(__dirname, "test.json"),
-          libChunks.map(({ code, ...other }) => other)
-        );
-        bundle[nameCache[chunkFileNames]] = libChunks.reduce((r, chunk) => ({
-          fileName: nameCache[chunkFileNames],
-          name: nameCache[chunkFileNames],
-          modules: { ...r.modules, ...chunk.modules },
-          exports: [...r.exports, ...chunk.exports],
-          imports: [...r.imports, ...chunk.imports],
-          importedBindings: { ...r.importedBindings, ...chunk.importedBindings },
-          dynamicImports: [...r.dynamicImports, ...chunk.dynamicImports],
-          code: r.code + "\n;" + chunk.code,
-          facadeModuleId: null,
-          isEntry: false,
-          type: "chunk",
-          implicitlyLoadedBefore: [],
-          referencedFiles: [],
-          isImplicitEntry: false,
-          isDynamicEntry: false,
-        }));
-        // console.log(libChunks);
+      if (libChunks && libChunks.length > 0) {
+        // writeJSON(
+        //   join(__dirname, "test.json"),
+        //   libChunks.map(({ code, ...other }) => other)
+        // );
+        bundle[nameCache[chunkFileNames]] =
+          libChunks.length > 1
+            ? libChunks.reduce((r, chunk) => ({
+                fileName: nameCache[chunkFileNames],
+                name: nameCache[chunkFileNames],
+                modules: { ...r.modules, ...chunk.modules },
+                exports: [...r.exports, ...chunk.exports],
+                imports: [...r.imports, ...chunk.imports],
+                importedBindings: { ...r.importedBindings, ...chunk.importedBindings },
+                dynamicImports: [...r.dynamicImports, ...chunk.dynamicImports],
+                code: r.code + "\n;" + chunk.code,
+                facadeModuleId: null,
+                isEntry: false,
+                type: "chunk",
+                implicitlyLoadedBefore: [],
+                referencedFiles: [],
+                isImplicitEntry: false,
+                isDynamicEntry: false,
+              }))
+            : {
+                ...libChunks[0],
+                fileName: nameCache[chunkFileNames],
+              };
+        console.log("finished!");
         // libChunks.code = libCodes.join("\n");
       }
     },
@@ -157,9 +162,9 @@ export function createPlugin(options?: {
         );
 
         code = code.replace(`define([`, `loadEsModule("${pluginName}", [`);
-        const banner = texts.length > 0 ? `${texts.join("\r\n")}\r\n` : `\r\n`
+        const banner = texts.length > 0 ? `${texts.join("\r\n")}\r\n` : `\r\n`;
         if (!options.sourcemap) {
-          return `${banner}\r\n${code}`
+          return `${banner}\r\n${code}`;
         }
         const magicString = new MagicString(code);
         magicString.prepend(banner);
