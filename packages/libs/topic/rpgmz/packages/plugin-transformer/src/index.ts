@@ -1,1 +1,2 @@
-export * from "./lib/plugin-transformer";
+export * as x from "./decorators";
+export * from "./decorators";

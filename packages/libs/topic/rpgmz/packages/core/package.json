@@ -12,7 +12,9 @@
     "build:watch": "tsc --build --watch",
     "dev": "tsc --build --watch"
   },
-  "dependencies": {"@yuyi919/shared-utils":"workspace:0.0.36"},
+  "dependencies": {
+    "@yuyi919/shared-utils": "workspace:0.0.36"
+  },
   "devDependencies": {
     "@types/jest": "~27.0.1",
     "@types/node": "~16.7.2",

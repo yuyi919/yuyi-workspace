@@ -147,6 +147,14 @@
       "allowedCategories": [ "tools" ]
     },
     {
+      "name": "@yuyi919/rpgmz-core",
+      "allowedCategories": [ "production" ]
+    },
+    {
+      "name": "@yuyi919/rpgmz-plugin-transformer",
+      "allowedCategories": [ "production" ]
+    },
+    {
       "name": "@yuyi919/rpgmz-plugins",
       "allowedCategories": [ "production" ]
     },
@@ -331,6 +339,10 @@
       "allowedCategories": [ "production" ]
     },
     {
+      "name": "http-proxy",
+      "allowedCategories": [ "production" ]
+    },
+    {
       "name": "ignore",
       "allowedCategories": [ "production" ]
     },
@@ -376,6 +388,10 @@
     },
     {
       "name": "minimatch",
+      "allowedCategories": [ "production" ]
+    },
+    {
+      "name": "mobx",
       "allowedCategories": [ "production" ]
     },
     {
@@ -496,6 +512,10 @@
     },
     {
       "name": "vite-plugin-dts",
+      "allowedCategories": [ "production" ]
+    },
+    {
+      "name": "vite-plugin-html",
       "allowedCategories": [ "production" ]
     },
     {
