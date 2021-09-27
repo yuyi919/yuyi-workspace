@@ -5,6 +5,12 @@
   },
   "references": [
     {
+      "path": "./packages/core"
+    },
+    {
+      "path": "./packages/plugin-transformer"
+    },
+    {
       "path": "./tsconfig.lib.json"
     },
     {
