@@ -1242,6 +1242,226 @@
       },
       "builder": "tsc"
     },
+    "topic-rpgmz": {
+      "root": "libs/topic/rpgmz",
+      "sourceRoot": "libs/topic/rpgmz/src",
+      "projectType": "library",
+      "targets": {
+        "build": {
+          "executor": "@nrwl/workspace:run-commands",
+          "configurations": {
+            "watch": {
+              "commands": ["pnpm run build:watch"]
+            }
+          },
+          "options": {
+            "commands": ["pnpm run build"],
+            "cwd": "libs/topic/rpgmz"
+          }
+        },
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/topic/rpgmz/**/*.ts"]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/topic/rpgmz"],
+          "options": {
+            "jestConfig": "libs/topic/rpgmz/jest.config.js",
+            "passWithNoTests": true
+          }
+        },
+        "command": {
+          "executor": "@nrwl/workspace:run-commands",
+          "options": {},
+          "configurations": {
+            "format": {
+              "cwd": ".",
+              "commands": [
+                {
+                  "command": "nx generate @yuyi919/nx-plugin-workspace-helper:format --project=topic-rpgmz --no-interactive"
+                }
+              ]
+            },
+            "remove": {
+              "cwd": ".",
+              "commands": [
+                {
+                  "command": "nx generate @nrwl/workspace:remove --projectName=topic-rpgmz --forceRemove"
+                }
+              ]
+            }
+          }
+        }
+      }
+    },
+    "topic-rpgmz-packages-core": {
+      "root": "libs/topic/rpgmz/packages/core",
+      "sourceRoot": "libs/topic/rpgmz/packages/core/src",
+      "projectType": "library",
+      "targets": {
+        "build": {
+          "executor": "@nrwl/workspace:run-commands",
+          "configurations": {
+            "watch": {
+              "commands": ["pnpm run build:watch"]
+            }
+          },
+          "options": {
+            "commands": ["pnpm run build"],
+            "cwd": "libs/topic/rpgmz/packages/core"
+          }
+        },
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/topic/rpgmz/packages/core/**/*.ts"]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/topic/rpgmz/packages/core"],
+          "options": {
+            "jestConfig": "libs/topic/rpgmz/packages/core/jest.config.js",
+            "passWithNoTests": true
+          }
+        },
+        "command": {
+          "executor": "@nrwl/workspace:run-commands",
+          "options": {},
+          "configurations": {
+            "format": {
+              "cwd": ".",
+              "commands": [
+                {
+                  "command": "nx generate @yuyi919/nx-plugin-workspace-helper:format --project=topic-rpgmz-packages-core --no-interactive"
+                }
+              ]
+            },
+            "remove": {
+              "cwd": ".",
+              "commands": [
+                {
+                  "command": "nx generate @nrwl/workspace:remove --projectName=topic-rpgmz-packages-core --forceRemove"
+                }
+              ]
+            }
+          }
+        }
+      }
+    },
+    "topic-rpgmz-packages-plugin-transformer": {
+      "root": "libs/topic/rpgmz/packages/plugin-transformer",
+      "sourceRoot": "libs/topic/rpgmz/packages/plugin-transformer/src",
+      "projectType": "library",
+      "targets": {
+        "build": {
+          "executor": "@nrwl/workspace:run-commands",
+          "configurations": {
+            "watch": {
+              "commands": ["pnpm run build:watch"]
+            }
+          },
+          "options": {
+            "commands": ["pnpm run build"],
+            "cwd": "libs/topic/rpgmz/packages/plugin-transformer"
+          }
+        },
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/topic/rpgmz/packages/plugin-transformer/**/*.ts"]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/topic/rpgmz/packages/plugin-transformer"],
+          "options": {
+            "jestConfig": "libs/topic/rpgmz/packages/plugin-transformer/jest.config.js",
+            "passWithNoTests": true
+          }
+        },
+        "command": {
+          "executor": "@nrwl/workspace:run-commands",
+          "options": {},
+          "configurations": {
+            "format": {
+              "cwd": ".",
+              "commands": [
+                {
+                  "command": "nx generate @yuyi919/nx-plugin-workspace-helper:format --project=topic-rpgmz-packages-plugin-transformer --no-interactive"
+                }
+              ]
+            },
+            "remove": {
+              "cwd": ".",
+              "commands": [
+                {
+                  "command": "nx generate @nrwl/workspace:remove --projectName=topic-rpgmz-packages-plugin-transformer --forceRemove"
+                }
+              ]
+            }
+          }
+        }
+      }
+    },
+    "topic-rpgmz-packages-plugins": {
+      "root": "libs/topic/rpgmz/packages/plugins",
+      "sourceRoot": "libs/topic/rpgmz/packages/plugins/src",
+      "projectType": "library",
+      "targets": {
+        "build": {
+          "executor": "@nrwl/workspace:run-commands",
+          "configurations": {
+            "watch": {
+              "commands": ["pnpm run build:watch"]
+            }
+          },
+          "options": {
+            "commands": ["pnpm run build"],
+            "cwd": "libs/topic/rpgmz/packages/plugins"
+          }
+        },
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/topic/rpgmz/packages/plugins/**/*.ts"]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/topic/rpgmz/packages/plugins"],
+          "options": {
+            "jestConfig": "libs/topic/rpgmz/packages/plugins/jest.config.js",
+            "passWithNoTests": true
+          }
+        },
+        "command": {
+          "executor": "@nrwl/workspace:run-commands",
+          "options": {},
+          "configurations": {
+            "format": {
+              "cwd": ".",
+              "commands": [
+                {
+                  "command": "nx generate @yuyi919/nx-plugin-workspace-helper:format --project=topic-rpgmz-packages-plugins --no-interactive"
+                }
+              ]
+            },
+            "remove": {
+              "cwd": ".",
+              "commands": [
+                {
+                  "command": "nx generate @nrwl/workspace:remove --projectName=topic-rpgmz-packages-plugins --forceRemove"
+                }
+              ]
+            }
+          }
+        }
+      }
+    },
     "web-solid-playground": {
       "root": "libs/web/solid/playground",
       "sourceRoot": "libs/web/solid/playground/src",

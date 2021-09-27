@@ -51,6 +51,18 @@
     "shared-utils": {
       "tags": ["lerna-package", "shared", "utils"]
     },
+    "topic-rpgmz": {
+      "tags": ["topic", "rpgmz"]
+    },
+    "topic-rpgmz-packages-core": {
+      "tags": ["topic", "rpgmz", "packages", "core"]
+    },
+    "topic-rpgmz-packages-plugin-transformer": {
+      "tags": ["topic", "rpgmz", "packages", "plugin", "plugin-transformer"]
+    },
+    "topic-rpgmz-packages-plugins": {
+      "tags": ["topic", "rpgmz", "packages", "plugins"]
+    },
     "ts-transformer-ast-utils": {
       "tags": ["lerna-package", "internal", "ts-transformer", "ast-utils"]
     },

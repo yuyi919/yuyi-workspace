@@ -1,0 +1,9 @@
+{
+  "extends": "./node_modules/@yuyi919/workspace-base-rig/profiles/tsc/tsconfig-base.json",
+  "compilerOptions": {
+    "emitDeclarationOnly": true,
+    "outDir": "./dist",
+    "rootDir": "./src",
+    "tsBuildInfoFile": "./node_modules/@yuyi919/workspace-base-rig/.tsBuildInfo/topic-rpgmz-packages-plugins.json"
+  }
+}

@@ -13,6 +13,10 @@
       "path": "packages\\libs\\tools\\workspace-base-rig"
     },
     {
+      "name": "📦 @yuyi919/topic-rpgmz",
+      "path": "packages\\libs\\topic\\rpgmz"
+    },
+    {
       "name": "🚀 @yuyi919/vue-antv-plus2",
       "path": "packages\\libs\\web\\vue\\antv-plus2"
     },

@@ -115,6 +115,14 @@
       "allowedCategories": [ "production" ]
     },
     {
+      "name": "@yuyi919-ts-transformer/ast-utils",
+      "allowedCategories": [ "production" ]
+    },
+    {
+      "name": "@yuyi919-ts-transformer/dev-utils",
+      "allowedCategories": [ "production" ]
+    },
+    {
       "name": "@yuyi919-tsmacro/inline-loop.tsmacro",
       "allowedCategories": [ "production" ]
     },
@@ -137,6 +145,10 @@
     {
       "name": "@yuyi919/nx-plugin-workspace-helper",
       "allowedCategories": [ "tools" ]
+    },
+    {
+      "name": "@yuyi919/rpgmz-plugins",
+      "allowedCategories": [ "production" ]
     },
     {
       "name": "@yuyi919/shared-constant",
@@ -267,6 +279,10 @@
       "allowedCategories": [ "production" ]
     },
     {
+      "name": "class-transformer",
+      "allowedCategories": [ "production" ]
+    },
+    {
       "name": "classnames",
       "allowedCategories": [ "production" ]
     },
@@ -343,6 +359,10 @@
       "allowedCategories": [ "production" ]
     },
     {
+      "name": "localforage",
+      "allowedCategories": [ "production" ]
+    },
+    {
       "name": "lodash",
       "allowedCategories": [ "production", "tools" ]
     },
@@ -359,8 +379,16 @@
       "allowedCategories": [ "production" ]
     },
     {
+      "name": "pako",
+      "allowedCategories": [ "production" ]
+    },
+    {
       "name": "pascal-case",
       "allowedCategories": [ "tools" ]
+    },
+    {
+      "name": "pixi.js",
+      "allowedCategories": [ "production" ]
     },
     {
       "name": "prettier",
@@ -376,7 +404,7 @@
     },
     {
       "name": "rollup",
-      "allowedCategories": [ "tools" ]
+      "allowedCategories": [ "production", "tools" ]
     },
     {
       "name": "rollup-plugin-commonjs",
@@ -433,6 +461,10 @@
     {
       "name": "ts-jest",
       "allowedCategories": [ "production", "tools" ]
+    },
+    {
+      "name": "ts-nameof",
+      "allowedCategories": [ "production" ]
     },
     {
       "name": "ts-node",

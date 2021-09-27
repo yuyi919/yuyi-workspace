@@ -511,6 +511,24 @@
       "reviewCategory": "production"
     },
     {
+      "packageName": "@yuyi919/rpgmz-core",
+      "projectFolder": "packages/libs/topic/rpgmz/packages/core",
+      "reviewCategory": "production",
+      "versionPolicyName": "shared"
+    },
+    {
+      "packageName": "@yuyi919/rpgmz-plugin-transformer",
+      "projectFolder": "packages/libs/topic/rpgmz/packages/plugin-transformer",
+      "reviewCategory": "production",
+      "versionPolicyName": "shared"
+    },
+    {
+      "packageName": "@yuyi919/rpgmz-plugins",
+      "projectFolder": "packages/libs/topic/rpgmz/packages/plugins",
+      "reviewCategory": "production",
+      "versionPolicyName": "shared"
+    },
+    {
       "packageName": "@yuyi919/shared",
       "projectFolder": "packages/libs/shared",
       "reviewCategory": "production",
@@ -537,6 +555,12 @@
     {
       "packageName": "@yuyi919/shared-utils",
       "projectFolder": "packages/libs/shared/packages/utils",
+      "reviewCategory": "production",
+      "versionPolicyName": "shared"
+    },
+    {
+      "packageName": "@yuyi919/topic-rpgmz",
+      "projectFolder": "packages/libs/topic/rpgmz",
       "reviewCategory": "production",
       "versionPolicyName": "shared"
     },

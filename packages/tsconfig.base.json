@@ -41,10 +41,10 @@
       "@yuyi919/vue-antv-plus2-modal": ["libs/web/vue/antv-plus2/packages/modal/src/index.ts"],
       "@yuyi919/vue-antv-plus2-shared": ["libs/web/vue/antv-plus2/packages/shared/src/index.ts"],
       "@yuyi919/vue-antv-plus2-stable": ["libs/web/vue/antv-plus2/packages/stable/src/index.ts"],
+      "@yuyi919/vue-antv-plus2-theme": ["libs/web/vue/antv-plus2/packages/theme/src/index.ts"],
       "@yuyi919/vue-antv-plus2-theme/index.less": [
         "libs/web/vue/antv-plus2/packages/theme/index.less"
       ],
-      "@yuyi919/vue-antv-plus2-theme": ["libs/web/vue/antv-plus2/packages/theme/src/index.ts"],
       "@yuyi919/vue-jss": ["libs/web/vue/jss/src/index.ts"],
       "@yuyi919/vue-use": ["libs/web/vue/use/src/index.ts"]
     }

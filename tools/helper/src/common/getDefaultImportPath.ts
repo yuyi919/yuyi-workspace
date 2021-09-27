@@ -5,7 +5,7 @@ export function isTypedModel(path?: string) {
 
 export function autoImportPath(scopedName: string, options: CommonSchema) {
   return `@${scopedName.toLowerCase()}/${convertDirectoryToHostName(
-    options.directory.replace(/\/packages/g, "").replace(/^web\/vue/, "vue") +
+    options.directory.replace(/\/(packages)/g, "").replace(/^(topic|web|other)\//, "") +
       "/" +
       options.name.toLowerCase()
   )}`;
