@@ -43,7 +43,6 @@ export function createProxy(list: ProxyList = [["/rpt", "http://10.100.156.251:8
   return ret;
 }
 export default defineViteConfig({
-  preset: "babel-ts",
   hooks: ({ command, mode }: ConfigEnv): UserConfig => {
     const isBuild = command === "build";
     const VITE_GLOB_APP_TITLE = "VITE_GLOB_APP_TITLE";
@@ -62,7 +61,7 @@ export default defineViteConfig({
         "process.env.NODE_ENV": JSON.stringify(mode),
       },
       root: pathResolve("."),
-      publicDir: "project",
+      publicDir: command === "build" ? false : "project",
       cacheDir: pathResolve("./node_modules/.vite"),
       css: {
         preprocessorOptions: {

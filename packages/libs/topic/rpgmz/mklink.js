@@ -7,4 +7,4 @@ async function symlink(source, target) {
   await fs.ensureSymlink(source, target);
 }
 
-symlink("D:\\Workspace\\RMMZ\\VOICEROID剧场", "./project");
+symlink("D:\\Workspace\\RMMZ\\VOICEROID剧场", "./web");

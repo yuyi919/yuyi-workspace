@@ -2,7 +2,7 @@
 // main.js v1.0.2
 //=============================================================================
 import { Main } from "@yuyi919/rpgmz-core";
-import "../project/css/index.less";
+import "./index.less";
 import * as RMMZ from "./index";
 import { System } from "./System";
 

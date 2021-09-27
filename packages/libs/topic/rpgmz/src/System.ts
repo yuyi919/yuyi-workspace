@@ -4,7 +4,6 @@ import * as cls from "class-transformer";
 import * as mobx from "mobx";
 import "reflect-metadata";
 import * as tslib from "tslib";
-import "regenerator-runtime";
 // import { createLogger } from "@yuyi919/shared-logger";
 
 const _exports: Record<string, any> = {};
@@ -90,13 +89,6 @@ System.register("mobx", [], () => ({
 System.register("tslib", [], () => ({
   execute() {
     return tslib;
-  },
-}));
-
-System.register("regenerator-runtime", [], () => ({
-  execute() {
-    // @ts-ignore
-    return regeneratorRuntime;
   },
 }));
 // @ts-ignore
