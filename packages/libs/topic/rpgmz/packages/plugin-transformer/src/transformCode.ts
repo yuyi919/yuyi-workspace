@@ -481,13 +481,13 @@ function collectMembers(
       })
       .concat(member.kind === DefinitionMemberType.Param ? [defaultTag, typeTag].filter(Boolean) : [])
       .map(({ name, value }) => [name, value]);
-    console.log(cleanedTags);
+    // console.log(cleanedTags);
     const children = [];
     if (member.kind === DefinitionMemberType.Command) {
       const child = collectMap[typeTag.defineTypeText];
       if (child) {
         children.push(...collectMembers(Object.values(child.members), collectMap, member));
-        member.name === "callLuckyDice" && console.log("push children", children, cleanedTags);
+        // member.name === "callLuckyDice" && console.log("push children", children, cleanedTags);
       }
     }
     return [

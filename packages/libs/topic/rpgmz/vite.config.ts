@@ -43,7 +43,7 @@ export function createProxy(list: ProxyList = [["/rpt", "http://10.100.156.251:8
   return ret;
 }
 export default defineViteConfig({
-  // preset: "babel-ts",
+  preset: "babel-ts",
   hooks: ({ command, mode }: ConfigEnv): UserConfig => {
     const isBuild = command === "build";
     const VITE_GLOB_APP_TITLE = "VITE_GLOB_APP_TITLE";

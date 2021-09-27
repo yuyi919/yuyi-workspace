@@ -500,6 +500,7 @@ importers:
       jest: ~27.1.0
       mobx: 6.0.4
       reflect-metadata: ^0.1.13
+      regenerator-runtime: 0.13.7
       tslib: ~2.3.1
       typescript: 4.1.2
       vite: 2.4.4
@@ -519,6 +520,7 @@ importers:
       '@yuyi919/workspace-base-rig': link:../../tools/workspace-base-rig
       http-proxy: 1.18.1
       jest: 27.1.0
+      regenerator-runtime: 0.13.7
       tslib: 2.3.1
       typescript: 4.1.2
       vite: 2.4.4
@@ -564,6 +566,7 @@ importers:
       jest: ~27.1.0
       lodash: 4.17.21
       lodash-es: 4.17.21
+      magic-string: ^0.25.7
       rollup: ^2.53.1
       ts-nameof: ^5.0.0
       tslib: ~2.3.1
@@ -572,6 +575,7 @@ importers:
       class-transformer: 0.2.3
       lodash: 4.17.21
       lodash-es: 4.17.21
+      magic-string: 0.25.7
       rollup: 2.56.3
       ts-nameof: 5.0.0_typescript@4.1.2
     devDependencies:
@@ -2554,7 +2558,7 @@ packages:
     resolution: {integrity: sha512-99catp6bHCaxr4sJ/DbTGgHS4+Rs2RVd2g7iOap6SLGPDknRK9ztKNsE/Fg6QhSeh1FGE5f6gHGQmvvn3I3xhw==}
     engines: {node: '>=6.9.0'}
     dependencies:
-      regenerator-runtime: 0.13.9
+      regenerator-runtime: 0.13.7
 
   /@babel/template/7.14.5:
     resolution: {integrity: sha512-6Z3Po85sfxRGachLULUhOmvAaOo7xCvqGQtxINai2mEGPFm6pQ4z5QInFnUrRpfoSV60BnjyF5F3c+15fxFV1g==}
@@ -12988,6 +12992,9 @@ packages:
   /regenerator-runtime/0.11.1:
     resolution: {integrity: sha512-MguG95oij0fC3QV3URf4V2SDYGJhJnJGqvIIgdECeODCT98wSWDAJ94SSuVpYQUoTcGUIL6L4yNB7j1DFFHSBg==}
 
+  /regenerator-runtime/0.13.7:
+    resolution: {integrity: sha512-a54FxoJDIr27pgf7IgeQGxmqUNYrcV338lf/6gH456HZ/PhX+5BcwHXG9ajESmwe6WRO0tAzRUrRmNONWgkrew==}
+
   /regenerator-runtime/0.13.9:
     resolution: {integrity: sha512-p3VT+cOEgxFsRRA9X4lkI1E+k2/CtnKtU4gcxyaCUreilL/vqI6CdZ3wxVUx3UOUg+gnUOQQcRI7BmSI656MYA==}
 
@@ -14656,7 +14663,7 @@ packages:
       pascal-case: 3.1.2
       prettier: 1.19.1
       progress-estimator: 0.2.2
-      regenerator-runtime: 0.13.9
+      regenerator-runtime: 0.13.7
       rollup: 1.32.1
       rollup-plugin-sourcemaps: 0.6.3_@types+node@16.7.7+rollup@1.32.1
       rollup-plugin-terser: 5.3.1_rollup@1.32.1

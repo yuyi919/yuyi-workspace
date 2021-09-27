@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/ban-ts-ignore */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { join, resolve } from "path";
 import { babelPluginTsdx } from "./tsdxExtend/babelPluginTsdx";

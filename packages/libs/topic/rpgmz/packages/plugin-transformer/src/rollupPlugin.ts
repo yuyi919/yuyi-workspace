@@ -1,8 +1,11 @@
+import MagicString from "magic-string";
 import { ensureDir, readJsonSync, writeJSON } from "fs-extra";
-import { defaults } from "lodash";
+import { defaults, cloneDeep } from "lodash";
 import { basename, join } from "path";
+import { OutputChunk } from "rollup";
 import ts from "typescript";
 import { Cache, extractCode, transformToComment } from "./transformCode";
+
 export function normlize(target: any) {
   if (target && ts.isTypeNode(target)) {
     return null;
@@ -23,7 +26,11 @@ export const transformHook = async (code: string, id: string, cache: Cache) => {
     Object.assign(cache.collect, collectMap);
     cache.file_collect[id] = collectMap;
   }
-  return `\r\n${code}`;
+  const str = new MagicString(`\r\n${code}`)
+  return {
+    code: str.toString(),
+    map: str.generateMap({ hires: true })
+  };
 };
 
 export function createPlugin(options?: {
@@ -43,6 +50,7 @@ export function createPlugin(options?: {
       baseName = "libs";
     }
     const pluginName = prefix + "_" + (pluginNamesMap[baseName] || baseName);
+    // console.log(fileName, "=>", pluginName + after + ".js");
     return pluginName + after + ".js";
   }
   // const { generateBundle } = renameExtensions({
@@ -53,7 +61,8 @@ export function createPlugin(options?: {
   // })
   const nameCache = {};
   const chunkFileNames = "plugin.libs.js";
-  let libChunks = null;
+  const libChunks: OutputChunk[] = [];
+  const libCodes = [];
   return {
     name: "rollup-plugin-extract-rmmz-plugin-desc",
     outputOptions({ ...option }) {
@@ -73,35 +82,63 @@ export function createPlugin(options?: {
         if (file.type === "chunk") {
           const pluginName = nameCache[key];
           if (nameCache[key]) {
-            delete bundle[key];
             nameCache[key] = pluginName;
-            const writeCode = `${top}${(file as any).code.replace(
+            const writeCode = `${top}${file.code.replace(
               /('|")\.\/plugin\.libs([0-9]*)(\.js|)('|")/g,
               (name: string) => `"${getPluginName(name.replace(/^('|")|('|")$/g, ""), prefix)}"`
             )}`;
-            const nextBundle = {
-              ...file,
-              code: writeCode,
-              fileName: pluginName,
-            };
+            const next = cloneDeep(file);
+            // console.log(key, pluginName);
             if (/^plugin\.libs([0-9]*)\.js$/.test(key)) {
-              if (!libChunks) {
-                libChunks = nextBundle;
-              } else if (libChunks) {
-                nextBundle.code = libChunks.code + nextBundle.code;
-                console.log("generateBundle extend code");
-              }
-              nextBundle.fileName = nameCache[chunkFileNames];
-              console.log("generateBundle", key, "=>", nextBundle.fileName);
+              libChunks.push(next);
+              libCodes.push(writeCode);
+              //  else if (libChunks) {
+              //   nextBundle.code = libChunks.code + nextBundle.code;
+              // }
+              // nextBundle.fileName = nameCache[chunkFileNames];
+              console.info("generateBundle", key, "=>", nameCache[chunkFileNames]);
+            } else {
+              const nextBundle = {
+                ...next,
+                code: writeCode,
+                fileName: pluginName,
+              };
+              bundle[pluginName] = nextBundle;
             }
-            bundle[pluginName] = nextBundle;
+            delete bundle[key];
           }
         }
       }
+      if (libChunks && libCodes.length > 0) {
+        writeJSON(
+          join(__dirname, "test.json"),
+          libChunks.map(({ code, ...other }) => other)
+        );
+        bundle[nameCache[chunkFileNames]] = libChunks.reduce((r, chunk) => ({
+          fileName: nameCache[chunkFileNames],
+          name: nameCache[chunkFileNames],
+          modules: { ...r.modules, ...chunk.modules },
+          exports: [...r.exports, ...chunk.exports],
+          imports: [...r.imports, ...chunk.imports],
+          importedBindings: { ...r.importedBindings, ...chunk.importedBindings },
+          dynamicImports: [...r.dynamicImports, ...chunk.dynamicImports],
+          code: r.code + "\n;" + chunk.code,
+          facadeModuleId: null,
+          isEntry: false,
+          type: "chunk",
+          implicitlyLoadedBefore: [],
+          referencedFiles: [],
+          isImplicitEntry: false,
+          isDynamicEntry: false,
+        }));
+        // console.log(libChunks);
+        // libChunks.code = libCodes.join("\n");
+      }
     },
-    renderChunk(code, { modules, fileName }) {
+    renderChunk(code, { modules, fileName, map }, options) {
+      // console.log("renderChunk", fileName);
       if (modules) {
-        libChunks = null;
+        // libChunks = null;
         const pkg = readJsonSync(join(process.cwd(), "./package.json"));
         const prefix = pkg.author;
         const pluginName = getPluginName(fileName, prefix);
@@ -112,19 +149,27 @@ export function createPlugin(options?: {
           .filter(Boolean)
           .reduce((r, collect) => Object.assign(r, collect), {});
         const texts = Object.values(transformToComment(collectMap, { cache, lang: "zh" }).result);
-        // console.log(chunk, )
+        // console.log(code)
 
-        const cacheDir = join(process.cwd(), "node_modules/.rmmz-plugin-transformer");
+        const cacheDir = join(process.cwd(), "node_modules/.cache/rpgmz-plugin-transformer");
         ensureDir(cacheDir).then(() =>
           writeJSON(cacheDir + "/cache.json", normlize(cache), { spaces: 2 })
         );
-        code = code.replace(`define([`, `loadEsModule("${pluginName}", [`);
-        console.log("renderChunk", fileName, pluginName);
+
+        // code = code.replace(`define([`, `loadEsModule("${pluginName}", [`);
+        const banner = texts.length > 0 ? `${texts.join("\r\n")}\r\n` : `\r\n`
+        if (!options.sourcemap) {
+          return `${banner}\r\n${code}`
+        }
+        const magicString = new MagicString(code);
+        magicString.prepend(banner);
+        // console.log("renderChunk", fileName, pluginName);
         return {
-          code: texts.length > 0 ? `${texts.join("\r\n")}\r\n${code}` : `\r\n${code}`,
+          code: magicString.toString(),
+          map: magicString.generateMap({ hires: true }),
         };
       }
-      return code;
+      return options.sourcemap ? { code, map } : code;
     },
     transform(code, id) {
       return transformHook(code, id, cache);

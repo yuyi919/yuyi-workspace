@@ -1,13 +1,14 @@
 import * as Core from "@yuyi919/rpgmz-core";
-import * as cls from "class-transformer";
 import * as helper from "@yuyi919/rpgmz-plugin-transformer";
-import * as tslib from "tslib";
+import * as cls from "class-transformer";
 import * as mobx from "mobx";
 import "reflect-metadata";
+import * as tslib from "tslib";
+import "regenerator-runtime";
 // import { createLogger } from "@yuyi919/shared-logger";
 
 const _exports: Record<string, any> = {};
-const logger = console
+const logger = console;
 
 type SystemModule = {
   setters?: ((module: typeof _exports) => void)[];
@@ -92,6 +93,12 @@ System.register("tslib", [], () => ({
   },
 }));
 
+System.register("regenerator-runtime", [], () => ({
+  execute() {
+    // @ts-ignore
+    return regeneratorRuntime;
+  },
+}));
 // @ts-ignore
 window.loadEsModule = (
   name: string,

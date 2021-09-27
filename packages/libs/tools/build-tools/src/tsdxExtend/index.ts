@@ -66,7 +66,7 @@ export type TsdxOptions = {
   input: string;
 };
 export type ExtendConfig = RollupOptions & {
-  preset?: "ts" | "vue3" | "babel-ts";
+  preset?: "ts" | "vue3" | "babel-ts" | "ts-only";
   /** @default "all" */
   transpiler?: "all" | "ts" | "babel";
   banner?: string;
@@ -93,7 +93,11 @@ export function extendTsdxConfig(extendConfig: ExtendConfig = {}) {
     overwriteTsConfig,
     ...next
   } = extendConfig;
-  Logger.info("use preset: " + (extendConfig.preset || "default"));
+  if (preset && !["ts", "vue3", "babel-ts", "ts-only"].includes(preset)) {
+    Logger.error(`preset [${preset}] is invalid!`);
+  } else {
+    Logger.info("use preset: " + (extendConfig.preset || "default"));
+  }
   let filter = bundleDeps || [];
   filter.length > 0 && Logger.info("external resolve modules: " + filter.join(", "));
 
@@ -230,7 +234,6 @@ export function extendTsdxConfig(extendConfig: ExtendConfig = {}) {
           Object.assign(source.globals, globals);
           Object.assign(source, other);
         });
-        // console.log(config.output)
       }
       if (extractErrors) {
         outputNum === 0 && Logger.info("use ExtractErrors");
@@ -242,6 +245,7 @@ export function extendTsdxConfig(extendConfig: ExtendConfig = {}) {
       //   input: next.input,
       //   output: config.output
       // })
+      // console.log(config.output)
       return {
         ...config,
         onwarn(warn, defaultOnWarn) {

@@ -1,7 +1,7 @@
 {
   "extends": "./node_modules/@yuyi919/workspace-base-rig/profiles/tsc/tsconfig-base.json",
   "compilerOptions": {
-    "target": "es5",
+    "target": "es2017",
     "module": "esnext",
     "emitDeclarationOnly": true,
     "outDir": "./dist",

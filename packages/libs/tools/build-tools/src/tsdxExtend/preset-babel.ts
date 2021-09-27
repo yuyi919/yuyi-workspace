@@ -44,5 +44,8 @@ export function pluginReplacer(extendConfig: ExtendConfig, options: TsdxOptions,
   if (plugin.name === "babel" && ["vue3", "babel-ts"].includes(extendConfig.preset)) {
     return PluginBabel(extendConfig, options);
   }
+  if (extendConfig.preset === "ts-only" && plugin.name === "babel") {
+    return;
+  }
   return plugin;
 }

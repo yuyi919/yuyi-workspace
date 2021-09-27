@@ -1,0 +1,8 @@
+{
+  "compact": false,
+  "presets": [["@yuyi919/build-tools/babel/ts"]],
+  "plugins": [
+    ["@babel/plugin-proposal-decorators", { "legacy": true }],
+    ["@babel/plugin-proposal-class-properties", { "loose": true }]
+  ]
+}

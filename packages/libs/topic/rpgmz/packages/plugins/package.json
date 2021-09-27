@@ -8,10 +8,9 @@
   "types": "dist/index.d.ts",
   "scripts": {
     "build": "tsdx build --minify --format=esm && gulp deploy",
-    "build:dev": "tsdx build && tsc run types",
-    "build:watch": "tsdx build && tsc run types",
-    "dev": "tsdx watch --transpileOnly --onSuccess \"tsc run types\"",
-    "types": "tsc --build --force"
+    "build:dev": "tsdx build --format=esm && gulp deploy",
+    "build:watch": "tsdx build --format=esm && gulp deploy",
+    "dev": "tsdx watch --transpileOnly --onSuccess \"pnpm gulp deploy\""
   },
   "dependencies": {
     "@yuyi919/rpgmz-core": "workspace:0.0.11",

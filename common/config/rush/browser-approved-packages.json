@@ -403,6 +403,10 @@
       "allowedCategories": [ "production" ]
     },
     {
+      "name": "magic-string",
+      "allowedCategories": [ "production" ]
+    },
+    {
       "name": "minimatch",
       "allowedCategories": [ "production" ]
     },
@@ -429,6 +433,10 @@
     {
       "name": "reflect-metadata",
       "allowedCategories": [ "production", "tools" ]
+    },
+    {
+      "name": "regenerator-runtime",
+      "allowedCategories": [ "production" ]
     },
     {
       "name": "resize-observer-polyfill",
