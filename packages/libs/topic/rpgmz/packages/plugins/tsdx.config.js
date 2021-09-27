@@ -28,7 +28,10 @@ module.exports = extendTsdxConfig({
   output: {
     file: false,
     dir: "dist",
-    format: "es",
+    format: "amd",
+    exports: "auto",
+    hoistTransitiveImports: false,
+    esModule: false,
     // compact: true,
     freeze: false,
     sourcemap: true,

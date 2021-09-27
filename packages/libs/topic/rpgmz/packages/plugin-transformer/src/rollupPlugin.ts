@@ -156,7 +156,7 @@ export function createPlugin(options?: {
           writeJSON(cacheDir + "/cache.json", normlize(cache), { spaces: 2 })
         );
 
-        // code = code.replace(`define([`, `loadEsModule("${pluginName}", [`);
+        code = code.replace(`define([`, `loadEsModule("${pluginName}", [`);
         const banner = texts.length > 0 ? `${texts.join("\r\n")}\r\n` : `\r\n`
         if (!options.sourcemap) {
           return `${banner}\r\n${code}`
