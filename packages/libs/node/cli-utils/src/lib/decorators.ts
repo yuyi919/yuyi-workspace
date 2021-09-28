@@ -3,7 +3,7 @@ import Enquirer from "enquirer";
 import { defaultsDeep, groupBy, merge, omit, get } from "lodash";
 import yargs, { Options } from "yargs";
 import { __decorate, __metadata } from "tslib";
-import { createStaticMetaDataDecorators, MetaArrayItem } from "@yuyi919/shared-decorator";
+import { createStaticMetaDataDecorators, MetaConfig } from "@yuyi919/shared-decorator";
 import { loadConfig, saveConfig } from "./loadConfig";
 import { BasePromptOptions, PromptOptions, TogglePromptOptions } from "./PromptType";
 
@@ -25,7 +25,7 @@ export const x = createStaticMetaDataDecorators("YARGS", {
     config: ({ target, propertyKey }, promptOpt?: Partial<PromptOptions>) => {
       return () => {
         const { meta = {} } = (x.getMeta("Option", target, propertyKey) ||
-          {}) as MetaArrayItem<yargs.Options>;
+          {}) as MetaConfig<yargs.Options>;
         const {
           required = meta.requiresArg,
           message = meta.description,
