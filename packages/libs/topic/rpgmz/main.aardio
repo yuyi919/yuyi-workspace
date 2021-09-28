@@ -1,6 +1,6 @@
 import win.ui;
 /*DSG{{*/
-mainForm = win.form(text="aardio工程5";right=759;bottom=469)
+mainForm = win.form(text="aardio工程5";right=1279;bottom=719)
 mainForm.add()
 /*}}*/
 
@@ -18,7 +18,7 @@ theView.external = {
 }
  
 import wsock.tcp.simpleHttpServer; 
-theView.go(wsock.tcp.simpleHttpServer.startSpaUrl("\web\index.html"), 37151)
+theView.go(wsock.tcp.simpleHttpServer.startSpaUrl("\project\index.html"), 37151)
  
 mainForm.show();
 win.loopMessage();

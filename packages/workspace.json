@@ -450,7 +450,7 @@
       },
       "builder": "heft-tsc"
     },
-    "shared-packages-logger": {
+    "shared-logger": {
       "root": "libs/shared/packages/logger",
       "sourceRoot": "libs/shared/packages/logger/src",
       "projectType": "library",
@@ -489,7 +489,7 @@
               "cwd": ".",
               "commands": [
                 {
-                  "command": "nx generate @yuyi919/nx-plugin-workspace-helper:format --project=shared-packages-logger --no-interactive"
+                  "command": "nx generate @yuyi919/nx-plugin-workspace-helper:format --project=shared-logger --no-interactive"
                 }
               ]
             },
@@ -497,7 +497,7 @@
               "cwd": ".",
               "commands": [
                 {
-                  "command": "nx generate @nrwl/workspace:remove --projectName=shared-packages-logger --forceRemove"
+                  "command": "nx generate @nrwl/workspace:remove --projectName=shared-logger --forceRemove"
                 }
               ]
             }
@@ -681,7 +681,7 @@
       },
       "builder": "tsc"
     },
-    "web-vue-antv-plus2-packages-action": {
+    "web-vue-antv-plus2-action": {
       "root": "libs/web/vue/antv-plus2/packages/action",
       "sourceRoot": "libs/web/vue/antv-plus2/packages/action/src",
       "projectType": "library",
@@ -720,7 +720,7 @@
               "cwd": ".",
               "commands": [
                 {
-                  "command": "nx generate @yuyi919/nx-plugin-workspace-helper:format --project=web-vue-antv-plus2-packages-action --no-interactive"
+                  "command": "nx generate @yuyi919/nx-plugin-workspace-helper:format --project=web-vue-antv-plus2-action --no-interactive"
                 }
               ]
             },
@@ -728,7 +728,7 @@
               "cwd": ".",
               "commands": [
                 {
-                  "command": "nx generate @nrwl/workspace:remove --projectName=web-vue-antv-plus2-packages-action --forceRemove"
+                  "command": "nx generate @nrwl/workspace:remove --projectName=web-vue-antv-plus2-action --forceRemove"
                 }
               ]
             }
@@ -737,7 +737,7 @@
       },
       "builder": "tsc"
     },
-    "web-vue-antv-plus2-packages-form": {
+    "web-vue-antv-plus2-form": {
       "root": "libs/web/vue/antv-plus2/packages/form",
       "sourceRoot": "libs/web/vue/antv-plus2/packages/form/src",
       "projectType": "library",
@@ -776,7 +776,7 @@
               "cwd": ".",
               "commands": [
                 {
-                  "command": "nx generate @yuyi919/nx-plugin-workspace-helper:format --project=web-vue-antv-plus2-packages-form --no-interactive"
+                  "command": "nx generate @yuyi919/nx-plugin-workspace-helper:format --project=web-vue-antv-plus2-form --no-interactive"
                 }
               ]
             },
@@ -784,7 +784,7 @@
               "cwd": ".",
               "commands": [
                 {
-                  "command": "nx generate @nrwl/workspace:remove --projectName=web-vue-antv-plus2-packages-form --forceRemove"
+                  "command": "nx generate @nrwl/workspace:remove --projectName=web-vue-antv-plus2-form --forceRemove"
                 }
               ]
             }
@@ -793,7 +793,7 @@
       },
       "builder": "tsc"
     },
-    "web-vue-antv-plus2-packages-helper": {
+    "web-vue-antv-plus2-helper": {
       "root": "libs/web/vue/antv-plus2/packages/helper",
       "sourceRoot": "libs/web/vue/antv-plus2/packages/helper/src",
       "projectType": "library",
@@ -832,7 +832,7 @@
               "cwd": ".",
               "commands": [
                 {
-                  "command": "nx generate @yuyi919/nx-plugin-workspace-helper:format --project=web-vue-antv-plus2-packages-helper --no-interactive"
+                  "command": "nx generate @yuyi919/nx-plugin-workspace-helper:format --project=web-vue-antv-plus2-helper --no-interactive"
                 }
               ]
             },
@@ -840,7 +840,7 @@
               "cwd": ".",
               "commands": [
                 {
-                  "command": "nx generate @nrwl/workspace:remove --projectName=web-vue-antv-plus2-packages-helper --forceRemove"
+                  "command": "nx generate @nrwl/workspace:remove --projectName=web-vue-antv-plus2-helper --forceRemove"
                 }
               ]
             }
@@ -849,7 +849,7 @@
       },
       "builder": "tsc"
     },
-    "web-vue-antv-plus2-packages-modal": {
+    "web-vue-antv-plus2-modal": {
       "root": "libs/web/vue/antv-plus2/packages/modal",
       "sourceRoot": "libs/web/vue/antv-plus2/packages/modal/src",
       "projectType": "library",
@@ -888,7 +888,7 @@
               "cwd": ".",
               "commands": [
                 {
-                  "command": "nx generate @yuyi919/nx-plugin-workspace-helper:format --project=web-vue-antv-plus2-packages-modal --no-interactive"
+                  "command": "nx generate @yuyi919/nx-plugin-workspace-helper:format --project=web-vue-antv-plus2-modal --no-interactive"
                 }
               ]
             },
@@ -896,7 +896,7 @@
               "cwd": ".",
               "commands": [
                 {
-                  "command": "nx generate @nrwl/workspace:remove --projectName=web-vue-antv-plus2-packages-modal --forceRemove"
+                  "command": "nx generate @nrwl/workspace:remove --projectName=web-vue-antv-plus2-modal --forceRemove"
                 }
               ]
             }
@@ -905,7 +905,7 @@
       },
       "builder": "tsc"
     },
-    "web-vue-antv-plus2-packages-shared": {
+    "web-vue-antv-plus2-shared": {
       "root": "libs/web/vue/antv-plus2/packages/shared",
       "sourceRoot": "libs/web/vue/antv-plus2/packages/shared/src",
       "projectType": "library",
@@ -944,7 +944,7 @@
               "cwd": ".",
               "commands": [
                 {
-                  "command": "nx generate @yuyi919/nx-plugin-workspace-helper:format --project=web-vue-antv-plus2-packages-shared --no-interactive"
+                  "command": "nx generate @yuyi919/nx-plugin-workspace-helper:format --project=web-vue-antv-plus2-shared --no-interactive"
                 }
               ]
             },
@@ -952,7 +952,7 @@
               "cwd": ".",
               "commands": [
                 {
-                  "command": "nx generate @nrwl/workspace:remove --projectName=web-vue-antv-plus2-packages-shared --forceRemove"
+                  "command": "nx generate @nrwl/workspace:remove --projectName=web-vue-antv-plus2-shared --forceRemove"
                 }
               ]
             }
@@ -961,7 +961,7 @@
       },
       "builder": "tsc"
     },
-    "web-vue-antv-plus2-packages-table": {
+    "web-vue-antv-plus2-table": {
       "root": "libs/web/vue/antv-plus2/packages/table",
       "sourceRoot": "libs/web/vue/antv-plus2/packages/table/src",
       "projectType": "library",
@@ -1000,7 +1000,7 @@
               "cwd": ".",
               "commands": [
                 {
-                  "command": "nx generate @yuyi919/nx-plugin-workspace-helper:format --project=web-vue-antv-plus2-packages-table --no-interactive"
+                  "command": "nx generate @yuyi919/nx-plugin-workspace-helper:format --project=web-vue-antv-plus2-table --no-interactive"
                 }
               ]
             },
@@ -1008,7 +1008,7 @@
               "cwd": ".",
               "commands": [
                 {
-                  "command": "nx generate @nrwl/workspace:remove --projectName=web-vue-antv-plus2-packages-table --forceRemove"
+                  "command": "nx generate @nrwl/workspace:remove --projectName=web-vue-antv-plus2-table --forceRemove"
                 }
               ]
             }
@@ -1017,7 +1017,7 @@
       },
       "builder": "tsc"
     },
-    "web-vue-antv-plus2-packages-theme": {
+    "web-vue-antv-plus2-theme": {
       "root": "libs/web/vue/antv-plus2/packages/theme",
       "sourceRoot": "libs/web/vue/antv-plus2/packages/theme/src",
       "projectType": "library",
@@ -1056,7 +1056,7 @@
               "cwd": ".",
               "commands": [
                 {
-                  "command": "nx generate @yuyi919/nx-plugin-workspace-helper:format --project=web-vue-antv-plus2-packages-theme --no-interactive"
+                  "command": "nx generate @yuyi919/nx-plugin-workspace-helper:format --project=web-vue-antv-plus2-theme --no-interactive"
                 }
               ]
             },
@@ -1064,7 +1064,7 @@
               "cwd": ".",
               "commands": [
                 {
-                  "command": "nx generate @nrwl/workspace:remove --projectName=web-vue-antv-plus2-packages-theme --forceRemove"
+                  "command": "nx generate @nrwl/workspace:remove --projectName=web-vue-antv-plus2-theme --forceRemove"
                 }
               ]
             }
@@ -1297,7 +1297,7 @@
       },
       "builder": "tsc"
     },
-    "topic-rpgmz": {
+    "rpgmz": {
       "root": "libs/topic/rpgmz",
       "sourceRoot": "libs/topic/rpgmz/src",
       "projectType": "library",
@@ -1336,7 +1336,7 @@
               "cwd": ".",
               "commands": [
                 {
-                  "command": "nx generate @yuyi919/nx-plugin-workspace-helper:format --project=topic-rpgmz --no-interactive"
+                  "command": "nx generate @yuyi919/nx-plugin-workspace-helper:format --project=rpgmz --no-interactive"
                 }
               ]
             },
@@ -1344,7 +1344,7 @@
               "cwd": ".",
               "commands": [
                 {
-                  "command": "nx generate @nrwl/workspace:remove --projectName=topic-rpgmz --forceRemove"
+                  "command": "nx generate @nrwl/workspace:remove --projectName=rpgmz --forceRemove"
                 }
               ]
             }
@@ -1352,7 +1352,7 @@
         }
       }
     },
-    "topic-rpgmz-packages-core": {
+    "rpgmz-core": {
       "root": "libs/topic/rpgmz/packages/core",
       "sourceRoot": "libs/topic/rpgmz/packages/core/src",
       "projectType": "library",
@@ -1391,7 +1391,7 @@
               "cwd": ".",
               "commands": [
                 {
-                  "command": "nx generate @yuyi919/nx-plugin-workspace-helper:format --project=topic-rpgmz-packages-core --no-interactive"
+                  "command": "nx generate @yuyi919/nx-plugin-workspace-helper:format --project=rpgmz-core --no-interactive"
                 }
               ]
             },
@@ -1399,7 +1399,7 @@
               "cwd": ".",
               "commands": [
                 {
-                  "command": "nx generate @nrwl/workspace:remove --projectName=topic-rpgmz-packages-core --forceRemove"
+                  "command": "nx generate @nrwl/workspace:remove --projectName=rpgmz-core --forceRemove"
                 }
               ]
             }
@@ -1407,7 +1407,7 @@
         }
       }
     },
-    "topic-rpgmz-packages-plugin-transformer": {
+    "rpgmz-plugin-transformer": {
       "root": "libs/topic/rpgmz/packages/plugin-transformer",
       "sourceRoot": "libs/topic/rpgmz/packages/plugin-transformer/src",
       "projectType": "library",
@@ -1446,7 +1446,7 @@
               "cwd": ".",
               "commands": [
                 {
-                  "command": "nx generate @yuyi919/nx-plugin-workspace-helper:format --project=topic-rpgmz-packages-plugin-transformer --no-interactive"
+                  "command": "nx generate @yuyi919/nx-plugin-workspace-helper:format --project=rpgmz-plugin-transformer --no-interactive"
                 }
               ]
             },
@@ -1454,7 +1454,7 @@
               "cwd": ".",
               "commands": [
                 {
-                  "command": "nx generate @nrwl/workspace:remove --projectName=topic-rpgmz-packages-plugin-transformer --forceRemove"
+                  "command": "nx generate @nrwl/workspace:remove --projectName=rpgmz-plugin-transformer --forceRemove"
                 }
               ]
             }
@@ -1462,7 +1462,7 @@
         }
       }
     },
-    "topic-rpgmz-packages-plugins": {
+    "rpgmz-plugins": {
       "root": "libs/topic/rpgmz/packages/plugins",
       "sourceRoot": "libs/topic/rpgmz/packages/plugins/src",
       "projectType": "library",
@@ -1501,7 +1501,7 @@
               "cwd": ".",
               "commands": [
                 {
-                  "command": "nx generate @yuyi919/nx-plugin-workspace-helper:format --project=topic-rpgmz-packages-plugins --no-interactive"
+                  "command": "nx generate @yuyi919/nx-plugin-workspace-helper:format --project=rpgmz-plugins --no-interactive"
                 }
               ]
             },
@@ -1509,7 +1509,7 @@
               "cwd": ".",
               "commands": [
                 {
-                  "command": "nx generate @nrwl/workspace:remove --projectName=topic-rpgmz-packages-plugins --forceRemove"
+                  "command": "nx generate @nrwl/workspace:remove --projectName=rpgmz-plugins --forceRemove"
                 }
               ]
             }

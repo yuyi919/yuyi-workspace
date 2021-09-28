@@ -9,6 +9,10 @@
       "path": "packages"
     },
     {
+      "name": "📦 @yuyi919/shared",
+      "path": "packages\\libs\\shared"
+    },
+    {
       "name": "📦 @yuyi919/workspace-base-rig",
       "path": "packages\\libs\\tools\\workspace-base-rig"
     },

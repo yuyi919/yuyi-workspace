@@ -45,7 +45,7 @@
     "shared-decorator": {
       "tags": ["shared", "decorator"]
     },
-    "shared-packages-logger": {
+    "shared-logger": {
       "tags": ["shared", "packages", "logger"]
     },
     "shared-types": {
@@ -54,16 +54,16 @@
     "shared-utils": {
       "tags": ["lerna-package", "shared", "utils"]
     },
-    "topic-rpgmz": {
+    "rpgmz": {
       "tags": ["topic", "rpgmz"]
     },
-    "topic-rpgmz-packages-core": {
+    "rpgmz-core": {
       "tags": ["topic", "rpgmz", "packages", "core"]
     },
-    "topic-rpgmz-packages-plugin-transformer": {
+    "rpgmz-plugin-transformer": {
       "tags": ["topic", "rpgmz", "packages", "plugin", "plugin-transformer"]
     },
-    "topic-rpgmz-packages-plugins": {
+    "rpgmz-plugins": {
       "tags": ["topic", "rpgmz", "packages", "plugins"]
     },
     "ts-transformer-ast-utils": {
@@ -78,25 +78,25 @@
     "web-vue-antv-plus2": {
       "tags": ["web", "vue", "antv", "antv-plus2"]
     },
-    "web-vue-antv-plus2-packages-action": {
+    "web-vue-antv-plus2-action": {
       "tags": ["web", "vue", "antv", "antv-plus2", "packages", "action"]
     },
-    "web-vue-antv-plus2-packages-form": {
+    "web-vue-antv-plus2-form": {
       "tags": ["web", "vue", "antv", "antv-plus2", "packages", "form"]
     },
-    "web-vue-antv-plus2-packages-helper": {
+    "web-vue-antv-plus2-helper": {
       "tags": ["web", "vue", "antv", "antv-plus2", "packages", "helper"]
     },
-    "web-vue-antv-plus2-packages-modal": {
+    "web-vue-antv-plus2-modal": {
       "tags": ["web", "vue", "antv", "antv-plus2", "packages", "modal"]
     },
-    "web-vue-antv-plus2-packages-shared": {
+    "web-vue-antv-plus2-shared": {
       "tags": ["web", "vue", "antv", "antv-plus2", "packages", "shared"]
     },
-    "web-vue-antv-plus2-packages-table": {
+    "web-vue-antv-plus2-table": {
       "tags": ["web", "vue", "antv", "antv-plus2", "packages", "table"]
     },
-    "web-vue-antv-plus2-packages-theme": {
+    "web-vue-antv-plus2-theme": {
       "tags": ["web", "vue", "antv", "antv-plus2", "packages", "theme"]
     },
     "web-vue-jss": {

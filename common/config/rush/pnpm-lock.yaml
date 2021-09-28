@@ -494,6 +494,7 @@ importers:
       '@yuyi919/build-tools': workspace:0.1.10
       '@yuyi919/rpgmz-core': workspace:0.0.11
       '@yuyi919/rpgmz-plugin-transformer': workspace:0.0.1
+      '@yuyi919/rpgmz-plugins': workspace:0.0.1
       '@yuyi919/workspace-base-rig': workspace:1.2.5
       class-transformer: 0.2.3
       http-proxy: ^1.18.1
@@ -508,6 +509,7 @@ importers:
     dependencies:
       '@yuyi919/rpgmz-core': link:packages/core
       '@yuyi919/rpgmz-plugin-transformer': link:packages/plugin-transformer
+      '@yuyi919/rpgmz-plugins': link:packages/plugins
       class-transformer: 0.2.3
       mobx: 6.0.4
       reflect-metadata: 0.1.13
