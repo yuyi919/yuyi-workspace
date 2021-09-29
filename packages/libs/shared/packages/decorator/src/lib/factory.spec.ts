@@ -1,34 +1,34 @@
 import { createStaticMetaDataDecorators } from "./factory";
 
+interface TestOption {
+  cons: boolean;
+  name?: string;
+}
+interface TestPropertyOption {
+  prop: boolean;
+  name?: string;
+}
+const x = createStaticMetaDataDecorators("YARGS", {
+  Config: {
+    kind: "constructor",
+    config: (_, opt: Partial<TestOption> = {}) => opt as TestOption,
+  },
+  Option: {
+    kind: "property",
+    config: (_, opt: Partial<TestPropertyOption> = {}) => opt as TestPropertyOption,
+  },
+});
+
+@x.Config({ cons: true })
+class Bot {
+  @x.Option({ prop: true })
+  qq?: number;
+
+  @x.Option({ prop: false })
+  pwd?: string;
+}
 describe("test", () => {
   it("test", () => {
-    interface TestOption {
-      cons: boolean;
-      name?: string;
-    }
-    interface TestPropertyOption {
-      prop: boolean;
-      name?: string;
-    }
-    const x = createStaticMetaDataDecorators("YARGS", {
-      Config: {
-        kind: "constructor",
-        config: (_, opt: Partial<TestOption> = {}) => opt as TestOption,
-      },
-      Option: {
-        kind: "property",
-        config: (_, opt: Partial<TestPropertyOption> = {}) => opt as TestPropertyOption,
-      },
-    });
-
-    @x.Config({ cons: true })
-    class Bot {
-      @x.Option({ prop: true })
-      qq?: number;
-
-      @x.Option({ prop: false })
-      pwd?: string;
-    }
     expect(x.metaKeys).toMatchInlineSnapshot(`
       Object {
         "Config": Symbol(YARGS_meta:Config),

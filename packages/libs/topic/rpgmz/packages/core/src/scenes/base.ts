@@ -29,17 +29,15 @@ export class Scene_Base extends Stage {
   _windowLayer?: WindowLayer;
   _colorFilter?: ColorFilter;
 
-  constructor();
-  constructor(thisClass: Constructable<Scene_Base>);
-  constructor(arg?: any) {
+  constructor(arg?: Constructable<Scene_Base>) {
     super(Stage);
-    if (typeof arg === "function" && arg === Scene_Base) {
-      return;
+    if (arg !== Scene_Base) {
+      this.initialize();
     }
-    this.initialize(...arguments);
   }
 
-  initialize(..._: any): void {
+  initialize(): void {
+    console.log(this.constructor.name, "initialize")
     super.initialize();
     this._started = false;
     this._active = false;

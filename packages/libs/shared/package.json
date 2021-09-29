@@ -33,7 +33,6 @@
     "tslib": "~2.3.1",
     "typescript": "4.1.2"
   },
-  "peerDependencies": {},
   "files": [
     "dist",
     "lib",

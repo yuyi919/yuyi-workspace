@@ -24,17 +24,14 @@ import { $dataSystem } from "../managers";
 export class Scene_Boot extends Scene_Base {
   _databaseLoaded = false;
 
-  constructor();
-  constructor(thisClass: Constructable<Scene_Boot>);
-  constructor(arg?: any) {
+  constructor(arg?: Constructable<Scene_Boot>) {
     super(Scene_Base);
-    if (typeof arg === "function" && arg === Scene_Boot) {
-      return;
+    if (arg !== Scene_Boot) {
+      this.initialize();
     }
-    this.initialize(...arguments);
   }
 
-  initialize(..._: any): void {
+  initialize(): void {
     super.initialize();
     this._databaseLoaded = false;
   }

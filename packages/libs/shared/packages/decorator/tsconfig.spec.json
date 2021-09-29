@@ -2,7 +2,8 @@
   "extends": "./tsconfig.json",
   "compilerOptions": {
     "outDir": "./node_modules/@yuyi919/workspace-base-rig/temp/out-tsc",
-    "types": ["heft-jest", "node"]
+    "module": "commonjs",
+    "types": ["jest", "node"]
   },
   "include": [
     "src/**/*.spec.ts",

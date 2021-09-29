@@ -8,19 +8,17 @@ import * as PIXI from "pixi.js";
  * @extends PIXI.Container
  */
 export class Stage extends PIXI.Container {
-  constructor();
-  constructor(thisClass: Constructable<Stage>);
-  constructor(arg?: any) {
+  constructor(arg?: Constructable<Stage>) {
     super();
-    if (typeof arg === "function" && arg === Stage) {
-      return;
+    if (arg !== Stage) {
+      this.initialize();
     }
-    this.initialize(...arguments);
   }
 
-  initialize(..._: any): void {
+  initialize(): void {
+    // console.log("Stage", "initialize");
     // dup with constructor super()
-    PIXI.Container.call(this);
+    // PIXI.Container.call(this);
   }
 
   /**

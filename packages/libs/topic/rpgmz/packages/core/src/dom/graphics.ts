@@ -106,7 +106,7 @@ export class Graphics {
   }
 
   /**
-   * Register a handler for tick events.
+   * 注册tick监听器
    *
    * @param {function} handler - The listener function to be added for updates.
    */

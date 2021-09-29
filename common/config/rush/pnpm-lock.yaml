@@ -206,18 +206,20 @@ importers:
 
   ../../packages/libs/shared/packages/decorator:
     specifiers:
-      '@types/heft-jest': 1.0.2
+      '@types/jest': ~27.0.1
       '@types/node': ~16.7.2
       '@yuyi919/shared-types': workspace:0.0.5
       '@yuyi919/workspace-base-rig': workspace:1.2.5
+      inversify: ~5.1.1
       jest: ~27.1.0
       reflect-metadata: ^0.1.13
       tslib: ~2.3.1
       typescript: 4.1.2
     dependencies:
       '@yuyi919/shared-types': link:../types
+      inversify: 5.1.1
     devDependencies:
-      '@types/heft-jest': 1.0.2
+      '@types/jest': 27.0.1
       '@types/node': 16.7.7
       '@yuyi919/workspace-base-rig': link:../../../tools/workspace-base-rig
       jest: 27.1.0
@@ -2554,7 +2556,7 @@ packages:
     engines: {node: '>=6.9.0'}
     dependencies:
       core-js-pure: 3.17.2
-      regenerator-runtime: 0.13.9
+      regenerator-runtime: 0.13.7
 
   /@babel/runtime/7.15.4:
     resolution: {integrity: sha512-99catp6bHCaxr4sJ/DbTGgHS4+Rs2RVd2g7iOap6SLGPDknRK9ztKNsE/Fg6QhSeh1FGE5f6gHGQmvvn3I3xhw==}
@@ -9253,6 +9255,10 @@ packages:
       loose-envify: 1.4.0
     dev: true
 
+  /inversify/5.1.1:
+    resolution: {integrity: sha512-j8grHGDzv1v+8T1sAQ+3boTCntFPfvxLCkNcxB1J8qA0lUN+fAlSyYd+RXKvaPRL4AGyPxViutBEJHNXOyUdFQ==}
+    dev: false
+
   /invert-kv/1.0.0:
     resolution: {integrity: sha1-EEqOSqym09jNFXqO+L+rLXo//bY=}
     engines: {node: '>=0.10.0'}
@@ -12996,9 +13002,6 @@ packages:
 
   /regenerator-runtime/0.13.7:
     resolution: {integrity: sha512-a54FxoJDIr27pgf7IgeQGxmqUNYrcV338lf/6gH456HZ/PhX+5BcwHXG9ajESmwe6WRO0tAzRUrRmNONWgkrew==}
-
-  /regenerator-runtime/0.13.9:
-    resolution: {integrity: sha512-p3VT+cOEgxFsRRA9X4lkI1E+k2/CtnKtU4gcxyaCUreilL/vqI6CdZ3wxVUx3UOUg+gnUOQQcRI7BmSI656MYA==}
 
   /regenerator-transform/0.10.1:
     resolution: {integrity: sha512-PJepbvDbuK1xgIgnau7Y90cwaAmO/LCLMI2mPvaXq2heGMR3aWW5/BQvYrhJ8jgmQjXewXvBjzfqKcVOmhjZ6Q==}

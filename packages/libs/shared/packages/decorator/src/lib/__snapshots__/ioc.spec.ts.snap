@@ -1,0 +1,12 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`basic aaa 1`] = `
+Config {
+  "plugins": Array [
+    PluginA {},
+    PluginB {
+      "a": PluginA {},
+    },
+  ],
+}
+`;

@@ -126,7 +126,7 @@ export function createStaticMetaDataDecorators<
     } else if (kind === "constructor") {
       decorators[key] = function (...args: any[]) {
         return function (target: Types.ConstructorType<any>) {
-          const propertyOpts = meta.config({ target }, ...args) as 0;
+          const propertyOpts = meta.config({ target }, ...args);
           _defineMeta(metaKey, target, propertyOpts, kind);
         } as ClassDecorator;
       } as any;

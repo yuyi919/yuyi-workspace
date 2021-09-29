@@ -319,6 +319,10 @@
       "allowedCategories": [ "production" ]
     },
     {
+      "name": "ecs-framework",
+      "allowedCategories": [ "production" ]
+    },
+    {
       "name": "enquirer",
       "allowedCategories": [ "production", "tools" ]
     },
@@ -360,6 +364,10 @@
     },
     {
       "name": "ignore",
+      "allowedCategories": [ "production" ]
+    },
+    {
+      "name": "inversify",
       "allowedCategories": [ "production" ]
     },
     {

@@ -52,6 +52,8 @@ export default defineViteConfig({
         alias: {
           "/@/": `${pathResolve("./src/App")}/`,
           "/src/": `${pathResolve("./src")}/`,
+          "@yuyi919/rpgmz-core": `${pathResolve("./packages/core/src")}/`,
+          "@yuyi919/rpgmz-plugin-transformer": `${pathResolve("./packages/plugin-transformer/src")}/`,
           lodash: "lodash-es",
           "@advscript": pathResolve("../advscript/src/index.ts"),
           "lodash/": "lodash-es/",
