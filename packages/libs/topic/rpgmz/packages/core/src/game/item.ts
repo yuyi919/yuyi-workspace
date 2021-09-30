@@ -21,10 +21,10 @@ export class Game_Item {
   constructor(item?: MZ.DataItemBase);
   constructor(thisClass: Constructable<Game_Item>);
   constructor(arg?: any) {
-    if (typeof arg === "function" && arg === Game_Item) {
+    if (arg === Game_Item) {
       return;
     }
-    this.initialize(...arguments);
+    this.initialize(arg);
   }
 
   _dataClass: ItemDataClass = ItemDataClass.Null;
@@ -96,7 +96,7 @@ export class Game_Item {
     } else {
       this._dataClass = "";
     }
-    this._itemId = item ? (item as any).id : 0;
+    this._itemId = item ? item.id : 0;
   }
 
   setEquip(isWeapon: boolean, itemId: MZ.ID): void {

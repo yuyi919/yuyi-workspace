@@ -18,10 +18,10 @@ export class Window_NameInput extends Window_Selectable {
   constructor(thisClass: Constructable<Window_NameInput>);
   constructor(arg?: any) {
     super(Window_Selectable);
-    if (typeof arg === "function" && arg === Window_NameInput) {
+    if (arg === Window_NameInput) {
       return;
     }
-    this.initialize(...arguments);
+    this.initialize(arg);
   }
 
   // prettier-ignore

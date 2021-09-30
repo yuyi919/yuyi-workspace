@@ -5,6 +5,7 @@ import { $dataSystem } from "../managers";
 import { Rectangle, Sprite } from "../pixi";
 import { Sprite_Name, Sprite_Gauge, Sprite_StateIcon } from "../sprites";
 import { Game_Actor } from "../game";
+import type { SpecialSprite } from "../sprites/name";
 
 //-----------------------------------------------------------------------------
 // Window_StatusBase
@@ -12,16 +13,16 @@ import { Game_Actor } from "../game";
 // The superclass of windows for displaying actor status.
 
 export class Window_StatusBase extends Window_Selectable {
-  _additionalSprites: { [key: string]: Sprite } = {};
+  _additionalSprites: { [key: string]: Sprite | SpecialSprite } = {};
 
   constructor(rect: Rectangle);
   constructor(thisClass: Constructable<Window_StatusBase>);
   constructor(arg?: any) {
     super(Window_Selectable);
-    if (typeof arg === "function" && arg === Window_StatusBase) {
+    if (arg === Window_StatusBase) {
       return;
     }
-    this.initialize(...arguments);
+    this.initialize(arg);
   }
 
   initialize(rect?: Rectangle): void {
@@ -49,8 +50,8 @@ export class Window_StatusBase extends Window_Selectable {
 
   placeActorName(actor: Game_Actor, x: number, y: number): void {
     const key = "actor%1-name".format(actor.actorId());
-    const sprite = this.createInnerSprite(key, Sprite_Name as any);
-    (sprite as any).setup(actor);
+    const sprite = this.createInnerSprite(key, Sprite_Name);
+    sprite.setup(actor);
     sprite.move(x, y);
     sprite.show();
   }
@@ -71,15 +72,18 @@ export class Window_StatusBase extends Window_Selectable {
     sprite.show();
   }
 
-  createInnerSprite<T extends Sprite>(key: string, spriteClass: Constructable<T>): T {
+  createInnerSprite<T extends Constructable<Sprite | SpecialSprite>>(
+    key: string,
+    spriteClass: T
+  ): InstanceType<T> {
     const dict = this._additionalSprites;
     if (dict[key]) {
-      return dict[key] as any;
+      return dict[key] as InstanceType<T>;
     } else {
       const sprite = new spriteClass();
       dict[key] = sprite;
-      this.addInnerChild(sprite);
-      return sprite;
+      this.addInnerChild(sprite as Sprite);
+      return sprite as InstanceType<T>;
     }
   }
 

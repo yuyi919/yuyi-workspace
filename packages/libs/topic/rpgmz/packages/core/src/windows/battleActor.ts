@@ -11,12 +11,12 @@ import { Game_Battler } from "../game";
 export class Window_BattleActor extends Window_BattleStatus {
   constructor(rect: Rectangle);
   constructor(thisClass: Constructable<Window_BattleActor>);
-  constructor(arg?: any) {
+  constructor(arg: any) {
     super(Window_BattleStatus);
-    if (typeof arg === "function" && arg === Window_BattleActor) {
+    if (arg === Window_BattleActor) {
       return;
     }
-    this.initialize(...arguments);
+    this.initialize(arg);
   }
 
   initialize(rect?: Rectangle): void {

@@ -2,6 +2,7 @@ import { Sprite, Point } from "../pixi";
 import { Utils, Graphics } from "../dom";
 import { AudioManager, EffectManager } from "../managers";
 import { MZ } from "../MZ";
+import type { Game_Battler, Game_Character } from "../game";
 
 //-----------------------------------------------------------------------------
 // Sprite_Animation
@@ -9,6 +10,7 @@ import { MZ } from "../MZ";
 // The sprite for displaying an animation.
 
 export class Sprite_Animation extends Sprite {
+  targetObjects?: (Game_Character | Game_Battler)[];
   _targets: Sprite[] = [];
   _animation: MZ.DataAnimation | null = null;
   _mirror = false;
@@ -30,13 +32,13 @@ export class Sprite_Animation extends Sprite {
   constructor(thisClass: Constructable<Sprite_Animation>);
   constructor(arg?: any) {
     super(Sprite);
-    if (typeof arg === "function" && arg === Sprite_Animation) {
+    if (arg === Sprite_Animation) {
       return;
     }
-    this.initialize(...arguments);
+    this.initialize();
   }
 
-  initialize(..._: any): void {
+  initialize(): void {
     super.initialize();
     this.initMembers();
   }

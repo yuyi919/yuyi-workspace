@@ -20,7 +20,7 @@ export class Scene_Item extends Scene_ItemBase {
   constructor(thisClass: Constructable<Scene_Item>);
   constructor(arg?: any) {
     super(Scene_ItemBase);
-    if (typeof arg === "function" && arg === Scene_Item) {
+    if (arg === Scene_Item) {
       return;
     }
     this.initialize(...arguments);

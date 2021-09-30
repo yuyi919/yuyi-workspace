@@ -1,7 +1,6 @@
 import { $gameMap } from "../managers";
 import { MZ } from "../MZ";
 
-type SelfSwitchData = [MZ.MapID, MZ.ID, MZ.SelfSwitchCh];
 
 //-----------------------------------------------------------------------------
 // Game_SelfSwitches
@@ -14,13 +13,13 @@ export class Game_SelfSwitches {
   constructor();
   constructor(thisClass: Constructable<Game_SelfSwitches>);
   constructor(arg?: any) {
-    if (typeof arg === "function" && arg === Game_SelfSwitches) {
+    if (arg === Game_SelfSwitches) {
       return;
     }
-    this.initialize(...arguments);
+    this.initialize();
   }
 
-  initialize(..._: any): void {
+  initialize(): void {
     this.clear();
   }
 
@@ -28,11 +27,11 @@ export class Game_SelfSwitches {
     this._data = {};
   }
 
-  value(key: SelfSwitchData): boolean {
+  value(key: MZ.SelfSwitchData): boolean {
     return !!this._data[String(key)];
   }
 
-  setValue(key: SelfSwitchData, value: boolean): void {
+  setValue(key: MZ.SelfSwitchData, value: boolean): void {
     if (value) {
       this._data[String(key)] = true;
     } else {

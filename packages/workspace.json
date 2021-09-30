@@ -1185,6 +1185,61 @@
       },
       "builder": "tsc"
     },
+    "web-vue-shared-decorators": {
+      "root": "libs/web/vue/shared/decorators",
+      "sourceRoot": "libs/web/vue/shared/decorators/src",
+      "projectType": "library",
+      "targets": {
+        "build": {
+          "executor": "@nrwl/workspace:run-commands",
+          "configurations": {
+            "watch": {
+              "commands": ["pnpm run build:watch"]
+            }
+          },
+          "options": {
+            "commands": ["pnpm run build"],
+            "cwd": "libs/web/vue/shared/decorators"
+          }
+        },
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/web/vue/shared/decorators/**/*.ts"]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/web/vue/shared/decorators"],
+          "options": {
+            "jestConfig": "libs/web/vue/shared/decorators/jest.config.js",
+            "passWithNoTests": true
+          }
+        },
+        "command": {
+          "executor": "@nrwl/workspace:run-commands",
+          "options": {},
+          "configurations": {
+            "format": {
+              "cwd": ".",
+              "commands": [
+                {
+                  "command": "nx generate @yuyi919/nx-plugin-workspace-helper:format --project=web-vue-shared-decorators --no-interactive"
+                }
+              ]
+            },
+            "remove": {
+              "cwd": ".",
+              "commands": [
+                {
+                  "command": "nx generate @nrwl/workspace:remove --projectName=web-vue-shared-decorators --forceRemove"
+                }
+              ]
+            }
+          }
+        }
+      }
+    },
     "web-vue-use": {
       "root": "libs/web/vue/use",
       "sourceRoot": "libs/web/vue/use/src",

@@ -23,10 +23,10 @@ export class Window_ShopNumber extends Window_Selectable {
   constructor(thisClass: Constructable<Window_ShopNumber>);
   constructor(arg?: any) {
     super(Window_Selectable);
-    if (typeof arg === "function" && arg === Window_ShopNumber) {
+    if (arg === Window_ShopNumber) {
       return;
     }
-    this.initialize(...arguments);
+    this.initialize(arg);
   }
 
   initialize(rect?: Rectangle): void {

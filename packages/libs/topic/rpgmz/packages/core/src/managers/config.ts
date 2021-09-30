@@ -102,7 +102,7 @@ export class ConfigManager {
 
   static readVolume(config: Config, name: string): number {
     if (name in config) {
-      return Number((config as any)[name]).clamp(0, 100);
+      return Number(config[name]).clamp(0, 100);
     } else {
       return 100;
     }

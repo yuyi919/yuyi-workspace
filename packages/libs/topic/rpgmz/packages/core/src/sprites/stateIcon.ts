@@ -17,13 +17,13 @@ export class Sprite_StateIcon extends Sprite {
   constructor(thisClass: Constructable<Sprite_StateIcon>);
   constructor(arg?: any) {
     super(Sprite);
-    if (typeof arg === "function" && arg === Sprite_StateIcon) {
+    if (arg === Sprite_StateIcon) {
       return;
     }
-    this.initialize(...arguments);
+    this.initialize();
   }
 
-  initialize(..._: any): void {
+  initialize(): void {
     super.initialize();
     this.initMembers();
     this.loadBitmap();

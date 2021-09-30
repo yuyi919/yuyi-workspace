@@ -12,10 +12,10 @@ export class Window_GameEnd extends Window_Command {
   constructor(thisClass: Constructable<Window_GameEnd>);
   constructor(arg?: any) {
     super(Window_Command);
-    if (typeof arg === "function" && arg === Window_GameEnd) {
+    if (arg === Window_GameEnd) {
       return;
     }
-    this.initialize(...arguments);
+    this.initialize(arg);
   }
 
   initialize(rect?: Rectangle): void {

@@ -13,10 +13,10 @@ export class Window_Gold extends Window_Selectable {
   constructor(thisClass: Constructable<Window_Gold>);
   constructor(arg?: any) {
     super(Window_Selectable);
-    if (typeof arg === "function" && arg === Window_Gold) {
+    if (arg === Window_Gold) {
       return;
     }
-    this.initialize(...arguments);
+    this.initialize(arg);
   }
 
   initialize(rect?: Rectangle): void {

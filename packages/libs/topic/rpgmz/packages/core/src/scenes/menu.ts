@@ -27,13 +27,13 @@ export class Scene_Menu extends Scene_MenuBase {
   constructor(thisClass: Constructable<Scene_Menu>);
   constructor(arg?: any) {
     super(Scene_MenuBase);
-    if (typeof arg === "function" && arg === Scene_Menu) {
+    if (arg === Scene_Menu) {
       return;
     }
-    this.initialize(...arguments);
+    this.initialize();
   }
 
-  initialize(..._: any): void {
+  initialize(): void {
     super.initialize();
   }
 

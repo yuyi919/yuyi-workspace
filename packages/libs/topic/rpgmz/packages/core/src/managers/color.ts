@@ -2,9 +2,6 @@ import { ImageManager } from "./";
 import { Bitmap } from "../pixi";
 import { Game_Battler } from "../game";
 
-type HexColorString = string; // #rrggbb
-type RGBAColorString = string; // rgba(r, g, b, a)
-type DamageColorType = 0 | 1 | 2 | 3;
 
 //-----------------------------------------------------------------------------
 // ColorManager
@@ -18,85 +15,85 @@ export class ColorManager {
     this._windowskin = ImageManager.loadSystem("Window");
   }
 
-  static textColor(n: number): HexColorString {
+  static textColor(n: number): MZ.HexColorString {
     const px = 96 + (n % 8) * 12 + 6;
     const py = 144 + Math.floor(n / 8) * 12 + 6;
     return this._windowskin!.getPixel(px, py);
   }
 
-  static normalColor(): HexColorString {
+  static normalColor(): MZ.HexColorString {
     return this.textColor(0);
   }
 
-  static systemColor(): HexColorString {
+  static systemColor(): MZ.HexColorString {
     return this.textColor(16);
   }
 
-  static crisisColor(): HexColorString {
+  static crisisColor(): MZ.HexColorString {
     return this.textColor(17);
   }
 
-  static deathColor(): HexColorString {
+  static deathColor(): MZ.HexColorString {
     return this.textColor(18);
   }
 
-  static gaugeBackColor(): HexColorString {
+  static gaugeBackColor(): MZ.HexColorString {
     return this.textColor(19);
   }
 
-  static hpGaugeColor1(): HexColorString {
+  static hpGaugeColor1(): MZ.HexColorString {
     return this.textColor(20);
   }
 
-  static hpGaugeColor2(): HexColorString {
+  static hpGaugeColor2(): MZ.HexColorString {
     return this.textColor(21);
   }
 
-  static mpGaugeColor1(): HexColorString {
+  static mpGaugeColor1(): MZ.HexColorString {
     return this.textColor(22);
   }
 
-  static mpGaugeColor2(): HexColorString {
+  static mpGaugeColor2(): MZ.HexColorString {
     return this.textColor(23);
   }
 
-  static mpCostColor(): HexColorString {
+  static mpCostColor(): MZ.HexColorString {
     return this.textColor(23);
   }
 
-  static powerUpColor(): HexColorString {
+  static powerUpColor(): MZ.HexColorString {
     return this.textColor(24);
   }
 
-  static powerDownColor(): HexColorString {
+  static powerDownColor(): MZ.HexColorString {
     return this.textColor(25);
   }
 
-  static ctGaugeColor1(): HexColorString {
+  static ctGaugeColor1(): MZ.HexColorString {
     return this.textColor(26);
   }
 
-  static ctGaugeColor2(): HexColorString {
+  static ctGaugeColor2(): MZ.HexColorString {
     return this.textColor(27);
   }
 
-  static tpGaugeColor1(): HexColorString {
+  static tpGaugeColor1(): MZ.HexColorString {
     return this.textColor(28);
   }
 
-  static tpGaugeColor2(): HexColorString {
+  static tpGaugeColor2(): MZ.HexColorString {
     return this.textColor(29);
   }
 
-  static tpCostColor(): HexColorString {
+  static tpCostColor(): MZ.HexColorString {
     return this.textColor(29);
   }
 
-  static pendingColor(): HexColorString {
+  static pendingColor(): MZ.HexColorString {
     return this._windowskin!.getPixel(120, 120);
   }
 
-  static hpColor(actor: Game_Battler): HexColorString {
+  static hpColor(actor: Game_Battler): MZ.HexColorString {
     if (!actor) {
       return this.normalColor();
     } else if (actor.isDead()) {
@@ -108,15 +105,15 @@ export class ColorManager {
     }
   }
 
-  static mpColor(actor: Game_Battler): HexColorString {
+  static mpColor(actor: Game_Battler): MZ.HexColorString {
     return this.normalColor();
   }
 
-  static tpColor(actor: Game_Battler): HexColorString {
+  static tpColor(actor: Game_Battler): MZ.HexColorString {
     return this.normalColor();
   }
 
-  static paramchangeTextColor(change: number): HexColorString {
+  static paramchangeTextColor(change: number): MZ.HexColorString {
     if (change > 0) {
       return this.powerUpColor();
     } else if (change < 0) {
@@ -126,7 +123,7 @@ export class ColorManager {
     }
   }
 
-  static damageColor(colorType: DamageColorType): HexColorString {
+  static damageColor(colorType: MZ.DamageColorType): MZ.HexColorString {
     switch (colorType) {
       case 0: // HP damage
         return "#ffffff";
@@ -141,23 +138,23 @@ export class ColorManager {
     }
   }
 
-  static outlineColor(): RGBAColorString {
+  static outlineColor(): MZ.RGBAColorString {
     return "rgba(0, 0, 0, 0.6)";
   }
 
-  static dimColor1(): RGBAColorString {
+  static dimColor1(): MZ.RGBAColorString {
     return "rgba(0, 0, 0, 0.6)";
   }
 
-  static dimColor2(): RGBAColorString {
+  static dimColor2(): MZ.RGBAColorString {
     return "rgba(0, 0, 0, 0)";
   }
 
-  static itemBackColor1(): RGBAColorString {
+  static itemBackColor1(): MZ.RGBAColorString {
     return "rgba(32, 32, 32, 0.5)";
   }
 
-  static itemBackColor2(): RGBAColorString {
+  static itemBackColor2(): MZ.RGBAColorString {
     return "rgba(0, 0, 0, 0.5)";
   }
 }

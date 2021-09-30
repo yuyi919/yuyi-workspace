@@ -7,7 +7,7 @@ import { MZ } from "../MZ";
 //
 // The superclass of Game_Battler. It mainly contains parameters calculation.
 
-export class Game_BattlerBase {
+export abstract class Game_BattlerBase {
   static TRAIT_ELEMENT_RATE = 11;
   static TRAIT_DEBUFF_RATE = 12;
   static TRAIT_STATE_RATE = 13;
@@ -51,14 +51,18 @@ export class Game_BattlerBase {
   _stateTurns: { [key: number]: number } = {};
 
   constructor();
-  constructor(thisClass: Constructable<Game_BattlerBase>);
+  constructor(thisClass: typeof Game_BattlerBase);
   constructor(arg?: any) {
-    if (typeof arg === "function" && arg === Game_BattlerBase) {
+    if (arg === Game_BattlerBase) {
       return;
     }
-    this.initialize(...arguments);
+    this.initialize();
   }
 
+  initialize(): void {
+    this.initMembers();
+  }
+  
   // Hit Points
   get hp(): number {
     return this._hp;
@@ -183,10 +187,6 @@ export class Game_BattlerBase {
   // EXperience Rate
   get exr(): number {
     return this.sparam(9);
-  }
-
-  initialize(..._: any): void {
-    this.initMembers();
   }
 
   initMembers(): void {

@@ -7,6 +7,7 @@ export * from "./game";
 export * from "./scenes";
 export * from "./sprites";
 export * from "./windows";
+export * as ECS from "./ecs";
 
 export declare class PluginManagerEx {
   static createParameter(currentScript: Document["currentScript"]): void;

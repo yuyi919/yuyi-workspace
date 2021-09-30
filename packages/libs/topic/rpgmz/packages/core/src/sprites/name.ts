@@ -3,12 +3,22 @@ import { ColorManager } from "../managers";
 import { $gameSystem } from "../managers";
 import { Game_Battler, Game_Actor, Game_Enemy } from "../game";
 
+/**
+ * 特殊(错误)的Sprite实现
+ * name不为字符串，反而为一个返回字符串的函数
+ * 至于为啥会这样，问MZ源码作者吧
+ */
+abstract class SpecialSprite extends Sprite {
+  // @ts-ignore 擅自重新定义了name(), PIXI.Sprite表示很凎
+  abstract name(): string;
+}
+
 //-----------------------------------------------------------------------------
 // Sprite_Name
 //
 // The sprite for displaying a status gauge.
 
-export class Sprite_Name extends Sprite {
+export class Sprite_Name extends SpecialSprite {
   _battler: Game_Battler | null = null;
   _name = "";
   _textColor = "";
@@ -17,13 +27,12 @@ export class Sprite_Name extends Sprite {
   constructor(thisClass: Constructable<Sprite_Name>);
   constructor(arg?: any) {
     super(Sprite);
-    if (typeof arg === "function" && arg === Sprite_Name) {
-      return;
+    if (arg !== Sprite_Name) {
+      this.initialize();
     }
-    this.initialize(...arguments);
   }
 
-  initialize(..._: any): void {
+  initialize(): void {
     super.initialize();
     this.initMembers();
     this.createBitmap();
@@ -82,11 +91,6 @@ export class Sprite_Name extends Sprite {
     }
   }
 
-  // @ts-ignore conflict with PIXI.Sprite
-  name(): string {
-    return this._battler ? (this._battler as Game_Actor | Game_Enemy).name() : "";
-  }
-
   textColor(): string {
     return ColorManager.hpColor(this._battler!);
   }
@@ -97,6 +101,10 @@ export class Sprite_Name extends Sprite {
 
   outlineWidth(): number {
     return 3;
+  }
+
+  name(): string {
+    return this._battler ? (this._battler as Game_Actor | Game_Enemy).name() : "";
   }
 
   redraw(): void {
@@ -116,3 +124,4 @@ export class Sprite_Name extends Sprite {
     this.bitmap!.outlineWidth = this.outlineWidth();
   }
 }
+export type { SpecialSprite };

@@ -25,10 +25,10 @@ export class Sprite_Battler extends Sprite_Clickable {
   constructor(thisClass: Constructable<Sprite_Battler>);
   constructor(arg?: any) {
     super(Sprite_Clickable);
-    if (typeof arg === "function" && arg === Sprite_Battler) {
+    if (arg === Sprite_Battler) {
       return;
     }
-    this.initialize(...arguments);
+    this.initialize(arg);
   }
 
   initialize(..._: any): void;
@@ -85,13 +85,13 @@ export class Sprite_Battler extends Sprite_Clickable {
 
   updateVisibility(): void {
     super.updateVisibility();
-    if (!this._battler || !(this._battler as any).isSpriteVisible()) {
+    if (!this._battler || !this._battler.isSpriteVisible()) {
       this.visible = false;
     }
   }
 
   updateMain(): void {
-    if ((this._battler as any).isSpriteVisible()) {
+    if (this._battler.isSpriteVisible()) {
       this.updateBitmap();
       this.updateFrame();
     }
@@ -153,7 +153,7 @@ export class Sprite_Battler extends Sprite_Clickable {
 
   setupDamagePopup(): void {
     if (this._battler!.isDamagePopupRequested()) {
-      if ((this._battler as any).isSpriteVisible()) {
+      if (this._battler.isSpriteVisible()) {
         this.createDamageSprite();
       }
       this._battler!.clearDamagePopup();

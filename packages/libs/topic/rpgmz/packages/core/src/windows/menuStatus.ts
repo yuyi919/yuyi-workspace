@@ -17,10 +17,10 @@ export class Window_MenuStatus extends Window_StatusBase {
   constructor(thisClass: Constructable<Window_MenuStatus>);
   constructor(arg?: any) {
     super(Window_StatusBase);
-    if (typeof arg === "function" && arg === Window_MenuStatus) {
+    if (arg === Window_MenuStatus) {
       return;
     }
-    this.initialize(...arguments);
+    this.initialize(arg);
   }
 
   initialize(rect?: Rectangle): void {

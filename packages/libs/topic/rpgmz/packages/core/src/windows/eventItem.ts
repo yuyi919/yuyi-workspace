@@ -21,10 +21,10 @@ export class Window_EventItem extends Window_ItemList {
   constructor(thisClass: Constructable<Window_EventItem>);
   constructor(arg?: any) {
     super(Window_ItemList);
-    if (typeof arg === "function" && arg === Window_EventItem) {
+    if (arg === Window_EventItem) {
       return;
     }
-    this.initialize(...arguments);
+    this.initialize(arg);
   }
 
   initialize(rect?: Rectangle): void {

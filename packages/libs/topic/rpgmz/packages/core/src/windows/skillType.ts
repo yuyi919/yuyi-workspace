@@ -17,10 +17,10 @@ export class Window_SkillType extends Window_Command {
   constructor(thisClass: Constructable<Window_SkillType>);
   constructor(arg?: any) {
     super(Window_Command);
-    if (typeof arg === "function" && arg === Window_SkillType) {
+    if (arg === Window_SkillType) {
       return;
     }
-    this.initialize(...arguments);
+    this.initialize(arg);
   }
 
   initialize(rect?: Rectangle): void {

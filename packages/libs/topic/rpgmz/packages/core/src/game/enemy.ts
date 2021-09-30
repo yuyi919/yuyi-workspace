@@ -31,7 +31,7 @@ export class Game_Enemy extends Game_Battler {
   constructor(thisClass: Constructable<Game_Enemy>);
   constructor(arg?: any) {
     super(Game_Battler);
-    if (typeof arg === "function" && arg === Game_Enemy) {
+    if (arg === Game_Enemy) {
       return;
     }
     this.initialize(...arguments);

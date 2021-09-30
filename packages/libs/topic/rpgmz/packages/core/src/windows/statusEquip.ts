@@ -15,10 +15,10 @@ export class Window_StatusEquip extends Window_StatusBase {
   constructor(thisClass: Constructable<Window_StatusEquip>);
   constructor(arg?: any) {
     super(Window_StatusBase);
-    if (typeof arg === "function" && arg === Window_StatusEquip) {
+    if (arg === Window_StatusEquip) {
       return;
     }
-    this.initialize(...arguments);
+    this.initialize(arg);
   }
 
   initialize(rect?: Rectangle): void {

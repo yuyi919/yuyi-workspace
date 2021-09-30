@@ -18,7 +18,7 @@ export class Scene_Debug extends Scene_MenuBase {
   constructor(thisClass: Constructable<Scene_Debug>);
   constructor(arg?: any) {
     super(Scene_MenuBase);
-    if (typeof arg === "function" && arg === Scene_Debug) {
+    if (arg === Scene_Debug) {
       return;
     }
     this.initialize(...arguments);
@@ -107,7 +107,7 @@ export class Scene_Debug extends Scene_MenuBase {
   }
 
   helpText(): string {
-    if ((this._rangeWindow as any).mode() === "switch") {
+    if (this._rangeWindow.mode(-1) === "switch") {
       return "Enter : ON / OFF";
     } else {
       return "Left     :  -1    Pageup   : -10\n" + "Right    :  +1    Pagedown : +10";

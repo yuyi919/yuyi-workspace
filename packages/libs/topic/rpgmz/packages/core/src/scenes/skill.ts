@@ -20,13 +20,13 @@ export class Scene_Skill extends Scene_ItemBase {
   constructor(thisClass: Constructable<Scene_Skill>);
   constructor(arg?: any) {
     super(Scene_ItemBase);
-    if (typeof arg === "function" && arg === Scene_Skill) {
+    if (arg === Scene_Skill) {
       return;
     }
-    this.initialize(...arguments);
+    this.initialize();
   }
 
-  initialize(..._: any): void {
+  initialize(): void {
     super.initialize();
   }
 

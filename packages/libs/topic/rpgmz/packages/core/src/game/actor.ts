@@ -50,12 +50,11 @@ export class Game_Actor extends Game_Battler {
 
   constructor(actorId: MZ.ActorID);
   constructor(thisClass: Constructable<Game_Actor>);
-  constructor(arg?: any) {
+  constructor(arg?: MZ.ActorID | Constructable<Game_Actor>) {
     super(Game_Battler);
-    if (typeof arg === "function" && arg === Game_Actor) {
-      return;
+    if (typeof arg === "number") {
+      this.initialize(arg);
     }
-    this.initialize(...arguments);
   }
 
   get level(): number {

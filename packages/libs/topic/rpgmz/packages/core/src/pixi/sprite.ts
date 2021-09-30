@@ -148,9 +148,7 @@ export class Sprite extends PIXI.Sprite {
    */
   update(): void {
     for (const child of this.children) {
-      if ((child as any).update) {
-        (child as any).update();
-      }
+      (child as Sprite).update?.()
     }
   }
 
@@ -336,4 +334,11 @@ export class Sprite extends PIXI.Sprite {
     this._colorFilter!.setBlendColor(this._blendColor);
     this._colorFilter!.setColorTone(this._colorTone);
   }
+
+  x: number;
+  y: number;
+  /**
+   * MZ自定义的z属性，作用域pixi.Sprite.zIndex不一样（大概
+   */
+  z?: number;
 }

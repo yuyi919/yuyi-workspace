@@ -37,7 +37,7 @@ export class Game_Event extends Game_Character {
   constructor(thisClass: Constructable<Game_Event>);
   constructor(arg?: any) {
     super(Game_Character);
-    if (typeof arg === "function" && arg === Game_Event) {
+    if (arg === Game_Event) {
       return;
     }
     this.initialize(...arguments);
@@ -250,8 +250,8 @@ export class Game_Event extends Game_Character {
       }
     }
     if (c.selfSwitchValid) {
-      const key = [this._mapId, this._eventId, c.selfSwitchCh];
-      if ($gameSelfSwitches.value(key as any) !== true) {
+      const key = [this._mapId, this._eventId, c.selfSwitchCh] as MZ.SelfSwitchData;
+      if ($gameSelfSwitches.value(key) !== true) {
         return false;
       }
     }

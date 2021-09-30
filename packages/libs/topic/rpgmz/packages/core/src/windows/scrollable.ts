@@ -7,29 +7,29 @@ import { Input, TouchInput } from "../dom";
 //
 // The window class with scroll functions.
 
-export class Window_Scrollable extends Window_Base {
-  _scrollX = 0;
-  _scrollY = 0;
-  _scrollBaseX = 0;
-  _scrollBaseY = 0;
-  _scrollTargetX = 0;
-  _scrollTargetY = 0;
-  _scrollDuration = 0;
-  _scrollAccelX = 0;
-  _scrollAccelY = 0;
-  _scrollTouching = false;
-  _scrollLastTouchX = 0;
-  _scrollLastTouchY = 0;
-  _scrollLastCursorVisible = false;
+export abstract class Window_Scrollable extends Window_Base {
+  private _scrollX = 0;
+  private _scrollY = 0;
+  private _scrollBaseX = 0;
+  private _scrollBaseY = 0;
+  private _scrollTargetX = 0;
+  private _scrollTargetY = 0;
+  private _scrollDuration = 0;
+  private _scrollAccelX = 0;
+  private _scrollAccelY = 0;
+  private _scrollTouching = false;
+  private _scrollLastTouchX = 0;
+  private _scrollLastTouchY = 0;
+  private _scrollLastCursorVisible = false;
 
   constructor(rect: Rectangle);
-  constructor(thisClass: Constructable<Window_Scrollable>);
+  constructor(thisClass: typeof Window_Scrollable);
   constructor(arg?: any) {
     super(Window_Base);
-    if (typeof arg === "function" && arg === Window_Scrollable) {
+    if (arg === Window_Scrollable) {
       return;
     }
-    this.initialize(...arguments);
+    this.initialize(arg);
   }
 
   initialize(rect?: Rectangle): void {
@@ -262,7 +262,5 @@ export class Window_Scrollable extends Window_Base {
     this.moveInnerChildrenBy(-deltaX, -deltaY);
   }
 
-  paint(): void {
-    // to be overridden
-  }
+  abstract paint(): void
 }

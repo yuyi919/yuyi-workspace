@@ -24,13 +24,13 @@ export class Scene_Name extends Scene_MenuBase {
   constructor(thisClass: Constructable<Scene_Name>);
   constructor(arg?: any) {
     super(Scene_MenuBase);
-    if (typeof arg === "function" && arg === Scene_Name) {
+    if (arg === Scene_Name) {
       return;
     }
-    this.initialize(...arguments);
+    this.initialize();
   }
 
-  initialize(..._: any): void {
+  initialize(): void {
     super.initialize();
   }
 
@@ -55,7 +55,8 @@ export class Scene_Name extends Scene_MenuBase {
     const rect = this.editWindowRect();
     this._editWindow = new Window_NameEdit(rect);
     this._editWindow.setup(this._actor!, this._maxLength);
-    this.addWindow(this._editWindow as any);
+    // @ts-ignore: override Window_StatusBase.name property
+    this.addWindow(this._editWindow);
   }
 
   editWindowRect(): Rectangle {

@@ -15,13 +15,13 @@ export class Sprite_Weapon extends Sprite {
   constructor(thisClass: Constructable<Sprite_Weapon>);
   constructor(arg?: any) {
     super(Sprite);
-    if (typeof arg === "function" && arg === Sprite_Weapon) {
+    if (arg === Sprite_Weapon) {
       return;
     }
-    this.initialize(...arguments);
+    this.initialize();
   }
 
-  initialize(..._: any): void {
+  initialize(): void {
     super.initialize();
     this.initMembers();
   }

@@ -20,10 +20,10 @@ export class Window_EquipSlot extends Window_StatusBase {
   constructor(thisClass: Constructable<Window_EquipSlot>);
   constructor(arg?: any) {
     super(Window_StatusBase);
-    if (typeof arg === "function" && arg === Window_EquipSlot) {
+    if (arg === Window_EquipSlot) {
       return;
     }
-    this.initialize(...arguments);
+    this.initialize(arg);
   }
 
   initialize(rect?: Rectangle): void {

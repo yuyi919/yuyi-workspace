@@ -18,10 +18,10 @@ export class Window_SkillList extends Window_Selectable {
   constructor(thisClass: Constructable<Window_SkillList>);
   constructor(arg?: any) {
     super(Window_Selectable);
-    if (typeof arg === "function" && arg === Window_SkillList) {
+    if (arg === Window_SkillList) {
       return;
     }
-    this.initialize(...arguments);
+    this.initialize(arg);
   }
 
   initialize(rect?: Rectangle): void {

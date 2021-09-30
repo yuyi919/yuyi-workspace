@@ -73,11 +73,10 @@ export class Game_Interpreter {
 
   constructor(depth?: number);
   constructor(thisClass: Constructable<Game_Interpreter>);
-  constructor(arg?: any) {
-    if (typeof arg === "function" && arg === Game_Interpreter) {
-      return;
+  constructor(arg?: number | Constructable<Game_Interpreter>) {
+    if (typeof arg === "number") {
+      this.initialize(arg);
     }
-    this.initialize(...arguments);
   }
 
   initialize(depth?: number): void {
@@ -257,8 +256,8 @@ export class Game_Interpreter {
     if (command) {
       this._indent = command.indent;
       const methodName = "command" + command.code;
-      if (typeof (this as any)[methodName] === "function") {
-        if (!(this as any)[methodName](command.parameters)) {
+      if (typeof this[methodName] === "function") {
+        if (!this[methodName](command.parameters)) {
           return false;
         }
       }
@@ -548,8 +547,8 @@ export class Game_Interpreter {
         break;
       case 2: // Self Switch
         if (this._eventId > 0) {
-          const key = [this._mapId, this._eventId, params[1]];
-          result = $gameSelfSwitches.value(key as any) === (params[2] === 0);
+          const key = [this._mapId, this._eventId, params[1]] as MZ.SelfSwitchData;
+          result = $gameSelfSwitches.value(key) === (params[2] === 0);
         }
         break;
       case 3: // Timer
@@ -929,8 +928,8 @@ export class Game_Interpreter {
   // Control Self Switch
   command123(params: any): boolean {
     if (this._eventId > 0) {
-      const key = [this._mapId, this._eventId, params[0]];
-      $gameSelfSwitches.setValue(key as any, params[1] === 0);
+      const key = [this._mapId, this._eventId, params[0]] as MZ.SelfSwitchData;
+      $gameSelfSwitches.setValue(key, params[1] === 0);
     }
     return true;
   }

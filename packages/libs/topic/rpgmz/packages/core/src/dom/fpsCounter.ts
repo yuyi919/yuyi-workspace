@@ -9,7 +9,7 @@ export class FPSCounter {
   constructor();
   constructor(thisClass: Constructable<FPSCounter>);
   constructor(arg?: any) {
-    if (typeof arg === "function" && arg === FPSCounter) {
+    if (arg === FPSCounter) {
       return;
     }
     this.initialize(arg);

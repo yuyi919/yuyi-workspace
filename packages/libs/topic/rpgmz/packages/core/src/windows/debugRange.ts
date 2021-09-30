@@ -19,10 +19,10 @@ export class Window_DebugRange extends Window_Selectable {
   constructor(thisClass: Constructable<Window_DebugRange>);
   constructor(arg?: any) {
     super(Window_Selectable);
-    if (typeof arg === "function" && arg === Window_DebugRange) {
+    if (arg === Window_DebugRange) {
       return;
     }
-    this.initialize(...arguments);
+    this.initialize(arg);
   }
 
   initialize(rect?: Rectangle): void {

@@ -20,10 +20,10 @@ export class Window_NameEdit extends Window_StatusBase {
   constructor(thisClass: Constructable<Window_NameEdit>);
   constructor(arg?: any) {
     super(Window_StatusBase);
-    if (typeof arg === "function" && arg === Window_NameEdit) {
+    if (arg === Window_NameEdit) {
       return;
     }
-    this.initialize(...arguments);
+    this.initialize(arg);
   }
 
   initialize(rect?: Rectangle): void {

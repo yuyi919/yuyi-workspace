@@ -17,10 +17,10 @@ export class Window_TitleCommand extends Window_Command {
   constructor(thisClass: Constructable<Window_TitleCommand>);
   constructor(arg?: any) {
     super(Window_Command);
-    if (typeof arg === "function" && arg === Window_TitleCommand) {
+    if (arg === Window_TitleCommand) {
       return;
     }
-    this.initialize(...arguments);
+    this.initialize(arg);
   }
 
   initialize(rect?: Rectangle): void {

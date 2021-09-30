@@ -29,7 +29,7 @@ export class Scene_Message extends Scene_Base {
   constructor(thisClass: Constructable<Scene_Message>);
   constructor(arg?: any) {
     super(Scene_Base);
-    if (typeof arg === "function" && arg === Scene_Message) {
+    if (arg === Scene_Message) {
       return;
     }
     this.initialize(...arguments);

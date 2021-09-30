@@ -12,7 +12,7 @@ export class Game_Timer {
   constructor();
   constructor(thisClass: Constructable<Game_Timer>);
   constructor(arg?: any) {
-    if (typeof arg === "function" && arg === Game_Timer) {
+    if (arg === Game_Timer) {
       return;
     }
     this.initialize(...arguments);

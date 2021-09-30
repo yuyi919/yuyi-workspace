@@ -38,13 +38,13 @@ export class Scene_Shop extends Scene_MenuBase {
   constructor(thisClass: Constructable<Scene_Shop>);
   constructor(arg?: any) {
     super(Scene_MenuBase);
-    if (typeof arg === "function" && arg === Scene_Shop) {
+    if (arg === Scene_Shop) {
       return;
     }
-    this.initialize(...arguments);
+    this.initialize();
   }
 
-  initialize(..._: any): void {
+  initialize(): void {
     super.initialize();
   }
 

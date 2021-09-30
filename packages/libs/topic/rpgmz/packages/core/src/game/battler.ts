@@ -11,7 +11,7 @@ import { MZ } from "../MZ";
 // The superclass of Game_Actor and Game_Enemy. It contains methods for sprites
 // and actions.
 
-export class Game_Battler extends Game_BattlerBase {
+export abstract class Game_Battler extends Game_BattlerBase {
   _actions: Game_Action[] = [];
   _speed = 0;
   _result = new Game_ActionResult();
@@ -31,16 +31,16 @@ export class Game_Battler extends Game_BattlerBase {
   _tpbTurnEnd = false;
 
   constructor();
-  constructor(thisClass: Constructable<Game_Battler>);
+  constructor(thisClass: typeof Game_Battler);
   constructor(arg?: any) {
     super(Game_BattlerBase);
-    if (typeof arg === "function" && arg === Game_Battler) {
+    if (arg === Game_Battler) {
       return;
     }
-    this.initialize(...arguments);
+    this.initialize();
   }
 
-  initialize(..._: any): void {
+  initialize(): void {
     super.initialize();
   }
 
@@ -523,7 +523,7 @@ export class Game_Battler extends Game_BattlerBase {
   }
 
   setLastTarget(target: Game_Battler): void {
-    this._lastTargetIndex = target ? (target as any).index() : 0;
+    this._lastTargetIndex = target ? target.index() : 0;
   }
 
   forceAction(skillId: MZ.SkillID, targetIndex: number): void {
@@ -741,4 +741,6 @@ export class Game_Battler extends Game_BattlerBase {
   performCollapse(): void {
     //
   }
+  abstract index(): number
+  abstract isSpriteVisible(): boolean
 }

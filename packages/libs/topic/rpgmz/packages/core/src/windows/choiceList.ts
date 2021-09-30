@@ -20,10 +20,10 @@ export class Window_ChoiceList extends Window_Command {
   constructor(thisClass: Constructable<Window_ChoiceList>);
   constructor(arg?: any) {
     super(Window_Command);
-    if (typeof arg === "function" && arg === Window_ChoiceList) {
+    if (arg === Window_ChoiceList) {
       return;
     }
-    this.initialize(...arguments);
+    this.initialize(arg);
   }
 
   initialize(..._: any): void {

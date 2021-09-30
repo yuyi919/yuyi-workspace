@@ -16,10 +16,10 @@ export class Window_ItemCategory extends Window_HorzCommand {
   constructor(thisClass: Constructable<Window_ItemCategory>);
   constructor(arg?: any) {
     super(Window_HorzCommand);
-    if (typeof arg === "function" && arg === Window_ItemCategory) {
+    if (arg === Window_ItemCategory) {
       return;
     }
-    this.initialize(...arguments);
+    this.initialize(arg);
   }
 
   initialize(rect?: Rectangle): void {

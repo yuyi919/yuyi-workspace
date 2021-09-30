@@ -1,6 +1,11 @@
 import * as PIXI from "pixi.js";
-import { Rectangle, Point, Bitmap, Sprite, TilingSprite } from ".";
+import { Sprite } from "./sprite";
+import { TilingSprite } from "./tilingSprite";
 import { MZ } from "../MZ";
+import { Bitmap } from "./bitmap";
+import { Rectangle } from "./rectangle";
+import { Point } from "./point";
+import { WindowSuper } from "./windowSuper";
 
 interface RectangleLike {
   x: number;
@@ -8,7 +13,6 @@ interface RectangleLike {
   width: number;
   height: number;
 }
-
 //-----------------------------------------------------------------------------
 /**
  * The window in the game.
@@ -16,7 +20,7 @@ interface RectangleLike {
  * @class
  * @extends PIXI.Container
  */
-export class Window extends PIXI.Container {
+export class Window extends WindowSuper {
   _isWindow = true;
   _windowskin: Bitmap | null = null;
   _width = 0;
@@ -28,7 +32,7 @@ export class Window extends PIXI.Container {
   _margin = 4;
   _colorTone: MZ.RGBAColorArray = [0, 0, 0, 0];
   _innerChildren: PIXI.DisplayObject[] = [];
-  _container: PIXI.Container | null = null;
+  _container: WindowSuper | null = null;
   _backSprite: Sprite | null = null;
   _frameSprite: Sprite | null = null;
   _contentsBackSprite: Sprite | null = null;
@@ -51,13 +55,13 @@ export class Window extends PIXI.Container {
   constructor(thisClass: Constructable<Window>);
   constructor(arg?: any) {
     super();
-    if (typeof arg === "function" && arg === Window) {
+    if (arg === Window) {
       return;
     }
-    this.initialize(...arguments);
+    this.initialize();
   }
 
-  initialize(..._: any): void {
+  initialize(): void {
     // dup with contructor super()
     PIXI.Container.call(this);
 
@@ -341,11 +345,7 @@ export class Window extends PIXI.Container {
     if (this.active) {
       this._animationCount++;
     }
-    for (const child of this.children) {
-      if ((child as any).update) {
-        (child as any).update();
-      }
-    }
+    super.update()
   }
 
   /**
@@ -508,7 +508,7 @@ export class Window extends PIXI.Container {
   }
 
   _createContainer(): void {
-    this._container = new PIXI.Container();
+    this._container = new WindowSuper();
     this.addChild(this._container);
   }
 

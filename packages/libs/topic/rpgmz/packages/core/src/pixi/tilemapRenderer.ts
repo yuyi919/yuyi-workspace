@@ -1,6 +1,18 @@
+/* eslint-disable no-var */
 import * as PIXI from "pixi.js";
 import { MAX_GL_TEXTURES } from "./tilemapLayer";
-
+declare module "pixi.js" {
+  interface Shader {
+    // NOTE 不知为何缺失的定义
+    destroy(): void;
+  }
+  interface CustomPlugins {
+    rpgtilemap: TilemapRenderer;
+  }
+  interface CustomRenderer extends Omit<PIXI.Renderer, "plugins"> {
+    readonly plugins: PIXI.Renderer["plugins"] & CustomPlugins;
+  }
+}
 export class TilemapRenderer extends PIXI.ObjectRenderer {
   _shader: PIXI.Shader | null = null;
   _images: TexImageSource[] = [];
@@ -11,10 +23,10 @@ export class TilemapRenderer extends PIXI.ObjectRenderer {
   constructor(thisClass: Constructable<TilemapRenderer>);
   constructor(arg?: any) {
     super(arg);
-    if (typeof arg === "function" && arg === TilemapRenderer) {
+    if (arg === TilemapRenderer) {
       return;
     }
-    this.initialize(...arguments);
+    this.initialize(arg);
   }
 
   initialize(renderer?: PIXI.Renderer): void {
@@ -30,7 +42,7 @@ export class TilemapRenderer extends PIXI.ObjectRenderer {
   destroy(): void {
     super.destroy();
     this._destroyInternalTextures();
-    (this._shader as any).destroy();
+    this._shader.destroy();
     this._shader = null;
   }
 
@@ -134,4 +146,5 @@ export class TilemapRenderer extends PIXI.ObjectRenderer {
   }
 }
 
-PIXI.Renderer.registerPlugin("rpgtilemap", TilemapRenderer as any);
+// @ts-ignore pixi.js类型定义错误
+PIXI.Renderer.registerPlugin("rpgtilemap", TilemapRenderer);

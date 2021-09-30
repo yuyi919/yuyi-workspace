@@ -1,6 +1,6 @@
 import { Input, TouchInput, WebAudio, Video, Graphics, Utils } from "../dom";
 import { Bitmap } from "../pixi";
-import { Scene_Base } from "../scenes";
+import { Scene_Shop, Scene_Base, Scene_Name } from "../scenes";
 import { ImageManager } from ".";
 import { EffectManager } from ".";
 import { AudioManager } from ".";
@@ -30,6 +30,10 @@ export class SceneManager {
   static _smoothDeltaTime = 1;
   static _elapsedTime = 0;
 
+  /**
+   * 引导场景
+   * @param sceneClass 
+   */
   static run(sceneClass: Constructable<Scene_Base>): void {
     try {
       this.initialize();
@@ -325,18 +329,27 @@ export class SceneManager {
 
   static goto(sceneClass: Constructable<Scene_Base> | null): void {
     if (sceneClass) {
+      console.log("next=", sceneClass.name)
       this._nextScene = new sceneClass();
     }
     if (this._scene) {
+      console.log("close", this._scene.constructor.name)
       this._scene.stop();
     }
   }
 
+  /**
+   * 在当前Scene上叠加场景，内部通过维护一个场景栈来实现
+   * @param sceneClass 
+   */
   static push(sceneClass: Constructable<Scene_Base>): void {
     this._stack.push(this._scene!.constructor);
     this.goto(sceneClass);
   }
 
+  /**
+   * 退出当前Scene
+   */
   static pop(): void {
     if (this._stack.length > 0) {
       this.goto(this._stack.pop() as Constructable<Scene_Base>);
@@ -358,8 +371,14 @@ export class SceneManager {
     Graphics.stopGameLoop();
   }
 
-  static prepareNextScene(...args: any[]): void {
-    (this._nextScene as any).prepare(...args);
+  static prepareNextScene(goods: MZ.GoodsParam[], purchaseOnly: boolean): void;
+  static prepareNextScene(actorId: MZ.ActorID, maxLength: number): void;
+  static prepareNextScene(arg1: any, arg2: any): void {
+    if (this._nextScene instanceof Scene_Name) {
+      this._nextScene.prepare(arg1, arg2);
+    } else {
+      (this._nextScene as Scene_Shop).prepare(arg1, arg2);
+    }
   }
 
   static snap(): Bitmap {

@@ -13,7 +13,7 @@ export class Game_Unit {
   constructor();
   constructor(thisClass: Constructable<Game_Unit>);
   constructor(arg?: any) {
-    if (typeof arg === "function" && arg === Game_Unit) {
+    if (arg === Game_Unit) {
       return;
     }
     this.initialize(...arguments);

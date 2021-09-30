@@ -231,6 +231,10 @@
       "allowedCategories": [ "production" ]
     },
     {
+      "name": "@yuyi919/vue-shared-decorators",
+      "allowedCategories": [ "production" ]
+    },
+    {
       "name": "@yuyi919/vue-use",
       "allowedCategories": [ "production" ]
     },
@@ -292,6 +296,10 @@
     },
     {
       "name": "babel-preset-vca-jsx",
+      "allowedCategories": [ "production" ]
+    },
+    {
+      "name": "bitecs",
       "allowedCategories": [ "production" ]
     },
     {
@@ -580,6 +588,10 @@
     },
     {
       "name": "vue-frag",
+      "allowedCategories": [ "production" ]
+    },
+    {
+      "name": "vue-pixi-wrapper",
       "allowedCategories": [ "production" ]
     },
     {

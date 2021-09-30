@@ -20,10 +20,10 @@ export class Window_ShopStatus extends Window_StatusBase {
   constructor(thisClass: Constructable<Window_ShopStatus>);
   constructor(arg?: any) {
     super(Window_StatusBase);
-    if (typeof arg === "function" && arg === Window_ShopStatus) {
+    if (arg === Window_ShopStatus) {
       return;
     }
-    this.initialize(...arguments);
+    this.initialize(arg);
   }
 
   initialize(rect?: Rectangle): void {

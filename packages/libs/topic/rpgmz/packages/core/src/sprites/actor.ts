@@ -2,7 +2,7 @@ import { Sprite } from "../pixi";
 import { Sprite_Battler } from ".";
 import { Sprite_StateOverlay } from ".";
 import { Sprite_Weapon } from ".";
-import { Game_Actor, Game_Battler } from "../game";
+import { Game_Actor } from "../game";
 import { ImageManager, BattleManager } from "../managers";
 import { MZ } from "../MZ";
 
@@ -47,7 +47,7 @@ export class Sprite_Actor extends Sprite_Battler {
   constructor(thisClass: Constructable<Sprite_Actor>);
   constructor(arg?: any) {
     super(Sprite_Battler);
-    if (typeof arg === "function" && arg === Sprite_Actor) {
+    if (arg === Sprite_Actor) {
       return;
     }
     this.initialize(...arguments);

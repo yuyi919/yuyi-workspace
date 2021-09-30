@@ -1,5 +1,14 @@
 import * as PIXI from "pixi.js";
-import { Window } from ".";
+import { Window } from "./window";
+import { WindowSuper } from "./windowSuper";
+
+declare module "pixi.js" {
+  namespace systems {
+    interface FramebufferSystem {
+      forceStencil(): void
+    }
+  }
+}
 
 //-----------------------------------------------------------------------------
 /**
@@ -8,18 +17,18 @@ import { Window } from ".";
  * @class
  * @extends PIXI.Container
  */
-export class WindowLayer extends PIXI.Container {
+export class WindowLayer extends WindowSuper {
   constructor();
   constructor(thisClass: Constructable<WindowLayer>);
   constructor(arg?: any) {
     super();
-    if (typeof arg === "function" && arg === WindowLayer) {
+    if (arg === WindowLayer) {
       return;
     }
-    this.initialize(...arguments);
+    this.initialize();
   }
 
-  initialize(..._: any): void {
+  initialize(): void {
     // dup with constructor super()
     PIXI.Container.call(this);
   }
@@ -28,11 +37,12 @@ export class WindowLayer extends PIXI.Container {
    * Updates the window layer for each frame.
    */
   update(): void {
-    for (const child of this.children) {
-      if ((child as any).update) {
-        (child as any).update();
-      }
-    }
+    super.update();
+    // for (const child of this.children) {
+    //   if (child.update) {
+    //     child.update();
+    //   }
+    // }
   }
 
   /**
@@ -49,13 +59,13 @@ export class WindowLayer extends PIXI.Container {
     const gl = renderer.gl;
     const children = this.children.clone();
 
-    (renderer.framebuffer as any).forceStencil();
+    (renderer.framebuffer).forceStencil();
     graphics.transform = this.transform;
     renderer.batch.flush();
     gl.enable(gl.STENCIL_TEST);
 
     while (children.length > 0) {
-      const win = children.pop() as Window;
+      const win = children.pop() as WindowLayer & Window;
       if (win._isWindow && win.visible && win.openness > 0) {
         gl.stencilFunc(gl.EQUAL, 0, ~0);
         gl.stencilOp(gl.KEEP, gl.KEEP, gl.KEEP);
@@ -78,7 +88,7 @@ export class WindowLayer extends PIXI.Container {
     renderer.batch.flush();
 
     for (const child of this.children) {
-      if (!(child as any)._isWindow && child.visible) {
+      if (!(child as Window)._isWindow && child.visible) {
         child.render(renderer);
       }
     }

@@ -12,10 +12,10 @@ export class Window_Options extends Window_Command {
   constructor(thisClass: Constructable<Window_Options>);
   constructor(arg?: any) {
     super(Window_Command);
-    if (typeof arg === "function" && arg === Window_Options) {
+    if (arg === Window_Options) {
       return;
     }
-    this.initialize(...arguments);
+    this.initialize(arg);
   }
 
   initialize(rect?: Rectangle): void {
@@ -133,10 +133,10 @@ export class Window_Options extends Window_Command {
   }
 
   getConfigValue(symbol: string): number | boolean {
-    return (ConfigManager as any)[symbol];
+    return ConfigManager[symbol];
   }
 
   setConfigValue(symbol: string, volume: number | boolean): void {
-    (ConfigManager as any)[symbol] = volume;
+    ConfigManager[symbol] = volume;
   }
 }

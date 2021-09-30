@@ -13,13 +13,13 @@ export class Scene_Save extends Scene_File {
   constructor(thisClass: Constructable<Scene_Save>);
   constructor(arg?: any) {
     super(Scene_File);
-    if (typeof arg === "function" && arg === Scene_Save) {
+    if (arg === Scene_Save) {
       return;
     }
-    this.initialize(...arguments);
+    this.initialize();
   }
 
-  initialize(..._: any): void {
+  initialize(): void {
     super.initialize();
   }
 

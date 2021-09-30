@@ -14,7 +14,7 @@ export class Sprite_Battleback extends TilingSprite {
   constructor(thisClass: Constructable<Sprite_Battleback>);
   constructor(arg?: any) {
     super(TilingSprite);
-    if (typeof arg === "function" && arg === Sprite_Battleback) {
+    if (arg === Sprite_Battleback) {
       return;
     }
     this.initialize(...arguments);

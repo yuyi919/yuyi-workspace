@@ -26,13 +26,13 @@ export class TilemapLayer extends PIXI.Container {
   constructor(thisClass: Constructable<TilemapLayer>);
   constructor(arg?: any) {
     super();
-    if (typeof arg === "function" && arg === TilemapLayer) {
+    if (arg === TilemapLayer) {
       return;
     }
-    this.initialize(...arguments);
+    this.initialize();
   }
 
-  initialize(..._: any): void {
+  initialize(): void {
     // dup with constructor super()
     PIXI.Container.call(this);
     this._elements = [];
@@ -83,7 +83,7 @@ export class TilemapLayer extends PIXI.Container {
 
   render(renderer: PIXI.Renderer): void {
     const gl = renderer.gl;
-    const tilemapRenderer = (renderer.plugins as any).rpgtilemap as TilemapRenderer;
+    const tilemapRenderer = (renderer as unknown as PIXI.CustomRenderer).plugins.rpgtilemap;
     const shader = tilemapRenderer.getShader();
     const matrix = shader.uniforms.uProjectionMatrix;
 
@@ -125,8 +125,8 @@ export class TilemapLayer extends PIXI.Container {
   }
 
   _createVao(): void {
-    const ib = new (PIXI.Buffer as any)(null, true, true);
-    const vb = new (PIXI.Buffer as any)(null, true, false);
+    const ib = new PIXI.Buffer(null, true, true);
+    const vb = new PIXI.Buffer(null, true, false);
     const stride = TilemapLayer.VERTEX_STRIDE;
     const type = PIXI.TYPES.FLOAT;
     const geometry = new PIXI.Geometry();

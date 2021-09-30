@@ -22,12 +22,12 @@ export class Sprite_Button extends Sprite_Clickable {
 
   constructor(buttonType: MZ.ButtonType);
   constructor(thisClass: Constructable<Sprite_Button>);
-  constructor(arg?: any) {
+  constructor(arg: any) {
     super(Sprite_Clickable);
-    if (typeof arg === "function" && arg === Sprite_Button) {
+    if (arg === Sprite_Button) {
       return;
     }
-    this.initialize(...arguments);
+    this.initialize(arg);
   }
 
   initialize(buttonType?: MZ.ButtonType): void {

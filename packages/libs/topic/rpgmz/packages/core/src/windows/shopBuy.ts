@@ -20,10 +20,10 @@ export class Window_ShopBuy extends Window_Selectable {
   constructor(thisClass: Constructable<Window_ShopBuy>);
   constructor(arg?: any) {
     super(Window_Selectable);
-    if (typeof arg === "function" && arg === Window_ShopBuy) {
+    if (arg === Window_ShopBuy) {
       return;
     }
-    this.initialize(...arguments);
+    this.initialize(arg);
   }
 
   initialize(rect?: Rectangle): void {
@@ -78,7 +78,9 @@ export class Window_ShopBuy extends Window_Selectable {
       const item = this.goodsToItem(goods);
       if (item) {
         this._data.push(item);
-        this._price.push(goods[2] === 0 ? (item as any).price : goods[3]);
+        this._price.push(
+          goods[2] === 0 ? (item as MZ.DataEquipItem | MZ.DataItem).price : goods[3]
+        );
       }
     }
   }

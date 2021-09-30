@@ -7,7 +7,7 @@ import { Sprite_AnimationMV } from ".";
 import { $gameScreen, $gameTemp } from "../managers";
 import { $dataAnimations } from "../managers";
 import { AnimationRequest } from "../game/temp";
-import { Game_Battler, Game_Character, Game_CharacterBase } from "../game";
+import { Game_Actor, Game_Battler, Game_Character, Game_CharacterBase } from "../game";
 import { MZ } from "../MZ";
 
 //-----------------------------------------------------------------------------
@@ -29,13 +29,13 @@ export class Spriteset_Base extends Sprite {
   constructor(thisClass: Constructable<Spriteset_Base>);
   constructor(arg?: any) {
     super(Sprite);
-    if (typeof arg === "function" && arg === Spriteset_Base) {
+    if (arg === Spriteset_Base) {
       return;
     }
-    this.initialize(...arguments);
+    this.initialize();
   }
 
-  initialize(..._: any): void {
+  initialize(): void {
     super.initialize();
     this.setFrame(0, 0, Graphics.width, Graphics.height);
     this.loadSystemImages();
@@ -185,16 +185,16 @@ export class Spriteset_Base extends Sprite {
     const baseDelay = this.animationBaseDelay();
     const previous = delay > baseDelay ? this.lastAnimationSprite() : null;
     if (this.animationShouldMirror(targets[0])) {
-        mirror = !mirror;
+      mirror = !mirror;
     }
-    (sprite as any).targetObjects = targets;
-    sprite.setup(targetSprites, animation as any, mirror, delay, previous as any);
+    sprite.targetObjects = targets;
+    sprite.setup(targetSprites, animation as MZ.DataAnimation & MZ.DataAnimationMV, mirror, delay, previous as Sprite_AnimationMV & Sprite_Animation);
     this._effectsContainer!.addChild(sprite as PIXI.DisplayObject);
-    this._animationSprites.push(sprite as any);
+    this._animationSprites.push(sprite);
   }
 
   isMVAnimation(animation: MZ.DataAnimation | MZ.DataAnimationMV): boolean {
-    return !!(animation as any).frames;
+    return !!(animation as MZ.DataAnimationMV).frames;
   }
 
   makeTargetSprites(targets: Array<Game_Character | Game_Battler>): Sprite[] {
@@ -228,14 +228,14 @@ export class Spriteset_Base extends Sprite {
   }
 
   animationShouldMirror(target: Game_Character | Game_Battler): boolean {
-    return target && (target as any).isActor && (target as any).isActor();
+    return (target as Game_Actor)?.isActor?.();
   }
 
   removeAnimation(sprite: Sprite_Animation | Sprite_AnimationMV): void {
-    this._animationSprites.remove(sprite as any);
+    this._animationSprites.remove(sprite);
     this._effectsContainer!.removeChild(sprite as PIXI.DisplayObject);
-    for (const target of (sprite as any).targetObjects) {
-      if (target.endAnimation) {
+    for (const target of sprite.targetObjects) {
+      if ("endAnimation" in target) {
         target.endAnimation();
       }
     }

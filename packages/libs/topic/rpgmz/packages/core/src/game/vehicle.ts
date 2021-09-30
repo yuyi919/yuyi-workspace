@@ -20,7 +20,7 @@ export class Game_Vehicle extends Game_Character {
   constructor(thisClass: Constructable<Game_Vehicle>);
   constructor(arg: any) {
     super(Game_Character);
-    if (typeof arg === "function" && arg === Game_Vehicle) {
+    if (arg === Game_Vehicle) {
       return;
     }
     this.initialize(...arguments);

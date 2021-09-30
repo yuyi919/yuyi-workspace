@@ -14,12 +14,12 @@ export class Window_ActorCommand extends Window_Command {
 
   constructor(rect: Rectangle);
   constructor(thisClass: Constructable<Window_ActorCommand>);
-  constructor(arg?: any) {
+  constructor(arg: any) {
     super(Window_Command);
-    if (typeof arg === "function" && arg === Window_ActorCommand) {
+    if (arg === Window_ActorCommand) {
       return;
     }
-    this.initialize(...arguments);
+    this.initialize(arg);
   }
 
   initialize(rect?: Rectangle): void {

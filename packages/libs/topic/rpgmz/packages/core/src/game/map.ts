@@ -48,13 +48,13 @@ export class Game_Map {
   constructor();
   constructor(thisClass: Constructable<Game_Map>);
   constructor(arg?: any) {
-    if (typeof arg === "function" && arg === Game_Map) {
+    if (arg === Game_Map) {
       return;
     }
-    this.initialize(...arguments);
+    this.initialize();
   }
 
-  initialize(..._: any): void {
+  initialize(): void {
     this._interpreter = new Game_Interpreter();
     this._mapId = 0;
     this._tilesetId = 0;

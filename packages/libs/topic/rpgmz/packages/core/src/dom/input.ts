@@ -5,9 +5,11 @@ import { MZ } from "../MZ";
 /**
  * The static class that handles input data from the keyboard and gamepads.
  *
- * @namespace
+ * @static
+ * @abstract
+ * @class
  */
-export class Input {
+export abstract class Input {
   /**
    * Initializes the input system.
    */

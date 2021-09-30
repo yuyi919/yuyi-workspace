@@ -19,10 +19,10 @@ export class Window_EquipItem extends Window_ItemList {
   constructor(thisClass: Constructable<Window_EquipItem>);
   constructor(arg?: any) {
     super(Window_ItemList);
-    if (typeof arg === "function" && arg === Window_EquipItem) {
+    if (arg === Window_EquipItem) {
       return;
     }
-    this.initialize(...arguments);
+    this.initialize(arg);
   }
 
   initialize(rect?: Rectangle): void {
@@ -59,7 +59,7 @@ export class Window_EquipItem extends Window_ItemList {
     if (item === null) {
       return true;
     }
-    return !!this._actor && this._actor.canEquip(item) && (item as any).etypeId === this.etypeId();
+    return !!this._actor && this._actor.canEquip(item) && item.etypeId === this.etypeId();
   }
 
   etypeId(): MZ.EquipTypeID {

@@ -15,12 +15,12 @@ export class Sprite_Picture extends Sprite_Clickable {
 
   constructor(pictureId: MZ.ID);
   constructor(thisClass: Constructable<Sprite_Picture>);
-  constructor(arg?: any) {
+  constructor(arg: any) {
     super(Sprite_Clickable);
-    if (typeof arg === "function" && arg === Sprite_Picture) {
+    if (arg === Sprite_Picture) {
       return;
     }
-    this.initialize(...arguments);
+    this.initialize(arg);
   }
 
   initialize(pictureId?: MZ.ID): void {

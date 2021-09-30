@@ -18,10 +18,10 @@ export class Window_DebugEdit extends Window_Selectable {
   constructor(thisClass: Constructable<Window_DebugEdit>);
   constructor(arg?: any) {
     super(Window_Selectable);
-    if (typeof arg === "function" && arg === Window_DebugEdit) {
+    if (arg === Window_DebugEdit) {
       return;
     }
-    this.initialize(...arguments);
+    this.initialize(arg);
   }
 
   initialize(rect?: Rectangle): void {

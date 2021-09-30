@@ -10,24 +10,28 @@ import { MZ } from "../MZ";
 //
 // The window class with cursor movement functions.
 
-export class Window_Selectable extends Window_Scrollable {
-  _index = -1;
-  _cursorFixed = false;
-  _cursorAll = false;
-  _helpWindow: Window_Help | null = null;
-  _handlers: { [key: string]: () => void } = {};
-  _doubleTouch = false;
-  _canRepeat = true;
+export abstract class Window_Selectable extends Window_Scrollable {
+  protected _index = -1;
+  private _cursorFixed = false;
+  private _cursorAll = false;
+  private _helpWindow: Window_Help | null = null;
+  private _handlers: { [key: string]: () => void } = {};
+  private _doubleTouch = false;
+  protected _canRepeat = true;
   cursorVisible = false;
 
+  // setAllowRepeat(canRepeat: boolean) {
+  //   this._canRepeat = canRepeat
+  // }
+
   constructor(rect: Rectangle);
-  constructor(thisClass: Constructable<Window_Selectable>);
+  constructor(thisClass: typeof Window_Selectable);
   constructor(arg?: any) {
     super(Window_Scrollable);
-    if (typeof arg === "function" && arg === Window_Selectable) {
+    if (arg === Window_Selectable) {
       return;
     }
-    this.initialize(...arguments);
+    this.initialize(arg);
   }
 
   initialize(rect?: Rectangle): void {

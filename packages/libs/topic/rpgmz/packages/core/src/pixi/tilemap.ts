@@ -4,6 +4,7 @@ import { TilemapLayer } from ".";
 import { TilemapRenderer } from ".";
 import { Point } from ".";
 import { Bitmap } from ".";
+import { Sprite } from "./sprite";
 
 //-----------------------------------------------------------------------------
 /**
@@ -45,7 +46,7 @@ export class Tilemap extends PIXI.Container {
   constructor(thisClass: Constructable<Tilemap>);
   constructor(arg?: any) {
     super();
-    if (typeof arg === "function" && arg === Tilemap) {
+    if (arg === Tilemap) {
       return;
     }
     this.initialize(...arguments);
@@ -175,9 +176,7 @@ export class Tilemap extends PIXI.Container {
     this.animationCount++;
     this.animationFrame = Math.floor(this.animationCount / 30);
     for (const child of this.children) {
-      if ((child as any).update) {
-        (child as any).update();
-      }
+      (child as Tilemap).update?.();
     }
   }
 
@@ -498,13 +497,13 @@ export class Tilemap extends PIXI.Container {
     this.children.sort(this._compareChildOrder.bind(this));
   }
 
-  _compareChildOrder(a: PIXI.DisplayObject, b: PIXI.DisplayObject): number {
-    if ((a as any).z !== (b as any).z) {
-      return (a as any).z - (b as any).z;
+  _compareChildOrder(a: Sprite, b: Sprite): number {
+    if (a.z !== b.z) {
+      return a.z - b.z;
     } else if (a.y !== b.y) {
       return a.y - b.y;
     } else {
-      return (a as any).spriteId - (b as any).spriteId;
+      return a.spriteId - b.spriteId;
     }
   }
 

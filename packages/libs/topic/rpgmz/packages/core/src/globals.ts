@@ -23,7 +23,10 @@ interface String {
   padZero(length: number): string;
 }
 interface Constructable<T> {
-  new (...args: Array<any>): T;
+  new (...args: any[]): T;
+}
+interface AbstractConstructable<T> {
+  prototype: T;
 }
 
 interface Document {

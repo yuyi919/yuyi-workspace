@@ -23,13 +23,13 @@ export class Sprite_Gauge extends Sprite {
   constructor(thisClass: Constructable<Sprite_Gauge>);
   constructor(arg?: any) {
     super(Sprite);
-    if (typeof arg === "function" && arg === Sprite_Gauge) {
+    if (arg === Sprite_Gauge) {
       return;
     }
-    this.initialize(...arguments);
+    this.initialize();
   }
 
-  initialize(..._: any): void {
+  initialize(): void {
     super.initialize();
     this.initMembers();
     this.createBitmap();

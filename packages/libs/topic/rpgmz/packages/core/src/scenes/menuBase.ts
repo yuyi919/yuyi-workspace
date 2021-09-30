@@ -26,7 +26,7 @@ export class Scene_MenuBase extends Scene_Base {
   constructor(thisClass: Constructable<Scene_MenuBase>);
   constructor(arg?: any) {
     super(Scene_Base);
-    if (typeof arg === "function" && arg === Scene_MenuBase) {
+    if (arg === Scene_MenuBase) {
       return;
     }
     this.initialize(...arguments);

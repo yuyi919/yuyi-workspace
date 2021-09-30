@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/ban-types */
 import type { Types, KeyOf, ValueOf } from "@yuyi919/shared-types";
 
 // type EventNames = {

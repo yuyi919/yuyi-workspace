@@ -21,13 +21,13 @@ export class Window_NumberInput extends Window_Selectable {
   constructor(thisClass: Constructable<Window_NumberInput>);
   constructor(arg?: any) {
     super(Window_Selectable);
-    if (typeof arg === "function" && arg === Window_NumberInput) {
+    if (arg === Window_NumberInput) {
       return;
     }
-    this.initialize(...arguments);
+    this.initialize();
   }
 
-  initialize(..._: any): void {
+  initialize(): void {
     super.initialize(new Rectangle());
     this._number = 0;
     this._maxDigits = 1;

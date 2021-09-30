@@ -13,13 +13,13 @@ export class Game_Actors {
   constructor();
   constructor(thisClass: Constructable<Game_Actors>);
   constructor(arg?: any) {
-    if (typeof arg === "function" && arg === Game_Actors) {
+    if (arg === Game_Actors) {
       return;
     }
-    this.initialize(...arguments);
+    this.initialize();
   }
 
-  initialize(..._: any): void {
+  initialize(): void {
     this._data = [];
   }
 

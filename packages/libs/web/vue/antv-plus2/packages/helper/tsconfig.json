@@ -5,6 +5,9 @@
   },
   "references": [
     {
+      "path": "../../../shared/decorators"
+    },
+    {
       "path": "./tsconfig.lib.json"
     },
     {

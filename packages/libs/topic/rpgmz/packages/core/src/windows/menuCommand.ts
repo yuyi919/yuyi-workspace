@@ -19,10 +19,10 @@ export class Window_MenuCommand extends Window_Command {
   constructor(thisClass: Constructable<Window_MenuCommand>);
   constructor(arg?: any) {
     super(Window_Command);
-    if (typeof arg === "function" && arg === Window_MenuCommand) {
+    if (arg === Window_MenuCommand) {
       return;
     }
-    this.initialize(...arguments);
+    this.initialize(arg);
   }
 
   initialize(rect?: Rectangle): void {

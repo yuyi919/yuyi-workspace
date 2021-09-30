@@ -14,11 +14,10 @@ export class Game_CommonEvent {
 
   constructor(commonEventId: MZ.CommonEventID);
   constructor(thisClass: Constructable<Game_CommonEvent>);
-  constructor(arg?: any) {
-    if (typeof arg === "function" && arg === Game_CommonEvent) {
-      return;
+  constructor(arg?: MZ.CommonEventID | Constructable<Game_CommonEvent>) {
+    if (typeof arg === "number") {
+      this.initialize(arg);
     }
-    this.initialize(...arguments);
   }
 
   initialize(commonEventId?: MZ.CommonEventID): void {

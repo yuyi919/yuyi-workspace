@@ -623,6 +623,12 @@
       "versionPolicyName": "shared"
     },
     {
+      "packageName": "@yuyi919/vue-shared-decorators",
+      "projectFolder": "packages/libs/web/vue/shared/decorators",
+      "reviewCategory": "production",
+      "versionPolicyName": "shared"
+    },
+    {
       "packageName": "@yuyi919/vue-use",
       "projectFolder": "packages/libs/web/vue/use",
       "reviewCategory": "production"

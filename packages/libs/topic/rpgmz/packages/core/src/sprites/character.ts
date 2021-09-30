@@ -1,7 +1,7 @@
 import { Bitmap, Sprite } from "../pixi";
 import { ImageManager } from "../managers";
 import { $gameMap } from "../managers";
-import { Game_Character, Game_CharacterBase } from "../game";
+import { Game_Character } from "../game";
 
 //-----------------------------------------------------------------------------
 // Sprite_Character
@@ -28,7 +28,7 @@ export class Sprite_Character extends Sprite {
     if (typeof arg === "function" && arg === Sprite_Character) {
       return;
     }
-    this.initialize(...arguments);
+    this.initialize(arg);
   }
 
   initialize(..._: any): void;

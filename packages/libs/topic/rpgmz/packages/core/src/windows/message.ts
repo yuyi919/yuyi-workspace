@@ -36,10 +36,10 @@ export class Window_Message extends Window_Base {
   constructor(thisClass: Constructable<Window_Message>);
   constructor(arg?: any) {
     super(Window_Base);
-    if (typeof arg === "function" && arg === Window_Message) {
+    if (arg === Window_Message) {
       return;
     }
-    this.initialize(...arguments);
+    this.initialize(arg);
   }
 
   initialize(rect?: Rectangle): void {

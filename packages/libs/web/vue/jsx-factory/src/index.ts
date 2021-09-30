@@ -187,3 +187,9 @@ export const Fragment: Element = Symbol("Fragment") as any;
 
 export * from "./mergeJsxPropsToVNode";
 export * from "./VNode";
+
+import type * as base from "../types/base.d";
+import type * as builtin from "../types/builtin-components.d";
+import type * as dom from "../types/dom.d";
+
+export type { base, builtin, dom }

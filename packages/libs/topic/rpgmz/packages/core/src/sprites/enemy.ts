@@ -4,6 +4,7 @@ import { $gameSystem } from "../managers";
 import { Game_Enemy } from "../game";
 import { ImageManager, SoundManager } from "../managers";
 import { MZ } from "../MZ";
+import { Sprite } from "../pixi";
 
 //-----------------------------------------------------------------------------
 // Sprite_Enemy
@@ -22,12 +23,12 @@ export class Sprite_Enemy extends Sprite_Battler {
 
   constructor(battler: Game_Enemy);
   constructor(thisClass: Constructable<Sprite_Enemy>);
-  constructor(arg?: any) {
+  constructor(arg: any) {
     super(Sprite_Battler);
-    if (typeof arg === "function" && arg === Sprite_Enemy) {
+    if (arg === Sprite_Enemy) {
       return;
     }
-    this.initialize(...arguments);
+    this.initialize(arg);
   }
 
   initialize(battler?: Game_Enemy): void {
@@ -90,8 +91,8 @@ export class Sprite_Enemy extends Sprite_Battler {
   setHue(hue: number): void {
     super.setHue(hue);
     for (const child of this.children) {
-      if ((child as any).setHue) {
-        (child as any).setHue(-hue);
+      if ("setHue" in child) {
+        (child as Sprite).setHue(-hue);
       }
     }
   }

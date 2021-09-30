@@ -37,7 +37,7 @@ export class Game_Screen {
   constructor();
   constructor(thisClass: Constructable<Game_Screen>);
   constructor(arg?: any) {
-    if (typeof arg === "function" && arg === Game_Screen) {
+    if (arg === Game_Screen) {
       return;
     }
     this.initialize(...arguments);

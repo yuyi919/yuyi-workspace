@@ -13,12 +13,11 @@ export class Game_Follower extends Game_Character {
 
   constructor(memberIndex: number);
   constructor(thisClass: Constructable<Game_Follower>);
-  constructor(arg: any) {
+  constructor(arg: number | Constructable<Game_Follower>) {
     super(Game_Character);
-    if (typeof arg === "function" && arg === Game_Follower) {
-      return;
+    if (typeof arg === "number") {
+      this.initialize(arg);
     }
-    this.initialize(...arguments);
   }
 
   initialize(memberIndex?: number): void {

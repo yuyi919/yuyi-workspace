@@ -27,7 +27,7 @@ export class Game_Party extends Game_Unit {
   constructor(thisClass: Constructable<Game_Party>);
   constructor(arg?: any) {
     super(Game_Unit);
-    if (typeof arg === "function" && arg === Game_Party) {
+    if (arg === Game_Party) {
       return;
     }
     this.initialize(...arguments);

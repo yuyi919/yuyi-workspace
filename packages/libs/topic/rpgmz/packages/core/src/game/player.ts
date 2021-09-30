@@ -1,10 +1,16 @@
-import { Graphics, Input, TouchInput } from "../dom";
-import { Game_Character } from ".";
-import { Game_Followers } from ".";
-import { Game_Vehicle } from ".";
-import { BattleManager, ConfigManager } from "../managers";
-import { $gameMap, $gameMessage, $gameParty, $gameSystem, $gameTemp } from "../managers";
-import { $dataSystem, $dataTroops } from "../managers";
+import { Game_Character, Game_Followers, Game_Vehicle } from ".";
+import { Input, TouchInput } from "../dom";
+import {
+  $dataSystem,
+  $dataTroops,
+  $gameMap,
+  $gameMessage,
+  $gameParty,
+  $gameSystem,
+  $gameTemp,
+  BattleManager,
+  ConfigManager,
+} from "../managers";
 import { MZ } from "../MZ";
 
 //-----------------------------------------------------------------------------
@@ -32,13 +38,13 @@ export class Game_Player extends Game_Character {
   constructor(thisClass: Constructable<Game_Player>);
   constructor(arg?: any) {
     super(Game_Character);
-    if (typeof arg === "function" && arg === Game_Player) {
+    if (arg === Game_Player) {
       return;
     }
-    this.initialize(...arguments);
+    this.initialize();
   }
 
-  initialize(..._: any): void {
+  initialize(): void {
     super.initialize();
     this.setTransparent($dataSystem.optTransparent);
   }
@@ -98,8 +104,8 @@ export class Game_Player extends Game_Character {
     this._newMapId = mapId;
     this._newX = x;
     this._newY = y;
-    this._newDirection = d as any;
-    this._fadeType = fadeType as any;
+    this._newDirection = d;
+    this._fadeType = fadeType;
   }
 
   setupForNewGame(): void {

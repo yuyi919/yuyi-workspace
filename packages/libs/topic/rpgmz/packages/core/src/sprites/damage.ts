@@ -18,19 +18,19 @@ export class Sprite_Damage extends Sprite {
   _duration = 90;
   _flashColor: MZ.RGBAColorArray = [0, 0, 0, 0];
   _flashDuration = 0;
-  _colorType = 0;
+  _colorType: MZ.DamageColorType = 0;
 
   constructor();
   constructor(thisClass: Constructable<Sprite_Damage>);
   constructor(arg?: any) {
     super(Sprite);
-    if (typeof arg === "function" && arg === Sprite_Damage) {
+    if (arg === Sprite_Damage) {
       return;
     }
-    this.initialize(...arguments);
+    this.initialize();
   }
 
-  initialize(..._: any): void {
+  initialize(): void {
     super.initialize();
     this._duration = 90;
     this._flashColor = [0, 0, 0, 0];
@@ -40,9 +40,7 @@ export class Sprite_Damage extends Sprite {
 
   destroy(options?: any): void {
     for (const child of this.children) {
-      if ((child as any).bitmap) {
-        (child as any).bitmap.destroy();
-      }
+      (child as Sprite)?.bitmap?.destroy();
     }
     super.destroy(options);
   }
@@ -78,7 +76,7 @@ export class Sprite_Damage extends Sprite {
   }
 
   damageColor(): string {
-    return ColorManager.damageColor(this._colorType as any);
+    return ColorManager.damageColor(this._colorType);
   }
 
   outlineColor(): string {

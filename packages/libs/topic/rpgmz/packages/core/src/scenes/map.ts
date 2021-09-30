@@ -55,7 +55,7 @@ export class Scene_Map extends Scene_Message {
   constructor(thisClass: Constructable<Scene_Battle>);
   constructor(arg?: any) {
     super(Scene_Message);
-    if (typeof arg === "function" && arg === Scene_Battle) {
+    if (arg === Scene_Battle) {
       return;
     }
     this.initialize(...arguments);
@@ -77,7 +77,7 @@ export class Scene_Map extends Scene_Message {
     if (this._transfer) {
       DataManager.loadMapData($gamePlayer.newMapId());
       this.onTransfer();
-    } else if (!$dataMap || ($dataMap as any).id !== $gameMap.mapId()) {
+    } else if (!$dataMap || $dataMap.id !== $gameMap.mapId()) {
       DataManager.loadMapData($gameMap.mapId());
     }
   }

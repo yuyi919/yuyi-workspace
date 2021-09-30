@@ -1,3 +1,4 @@
+/* eslint-disable prefer-spread */
 /* eslint-disable prefer-rest-params */
 import { Window_Base } from ".";
 import { Input, TouchInput } from "../dom";
@@ -23,9 +24,9 @@ export class Window_BattleLog extends Window_Base {
 
   constructor(rect: Rectangle);
   constructor(thisClass: Constructable<Window_BattleLog>);
-  constructor() {
+  constructor(arg: any) {
     super(Window_Base);
-    this.initialize(...arguments);
+    this.initialize(arg);
   }
 
   initialize(rect?: Rectangle): void {
@@ -104,8 +105,8 @@ export class Window_BattleLog extends Window_Base {
   callNextMethod(): void {
     if (this._methods.length > 0) {
       const method = this._methods.shift()!;
-      if (method.name && (this as any)[method.name]) {
-        (this as any)[method.name].apply(this, method.params);
+      if (method.name && this[method.name]) {
+        this[method.name].apply(this, method.params);
       } else {
         throw new Error("Method not found: " + method.name);
       }

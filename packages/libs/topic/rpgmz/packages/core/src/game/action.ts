@@ -54,7 +54,7 @@ export class Game_Action extends Game_Action_Static {
   constructor(thisClass: Constructable<Game_Action>);
   constructor(arg: any, ...args: any[]) {
     super();
-    if (typeof arg === "function" && arg === Game_Action) {
+    if (arg === Game_Action) {
       return;
     }
     this.initialize(arg, ...args);

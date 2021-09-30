@@ -11,10 +11,10 @@ export class Window_HorzCommand extends Window_Command {
   constructor(thisClass: Constructable<Window_HorzCommand>);
   constructor(arg?: any) {
     super(Window_Command);
-    if (typeof arg === "function" && arg === Window_HorzCommand) {
+    if (arg === Window_HorzCommand) {
       return;
     }
-    this.initialize(...arguments);
+    this.initialize(arg);
   }
 
   initialize(rect?: Rectangle): void {

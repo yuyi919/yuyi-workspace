@@ -23,10 +23,10 @@ export class Game_Troop extends Game_Unit {
   constructor(thisClass: Constructable<Game_Troop>);
   constructor(arg?: any) {
     super(Game_Unit);
-    if (typeof arg === "function" && arg === Game_Troop) {
+    if (arg === Game_Troop) {
       return;
     }
-    this.initialize(...arguments);
+    this.initialize();
   }
 
   // prettier-ignore
@@ -40,7 +40,7 @@ export class Game_Troop extends Game_Unit {
     "Ｎ","Ｏ","Ｐ","Ｑ","Ｒ","Ｓ","Ｔ","Ｕ","Ｖ","Ｗ","Ｘ","Ｙ","Ｚ"
   ];
 
-  initialize(..._: any): void {
+  initialize(): void {
     super.initialize();
     this._interpreter = new Game_Interpreter();
     this.clear();

@@ -19,7 +19,8 @@
     "@yuyi919/rpgmz-plugin-transformer": "workspace:0.0.1",
     "class-transformer": "0.2.3",
     "reflect-metadata": "^0.1.13",
-    "mobx": "6.0.4"
+    "mobx": "6.0.4",
+    "bitecs": "~0.3.21-6"
   },
   "devDependencies": {
     "@types/jest": "~27.0.1",

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-var-requires */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/ban-types */
 import pako from "pako";
@@ -233,7 +234,7 @@ export class StorageManager {
 
   static fileDirectoryPath(): string {
     const path = require("path");
-    const base = path.dirname((process as any).mainModule.filename);
+    const base = path.dirname(process.mainModule.filename);
     return path.join(base, "save/");
   }
 

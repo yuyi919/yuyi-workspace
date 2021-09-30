@@ -15,13 +15,13 @@ export class Game_Followers {
   constructor();
   constructor(thisClass: Constructable<Game_Followers>);
   constructor(arg?: any) {
-    if (typeof arg === "function" && arg === Game_Followers) {
+    if (arg === Game_Followers) {
       return;
     }
-    this.initialize(...arguments);
+    this.initialize();
   }
 
-  initialize(..._: any): void {
+  initialize(): void {
     this._visible = $dataSystem.optFollowers;
     this._gathering = false;
     this._data = [];

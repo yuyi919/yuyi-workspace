@@ -14,10 +14,10 @@ export class Window_ShopCommand extends Window_HorzCommand {
   constructor(thisClass: Constructable<Window_ShopCommand>);
   constructor(arg?: any) {
     super(Window_HorzCommand);
-    if (typeof arg === "function" && arg === Window_ShopCommand) {
+    if (arg === Window_ShopCommand) {
       return;
     }
-    this.initialize(...arguments);
+    this.initialize(arg);
   }
 
   initialize(rect?: Rectangle): void {

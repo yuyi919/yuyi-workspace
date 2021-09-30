@@ -12,10 +12,10 @@ export class Window_ShopSell extends Window_ItemList {
   constructor(thisClass: Constructable<Window_ShopSell>);
   constructor(arg?: any) {
     super(Window_ItemList);
-    if (typeof arg === "function" && arg === Window_ShopSell) {
+    if (arg === Window_ShopSell) {
       return;
     }
-    this.initialize(...arguments);
+    this.initialize(arg);
   }
 
   initialize(rect?: Rectangle): void {

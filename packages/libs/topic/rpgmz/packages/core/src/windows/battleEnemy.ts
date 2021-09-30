@@ -13,12 +13,12 @@ export class Window_BattleEnemy extends Window_Selectable {
 
   constructor(rect: Rectangle);
   constructor(thisClass: Constructable<Window_BattleEnemy>);
-  constructor(arg?: any) {
+  constructor(arg: any) {
     super(Window_Selectable);
-    if (typeof arg === "function" && arg === Window_BattleEnemy) {
+    if (arg === Window_BattleEnemy) {
       return;
     }
-    this.initialize(...arguments);
+    this.initialize(arg);
   }
 
   initialize(rect?: Rectangle): void {

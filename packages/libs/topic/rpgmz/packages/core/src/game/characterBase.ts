@@ -45,10 +45,14 @@ export class Game_CharacterBase {
   constructor();
   constructor(thisClass: Constructable<Game_CharacterBase>);
   constructor(arg?: any) {
-    if (typeof arg === "function" && arg === Game_CharacterBase) {
+    if (arg === Game_CharacterBase) {
       return;
     }
-    this.initialize(...arguments);
+    this.initialize();
+  }
+
+  initialize(): void {
+    this.initMembers();
   }
 
   get x(): number {
@@ -56,10 +60,6 @@ export class Game_CharacterBase {
   }
   get y(): number {
     return this._y;
-  }
-
-  initialize(..._: any): void {
-    this.initMembers();
   }
 
   initMembers(): void {

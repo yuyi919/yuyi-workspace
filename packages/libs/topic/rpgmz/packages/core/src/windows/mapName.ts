@@ -15,10 +15,10 @@ export class Window_MapName extends Window_Base {
   constructor(thisClass: Constructable<Window_MapName>);
   constructor(arg?: any) {
     super(Window_Base);
-    if (typeof arg === "function" && arg === Window_MapName) {
+    if (arg === Window_MapName) {
       return;
     }
-    this.initialize(...arguments);
+    this.initialize(arg);
   }
 
   initialize(rect?: Rectangle): void {

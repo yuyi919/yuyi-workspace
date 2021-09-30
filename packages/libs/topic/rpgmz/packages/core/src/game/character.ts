@@ -67,13 +67,13 @@ export class Game_Character extends Game_CharacterBase {
   constructor(thisClass: Constructable<Game_Character>);
   constructor(arg?: any) {
     super(Game_CharacterBase);
-    if (typeof arg === "function" && arg === Game_Character) {
+    if (arg === Game_Character) {
       return;
     }
-    this.initialize(...arguments);
+    this.initialize();
   }
 
-  initialize(..._: any): void {
+  initialize(): void {
     super.initialize();
   }
 
@@ -393,7 +393,7 @@ export class Game_Character extends Game_CharacterBase {
   advanceMoveRouteIndex(): void {
     const moveRoute = this._moveRoute;
     if (moveRoute && (this.isMovementSucceeded() || moveRoute.skippable)) {
-      let numCommands = moveRoute.list.length - 1;
+      const numCommands = moveRoute.list.length - 1;
       this._moveRouteIndex++;
       if (moveRoute.repeat && this._moveRouteIndex >= numCommands) {
         this._moveRouteIndex = 0;

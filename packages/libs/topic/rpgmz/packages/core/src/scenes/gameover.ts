@@ -17,7 +17,7 @@ export class Scene_Gameover extends Scene_Base {
   constructor(thisClass: Constructable<Scene_Gameover>);
   constructor(arg?: any) {
     super(Scene_Base);
-    if (typeof arg === "function" && arg === Scene_Gameover) {
+    if (arg === Scene_Gameover) {
       return;
     }
     this.initialize(...arguments);

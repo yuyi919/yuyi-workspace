@@ -62,6 +62,12 @@ export default defineViteConfig({
       define: {
         "process.env.NODE_ENV": JSON.stringify(mode),
       },
+      esbuild: {
+        jsx: "transform",
+        jsxFactory: "jsx_runtime.jsxEsbuild",
+        jsxFragment: "jsx_runtime.Fragment",
+        jsxInject: "import * as jsx_runtime from '@yuyi919/vue-jsx-factory'",
+      },
       root: pathResolve("."),
       publicDir: command === "build" ? false : "project",
       cacheDir: pathResolve("./node_modules/.vite"),

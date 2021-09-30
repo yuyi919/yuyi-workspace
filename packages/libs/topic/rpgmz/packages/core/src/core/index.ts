@@ -2,6 +2,12 @@
 export type ID = number;
 export type DataID = ID;
 
+export type SelfSwitchData = [MZ.MapID, MZ.ID, MZ.SelfSwitchCh];
+
+export type HexColorString = string; // #rrggbb
+export type RGBAColorString = string; // rgba(r, g, b, a)
+export type DamageColorType = 0 | 1 | 2 | 3;
+
 export type ActorID = DataID;
 export type ClassID = DataID;
 export type SkillID = DataID;
@@ -661,6 +667,7 @@ export interface MapEncount {
 export type MapEventArray = [null, ...Event[]] | [];
 
 export interface DataMap {
+  id: number;
   displayName: string;
   note: string;
   width: number;

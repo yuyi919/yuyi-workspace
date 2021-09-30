@@ -1,5 +1,6 @@
 import { Sprite } from "../pixi";
 import { ImageManager } from "../managers";
+import { Game_Character } from "../game";
 
 //-----------------------------------------------------------------------------
 // Sprite_Balloon
@@ -11,12 +12,14 @@ export class Sprite_Balloon extends Sprite {
   _balloonId = 0;
   _duration = 0;
   z = 7;
+  
+  targetObject?: Game_Character
 
   constructor();
   constructor(thisClass: Constructable<Sprite_Balloon>);
   constructor(arg?: any) {
     super(Sprite);
-    if (typeof arg === "function" && arg === Sprite_Balloon) {
+    if (arg === Sprite_Balloon) {
       return;
     }
     this.initialize(...arguments);

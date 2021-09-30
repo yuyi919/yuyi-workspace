@@ -14,7 +14,7 @@ export class Point extends PIXI.Point {
   constructor(thisClass: Constructable<Point>);
   constructor(arg?: any) {
     super(...arguments);
-    if (typeof arg === "function" && arg === Point) {
+    if (arg === Point) {
       return;
     }
     this.initialize(...arguments);

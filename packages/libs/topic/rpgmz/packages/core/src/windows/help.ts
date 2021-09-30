@@ -14,10 +14,10 @@ export class Window_Help extends Window_Base {
   constructor(thisClass: Constructable<Window_Help>);
   constructor(arg?: any) {
     super(Window_Base);
-    if (typeof arg === "function" && arg === Window_Help) {
+    if (arg === Window_Help) {
       return;
     }
-    this.initialize(...arguments);
+    this.initialize(arg);
   }
 
   initialize(rect?: Rectangle): void {

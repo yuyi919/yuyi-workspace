@@ -19,7 +19,7 @@ import { Scene_Gameover } from ".";
 //
 // The superclass of all scenes within the game.
 
-export class Scene_Base extends Stage {
+export abstract class Scene_Base extends Stage {
   _started = false;
   _active = false;
   _fadeSign = 0;
@@ -29,7 +29,9 @@ export class Scene_Base extends Stage {
   _windowLayer?: WindowLayer;
   _colorFilter?: ColorFilter;
 
-  constructor(arg?: Constructable<Scene_Base>) {
+  constructor()
+  constructor(arg: typeof Scene_Base)
+  constructor(arg?: typeof Scene_Base) {
     super(Stage);
     if (arg !== Scene_Base) {
       this.initialize();
@@ -37,7 +39,6 @@ export class Scene_Base extends Stage {
   }
 
   initialize(): void {
-    console.log(this.constructor.name, "initialize")
     super.initialize();
     this._started = false;
     this._active = false;
@@ -46,6 +47,7 @@ export class Scene_Base extends Stage {
     this._fadeWhite = 0;
     this._fadeOpacity = 0;
     this.createColorFilter();
+    // console.log(this.constructor.name, "initialize")
   }
 
   create(): void {
@@ -65,10 +67,10 @@ export class Scene_Base extends Stage {
     this._active = true;
   }
 
-  update(): void {
+  update(current?: boolean): void {
     this.updateFade();
     this.updateColorFilter();
-    this.updateChildren();
+    !current && this.updateChildren();
     AudioManager.checkErrors();
   }
 
@@ -99,7 +101,7 @@ export class Scene_Base extends Stage {
     this.addChild(this._windowLayer);
   }
 
-  addWindow(window: PIXI.DisplayObject): void {
+  addWindow(window: PIXI.DisplayObject | Window_Base): void {
     this._windowLayer!.addChild(window);
   }
 
@@ -144,9 +146,7 @@ export class Scene_Base extends Stage {
 
   updateChildren(): void {
     for (const child of this.children) {
-      if ((child as any).update) {
-        (child as any).update();
-      }
+      (child as Scene_Base).update?.();
     }
   }
 
@@ -228,12 +228,13 @@ export class Scene_Base extends Stage {
     return this.buttonAreaTop() + offsetY;
   }
 
+  /**
+   * 计算窗体高度
+   * @param numLines
+   * @param selectable
+   */
   calcWindowHeight(numLines: number, selectable: boolean): number {
-    if (selectable) {
-      return Window_Selectable.prototype.fittingHeight(numLines);
-    } else {
-      return Window_Base.prototype.fittingHeight(numLines);
-    }
+    return (selectable ? Window_Selectable : Window_Base).prototype.fittingHeight(numLines);
   }
 
   requestAutosave(): void {

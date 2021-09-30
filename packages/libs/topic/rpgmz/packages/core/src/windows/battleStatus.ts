@@ -18,10 +18,10 @@ export class Window_BattleStatus extends Window_StatusBase {
   constructor(thisClass: Constructable<Window_BattleStatus>);
   constructor(arg?: any) {
     super(Window_StatusBase);
-    if (typeof arg === "function" && arg === Window_BattleStatus) {
+    if (arg === Window_BattleStatus) {
       return;
     }
-    this.initialize(...arguments);
+    this.initialize(arg);
   }
 
   initialize(rect?: Rectangle): void {

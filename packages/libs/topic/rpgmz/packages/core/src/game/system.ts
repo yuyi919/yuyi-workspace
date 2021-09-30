@@ -32,7 +32,7 @@ export class Game_System {
   constructor();
   constructor(thisClass: Constructable<Game_System>);
   constructor(arg?: any) {
-    if (typeof arg === "function" && arg === Game_System) {
+    if (arg === Game_System) {
       return;
     }
     this.initialize(...arguments);

@@ -36,6 +36,18 @@
     "node-shared-logger": {
       "tags": ["node", "shared", "logger"]
     },
+    "rpgmz": {
+      "tags": ["topic", "rpgmz"]
+    },
+    "rpgmz-core": {
+      "tags": ["topic", "rpgmz", "packages", "core"]
+    },
+    "rpgmz-plugin-transformer": {
+      "tags": ["topic", "rpgmz", "packages", "plugin", "plugin-transformer"]
+    },
+    "rpgmz-plugins": {
+      "tags": ["topic", "rpgmz", "packages", "plugins"]
+    },
     "shared": {
       "tags": ["lerna-package", "shared"]
     },
@@ -53,18 +65,6 @@
     },
     "shared-utils": {
       "tags": ["lerna-package", "shared", "utils"]
-    },
-    "rpgmz": {
-      "tags": ["topic", "rpgmz"]
-    },
-    "rpgmz-core": {
-      "tags": ["topic", "rpgmz", "packages", "core"]
-    },
-    "rpgmz-plugin-transformer": {
-      "tags": ["topic", "rpgmz", "packages", "plugin", "plugin-transformer"]
-    },
-    "rpgmz-plugins": {
-      "tags": ["topic", "rpgmz", "packages", "plugins"]
     },
     "ts-transformer-ast-utils": {
       "tags": ["lerna-package", "internal", "ts-transformer", "ast-utils"]
@@ -104,6 +104,9 @@
     },
     "web-vue-jsx-factory": {
       "tags": ["web", "vue", "jsx", "jsx-factory"]
+    },
+    "web-vue-shared-decorators": {
+      "tags": ["web", "vue", "shared", "decorators"]
     },
     "web-vue-use": {
       "tags": ["web", "vue", "use"]

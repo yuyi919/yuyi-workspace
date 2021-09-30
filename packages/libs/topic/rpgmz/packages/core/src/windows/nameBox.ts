@@ -17,10 +17,10 @@ export class Window_NameBox extends Window_Base {
   constructor(thisClass: Constructable<Window_NameBox>);
   constructor(arg?: any) {
     super(Window_Base);
-    if (typeof arg === "function" && arg === Window_NameBox) {
+    if (arg === Window_NameBox) {
       return;
     }
-    this.initialize(...arguments);
+    this.initialize(arg);
   }
 
   initialize(..._: any): void {

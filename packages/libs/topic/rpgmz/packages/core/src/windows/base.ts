@@ -17,12 +17,12 @@ export class Window_Base extends Window {
 
   constructor(rect: Rectangle);
   constructor(thisClass: Constructable<Window_Base>);
-  constructor(arg?: any) {
+  constructor(arg: any) {
     super(Window);
-    if (typeof arg === "function" && arg === Window_Base) {
+    if (arg === Window_Base) {
       return;
     }
-    this.initialize(...arguments);
+    this.initialize(arg);
   }
 
   initialize(rect?: Rectangle): void {
@@ -54,6 +54,9 @@ export class Window_Base extends Window {
     }
   }
 
+  /**
+   * 内置行高
+   */
   lineHeight(): number {
     return 36;
   }
@@ -88,6 +91,10 @@ export class Window_Base extends Window {
     this.backOpacity = 192;
   }
 
+  /**
+   * 返回具体到行数的推测高度
+   * @param numLines 
+   */
   fittingHeight(numLines: number): number {
     return numLines * this.itemHeight() + $gameSystem.windowPadding() * 2;
   }

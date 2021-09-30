@@ -42,7 +42,7 @@ export class Scene_Battle extends Scene_Message {
   constructor(thisClass: Constructable<Scene_Battle>);
   constructor(arg?: any) {
     super(Scene_Message);
-    if (typeof arg === "function" && arg === Scene_Battle) {
+    if (arg === Scene_Battle) {
       return;
     }
     this.initialize(...arguments);

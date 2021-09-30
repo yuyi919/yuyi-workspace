@@ -17,13 +17,12 @@ export class ScreenSprite extends PIXI.Container {
   constructor(thisClass: Constructable<ScreenSprite>);
   constructor(arg?: any) {
     super();
-    if (typeof arg === "function" && arg === ScreenSprite) {
-      return;
+    if (arg !== ScreenSprite) {
+      this.initialize();
     }
-    this.initialize(...arguments);
   }
 
-  initialize(..._: any): void {
+  initialize(): void {
     // dup with constructor super()
     PIXI.Container.call(this);
 

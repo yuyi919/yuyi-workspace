@@ -16,7 +16,7 @@ export class Rectangle extends PIXI.Rectangle {
   constructor(thisClass: Constructable<Rectangle>);
   constructor(arg?: any) {
     super(...arguments);
-    if (typeof arg === "function" && arg === Rectangle) {
+    if (arg === Rectangle) {
       return;
     }
     this.initialize(...arguments);

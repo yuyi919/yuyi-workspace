@@ -18,10 +18,10 @@ export class Window_ScrollText extends Window_Base {
   constructor(thisClass: Constructable<Window_ScrollText>);
   constructor(arg?: any) {
     super(Window_Base);
-    if (typeof arg === "function" && arg === Window_ScrollText) {
+    if (arg === Window_ScrollText) {
       return;
     }
-    this.initialize(...arguments);
+    this.initialize(arg);
   }
 
   initialize(rect?: Rectangle): void {

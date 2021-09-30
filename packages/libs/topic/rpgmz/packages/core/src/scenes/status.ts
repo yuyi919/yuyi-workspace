@@ -18,13 +18,13 @@ export class Scene_Status extends Scene_MenuBase {
   constructor(thisClass: Constructable<Scene_Status>);
   constructor(arg?: any) {
     super(Scene_MenuBase);
-    if (typeof arg === "function" && arg === Scene_Status) {
+    if (arg === Scene_Status) {
       return;
     }
-    this.initialize(...arguments);
+    this.initialize();
   }
 
-  initialize(..._: any): void {
+  initialize(): void {
     super.initialize();
   }
 

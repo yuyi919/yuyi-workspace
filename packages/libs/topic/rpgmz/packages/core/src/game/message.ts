@@ -31,13 +31,13 @@ export class Game_Message {
   constructor();
   constructor(thisClass: Constructable<Game_Message>);
   constructor(arg?: any) {
-    if (typeof arg === "function" && arg === Game_Message) {
+    if (arg === Game_Message) {
       return;
     }
-    this.initialize(...arguments);
+    this.initialize();
   }
 
-  initialize(..._: any): void {
+  initialize(): void {
     this.clear();
   }
 

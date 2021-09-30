@@ -44,13 +44,13 @@ export class Game_Temp {
   constructor();
   constructor(thisClass: Constructable<Game_Temp>);
   constructor(arg?: any) {
-    if (typeof arg === "function" && arg === Game_Temp) {
+    if (arg === Game_Temp) {
       return;
     }
-    this.initialize(...arguments);
+    this.initialize();
   }
 
-  initialize(..._: any): void {
+  initialize(): void {
     this._isPlaytest = Utils.isOptionValid("test");
     this._destinationX = null;
     this._destinationY = null;
@@ -146,8 +146,8 @@ export class Game_Temp {
       };
       this._animationQueue.push(request);
       for (const target of targets) {
-        if ((target as any).startAnimation) {
-          (target as any).startAnimation();
+        if ((target as Game_Character).startAnimation) {
+          (target as Game_Character).startAnimation();
         }
       }
     }

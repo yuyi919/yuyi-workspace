@@ -16,10 +16,10 @@ export class Window_SavefileList extends Window_Selectable {
   constructor(thisClass: Constructable<Window_SavefileList>);
   constructor(arg?: any) {
     super(Window_Selectable);
-    if (typeof arg === "function" && arg === Window_SavefileList) {
+    if (arg === Window_SavefileList) {
       return;
     }
-    this.initialize(...arguments);
+    this.initialize(arg);
   }
 
   initialize(rect?: Rectangle): void {

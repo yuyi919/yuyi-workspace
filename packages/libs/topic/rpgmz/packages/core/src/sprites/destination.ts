@@ -13,13 +13,13 @@ export class Sprite_Destination extends Sprite {
   constructor(thisClass: Constructable<Sprite_Destination>);
   constructor(arg?: any) {
     super(Sprite);
-    if (typeof arg === "function" && arg === Sprite_Destination) {
+    if (arg === Sprite_Destination) {
       return;
     }
-    this.initialize(...arguments);
+    this.initialize();
   }
 
-  initialize(..._: any): void {
+  initialize(): void {
     super.initialize();
     this.createBitmap();
     this._frameCount = 0;

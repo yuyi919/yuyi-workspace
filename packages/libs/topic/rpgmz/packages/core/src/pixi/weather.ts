@@ -10,6 +10,12 @@ class WeatherSprite extends Sprite {
   ay = 0;
 }
 
+declare module "pixi.js" {
+  interface Container {
+    // NOTE 不知为何缺失的定义
+    viewport: Bitmap;
+  }
+}
 //-----------------------------------------------------------------------------
 /**
  * The weather effect which displays rain, storm, or snow.
@@ -33,7 +39,7 @@ export class Weather extends PIXI.Container {
   constructor(thisClass: Constructable<Weather>);
   constructor(arg?: any) {
     super();
-    if (typeof arg === "function" && arg === Weather) {
+    if (arg === Weather) {
       return;
     }
     this.initialize(...arguments);
@@ -126,7 +132,7 @@ export class Weather extends PIXI.Container {
   }
 
   _addSprite(): void {
-    const sprite = new WeatherSprite((this as any).viewport);
+    const sprite = new WeatherSprite(this.viewport);
     sprite.opacity = 0;
     this._sprites.push(sprite);
     this.addChild(sprite);

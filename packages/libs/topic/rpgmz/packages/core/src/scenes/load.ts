@@ -17,13 +17,13 @@ export class Scene_Load extends Scene_File {
   constructor(thisClass: Constructable<Scene_Load>);
   constructor(arg?: any) {
     super(Scene_File);
-    if (typeof arg === "function" && arg === Scene_Load) {
+    if (arg === Scene_Load) {
       return;
     }
-    this.initialize(...arguments);
+    this.initialize();
   }
 
-  initialize(..._: any): void {
+  initialize(): void {
     super.initialize();
     this._loadSuccess = false;
   }

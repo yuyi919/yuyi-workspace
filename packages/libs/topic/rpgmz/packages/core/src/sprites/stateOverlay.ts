@@ -17,13 +17,13 @@ export class Sprite_StateOverlay extends Sprite {
   constructor(thisClass: Constructable<Sprite_StateOverlay>);
   constructor(arg?: any) {
     super(Sprite);
-    if (typeof arg === "function" && arg === Sprite_StateOverlay) {
+    if (arg === Sprite_StateOverlay) {
       return;
     }
-    this.initialize(...arguments);
+    this.initialize();
   }
 
-  initialize(..._: any): void {
+  initialize(): void {
     super.initialize();
     this.initMembers();
     this.loadBitmap();

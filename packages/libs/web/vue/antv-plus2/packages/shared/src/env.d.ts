@@ -3,8 +3,7 @@
 import "./antv";
 import { VNodeData, VNode } from "vue";
 import { ComponentRenderProxy } from "@vue/composition-api";
-import { base, builtin } from "@yuyi919/vue-antv-plus2-helper";
-import type { ExtendIntrinsicAttributes } from "@yuyi919/vue-jsx-factory";
+import type { ExtendIntrinsicAttributes, base, builtin } from "@yuyi919/vue-jsx-factory";
 
 declare global {
   namespace JSX {

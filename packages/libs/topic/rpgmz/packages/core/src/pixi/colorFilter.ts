@@ -13,7 +13,7 @@ export class ColorFilter extends PIXI.Filter {
   constructor(thisClass: Constructable<ColorFilter>);
   constructor(arg?: any) {
     super(undefined, undefined);
-    if (typeof arg === "function" && arg === ColorFilter) {
+    if (arg === ColorFilter) {
       return;
     }
     this.initialize(...arguments);

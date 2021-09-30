@@ -1,9 +1,14 @@
 {
   "extends": "./node_modules/@yuyi919/workspace-base-rig/profiles/tsc/tsconfig-base.json",
   "compilerOptions": {
+    "jsx": "react-jsx",
+    "jsxImportSource": "@yuyi919/vue-jsx-factory",
     "rootDir": "./src"
   },
   "references": [
+    {
+      "path": "../../../../web/vue/jsx-factory"
+    },
     {
       "path": "./tsconfig.lib.json"
     },

@@ -30,13 +30,13 @@ export class Spriteset_Map extends Spriteset_Base {
   constructor(thisClass: Constructable<Spriteset_Map>);
   constructor(arg?: any) {
     super(Spriteset_Base);
-    if (typeof arg === "function" && arg === Spriteset_Map) {
+    if (arg === Spriteset_Map) {
       return;
     }
-    this.initialize(...arguments);
+    this.initialize();
   }
 
-  initialize(..._: any): void {
+  initialize(): void {
     super.initialize();
     this._balloonSprites = [];
   }
@@ -136,13 +136,13 @@ export class Spriteset_Map extends Spriteset_Base {
     this._shadowSprite.bitmap = ImageManager.loadSystem("Shadow1");
     this._shadowSprite.anchor.x = 0.5;
     this._shadowSprite.anchor.y = 1;
-    (this._shadowSprite as any).z = 6;
+    this._shadowSprite.z = 6;
     this._tilemap!.addChild(this._shadowSprite);
   }
 
   createDestination(): void {
     this._destinationSprite = new Sprite_Destination();
-    (this._destinationSprite as any).z = 9;
+    this._destinationSprite.z = 9;
     this._tilemap!.addChild(this._destinationSprite);
   }
 
@@ -211,7 +211,7 @@ export class Spriteset_Map extends Spriteset_Base {
     const targetSprite = this.findTargetSprite(request.target);
     if (targetSprite) {
       const sprite = new Sprite_Balloon();
-      (sprite as any).targetObject = request.target;
+      sprite.targetObject = request.target;
       sprite.setup(targetSprite, request.balloonId);
       this._effectsContainer!.addChild(sprite);
       this._balloonSprites!.push(sprite);
@@ -221,8 +221,8 @@ export class Spriteset_Map extends Spriteset_Base {
   removeBalloon(sprite: Sprite_Balloon): void {
     this._balloonSprites!.remove(sprite);
     this._effectsContainer!.removeChild(sprite);
-    if ((sprite as any).targetObject.endBalloon) {
-      (sprite as any).targetObject.endBalloon();
+    if (sprite.targetObject.endBalloon) {
+      sprite.targetObject.endBalloon();
     }
     sprite.destroy();
   }

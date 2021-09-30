@@ -28,13 +28,13 @@ export class Spriteset_Battle extends Spriteset_Base {
   constructor(thisClass: Constructable<Spriteset_Battle>);
   constructor(arg?: any) {
     super(Spriteset_Base);
-    if (typeof arg === "function" && arg === Spriteset_Battle) {
+    if (arg === Spriteset_Battle) {
       return;
     }
-    this.initialize(...arguments);
+    this.initialize();
   }
 
-  initialize(..._: any): void {
+  initialize(): void {
     super.initialize();
     this._battlebackLocated = false;
   }

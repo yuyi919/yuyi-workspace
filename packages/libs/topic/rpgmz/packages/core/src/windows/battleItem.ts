@@ -11,12 +11,12 @@ import { Rectangle } from "../pixi";
 export class Window_BattleItem extends Window_ItemList {
   constructor(rect: Rectangle);
   constructor(thisClass: Constructable<Window_BattleItem>);
-  constructor(arg?: any) {
+  constructor(arg: any) {
     super(Window_ItemList);
-    if (typeof arg === "function" && arg === Window_BattleItem) {
+    if (arg === Window_BattleItem) {
       return;
     }
-    this.initialize(...arguments);
+    this.initialize(arg);
   }
 
   initialize(rect?: Rectangle): void {

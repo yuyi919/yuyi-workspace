@@ -28,13 +28,13 @@ export class Game_ActionResult {
   constructor();
   constructor(thisClass: Constructable<Game_ActionResult>);
   constructor(arg?: any) {
-    if (typeof arg === "function" && arg === Game_ActionResult) {
+    if (arg === Game_ActionResult) {
       return;
     }
-    this.initialize(...arguments);
+    this.initialize();
   }
 
-  initialize(..._: any): void {
+  initialize(): void {
     this.clear();
   }
 

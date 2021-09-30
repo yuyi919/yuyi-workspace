@@ -14,13 +14,13 @@ export class Sprite_Clickable extends Sprite {
   constructor(thisClass: Constructable<Sprite_Clickable>);
   constructor(arg?: any) {
     super(Sprite);
-    if (typeof arg === "function" && arg === Sprite_Clickable) {
+    if (arg === Sprite_Clickable) {
       return;
     }
-    this.initialize(...arguments);
+    this.initialize();
   }
 
-  initialize(..._: any): void {
+  initialize(): void {
     super.initialize();
     this._pressed = false;
     this._hovered = false;

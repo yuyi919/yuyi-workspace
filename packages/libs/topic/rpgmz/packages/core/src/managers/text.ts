@@ -27,10 +27,10 @@ export class TextManager {
   }
 
   // NOTE: rmmz-ts don't use this getter() anymore, but plugins may need it
-  static getter(method: string, param: number | string): PropertyDescriptor {
+  static getter(method: keyof TextManager, param: number | string): PropertyDescriptor {
     return {
       get: function () {
-        return (this as any)[method](param);
+        return this[method](param);
       },
       configurable: true,
     };

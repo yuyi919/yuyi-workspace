@@ -99,9 +99,7 @@ export class TilingSprite extends PIXI.TilingSprite {
    */
   update(): void {
     for (const child of this.children) {
-      if ((child as any).update) {
-        (child as any).update();
-      }
+      (child as TilingSprite).update?.()
     }
   }
 

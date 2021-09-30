@@ -1,6 +1,8 @@
+/* eslint-disable @typescript-eslint/no-this-alias */
 import { Sprite, ScreenSprite, Bitmap } from "../pixi";
 import { AudioManager, ImageManager } from "../managers";
 import { MZ } from "../MZ";
+import { Game_Battler, Game_Character } from "../game";
 
 //-----------------------------------------------------------------------------
 // Sprite_AnimationMV
@@ -8,6 +10,7 @@ import { MZ } from "../MZ";
 // The sprite for displaying an old format animation.
 
 export class Sprite_AnimationMV extends Sprite {
+  targetObjects?: (Game_Character | Game_Battler)[];
   _targets: Sprite[] = [];
   _cellSprites: Sprite[] = [];
   _animation: MZ.DataAnimationMV | null = null;
@@ -30,13 +33,13 @@ export class Sprite_AnimationMV extends Sprite {
   constructor(thisClass: Constructable<Sprite_AnimationMV>);
   constructor(arg?: any) {
     super(Sprite);
-    if (typeof arg === "function" && arg === Sprite_AnimationMV) {
+    if (arg === Sprite_AnimationMV) {
       return;
     }
-    this.initialize(...arguments);
+    this.initialize();
   }
 
-  initialize(..._: any): void {
+  initialize(): void {
     super.initialize();
     this.initMembers();
   }
@@ -116,20 +119,20 @@ export class Sprite_AnimationMV extends Sprite {
 
   absoluteX(): number {
     let x = 0;
-    let object = this;
+    let object: PIXI.Container = this;
     while (object) {
       x += object.x;
-      object = object.parent as any;
+      object = object.parent;
     }
     return x;
   }
 
   absoluteY(): number {
     let y = 0;
-    let object = this;
+    let object: PIXI.Container = this;
     while (object) {
       y += object.y;
-      object = object.parent as any;
+      object = object.parent;
     }
     return y;
   }

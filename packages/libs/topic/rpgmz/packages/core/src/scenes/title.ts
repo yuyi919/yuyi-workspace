@@ -20,6 +20,7 @@ import { Scene_Options } from "./options";
 // The scene class of the title screen.
 
 export class Scene_Title extends Scene_Base {
+  static current: Scene_Title
   _commandWindow?: Window_TitleCommand;
   _gameTitleSprite?: Sprite;
   _backSprite1?: Sprite;
@@ -29,13 +30,14 @@ export class Scene_Title extends Scene_Base {
   constructor(thisClass: Constructable<Scene_Title>);
   constructor(arg?: any) {
     super(Scene_Base);
-    if (typeof arg === "function" && arg === Scene_Title) {
+    if (arg === Scene_Title) {
       return;
     }
-    this.initialize(...arguments);
+    Scene_Title.current = this
+    this.initialize();
   }
 
-  initialize(..._: any): void {
+  initialize(): void {
     super.initialize();
   }
 
@@ -57,7 +59,7 @@ export class Scene_Title extends Scene_Base {
 
   update(): void {
     if (!this.isBusy()) {
-      this._commandWindow!.open();
+      // this._commandWindow!.open();
     }
     super.update();
   }

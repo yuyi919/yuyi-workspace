@@ -833,7 +833,7 @@ export class BattleManager {
     if (items!.length > 0) {
       $gameMessage.newPage();
       for (const item of items!) {
-        $gameMessage.add(TextManager.obtainItem.format((item as any).name));
+        $gameMessage.add(TextManager.obtainItem.format(item.name));
       }
     }
   }

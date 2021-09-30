@@ -34,13 +34,13 @@ export class Game_Picture {
   constructor();
   constructor(thisClass: Constructable<Game_Picture>);
   constructor(arg?: any) {
-    if (typeof arg === "function" && arg === Game_Picture) {
+    if (arg === Game_Picture) {
       return;
     }
-    this.initialize(...arguments);
+    this.initialize();
   }
 
-  initialize(..._: any): void {
+  initialize(): void {
     this.initBasic();
     this.initTarget();
     this.initTone();

@@ -11,10 +11,10 @@ export class Window_BattleSkill extends Window_SkillList {
   constructor(thisClass: Constructable<Window_BattleSkill>);
   constructor(arg?: any) {
     super(Window_SkillList);
-    if (typeof arg === "function" && arg === Window_BattleSkill) {
+    if (arg === Window_BattleSkill) {
       return;
     }
-    this.initialize(...arguments);
+    this.initialize(arg);
   }
 
   initialize(rect?: Rectangle): void {
