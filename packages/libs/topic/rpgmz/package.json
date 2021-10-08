@@ -27,6 +27,7 @@
     "@types/http-proxy": "^1.17.4",
     "@types/node": "~16.7.2",
     "@types/nw.js": "^0.13.9",
+    "@yuyi919/shared-types": "workspace:0.0.5",
     "vite-plugin-html": "2.0.7",
     "@yuyi919/build-tools": "workspace:0.1.10",
     "@yuyi919/workspace-base-rig": "workspace:1.2.5",

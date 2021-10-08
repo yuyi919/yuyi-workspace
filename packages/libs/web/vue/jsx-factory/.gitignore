@@ -5,3 +5,5 @@
 /.rush
 *.log
 .tsBuildInfo
+/jsx-runtime-es
+/jsx-runtime

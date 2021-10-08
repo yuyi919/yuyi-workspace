@@ -2,8 +2,8 @@
   "extends": "./tsconfig.json",
   "compilerOptions": {
     "module": "esnext",
-    "outDir": "./lib",
-    "declarationDir": "./dist",
+    "outDir": "./jsx-runtime-es",
+    "declarationDir": "./jsx-runtime",
     "tsBuildInfoFile": "./node_modules/@yuyi919/workspace-base-rig/.tsBuildInfo/web-vue-jsx-factory-es.json"
   },
   "exclude": [

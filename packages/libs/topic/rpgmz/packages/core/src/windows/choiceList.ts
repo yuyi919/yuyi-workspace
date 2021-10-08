@@ -20,13 +20,12 @@ export class Window_ChoiceList extends Window_Command {
   constructor(thisClass: Constructable<Window_ChoiceList>);
   constructor(arg?: any) {
     super(Window_Command);
-    if (arg === Window_ChoiceList) {
-      return;
+    if (!arg) {
+      this.initialize();
     }
-    this.initialize(arg);
   }
 
-  initialize(..._: any): void {
+  initialize(): void {
     super.initialize(new Rectangle());
     this.createCancelButton();
     this.openness = 0;

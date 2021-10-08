@@ -7,7 +7,9 @@ import { VueRef } from "./lib/vue-ref";
 import { mergeJsxProps, VNodeData } from "./mergeJsxProps";
 
 Vue.use(VueRef);
-Vue.directive("frag", frag);
+if (isVue2) {
+  Vue.directive("frag", frag);
+}
 export interface ExtendIntrinsicAttributes {
   ["v-slot"]?: string;
   /**
@@ -154,7 +156,7 @@ export function jsxEsbuild(
   if (options) {
     const { data, children: renderChildren } = getJArgumentsWithOptions(element, options, children);
     if (element === Fragment) {
-      return renderChildren;
+      return  h("div", fragFunction, [renderChildren]);
     }
     return h(element, data, renderChildren);
   }

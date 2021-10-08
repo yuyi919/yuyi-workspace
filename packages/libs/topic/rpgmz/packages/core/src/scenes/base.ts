@@ -14,11 +14,10 @@ import { ColorFilter, Sprite, Stage, WindowLayer } from "../pixi";
 import { Window_Base, Window_Selectable } from "../windows";
 import { Scene_Gameover } from ".";
 
-//-----------------------------------------------------------------------------
-// Scene_Base
-//
-// The superclass of all scenes within the game.
-
+/**
+ * 场景基类
+ * 任何游戏场景(Scene)类的超类(superclass)
+ */
 export abstract class Scene_Base extends Stage {
   _started = false;
   _active = false;

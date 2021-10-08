@@ -14,9 +14,10 @@ import {
   Game_Timer,
   Game_Troop,
   Game_Variables,
-  
 } from "../game";
-import { BattleManager, ImageManager, StorageManager } from "./";
+import { BattleManager } from "./battle";
+import { ImageManager } from "./image";
+import { StorageManager } from "./storage";
 
 type SaveContents = {
   system: Game_System;

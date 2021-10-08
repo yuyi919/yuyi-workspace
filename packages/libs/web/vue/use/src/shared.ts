@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { WrapValue } from "@yuyi919/shared-types";
 import { computed, ComputedRef } from "vue-demi";
 
@@ -7,7 +8,7 @@ export type { WrapValue };
  * 取得传入的以及带默认值（非undefined）的props集合
  * @param $props
  */
- export function getProps<V extends Record<string, any> = any>($props: V): V {
+export function getProps<V extends Record<string, any> = any>($props: V): V {
   const r: any = {};
   for (const [key, v] of Object.entries($props)) {
     if (v !== undefined) {
@@ -28,24 +29,30 @@ export function unwrap<T, GetterArgs extends any[]>(
   return (
     wrapper instanceof Function
       ? wrapper(...args)
-      : wrapper instanceof Object && ('value' in wrapper) // && (wrapper as { value?: T }).value !== void 0
+      : wrapper instanceof Object && "value" in wrapper // && (wrapper as { value?: T }).value !== void 0
       ? (wrapper as { value?: T }).value
       : wrapper
   ) as T;
 }
 
-export function isWrap<T>(wrapper: WrapValue<T>): wrapper is WrapValue<T> extends T ? () => T : WrapValue<T> {
+export function isWrap<T>(
+  wrapper: WrapValue<T>
+): wrapper is WrapValue<T> extends T ? () => T : WrapValue<T> {
   return wrapper instanceof Function || (wrapper instanceof Object && "value" in wrapper);
 }
 
-export function useWrap<T>(wrapper: WrapValue<T>): ComputedRef<T> {
+export function useWrap<T, Args extends any[]>(
+  wrapper: WrapValue<T, Args>,
+  ...args: Args
+): ComputedRef<T> {
   return wrapper instanceof Function
-    ? (computed(wrapper) as ComputedRef<T>)
+    ? (computed(
+        wrapper.length > 0 ? () => wrapper(...args) : (wrapper as () => T)
+      ) as ComputedRef<T>)
     : wrapper instanceof Object && "value" in wrapper
     ? (wrapper as ComputedRef<T>)
     : (computed(() => wrapper) as ComputedRef<T>);
 }
-
 
 type UnwrapPromise<T extends any> = T extends Promise<infer R> ? R : T;
 type UnwrapPromises<T extends any> = {

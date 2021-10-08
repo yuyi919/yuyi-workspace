@@ -4,7 +4,7 @@
 import pako from "pako";
 import localforage from "localforage";
 import { JsonEx, Utils } from "../dom";
-import { $dataSystem } from ".";
+import { $dataSystem } from "./data";
 
 //-----------------------------------------------------------------------------
 // StorageManager

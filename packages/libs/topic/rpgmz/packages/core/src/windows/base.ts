@@ -1,8 +1,8 @@
 import { Window } from "../pixi/window";
 import { Utils } from "../dom";
 import { ColorManager, TextManager, ImageManager, SoundManager } from "../managers";
-import { $gameSystem, $gameActors, $gameParty, $gameVariables } from "../managers";
-import { Rectangle, Sprite, Bitmap } from "../pixi";
+import { $gameSystem, $gameActors, $gameParty, $gameVariables } from "../managers/data";
+import { RectangleLike, Rectangle, Sprite, Bitmap } from "../pixi";
 import { MZ } from "../MZ";
 
 //-----------------------------------------------------------------------------
@@ -15,7 +15,7 @@ export class Window_Base extends Window {
   _closing = false;
   _dimmerSprite: Sprite | null = null;
 
-  constructor(rect: Rectangle);
+  constructor(rect: RectangleLike);
   constructor(thisClass: Constructable<Window_Base>);
   constructor(arg: any) {
     super(Window);
@@ -25,7 +25,7 @@ export class Window_Base extends Window {
     this.initialize(arg);
   }
 
-  initialize(rect?: Rectangle): void {
+  initialize(rect?: RectangleLike): void {
     super.initialize();
     this.loadWindowskin();
     this.checkRectObject(rect);
@@ -47,7 +47,7 @@ export class Window_Base extends Window {
     super.destroy(options);
   }
 
-  checkRectObject(rect?: Rectangle): void {
+  checkRectObject(rect?: RectangleLike): void {
     if (typeof rect !== "object" || !("x" in rect)) {
       // Probably MV plugin is used
       throw new Error("Argument must be a Rectangle");

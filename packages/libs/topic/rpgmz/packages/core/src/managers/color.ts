@@ -1,4 +1,4 @@
-import { ImageManager } from "./";
+import { ImageManager } from "./image";
 import { Bitmap } from "../pixi";
 import { Game_Battler } from "../game";
 

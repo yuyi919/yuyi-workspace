@@ -1,5 +1,10 @@
-import { PApplication, PText } from "vue-pixi-wrapper";
-import { createApp, defineComponent } from "vue-demi";
+import { defineComponent } from "vue-demi";
+import { createApp, shallowRef } from "vue-demi";
+import { PText } from "vue-pixi-wrapper";
+import { PApplication, PApplicationProps, PScene } from "./components";
+import { RootInstance } from "./components/context";
+import { PWindow } from "./components/Window";
+import { $gameSystem, SceneManager } from "./managers";
 
 declare module "vue-pixi-wrapper" {
   interface PApplication {
@@ -8,36 +13,67 @@ declare module "vue-pixi-wrapper" {
   interface PText {
     $props: Partial<PText>;
   }
+  interface PGraphics {
+    $props: Partial<PGraphics>;
+  }
 }
 
-export const Application = defineComponent({
+export const App = defineComponent({
   setup() {
     return () => {
       return (
-        <PApplication width={800} height={600} backgroundColor={0x000000}>
-          <PText
-            text="text"
-            textStyle={{
-              fontFamily: "Arial",
-              fontSize: 36,
-              fontStyle: "italic",
-              fontWeight: "bold",
-              fill: ["#ffffff", "#00ff99"], // gradient
-              stroke: "#4a1850",
-              strokeThickness: 5,
-              dropShadow: true,
-              dropShadowColor: "#000000",
-              dropShadowBlur: 4,
-              dropShadowAngle: Math.PI / 6,
-              dropShadowDistance: 6,
-              wordWrap: true,
-              wordWrapWidth: 440,
-            }}
-          />
-        </PApplication>
+        <PScene name={"test"} parent={SceneManager._scene}>
+          <div>
+            <PWindow name="test" help="test">
+              <PText
+                text="text"
+                textStyle={{
+                  fontFamily: "Arial",
+                  fontSize: 36,
+                  fontStyle: "italic",
+                  fontWeight: "bold",
+                  fill: ["#ffffff", "#00ff99"], // gradient
+                  stroke: "#4a1850",
+                  strokeThickness: 5,
+                  dropShadow: true,
+                  dropShadowColor: "#000000",
+                  dropShadowBlur: 4,
+                  dropShadowAngle: Math.PI / 6,
+                  dropShadowDistance: 6,
+                  wordWrap: true,
+                  wordWrapWidth: 440,
+                }}
+              />
+            </PWindow>
+          </div>
+        </PScene>
       );
     };
   },
 });
 
-export const run = () => createApp(Application, {}).mount("#root");
+export const run = (el: HTMLCanvasElement, props: PApplicationProps = {}) => {
+  const vue = createApp(
+    {
+      setup() {
+        const text = shallowRef(null);
+        setTimeout(() => {
+          text.value = <App />;
+        }, 1000);
+        return () => {
+          console.log($gameSystem);
+          return (
+            <>
+              <PApplication canvasId={el.id} mergeJsxProps={[{ props }]}>
+                {text.value}
+              </PApplication>
+            </>
+          );
+        };
+      },
+    },
+    props
+  );
+  vue.config.silent = true;
+  return vue.mount(el).$children[0] as RootInstance;
+};

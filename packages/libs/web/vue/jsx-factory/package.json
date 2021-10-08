@@ -3,9 +3,9 @@
   "version": "0.0.1",
   "description": "",
   "author": "",
-  "main": "dist/index.js",
-  "module": "lib/index.js",
-  "types": "dist/index.d.ts",
+  "main": "jsx-runtime/index.js",
+  "module": "jsx-runtime-es/index.js",
+  "types": "jsx-runtime/index.d.ts",
   "scripts": {
     "build": "tsc --build --force",
     "build:dev": "tsc --build",

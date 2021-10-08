@@ -1,7 +1,8 @@
 import * as PIXI from "pixi.js";
-import { Utils } from "./";
-import { Video } from "./";
-import { FPSCounter } from "./";
+import { run } from "../App";
+import { Utils } from "./utils";
+import { Video } from "./video";
+import { FPSCounter } from "./fpsCounter";
 
 //-----------------------------------------------------------------------------
 /**
@@ -566,10 +567,17 @@ export class Graphics {
   static _createPixiApp(): void {
     try {
       this._setupPixi();
-      this._app = new PIXI.Application({
-        view: this._canvas!,
+      const Application = run(this._canvas!, { 
         autoStart: false,
-      });
+      })
+      this._app = Application.appliaction
+      this._canvas = Application.$el as HTMLCanvasElement
+      // this._updateAllElements()
+      // new PIXI.Application({
+      //   view: this._canvas!,
+      //   autoStart: false,
+      // });
+      console.log(this._app)
       this._app.ticker.remove(this._app.render, this._app);
       this._app.ticker.add(this._onTick, this);
     } catch (e) {

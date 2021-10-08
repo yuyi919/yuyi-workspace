@@ -3,11 +3,17 @@
   "compilerOptions": {
     "jsx": "react-jsx",
     "jsxImportSource": "@yuyi919/vue-jsx-factory",
-    "rootDir": "./src"
+    "rootDir": "./src",
+    "paths": {
+      "vue-demi": ["./node_modules/@vue/composition-api"]
+    }
   },
   "references": [
     {
       "path": "../../../../web/vue/jsx-factory"
+    },
+    {
+      "path": "../../../../web/vue/use"
     },
     {
       "path": "./tsconfig.lib.json"

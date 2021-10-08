@@ -1,7 +1,9 @@
 import * as PIXI from "pixi.js";
-import { Bitmap, Sprite, Point } from ".";
-import { ScreenSprite } from ".";
-import { Graphics } from "../dom";
+import { Point } from "./point";
+import { Sprite } from "./sprite";
+import { Bitmap } from "./bitmap";
+import { ScreenSprite } from "./screenSprite";
+import { Graphics } from "../dom/graphics";
 
 export type WeatherType = "none" | "rain" | "storm" | "snow";
 

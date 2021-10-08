@@ -1,7 +1,7 @@
 export { Bitmap } from "./bitmap";
 export { ColorFilter } from "./colorFilter";
 export { Point } from "./point";
-export { Rectangle } from "./rectangle";
+export * from "./rectangle";
 export { ScreenSprite } from "./screenSprite";
 export { Sprite } from "./sprite";
 export { Stage } from "./stage";

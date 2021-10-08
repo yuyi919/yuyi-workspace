@@ -9,10 +9,9 @@ import * as PIXI from "pixi.js";
 export class WindowSuper extends PIXI.Container {
   children: WindowSuper[];
   update(): void {
-    for (const child of this.children) {
-      if (child.update) {
-        child.update();
-      }
+    const { children } = this;
+    for (let i = children.length; --i > -1; ) {
+      children[i].update?.();
     }
   }
 }

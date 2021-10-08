@@ -27,3 +27,14 @@ export class Rectangle extends PIXI.Rectangle {
     PIXI.Rectangle.call(this, x, y, width, height);
   }
 }
+
+export interface RectangleLike {
+  x?: number;
+  y?: number;
+  width?: number;
+  height?: number;
+}
+
+export function createRectangleLike(x?: number, y?: number, width?: number, height?: number) {
+  return { x, y, width, height } as RectangleLike;
+}

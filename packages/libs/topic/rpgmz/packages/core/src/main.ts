@@ -1,5 +1,4 @@
 import { Utils } from "./dom";
-import { run } from "./App";
 import { PluginManager, SceneManager } from "./managers";
 import { Scene_Boot } from "./scenes";
 
@@ -130,7 +129,7 @@ export class Main {
   onEffekseerLoad() {
     this.eraseLoadingSpinner();
     SceneManager.run(Scene_Boot);
-    run()
+    // console.log(run(document.querySelector("#root"), { width: 800, height: 600 }))
   }
 
   onEffekseerError() {

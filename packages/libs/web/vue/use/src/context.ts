@@ -4,7 +4,7 @@ import { provide, inject } from "vue-demi";
 import type { Component } from "@type-helper/vue2";
 
 export type ContextFactoryManager<T> = {
-  provide<T>(target: T): T;
+  provide<PT extends T>(target: PT): PT;
   inject(): T;
   inject(defaultValue: T | null): T;
   inject(defaultValue: (() => T | null) | null, treatDefaultAsFactory: true): T;

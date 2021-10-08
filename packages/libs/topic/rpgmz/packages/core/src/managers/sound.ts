@@ -1,5 +1,5 @@
-import { AudioManager } from ".";
-import { $dataSystem } from ".";
+import { AudioManager } from "./audio";
+import { $dataSystem } from "./data";
 
 //-----------------------------------------------------------------------------
 // SoundManager

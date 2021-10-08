@@ -1,9 +1,9 @@
-import { AudioManager } from ".";
-import { SoundManager } from ".";
-import { SceneManager } from ".";
-import { TextManager } from ".";
-import { $gameMessage, $gameParty, $gameScreen, $gameSystem, $gameTroop } from ".";
-import { $dataSystem } from ".";
+import { AudioManager } from "./audio";
+import { SoundManager } from "./sound";
+import { SceneManager } from "./scene";
+import { TextManager } from "./text";
+import { $gameMessage, $gameParty, $gameScreen, $gameSystem, $gameTroop } from "./data";
+import { $dataSystem } from "./data";
 import { Game_Action, Game_Actor, Game_Enemy, Game_Battler } from "../game";
 import { Window_BattleLog } from "../windows";
 import { Spriteset_Battle } from "../sprites";

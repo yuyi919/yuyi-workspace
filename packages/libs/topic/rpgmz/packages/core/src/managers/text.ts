@@ -1,4 +1,4 @@
-import { $dataSystem } from ".";
+import { $dataSystem } from "./data";
 
 //-----------------------------------------------------------------------------
 // TextManager

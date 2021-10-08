@@ -1,24 +1,26 @@
 import { Window_HorzCommand } from ".";
 import { TextManager } from "../managers";
-import { Rectangle } from "../pixi";
+import { RectangleLike } from "../pixi";
+import { SelectableSymbols } from "./selectable";
 
 //-----------------------------------------------------------------------------
 // Window_EquipCommand
 //
 // The window for selecting a command on the equipment screen.
-
-export class Window_EquipCommand extends Window_HorzCommand {
-  constructor(rect: Rectangle);
-  constructor(thisClass: Constructable<Window_EquipCommand>);
-  constructor(arg?: any) {
+type Internal = SelectableSymbols<"equip" | "optimize" | "clear">;
+export class Window_EquipCommand<
+  Symbols extends Internal = Internal
+> extends Window_HorzCommand<Symbols> {
+  constructor(rect: RectangleLike);
+  constructor(thisClass: typeof Window_EquipCommand);
+  constructor(arg?: RectangleLike | typeof Window_EquipCommand) {
     super(Window_HorzCommand);
-    if (arg === Window_EquipCommand) {
-      return;
+    if (arg !== Window_EquipCommand) {
+      this.initialize(arg as RectangleLike);
     }
-    this.initialize(arg);
   }
 
-  initialize(rect?: Rectangle): void {
+  initialize(rect?: RectangleLike): void {
     super.initialize(rect);
   }
 
@@ -27,8 +29,8 @@ export class Window_EquipCommand extends Window_HorzCommand {
   }
 
   makeCommandList(): void {
-    this.addCommand(TextManager.equip2, "equip");
-    this.addCommand(TextManager.optimize, "optimize");
-    this.addCommand(TextManager.clear, "clear");
+    this.addCommand(TextManager.equip2, "equip" as Symbols);
+    this.addCommand(TextManager.optimize, "optimize" as Symbols);
+    this.addCommand(TextManager.clear, "clear" as Symbols);
   }
 }

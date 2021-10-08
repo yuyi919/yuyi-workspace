@@ -1,5 +1,5 @@
-import { Window_Base } from ".";
-import { Rectangle, Point } from "../pixi";
+import { Window_Base } from "./base";
+import { Point, RectangleLike } from "../pixi";
 import { Input, TouchInput } from "../dom";
 
 //-----------------------------------------------------------------------------
@@ -22,7 +22,7 @@ export abstract class Window_Scrollable extends Window_Base {
   private _scrollLastTouchY = 0;
   private _scrollLastCursorVisible = false;
 
-  constructor(rect: Rectangle);
+  constructor(rect: RectangleLike);
   constructor(thisClass: typeof Window_Scrollable);
   constructor(arg?: any) {
     super(Window_Base);
@@ -32,7 +32,7 @@ export abstract class Window_Scrollable extends Window_Base {
     this.initialize(arg);
   }
 
-  initialize(rect?: Rectangle): void {
+  initialize(rect?: RectangleLike): void {
     super.initialize(rect);
     this._scrollX = 0;
     this._scrollY = 0;

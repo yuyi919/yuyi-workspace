@@ -1,9 +1,9 @@
-import { Window_Selectable } from ".";
-import { Rectangle } from "../pixi";
+import { Window_Selectable, SelectableSymbols } from "./selectable";
+import { RectangleLike } from "../pixi";
 
-interface WindowCommand {
+interface WindowCommand<Symbols extends SelectableSymbols = SelectableSymbols> {
   name: string;
-  symbol: string;
+  symbol: Symbols;
   enabled: boolean;
   ext: any;
 }
@@ -13,20 +13,19 @@ interface WindowCommand {
 //
 // The superclass of windows for selecting a command.
 
-export class Window_Command extends Window_Selectable {
-  _list: WindowCommand[] = [];
+export abstract class Window_Command<Symbols extends SelectableSymbols = SelectableSymbols> extends Window_Selectable<Symbols> {
+  _list: WindowCommand<Symbols>[] = [];
 
-  constructor(rect: Rectangle);
-  constructor(thisClass: Constructable<Window_Command>);
+  constructor(rect: RectangleLike);
+  constructor(thisClass: typeof Window_Command);
   constructor(arg?: any) {
     super(Window_Selectable);
-    if (arg === Window_Command) {
-      return;
+    if (arg !== Window_Command) {
+      this.initialize(arg);
     }
-    this.initialize(arg);
   }
 
-  initialize(rect?: Rectangle): void {
+  initialize(rect?: RectangleLike): void {
     super.initialize(rect);
     this.refresh();
     this.select(0);
@@ -41,11 +40,12 @@ export class Window_Command extends Window_Selectable {
     this._list = [];
   }
 
-  makeCommandList(): void {
-    //
-  }
+  /**
+   * 创建命令选项，抽象方法
+   */
+  abstract makeCommandList(): void;
 
-  addCommand(name: string, symbol: string, enabled: boolean = true, ext: any = null) {
+  addCommand(name: string, symbol: Symbols, enabled: boolean = true, ext: any = null) {
     this._list.push({ name: name, symbol: symbol, enabled: enabled, ext: ext });
   }
 
@@ -61,7 +61,7 @@ export class Window_Command extends Window_Selectable {
     return this._list[index].enabled;
   }
 
-  currentData(): WindowCommand | null {
+  currentData(): WindowCommand<Symbols> | null {
     return this.index() >= 0 ? this._list[this.index()] : null;
   }
 
@@ -69,7 +69,7 @@ export class Window_Command extends Window_Selectable {
     return this.currentData() ? this.currentData()!.enabled : false;
   }
 
-  currentSymbol(): string | null {
+  currentSymbol(): Symbols | null {
     return this.currentData() ? this.currentData()!.symbol : null;
   }
 
@@ -123,7 +123,7 @@ export class Window_Command extends Window_Selectable {
     const symbol = this.currentSymbol();
     if (this.isHandled(symbol)) {
       this.callHandler(symbol);
-    } else if (this.isHandled("ok")) {
+    } else if (this.isHandled("ok" as Symbols)) {
       super.callOkHandler();
     } else {
       this.activate();

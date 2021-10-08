@@ -497,6 +497,7 @@ importers:
       '@yuyi919/rpgmz-core': workspace:0.0.11
       '@yuyi919/rpgmz-plugin-transformer': workspace:0.0.1
       '@yuyi919/rpgmz-plugins': workspace:0.0.1
+      '@yuyi919/shared-types': workspace:0.0.5
       '@yuyi919/workspace-base-rig': workspace:1.2.5
       bitecs: ~0.3.21-6
       class-transformer: 0.2.3
@@ -523,6 +524,7 @@ importers:
       '@types/node': 16.7.7
       '@types/nw.js': 0.13.14
       '@yuyi919/build-tools': link:../../tools/build-tools
+      '@yuyi919/shared-types': link:../../shared/packages/types
       '@yuyi919/workspace-base-rig': link:../../tools/workspace-base-rig
       http-proxy: 1.18.1
       jest: 27.1.0
@@ -538,8 +540,10 @@ importers:
       '@types/node': ~16.7.2
       '@types/nw.js': ^0.13.9
       '@vue/composition-api': ^1.0.2
+      '@yuyi919/shared-types': workspace:0.0.5
       '@yuyi919/shared-utils': workspace:0.0.36
       '@yuyi919/vue-jsx-factory': workspace:0.0.1
+      '@yuyi919/vue-shared-decorators': workspace:0.0.1
       '@yuyi919/vue-use': workspace:0.0.3
       '@yuyi919/workspace-base-rig': workspace:1.2.5
       jest: ~27.1.0
@@ -554,8 +558,10 @@ importers:
       vue-demi: ^0.11.3
       vue-pixi-wrapper: 1.1.5
     dependencies:
+      '@yuyi919/shared-types': link:../../../../shared/packages/types
       '@yuyi919/shared-utils': link:../../../../shared/packages/utils
       '@yuyi919/vue-jsx-factory': link:../../../../web/vue/jsx-factory
+      '@yuyi919/vue-shared-decorators': link:../../../../web/vue/shared/decorators
       '@yuyi919/vue-use': link:../../../../web/vue/use
       lodash: 4.17.21
       lodash-es: 4.17.21

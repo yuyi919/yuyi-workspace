@@ -1,10 +1,10 @@
 import { Input, TouchInput, WebAudio, Video, Graphics, Utils } from "../dom";
 import { Bitmap } from "../pixi";
 import { Scene_Shop, Scene_Base, Scene_Name } from "../scenes";
-import { ImageManager } from ".";
-import { EffectManager } from ".";
-import { AudioManager } from ".";
-import { PluginManager } from ".";
+import { ImageManager } from "./image";
+import { EffectManager } from "./effect";
+import { AudioManager } from "./audio";
+import { PluginManager } from "./plugin";
 
 export type LoadError = ["LoadError", string, () => void];
 
@@ -327,13 +327,13 @@ export class SceneManager {
     return this._previousClass === sceneClass;
   }
 
-  static goto(sceneClass: Constructable<Scene_Base> | null): void {
-    if (sceneClass) {
-      console.log("next=", sceneClass.name)
-      this._nextScene = new sceneClass();
+  static goto(SceneClass: Constructable<Scene_Base> | null): void {
+    if (SceneClass) {
+      console.debug("start:", SceneClass.name)
+      this._nextScene = new SceneClass();
     }
     if (this._scene) {
-      console.log("close", this._scene.constructor.name)
+      console.debug("end:", this._scene.constructor.name)
       this._scene.stop();
     }
   }

@@ -1,5 +1,5 @@
 import { Window_Base } from ".";
-import { Rectangle } from "../pixi";
+import { Rectangle, RectangleLike } from "../pixi";
 import { MZ } from "../MZ";
 
 //-----------------------------------------------------------------------------
@@ -10,7 +10,7 @@ import { MZ } from "../MZ";
 export class Window_Help extends Window_Base {
   _text = "";
 
-  constructor(rect: Rectangle);
+  constructor(rect: RectangleLike);
   constructor(thisClass: Constructable<Window_Help>);
   constructor(arg?: any) {
     super(Window_Base);
@@ -20,7 +20,7 @@ export class Window_Help extends Window_Base {
     this.initialize(arg);
   }
 
-  initialize(rect?: Rectangle): void {
+  initialize(rect?: RectangleLike): void {
     super.initialize(rect);
     this._text = "";
   }

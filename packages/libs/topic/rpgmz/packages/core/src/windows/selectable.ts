@@ -1,6 +1,7 @@
-import { Window_Scrollable } from ".";
+import { Window_Scrollable } from "./scrollable";
+import { DynamicString } from "@yuyi919/shared-types";
 import { ColorManager, SoundManager } from "../managers";
-import { Rectangle, Point } from "../pixi";
+import { Rectangle, Point, RectangleLike } from "../pixi";
 import { Window_Help } from "./help";
 import { Input, TouchInput } from "../dom";
 import { MZ } from "../MZ";
@@ -9,13 +10,15 @@ import { MZ } from "../MZ";
 // Window_Selectable
 //
 // The window class with cursor movement functions.
-
-export abstract class Window_Selectable extends Window_Scrollable {
+export type SelectableSymbols<Key extends string = DynamicString> = "pagedown" | "pageup" | "ok" | "cancel" | Key
+export abstract class Window_Selectable<
+  HandleSymbols extends SelectableSymbols = SelectableSymbols
+> extends Window_Scrollable {
   protected _index = -1;
   private _cursorFixed = false;
   private _cursorAll = false;
-  private _helpWindow: Window_Help | null = null;
-  private _handlers: { [key: string]: () => void } = {};
+  protected _helpWindow: Window_Help | null = null;
+  private _handlers: Record<HandleSymbols, () => void> = {} as Record<HandleSymbols, () => void>;
   private _doubleTouch = false;
   protected _canRepeat = true;
   cursorVisible = false;
@@ -24,23 +27,22 @@ export abstract class Window_Selectable extends Window_Scrollable {
   //   this._canRepeat = canRepeat
   // }
 
-  constructor(rect: Rectangle);
+  constructor(rect: RectangleLike);
   constructor(thisClass: typeof Window_Selectable);
   constructor(arg?: any) {
     super(Window_Scrollable);
-    if (arg === Window_Selectable) {
-      return;
+    if (arg !== Window_Selectable) {
+      this.initialize(arg);
     }
-    this.initialize(arg);
   }
 
-  initialize(rect?: Rectangle): void {
+  initialize(rect?: RectangleLike): void {
     super.initialize(rect);
     this._index = -1;
     this._cursorFixed = false;
     this._cursorAll = false;
     this._helpWindow = null;
-    this._handlers = {};
+    this._handlers = {} as Record<HandleSymbols, () => void>;
     this._doubleTouch = false;
     this._canRepeat = true;
     this.deactivate();
@@ -223,15 +225,20 @@ export abstract class Window_Selectable extends Window_Scrollable {
     }
   }
 
-  setHandler(symbol: string, method: () => void): void {
-    this._handlers[symbol] = method;
+  /**
+   * 设置事件回调
+   * @param eventSymbol 事件名称
+   * @param callback 回调函数
+   */
+  setHandler(eventSymbol: HandleSymbols, callback: () => any): void {
+    this._handlers[eventSymbol] = callback;
   }
 
-  isHandled(symbol: string | null): boolean {
+  isHandled(symbol: HandleSymbols | null): boolean {
     return !!this._handlers[symbol!];
   }
 
-  callHandler(symbol: string | null): void {
+  callHandler(symbol: HandleSymbols | null): void {
     if (this.isHandled(symbol)) {
       this._handlers[symbol!]();
     }
@@ -326,10 +333,10 @@ export abstract class Window_Selectable extends Window_Scrollable {
       if (Input.isRepeated("left")) {
         this.cursorLeft(Input.isTriggered("left"));
       }
-      if (!this.isHandled("pagedown") && Input.isTriggered("pagedown")) {
+      if (!this.isHandled("pagedown" as HandleSymbols) && Input.isTriggered("pagedown")) {
         this.cursorPagedown();
       }
-      if (!this.isHandled("pageup") && Input.isTriggered("pageup")) {
+      if (!this.isHandled("pageup" as HandleSymbols) && Input.isTriggered("pageup")) {
         this.cursorPageup();
       }
       if (this.index() !== lastIndex) {
@@ -346,10 +353,10 @@ export abstract class Window_Selectable extends Window_Scrollable {
       if (this.isCancelEnabled() && this.isCancelTriggered()) {
         return this.processCancel();
       }
-      if (this.isHandled("pagedown") && Input.isTriggered("pagedown")) {
+      if (this.isHandled("pagedown" as HandleSymbols) && Input.isTriggered("pagedown")) {
         return this.processPagedown();
       }
-      if (this.isHandled("pageup") && Input.isTriggered("pageup")) {
+      if (this.isHandled("pageup" as HandleSymbols) && Input.isTriggered("pageup")) {
         return this.processPageup();
       }
     }
@@ -439,11 +446,11 @@ export abstract class Window_Selectable extends Window_Scrollable {
   }
 
   isOkEnabled(): boolean {
-    return this.isHandled("ok");
+    return this.isHandled("ok" as HandleSymbols);
   }
 
   isCancelEnabled(): boolean {
-    return this.isHandled("cancel");
+    return this.isHandled("cancel" as HandleSymbols);
   }
 
   isOkTriggered(): boolean {
@@ -466,7 +473,7 @@ export abstract class Window_Selectable extends Window_Scrollable {
   }
 
   callOkHandler(): void {
-    this.callHandler("ok");
+    this.callHandler("ok" as HandleSymbols);
   }
 
   processCancel(): void {
@@ -477,19 +484,19 @@ export abstract class Window_Selectable extends Window_Scrollable {
   }
 
   callCancelHandler(): void {
-    this.callHandler("cancel");
+    this.callHandler("cancel" as HandleSymbols);
   }
 
   processPageup(): void {
     this.updateInputData();
     this.deactivate();
-    this.callHandler("pageup");
+    this.callHandler("pageup" as HandleSymbols);
   }
 
   processPagedown(): void {
     this.updateInputData();
     this.deactivate();
-    this.callHandler("pagedown");
+    this.callHandler("pagedown" as HandleSymbols);
   }
 
   updateInputData(): void {

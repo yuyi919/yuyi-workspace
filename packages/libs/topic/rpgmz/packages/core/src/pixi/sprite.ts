@@ -1,7 +1,7 @@
 import * as PIXI from "pixi.js";
-import { Bitmap } from ".";
-import { Rectangle } from ".";
-import { ColorFilter } from ".";
+import { Bitmap } from "./bitmap";
+import { Rectangle } from "./rectangle";
+import { ColorFilter } from "./colorFilter";
 import { MZ } from "../MZ";
 
 //-----------------------------------------------------------------------------
