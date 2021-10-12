@@ -1,0 +1,40 @@
+{
+  "name": "@yuyi919/advscript-parser",
+  "version": "0.0.1",
+  "description": "",
+  "author": "",
+  "main": "dist/index.js",
+  "module": "lib/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "vite build",
+    "build:dev": "vite build",
+    "build:watch": "vite build",
+    "dev": "vite",
+    "ohm:generate": "ohm generateBundles --withTypes ohm/adv.ohm"
+  },
+  "dependencies": {
+    "chevrotain": "^9.0.2",
+    "ohm-js": "^16.0.0"
+  },
+  "devDependencies": {
+    "@types/jest": "~27.0.1",
+    "@types/node": "~16.7.2",
+    "@yuyi919/workspace-base-rig": "workspace:1.2.5",
+    "@yuyi919/advscript-vite-plugin": "workspace:0.0.1",
+    "vite": "2.4.4",
+    "vite-plugin-dts": "~0.8.0",
+    "jest": "~27.1.0",
+    "tslib": "~2.3.1",
+    "typescript": "4.1.2"
+  },
+  "peerDependencies": {},
+  "files": [
+    "dist",
+    "lib",
+    "README.md"
+  ],
+  "publishConfig": {
+    "access": "public"
+  }
+}

@@ -1,0 +1,24 @@
+{
+  "extends": "./node_modules/@yuyi919/workspace-base-rig/profiles/tsc/tsconfig-base.json",
+  "compilerOptions": {
+    "emitDeclarationOnly": true,
+    "outDir": "./dist",
+    "rootDir": "./src",
+    "target": "ESNext",
+    "module": "ESNext",
+    "moduleResolution": "node",
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
+    "types": ["vite/client"],
+    "paths": {
+      "@adv.ohm-bundle": ["./ohm/adv.ohm-bundle.d.ts"]
+    },
+    "tsBuildInfoFile": "./node_modules/@yuyi919/workspace-base-rig/.tsBuildInfo/topic-advscript-packages-parser.json"
+  },
+  "exclude": [
+    "src/**/*.spec.ts",
+    "src/**/*.test.ts",
+    "**/__test__/**"
+  ],
+  "include": ["src/**/*.ts"]
+}

@@ -484,6 +484,24 @@
       "reviewCategory": "production"
     },
     {
+      "packageName": "@yuyi919/advscript-parser",
+      "projectFolder": "packages/libs/topic/advscript/packages/parser",
+      "reviewCategory": "production",
+      "versionPolicyName": "shared"
+    },
+    {
+      "packageName": "@yuyi919/advscript-vite-plugin",
+      "projectFolder": "packages/libs/topic/advscript/packages/vite-plugin",
+      "reviewCategory": "production",
+      "versionPolicyName": "shared"
+    },
+    {
+      "packageName": "@yuyi919/advscript-vscode-extension",
+      "projectFolder": "packages/libs/topic/advscript/packages/vscode-extension",
+      "reviewCategory": "production",
+      "versionPolicyName": "shared"
+    },
+    {
       "packageName": "@yuyi919/build-tools",
       "projectFolder": "packages/libs/tools/build-tools",
       "reviewCategory": "tools",
@@ -561,6 +579,12 @@
     {
       "packageName": "@yuyi919/shared-utils",
       "projectFolder": "packages/libs/shared/packages/utils",
+      "reviewCategory": "production",
+      "versionPolicyName": "shared"
+    },
+    {
+      "packageName": "@yuyi919/topic-advscript",
+      "projectFolder": "packages/libs/topic/advscript",
       "reviewCategory": "production",
       "versionPolicyName": "shared"
     },

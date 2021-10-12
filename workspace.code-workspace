@@ -17,6 +17,10 @@
       "path": "packages\\libs\\tools\\workspace-base-rig"
     },
     {
+      "name": "📦 @yuyi919/topic-advscript",
+      "path": "packages\\libs\\topic\\advscript"
+    },
+    {
       "name": "📦 @yuyi919/topic-rpgmz",
       "path": "packages\\libs\\topic\\rpgmz"
     },

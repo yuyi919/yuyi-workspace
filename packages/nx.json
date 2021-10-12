@@ -66,6 +66,18 @@
     "shared-utils": {
       "tags": ["lerna-package", "shared", "utils"]
     },
+    "topic-advscript": {
+      "tags": ["topic", "advscript"]
+    },
+    "topic-advscript-packages-parser": {
+      "tags": ["topic", "advscript", "packages", "parser"]
+    },
+    "topic-advscript-packages-vite-plugin": {
+      "tags": ["topic", "advscript", "packages", "vite", "vite-plugin"]
+    },
+    "topic-advscript-packages-vscode-extension": {
+      "tags": ["topic", "advscript", "packages", "vscode", "vscode-extension"]
+    },
     "ts-transformer-ast-utils": {
       "tags": ["lerna-package", "internal", "ts-transformer", "ast-utils"]
     },

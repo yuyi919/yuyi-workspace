@@ -1572,6 +1572,226 @@
         }
       }
     },
+    "topic-advscript": {
+      "root": "libs/topic/advscript",
+      "sourceRoot": "libs/topic/advscript/src",
+      "projectType": "library",
+      "targets": {
+        "build": {
+          "executor": "@nrwl/workspace:run-commands",
+          "configurations": {
+            "watch": {
+              "commands": ["pnpm run build:watch"]
+            }
+          },
+          "options": {
+            "commands": ["pnpm run build"],
+            "cwd": "libs/topic/advscript"
+          }
+        },
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/topic/advscript/**/*.ts"]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/topic/advscript"],
+          "options": {
+            "jestConfig": "libs/topic/advscript/jest.config.js",
+            "passWithNoTests": true
+          }
+        },
+        "command": {
+          "executor": "@nrwl/workspace:run-commands",
+          "options": {},
+          "configurations": {
+            "format": {
+              "cwd": ".",
+              "commands": [
+                {
+                  "command": "nx generate @yuyi919/nx-plugin-workspace-helper:format --project=topic-advscript --no-interactive"
+                }
+              ]
+            },
+            "remove": {
+              "cwd": ".",
+              "commands": [
+                {
+                  "command": "nx generate @nrwl/workspace:remove --projectName=topic-advscript --forceRemove"
+                }
+              ]
+            }
+          }
+        }
+      }
+    },
+    "topic-advscript-packages-parser": {
+      "root": "libs/topic/advscript/packages/parser",
+      "sourceRoot": "libs/topic/advscript/packages/parser/src",
+      "projectType": "library",
+      "targets": {
+        "build": {
+          "executor": "@nrwl/workspace:run-commands",
+          "configurations": {
+            "watch": {
+              "commands": ["pnpm run build:watch"]
+            }
+          },
+          "options": {
+            "commands": ["pnpm run build"],
+            "cwd": "libs/topic/advscript/packages/parser"
+          }
+        },
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/topic/advscript/packages/parser/**/*.ts"]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/topic/advscript/packages/parser"],
+          "options": {
+            "jestConfig": "libs/topic/advscript/packages/parser/jest.config.js",
+            "passWithNoTests": true
+          }
+        },
+        "command": {
+          "executor": "@nrwl/workspace:run-commands",
+          "options": {},
+          "configurations": {
+            "format": {
+              "cwd": ".",
+              "commands": [
+                {
+                  "command": "nx generate @yuyi919/nx-plugin-workspace-helper:format --project=topic-advscript-packages-parser --no-interactive"
+                }
+              ]
+            },
+            "remove": {
+              "cwd": ".",
+              "commands": [
+                {
+                  "command": "nx generate @nrwl/workspace:remove --projectName=topic-advscript-packages-parser --forceRemove"
+                }
+              ]
+            }
+          }
+        }
+      }
+    },
+    "topic-advscript-packages-vite-plugin": {
+      "root": "libs/topic/advscript/packages/vite-plugin",
+      "sourceRoot": "libs/topic/advscript/packages/vite-plugin/src",
+      "projectType": "library",
+      "targets": {
+        "build": {
+          "executor": "@nrwl/workspace:run-commands",
+          "configurations": {
+            "watch": {
+              "commands": ["pnpm run build:watch"]
+            }
+          },
+          "options": {
+            "commands": ["pnpm run build"],
+            "cwd": "libs/topic/advscript/packages/vite-plugin"
+          }
+        },
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/topic/advscript/packages/vite-plugin/**/*.ts"]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/topic/advscript/packages/vite-plugin"],
+          "options": {
+            "jestConfig": "libs/topic/advscript/packages/vite-plugin/jest.config.js",
+            "passWithNoTests": true
+          }
+        },
+        "command": {
+          "executor": "@nrwl/workspace:run-commands",
+          "options": {},
+          "configurations": {
+            "format": {
+              "cwd": ".",
+              "commands": [
+                {
+                  "command": "nx generate @yuyi919/nx-plugin-workspace-helper:format --project=topic-advscript-packages-vite-plugin --no-interactive"
+                }
+              ]
+            },
+            "remove": {
+              "cwd": ".",
+              "commands": [
+                {
+                  "command": "nx generate @nrwl/workspace:remove --projectName=topic-advscript-packages-vite-plugin --forceRemove"
+                }
+              ]
+            }
+          }
+        }
+      }
+    },
+    "topic-advscript-packages-vscode-extension": {
+      "root": "libs/topic/advscript/packages/vscode-extension",
+      "sourceRoot": "libs/topic/advscript/packages/vscode-extension/src",
+      "projectType": "library",
+      "targets": {
+        "build": {
+          "executor": "@nrwl/workspace:run-commands",
+          "configurations": {
+            "watch": {
+              "commands": ["pnpm run build:watch"]
+            }
+          },
+          "options": {
+            "commands": ["pnpm run build"],
+            "cwd": "libs/topic/advscript/packages/vscode-extension"
+          }
+        },
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/topic/advscript/packages/vscode-extension/**/*.ts"]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/topic/advscript/packages/vscode-extension"],
+          "options": {
+            "jestConfig": "libs/topic/advscript/packages/vscode-extension/jest.config.js",
+            "passWithNoTests": true
+          }
+        },
+        "command": {
+          "executor": "@nrwl/workspace:run-commands",
+          "options": {},
+          "configurations": {
+            "format": {
+              "cwd": ".",
+              "commands": [
+                {
+                  "command": "nx generate @yuyi919/nx-plugin-workspace-helper:format --project=topic-advscript-packages-vscode-extension --no-interactive"
+                }
+              ]
+            },
+            "remove": {
+              "cwd": ".",
+              "commands": [
+                {
+                  "command": "nx generate @nrwl/workspace:remove --projectName=topic-advscript-packages-vscode-extension --forceRemove"
+                }
+              ]
+            }
+          }
+        }
+      }
+    },
     "web-solid-playground": {
       "root": "libs/web/solid/playground",
       "sourceRoot": "libs/web/solid/playground/src",

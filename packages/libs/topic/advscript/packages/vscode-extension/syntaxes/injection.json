@@ -1,0 +1,15 @@
+{
+  "scopeName": "advscript.injection",
+  "injectionSelector": "L:comment.line.double-slash",
+  "patterns": [
+    {
+      "include": "#todo-keyword"
+    }
+  ],
+  "repository": {
+    "todo-keyword": {
+      "match": "TD",
+      "name": "keyword.todo"
+    }
+  }
+}

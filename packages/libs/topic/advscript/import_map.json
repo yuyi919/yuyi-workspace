@@ -1,0 +1,5 @@
+{
+  "imports": {
+    "./src/lib/advscript": "./src/lib/advscript.ts"
+  }
+}

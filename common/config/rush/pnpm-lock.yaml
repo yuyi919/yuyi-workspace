@@ -487,6 +487,88 @@ importers:
       '@types/node': 16.7.7
       '@yuyi919/jest-extra': link:../../../../tools/jest
 
+  ../../packages/libs/topic/advscript:
+    specifiers:
+      '@types/jest': ~27.0.1
+      '@types/node': ~16.7.2
+      '@yuyi919/workspace-base-rig': workspace:1.2.5
+      jest: ~27.1.0
+      tslib: ~2.3.1
+      typescript: 4.1.2
+    devDependencies:
+      '@types/jest': 27.0.1
+      '@types/node': 16.7.7
+      '@yuyi919/workspace-base-rig': link:../../tools/workspace-base-rig
+      jest: 27.1.0
+      tslib: 2.3.1
+      typescript: 4.1.2
+
+  ../../packages/libs/topic/advscript/packages/parser:
+    specifiers:
+      '@types/jest': ~27.0.1
+      '@types/node': ~16.7.2
+      '@yuyi919/advscript-vite-plugin': workspace:0.0.1
+      '@yuyi919/workspace-base-rig': workspace:1.2.5
+      chevrotain: ^9.0.2
+      jest: ~27.1.0
+      ohm-js: ^16.0.0
+      tslib: ~2.3.1
+      typescript: 4.1.2
+      vite: 2.4.4
+      vite-plugin-dts: ~0.8.0
+    dependencies:
+      chevrotain: 9.0.2
+      ohm-js: 16.0.0
+    devDependencies:
+      '@types/jest': 27.0.1
+      '@types/node': 16.7.7
+      '@yuyi919/advscript-vite-plugin': link:../vite-plugin
+      '@yuyi919/workspace-base-rig': link:../../../../tools/workspace-base-rig
+      jest: 27.1.0
+      tslib: 2.3.1
+      typescript: 4.1.2
+      vite: 2.4.4
+      vite-plugin-dts: 0.8.0_vite@2.4.4
+
+  ../../packages/libs/topic/advscript/packages/vite-plugin:
+    specifiers:
+      '@types/jest': ~27.0.1
+      '@types/node': ~16.7.2
+      '@yuyi919/workspace-base-rig': workspace:1.2.5
+      jest: ~27.1.0
+      ohm-js: ^16.0.0
+      tslib: ~2.3.1
+      typescript: 4.1.2
+      vite: 2.4.4
+    dependencies:
+      ohm-js: 16.0.0
+    devDependencies:
+      '@types/jest': 27.0.1
+      '@types/node': 16.7.7
+      '@yuyi919/workspace-base-rig': link:../../../../tools/workspace-base-rig
+      jest: 27.1.0
+      tslib: 2.3.1
+      typescript: 4.1.2
+      vite: 2.4.4
+
+  ../../packages/libs/topic/advscript/packages/vscode-extension:
+    specifiers:
+      '@types/jest': ~27.0.1
+      '@types/node': ~16.7.2
+      '@types/vscode': ~1.61.0
+      '@yuyi919/workspace-base-rig': workspace:1.2.5
+      jest: ~27.1.0
+      tslib: ~2.3.1
+      typescript: 4.1.2
+    devDependencies:
+      '@types/jest': 27.0.1
+      '@types/node': 16.7.7
+      '@types/vscode': 1.61.0
+      '@yuyi919/workspace-base-rig': link:../../../../tools/workspace-base-rig
+      jest: 27.1.0
+      tslib: 2.3.1
+      typescript: 4.1.2
+
   ../../packages/libs/topic/rpgmz:
     specifiers:
       '@types/http-proxy': ^1.17.4
@@ -2686,6 +2768,14 @@ packages:
   /@bcoe/v8-coverage/0.2.3:
     resolution: {integrity: sha512-0hYQ8SB4Db5zvZB4axdMHGwEaQjkZzFjQiN9LVYvIFB2nSUHW9tYpxWriPrWDASIxiaXax83REcLxuSdnGPZtw==}
 
+  /@chevrotain/types/9.0.2:
+    resolution: {integrity: sha512-lo1dQPX7DQffJb26eaYLEy4/jUTFmsGKa43mDvMNAHwItEgUQHUkTZR0iAkHG0aJv8ejM/KqYpRVSNetrOK8qw==}
+    dev: false
+
+  /@chevrotain/utils/9.0.2:
+    resolution: {integrity: sha512-iTju1VpbGruWagXS/XswuqeimOCRNeDvrXLlWHYsHp1qTU8sJfAfLiX5vs7DNxB1px6N8VWVI0SD8vMUksNBYw==}
+    dev: false
+
   /@cnakazawa/watch/1.0.4:
     resolution: {integrity: sha512-v9kIhKwjeZThiWrLmj0y17CWoyddASLj9O2yvbZkbvw/N3rWOYy9zkV66ursAoVr0mV15bL8g0c4QZUE6cdDoQ==}
     engines: {node: '>=0.1.95'}
@@ -4296,6 +4386,10 @@ packages:
     dependencies:
       '@types/node': 16.7.7
     dev: false
+
+  /@types/vscode/1.61.0:
+    resolution: {integrity: sha512-9k5Nwq45hkRwdfCFY+eKXeQQSbPoA114mF7U/4uJXRBJeGIO7MuJdhF1PnaDN+lllL9iKGQtd6FFXShBXMNaFg==}
+    dev: true
 
   /@types/webpack-sources/0.1.9:
     resolution: {integrity: sha512-bvzMnzqoK16PQIC8AYHNdW45eREJQMd6WG/msQWX5V2+vZmODCOPb4TJcbgRljTZZTwTM4wUMcsI8FftNA7new==}
@@ -6521,6 +6615,14 @@ packages:
 
   /chardet/0.7.0:
     resolution: {integrity: sha512-mT8iDcrh03qDGRRmoA2hmBJnxpllMR+0/0qlzjqZES6NdiWDcZkCNAk4rPFZ9Q85r27unkiNNg8ZOiwZXBHwcA==}
+
+  /chevrotain/9.0.2:
+    resolution: {integrity: sha512-6ZjgUdGvU4j1n1b2hTjb79Vr2V+qNtmP7f8FVt79+kdAYcUj2QfYNwI8ycCVsgHD/dIeO5Vr1hckkkfliVQTfg==}
+    dependencies:
+      '@chevrotain/types': 9.0.2
+      '@chevrotain/utils': 9.0.2
+      regexp-to-ast: 0.5.0
+    dev: false
 
   /chokidar/2.1.8:
     resolution: {integrity: sha512-ZmZUazfOzf0Nve7duiCKD23PFSCs4JPoYyccjUFF3aQkQadqBhfzhjkwBH2mNOG9cTBwhamM37EIsIkZw3nRgg==}
@@ -12047,6 +12149,11 @@ packages:
       define-properties: 1.1.3
       es-abstract: 1.18.5
 
+  /ohm-js/16.0.0:
+    resolution: {integrity: sha512-e0xfOO/OdF3IE+H3VibMlW/wJr5bNJIEa5bnVvoxEjPNTJ6Djjt3seAKHu6CWfByRnJFk5TsiSX3Vz7GWoM0og==}
+    engines: {node: '>=0.12.1'}
+    dev: false
+
   /omit.js/1.0.2:
     resolution: {integrity: sha512-/QPc6G2NS+8d4L/cQhbk6Yit1WTB6Us2g84A7A/1+w9d/eRGHyEqC5kkQtHVoHZ5NFWGG7tUGgrhVZwgZanKrQ==}
     dependencies:
@@ -13041,6 +13148,10 @@ packages:
     dependencies:
       extend-shallow: 3.0.2
       safe-regex: 1.1.0
+
+  /regexp-to-ast/0.5.0:
+    resolution: {integrity: sha512-tlbJqcMHnPKI9zSrystikWKwHkBqu2a/Sgw01h3zFjvYrMxEDYHzzoMZnUrbIfpTFEsoRnnviOXNCzFiSc54Qw==}
+    dev: false
 
   /regexp.prototype.flags/1.3.1:
     resolution: {integrity: sha512-JiBdRBq91WlY7uRJ0ds7R+dU02i6LKi8r3BuQhNXn+kmeLN+EfHhfjqMRis1zJxnlu88hq/4dx0P2OP3APRTOA==}
@@ -15092,6 +15203,18 @@ packages:
       cloneable-readable: 1.1.3
       remove-trailing-separator: 1.1.0
       replace-ext: 1.0.1
+    dev: true
+
+  /vite-plugin-dts/0.8.0_vite@2.4.4:
+    resolution: {integrity: sha512-lc8jLnNY4sGFh1S9XP7yIQT8cUuRZc07hEKpfM+6T4zuhfAU4RFQXKe68VWtbFGRHoHHKZeJfLA9bJDWPL8kMw==}
+    engines: {node: '>=12.0.0'}
+    peerDependencies:
+      vite: '>=2.4.4'
+    dependencies:
+      fast-glob: 3.2.7
+      fs-extra: 10.0.0
+      ts-morph: 11.0.3
+      vite: 2.4.4
     dev: true
 
   /vite-plugin-dts/0.8.0_vite@2.5.8:

@@ -1,0 +1,63 @@
+{
+  "name": "@yuyi919/advscript-vscode-extension",
+  "displayName": "AdvScript",
+  "description": "AdvScript support for VSCode",
+  "version": "0.1.2",
+  "publisher": "yuyiRai",
+  "scripts": {
+    "build:dev": "tsc --build",
+    "build:watch": "tsc --build --watch",
+    "dev": "node scripts/publish-local.js",
+    "build": "node scripts/syntaxes.js"
+  },
+  "engines": {
+    "vscode": "^1.6.0"
+  },
+  "categories": [
+    "Programming Languages"
+  ],
+  "contributes": {
+    "languages": [
+      {
+        "id": "advscript",
+        "aliases": [
+          "AdvScript",
+          "advscript"
+        ],
+        "extensions": [
+          ".adv",
+          ".avs"
+        ],
+        "configuration": "./language-configuration.json"
+      }
+    ],
+    "grammars": [
+      {
+        "language": "advscript",
+        "scopeName": "source.advscript",
+        "path": "./syntaxes/advscript.tmLanguage.json",
+        "embeddedLanguages": {
+          "source.ts": "typescript",
+          "source.js": "javascript"
+        }
+      }
+    ]
+  },
+  "devDependencies": {
+    "@types/jest": "~27.0.1",
+    "@types/node": "~16.7.2",
+    "@yuyi919/workspace-base-rig": "workspace:1.2.5",
+    "jest": "~27.1.0",
+    "tslib": "~2.3.1",
+    "typescript": "4.1.2",
+    "@types/vscode": "~1.61.0"
+  },
+  "files": [
+    "dist",
+    "lib",
+    "README.md"
+  ],
+  "publishConfig": {
+    "access": "public"
+  }
+}
