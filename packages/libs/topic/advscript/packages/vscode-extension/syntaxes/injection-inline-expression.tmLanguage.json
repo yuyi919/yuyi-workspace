@@ -1,0 +1,43 @@
+{
+  "scopeName": "inline-expression.injection",
+  "injectionSelector": [
+    "L:string",
+    "L:meta.paragraph.text"
+  ],
+  "patterns": [
+    {
+      "include": "#INLINE_EXPRESSION"
+    }
+  ],
+  "repository": {
+    "INLINE_EXPRESSION": {
+      "begin": "(|^)(@{)",
+      "beginCaptures": {
+        "2": {
+          "name": "entity.name.tag.adv"
+        }
+      },
+      "end": "(})(|\\n)",
+      "endCaptures": {
+        "1": {
+          "name": "entity.name.tag.adv"
+        }
+      },
+      "contentName": "meta.embedded.expression.adv source.ts",
+      "patterns": [
+        {
+          "begin": "\\G\\s*(?={)",
+          "end": "(?<=})",
+          "patterns": [
+            {
+              "include": "text.source.advscript#EXPRESSION"
+            }
+          ]
+        },
+        {
+          "include": "text.source.advscript#EXPRESSION"
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,109 @@
+AVS {
+  Scripts
+    = LogicBlock*
+  LogicBlock
+    = Comment
+    | IF LogicBlock* (ELSEIF LogicBlock*)* (ELSE LogicBlock*)? END  -- IF
+    | WHILE LogicBlock* END  -- WHILE
+    | FOREACH LogicBlock* END  -- FOREACH
+    | LET                      -- LET
+    | StoryLine                       -- Story
+  Comment = "//" comment_single     -- single
+          | "/*" comment_multi "*/"       -- multi
+  comment_single = (~("\n" | "\r") any)+
+  comment_multi = (~("*/") any)+
+  StoryLine
+    = "[" command Content "]"    -- formatB
+      | "@" command Content ("\r"|";"|"\n"|end)?  -- formatA
+      | "@" command ("\r"|";"|"\n"|end)?  -- formatC
+      | "[" command "]"    -- formatD
+      | text? "@{" Identifier "}" text?  -- formatVar
+      | text -- formatE
+  text = (~("[" | "@" | "|" | "\n" | "\r" | "//" | "/*") any)+
+
+  command = key
+
+  Content 
+    = KeyValue (#",")? Content -- mul
+    | KeyValue                   -- base
+
+  KeyValue = # key "=" Exp  -- param
+    | key        -- flag
+  key = (letter | number | "_")+
+  value = string | number | boolean | "null"
+
+  ArraySpread = Exp "..." Exp
+
+  ArrayItems = ListOf<Exp, ",">
+  Array = "[" ArrayItems "]"
+  
+  Expression = Array | Identifier | value
+
+  string = "\"" doubleQuoteStringContent* "\"" -- doubleQuote
+      | "\'" singleQuoteStringContent* "\'" -- singleQuote
+// ~("\'" | "\\" ) any  -- nonEscaped
+  singleQuoteStringContent = ~("\'") any  -- nonEscaped
+      | "\\" escapeCharacter                 -- escaped
+  doubleQuoteStringContent = ~("\"") any  -- nonEscaped
+      | "\\" escapeCharacter                 -- escaped
+  singleEscapeCharacter = "'"|"\""|"\\"|"b"|"f"|"n"|"r"|"t"|"v"
+  escapeCharacter = singleEscapeCharacter | "x" | "u"
+  quote = "\"" | "\'"
+  boolean = "true" | "false"
+  number  (a number)
+    = ("-"|"+") number   -- sign
+    | digit* "." digit+  --  fract
+    | "0x" hexdigit+        --  hex
+    | digit+             --  whole
+  hexdigit
+    = "a".."f" | "A".."F" | digit
+  Identifier = ~(number | boolean) ("$" | "%")? key
+  invalidIdentifier(valid identifier) = ~(number | boolean) ("$" | "%")? (key " "+ key)
+  statment_end(请换行) = (" "|";")* ("\n"|"\r"|"\t"|end)
+  IF
+    = "|if" Exp
+  LET
+    = "|let" ListOf<LetStatement, ","> #statment_end
+  LetStatement
+    = Identifier "=" Exp  -- assign
+    | Identifier         -- nonAssign
+  END
+    = "|end"
+  ELSE
+    = "|else"
+  ELSEIF
+    = "|elseif" Exp
+  WHILE
+    = "|while" Exp
+  FOREACH
+    = "|foreach" Identifier "in" ~(invalidIdentifier)(Identifier | Array | ArraySpread | ArrayItems)
+  Exp
+    = JudgeExp booleanOperator Exp  -- bool
+    | JudgeExp
+  booleanOperator = "&&" | "||"
+  JudgeExp
+    = AddExp judgeOperator AddExp     -- judge
+    | AddExp
+  judgeOperator = "!=" | "==" | "??" | ">=" | "<=" | ">" | "<"
+  // MathExp
+  // = MathExp mathOperator MathExp  -- math
+  // | PriExp
+  // mathOperator = "+" | "-" | "*" | "/" | "^" | "%"
+  AddExp
+  = AddExp ("+" | "-") MulExp  -- add
+  // | AddExp "-" MulExp  -- minus
+  | MulExp
+  MulExp
+    = MulExp ("*" | "/" | "%") ExpExp  -- mul
+    // | MulExp "/" ExpExp  -- divide
+    // | MulExp "%" ExpExp  -- mod
+    | ExpExp
+  ExpExp
+    = PriExp "^" ExpExp  -- power
+    | PriExp
+  PriExp
+  = "(" Exp ")"  -- paren
+  | "+" PriExp   -- pos
+  | "-" PriExp   -- neg
+  | Expression
+}

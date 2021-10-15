@@ -1,0 +1,258 @@
+import * as fs from "fs";
+import * as path from "path";
+import * as vscode from "vscode";
+import { getConfig } from "../configloader";
+import {
+  diagnosticCollection,
+  diagnostics,
+  getEditor,
+  parsedDocuments,
+  parseDocument,
+} from "../extension";
+import { assetsPath, assetsRuntimePath } from "../utils";
+import { getVisibleLine, TopmostLineMonitor } from "../utils/topMostLineMonitor";
+
+interface preview {
+  uri: string;
+  dynamic: boolean;
+  panel: vscode.WebviewPanel;
+  id: number;
+}
+
+export const previews: preview[] = [];
+let isScrolling = false;
+
+export function getPreviewPanels(docuri: vscode.Uri): preview[] {
+  const selectedPreviews: preview[] = [];
+  for (let i = 0; i < previews.length; i++) {
+    if (previews[i].uri == docuri.toString()) selectedPreviews.push(previews[i]);
+  }
+  return selectedPreviews;
+}
+export function removePreviewPanel(id: number) {
+  for (let i = previews.length - 1; i >= 0; i--) {
+    if (previews[i].id == id) {
+      previews.splice(i, 1);
+    }
+  }
+}
+
+export function getPreviewsToUpdate(docuri: vscode.Uri): preview[] {
+  const selectedPreviews: preview[] = [];
+  for (let i = 0; i < previews.length; i++) {
+    if (previews[i].uri == docuri.toString() || previews[i].dynamic)
+      selectedPreviews.push(previews[i]);
+  }
+  return selectedPreviews;
+}
+
+export function createPreviewPanel(
+  editor: vscode.TextEditor,
+  dynamic: boolean
+): vscode.WebviewPanel {
+  if (editor.document.languageId !== "advscript") {
+    vscode.window.showErrorMessage("You can only preview advscript documents as a screenplay!");
+    return undefined;
+  }
+  let preview: vscode.WebviewPanel;
+  const presentPreviews = getPreviewPanels(editor.document.uri);
+  presentPreviews.forEach((p) => {
+    if (p.uri == editor.document.uri.toString() && p.dynamic == dynamic) {
+      //The preview already exists
+      p.panel.reveal();
+      preview = p.panel;
+      dynamic = p.dynamic;
+    }
+  });
+
+  if (preview == undefined) {
+    //The preview didn't already exist
+    let previewname = path.basename(editor.document.fileName).replace(".advscript", "");
+    if (dynamic) previewname = "Advscript Preview";
+    preview = vscode.window.createWebviewPanel(
+      "advscript-preview", // Identifies the type of the webview. Used internally
+      previewname, // Title of the panel displayed to the user
+      vscode.ViewColumn.Three, // Editor column to show the new webview panel in.
+      { enableScripts: true, retainContextWhenHidden: true }
+    );
+  }
+  loadWebView(editor.document.uri, preview, dynamic);
+  return preview;
+}
+
+const webviewHtml = fs.readFileSync(path.join(assetsPath(), "webviews/preview/index.html"), "utf8");
+
+function loadWebView(docuri: vscode.Uri, preview: vscode.WebviewPanel, dynamic: boolean) {
+  const id = Date.now() + Math.floor(Math.random() * 1000);
+  previews.push({ uri: docuri.toString(), dynamic: dynamic, panel: preview, id: id });
+
+  preview.webview.onDidReceiveMessage(async (message) => {
+    if (message.command == "updateFontResult") {
+      if (
+        message.content == false &&
+        parsedDocuments.get(vscode.Uri.parse(message.uri).toString()).properties.fontLine != -1
+      ) {
+        //The font could not be rendered
+        diagnostics.length = 0;
+        diagnostics.push(
+          new vscode.Diagnostic(
+            new vscode.Range(
+              new vscode.Position(
+                parsedDocuments.get(vscode.Uri.parse(message.uri).toString()).properties.fontLine,
+                0
+              ),
+              new vscode.Position(parsedDocuments.get(docuri.toString()).properties.fontLine, 5)
+            ),
+            "This font could not be rendered in the live preview. Is it installed?",
+            vscode.DiagnosticSeverity.Error
+          )
+        );
+        diagnosticCollection.set(vscode.Uri.parse(message.uri), diagnostics);
+      } else {
+        //Yay, the font has been rendered
+        diagnosticCollection.set(vscode.Uri.parse(message.uri), []);
+      }
+    } else if (message.command == "revealLine") {
+      if (!getConfig(vscode.Uri.parse(message.uri)).synchronized_markup_and_preview) return;
+      isScrolling = true;
+      console.log("jump to line:" + message.content);
+      const sourceLine = Math.floor(message.content);
+      const fraction = message.content - sourceLine;
+      const editor = getEditor(vscode.Uri.parse(message.uri));
+      if (editor && !Number.isNaN(sourceLine)) {
+        const text = editor.document.lineAt(sourceLine).text;
+        const start = Math.floor(fraction * text.length);
+        editor.revealRange(
+          new vscode.Range(sourceLine, start, sourceLine + 1, 0),
+          vscode.TextEditorRevealType.AtTop
+        );
+      }
+    }
+    if (message.command == "changeselection") {
+      const linePos = Number(message.line);
+      let charPos = Number(message.character);
+      if (Number.isNaN(linePos)) return;
+      if (Number.isNaN(charPos)) charPos = 0;
+
+      const selectionposition = new vscode.Position(message.line, message.character);
+
+      let editor = getEditor(vscode.Uri.parse(message.uri));
+      if (editor == undefined) {
+        const doc = await vscode.workspace.openTextDocument(vscode.Uri.parse(message.uri));
+        editor = await vscode.window.showTextDocument(doc);
+      } else {
+        await vscode.window.showTextDocument(editor.document, editor.viewColumn, false);
+      }
+
+      editor.selection = new vscode.Selection(selectionposition, selectionposition);
+      editor.revealRange(
+        new vscode.Range(linePos, 0, linePos + 1, 0),
+        vscode.TextEditorRevealType.InCenterIfOutsideViewport
+      );
+    }
+  });
+  preview.onDidDispose(() => {
+    removePreviewPanel(id);
+  });
+  console.log(assetsRuntimePath());
+  preview.webview.html = webviewHtml
+    .replaceAll(
+      "$ROOTDIR$",
+      preview.webview.asWebviewUri(vscode.Uri.file(assetsRuntimePath())).toString()
+    )
+    .replaceAll(
+      "/$BASE_URL$",
+      preview.webview
+        .asWebviewUri(vscode.Uri.file(assetsRuntimePath("webviews/preview")))
+        .toString()
+    );
+  preview.webview.postMessage({ command: "setstate", uri: docuri.toString(), dynamic: dynamic });
+  const config = getConfig(docuri);
+  preview.webview.postMessage({ command: "updateconfig", content: config });
+
+  const editor = getEditor(docuri);
+  if (editor) {
+    parseDocument(editor.document);
+    if (config?.synchronized_markup_and_preview) {
+      preview.webview.postMessage({
+        command: "highlightline",
+        content: editor.selection.start.line,
+      });
+      preview.webview.postMessage({
+        command: "showsourceline",
+        content: getVisibleLine(editor),
+        linescount: editor.document.lineCount,
+        source: "scroll",
+      });
+    }
+  }
+  console.log(preview.webview.html);
+}
+
+const _topmostLineMonitor = new TopmostLineMonitor();
+_topmostLineMonitor.onDidChanged((event) => {
+  scrollTo(event.line, event.resource);
+});
+
+function scrollTo(topLine: number, resource: vscode.Uri) {
+  if (isScrolling) {
+    isScrolling = false;
+    return;
+  }
+
+  const editor = getEditor(resource);
+  if (getConfig(editor.document.uri).synchronized_markup_and_preview) {
+    previews.forEach((p) => {
+      if (p.uri == resource.toString()) {
+        p.panel.webview.postMessage({
+          command: "showsourceline",
+          content: topLine,
+          linescount: editor.document.lineCount,
+          source: "scroll",
+        });
+      }
+    });
+  }
+}
+
+vscode.workspace.onDidChangeConfiguration((change) => {
+  previews.forEach((p) => {
+    const config = getConfig(vscode.Uri.parse(p.uri));
+    if (change.affectsConfiguration("advscript"))
+      p.panel.webview.postMessage({ command: "updateconfig", content: config });
+  });
+});
+
+vscode.window.onDidChangeTextEditorSelection((change) => {
+  if (change.textEditor.document.languageId == "advscript") {
+    const config = getConfig(change.textEditor.document.uri);
+    if (config.synchronized_markup_and_preview) {
+      const selection = change.selections[0];
+      previews.forEach((p) => {
+        if (p.uri == change.textEditor.document.uri.toString())
+          p.panel.webview.postMessage({
+            command: "showsourceline",
+            content: selection.active.line,
+            linescount: change.textEditor.document.lineCount,
+            source: "click",
+          });
+      });
+    }
+  }
+});
+
+export class PreviewSerializer implements vscode.WebviewPanelSerializer {
+  async deserializeWebviewPanel(webviewPanel: vscode.WebviewPanel, state: any) {
+    // `state` is the state persisted using `setState` inside the webview
+
+    // Restore the content of our webview.
+    //
+    // Make sure we hold on to the `webviewPanel` passed in here and
+    // also restore any event listeners we need on it.
+
+    const docuri = vscode.Uri.parse(state.docuri);
+    loadWebView(docuri, webviewPanel, state.dynamic);
+    //webviewPanel.webview.postMessage({ command: 'updateTitle', content: state.title_html });
+    //webviewPanel.webview.postMessage({ command: 'updateScript', content: state.screenplay_html });
+  }
+}

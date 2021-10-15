@@ -1,7 +1,9 @@
 /lib
 /dist
+/out
 /temp
 /node_modules
 /.rush
 *.log
 .tsBuildInfo
+/syntaxes/fountain.tmlanguage

@@ -1,0 +1,30 @@
+{
+  "scopeName": "adv.fountain",
+  "injectionSelector": ["L:markup.raw"],
+  "patterns": [
+    {
+      "include": "#INLINE_EXPRESSION"
+    }
+  ],
+  "repository": {
+    "INLINE_EXPRESSION": {
+      "begin": "(|^)(@{)",
+      "beginCaptures": {
+        "2": {
+          "name": "entity.name.tag.adv"
+        }
+      },
+      "end": "(})(|\n)",
+      "endCaptures": {
+        "1": {
+          "name": "entity.name.tag.adv"
+        }
+      },
+      "patterns": [
+        {
+          "include": "#EXPRESSION"
+        }
+      ]
+    }
+  }
+}

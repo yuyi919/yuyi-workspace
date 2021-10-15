@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-misused-new */
+import { LogicStatmentData } from "./actions/LogicBlock";
 import { StatementData } from "./interface";
 import { VariableNodeData } from "./interface";
 import { ExpressionNodeData } from "./interface";
@@ -56,17 +57,18 @@ export type LetLogic = {
     value: 123;
   };
 };
-interface IfBlockData {
+interface ProcessBlockData {
   type: string;
   currentLine: number;
   blockIndex: number;
 }
-class IfBlock {
-  data: any;
+class ProcessBlock extends Block {
+  data: LogicStatmentData[];
   blockIndex: number;
   currentLine: number;
   done: boolean;
-  constructor(public variable: Scope, data, blockIndex?: number) {
+  constructor(public variable: Scope, data: LogicStatmentData[], blockIndex?: number) {
+    super(variable, data, blockIndex)
     this.reset();
     this.data = data;
     this.blockIndex = blockIndex;
@@ -77,7 +79,7 @@ class IfBlock {
     this.currentLine = 0;
     this.done = false;
   }
-  getData(): IfBlockData {
+  getData(): ProcessBlockData {
     return {
       type: "if",
       currentLine: this.currentLine,
@@ -131,8 +133,7 @@ class WhileBlock {
     } else {
       if (this.variable.calc(this.condition)) {
         this.currentLine = 0;
-        this.variable.popScope();
-        this.variable.pushScope();
+        this.variable.switchScope();
         return this.next();
       } else {
         // !this.done && this.variable.popScope();
@@ -147,23 +148,23 @@ class ForeachBlock {
   index: number;
   currentLine: number;
   done: boolean;
-  childrenValue: any[];
+  iteratorValues: any[];
   constructor(
     public variable: Scope,
     public data: StatementData[],
-    public child: VariableNodeData,
-    public children: ExpressionNodeData
+    public i: VariableNodeData,
+    public iterator: ExpressionNodeData
   ) {
     this.reset();
     this.data = data;
-    this.child = child;
-    this.childrenValue = this.variable.calc(children);
+    this.i = i;
+    this.iteratorValues = this.variable.calc(iterator);
     this.index = 0;
     this.variable.pushScope();
     this.variable.assign(
-      this.child.value,
-      this.child.prefix,
-      { type: "value", value: this.childrenValue[this.index] },
+      this.i.value,
+      this.i.prefix,
+      { type: "value", value: this.iteratorValues[this.index] },
       true
     );
   }
@@ -184,20 +185,19 @@ class ForeachBlock {
   }
 
   next() {
-    if (!this.childrenValue.length) return { done: true };
+    if (!this.iteratorValues.length) return { done: true };
     if (this.currentLine < this.data.length) {
       const line = this.data[this.currentLine++];
       return { value: line, done: false };
     } else {
-      if (this.index < this.childrenValue.length - 1) {
+      if (this.index < this.iteratorValues.length - 1) {
         this.currentLine = 0;
         this.index++;
-        this.variable.popScope();
-        this.variable.pushScope();
+        this.variable.switchScope();
         this.variable.assign(
-          this.child.value,
-          this.child.prefix,
-          { type: "value", value: this.childrenValue[this.index] },
+          this.i.value,
+          this.i.prefix,
+          { type: "value", value: this.iteratorValues[this.index] },
           true
         );
         return this.next();
@@ -210,4 +210,4 @@ class ForeachBlock {
   }
 }
 
-export { IfBlock, WhileBlock, ForeachBlock };
+export { ProcessBlock, WhileBlock, ForeachBlock };

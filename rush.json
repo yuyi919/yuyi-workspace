@@ -496,7 +496,7 @@
       "versionPolicyName": "shared"
     },
     {
-      "packageName": "@yuyi919/advscript-vscode-extension",
+      "packageName": "vscode-advscript",
       "projectFolder": "packages/libs/topic/advscript/packages/vscode-extension",
       "reviewCategory": "production",
       "versionPolicyName": "shared"

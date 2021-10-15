@@ -307,6 +307,10 @@
       "allowedCategories": [ "production" ]
     },
     {
+      "name": "blob",
+      "allowedCategories": [ "production" ]
+    },
+    {
       "name": "chevrotain",
       "allowedCategories": [ "production" ]
     },
@@ -331,7 +335,27 @@
       "allowedCategories": [ "production" ]
     },
     {
+      "name": "copyfiles",
+      "allowedCategories": [ "production" ]
+    },
+    {
       "name": "csstype",
+      "allowedCategories": [ "production" ]
+    },
+    {
+      "name": "d3",
+      "allowedCategories": [ "production" ]
+    },
+    {
+      "name": "datatables.net",
+      "allowedCategories": [ "production" ]
+    },
+    {
+      "name": "datatables.net-dt",
+      "allowedCategories": [ "production" ]
+    },
+    {
+      "name": "diff",
       "allowedCategories": [ "production" ]
     },
     {
@@ -363,6 +387,14 @@
       "allowedCategories": [ "production" ]
     },
     {
+      "name": "flesch-kincaid",
+      "allowedCategories": [ "production" ]
+    },
+    {
+      "name": "font-finder",
+      "allowedCategories": [ "production" ]
+    },
+    {
       "name": "fs-extra",
       "allowedCategories": [ "production", "tools" ]
     },
@@ -372,6 +404,10 @@
     },
     {
       "name": "gulp",
+      "allowedCategories": [ "production" ]
+    },
+    {
+      "name": "he",
       "allowedCategories": [ "production" ]
     },
     {
@@ -389,6 +425,10 @@
     {
       "name": "jest",
       "allowedCategories": [ "production", "tools" ]
+    },
+    {
+      "name": "jquery",
+      "allowedCategories": [ "production" ]
     },
     {
       "name": "js-yaml",
@@ -443,6 +483,10 @@
       "allowedCategories": [ "production" ]
     },
     {
+      "name": "os-fonts",
+      "allowedCategories": [ "production" ]
+    },
+    {
       "name": "pako",
       "allowedCategories": [ "production" ]
     },
@@ -451,12 +495,24 @@
       "allowedCategories": [ "tools" ]
     },
     {
+      "name": "pdfkit",
+      "allowedCategories": [ "production" ]
+    },
+    {
       "name": "pixi.js",
+      "allowedCategories": [ "production" ]
+    },
+    {
+      "name": "plist2",
       "allowedCategories": [ "production" ]
     },
     {
       "name": "prettier",
       "allowedCategories": [ "production", "tools" ]
+    },
+    {
+      "name": "readability-scores",
+      "allowedCategories": [ "production" ]
     },
     {
       "name": "reflect-metadata",
@@ -563,6 +619,10 @@
       "allowedCategories": [ "production", "tools" ]
     },
     {
+      "name": "username",
+      "allowedCategories": [ "production" ]
+    },
+    {
       "name": "vite",
       "allowedCategories": [ "production", "tools" ]
     },
@@ -588,6 +648,18 @@
     },
     {
       "name": "vite-plugin-vue2",
+      "allowedCategories": [ "production" ]
+    },
+    {
+      "name": "vscode-codicons",
+      "allowedCategories": [ "production" ]
+    },
+    {
+      "name": "vscode-extension-telemetry",
+      "allowedCategories": [ "production" ]
+    },
+    {
+      "name": "vscode-test",
       "allowedCategories": [ "production" ]
     },
     {

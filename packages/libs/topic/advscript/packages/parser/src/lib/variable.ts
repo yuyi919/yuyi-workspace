@@ -6,7 +6,6 @@ import { VariablePrefixKeyword } from "./interface/arithmetic";
 import { ExpressionNodeData } from "./interface/Expression";
 import { OperatorKeyword } from "./interface";
 
-
 export function calcExpression(left: any, operator: OperatorKeyword, right: any) {
   switch (operator) {
     case "&&":
@@ -44,10 +43,10 @@ export function calcExpression(left: any, operator: OperatorKeyword, right: any)
   }
 }
 export function createScope() {
-  let GLOBAL = {},
-    SAVE = {},
-    SCOPES = [];
-  let CURRENTSCOPE = {};
+  let GLOBAL: Record<string, any> = {},
+    SAVE: Record<string, any> = {},
+    SCOPES: Record<string, any>[] = [];
+  let CURRENTSCOPE: Record<string, any> = {};
 
   function calculate(exp: ExpressionNodeData, node = 0) {
     if (!exp || !(exp instanceof Object)) return exp;
@@ -132,12 +131,20 @@ export function createScope() {
     }
   }
 
-  return {
+  const ctl = {
     load() {
       GLOBAL = {};
       SAVE = {};
       SCOPES = [];
       CURRENTSCOPE = {};
+    },
+    get scoped() {
+      return {
+        GLOBAL,
+        SAVE,
+        SCOPES,
+        CURRENTSCOPE,
+      };
     },
     dump() {
       return {
@@ -156,30 +163,40 @@ export function createScope() {
     getScope(node: number) {
       return [...SCOPES, CURRENTSCOPE][SCOPES.length - node];
     },
-    setGlobalScope(scope: {}) {
+    setGlobalScope(scope: Record<string, any>) {
       GLOBAL = scope;
     },
-    setSaveScope(scope: {}) {
+    setSaveScope(scope: Record<string, any>) {
       SAVE = scope;
     },
-    setScopes(scopes: any[]) {
+    setScopes(scopes: Record<string, any>[]) {
       // SCOPES = SCOPES;
-      this.popScope();
+      ctl.popScope();
     },
-    pushScope(scope = {}) {
+    pushScope(scope: Record<string, any> = {}) {
       SCOPES.push(CURRENTSCOPE);
       CURRENTSCOPE = scope;
     },
     popScope() {
       CURRENTSCOPE = SCOPES.pop();
     },
+    switchScope(scope: Record<string, any> = {}) {
+      ctl.popScope();
+      ctl.pushScope(scope);
+    },
     calc(exp: any, node?: Node) {
       return calculate(exp);
     },
     assign(name: string, prefix: string, right: ExpressionNodeData, explicit: boolean) {
-      return assign(name, prefix, calculate(right), explicit);
+      const value = calculate(right);
+      console.log(`set ${prefix || ""}${name}`, value, [...SCOPES, CURRENTSCOPE], {
+        GLOBAL: GLOBAL,
+        SAVE: SAVE
+      });
+      return assign(name, prefix, value, explicit);
     },
   };
+  return ctl;
 }
 
 export interface Scope extends ReturnType<typeof createScope> {}

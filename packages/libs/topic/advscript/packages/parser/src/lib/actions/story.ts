@@ -58,10 +58,10 @@ export const Story = defineActions({
       type: "content",
     };
   },
-  StoryLine_formatVar(before, leftPad, identifier, rightPad, after) {
+  StoryLine_formatVar(before, leftPad, identifier, rightPad, after): IContent {
     return {
       command: "text",
-      text: [before, identifier, after].map((o) => o.sourceString).join(""),
+      text: [before, leftPad, identifier, rightPad, after].map((o) => o.sourceString).join(""),
       params: {
         raw: {
           type: "array",

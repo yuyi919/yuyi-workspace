@@ -52,7 +52,7 @@ export type OperatorKeyword =
   | "%";
 
 import { Node } from "ohm-js";
-import { BKSActionDict } from "adv.ohm-bundle"
+import { BKSActionDict } from "@adv.ohm-bundle"
 export interface LabelNode extends Node {
   parse(): string;
 }

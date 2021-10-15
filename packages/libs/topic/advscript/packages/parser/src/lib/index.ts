@@ -6,10 +6,10 @@ import {
   LetStatmentData,
   WhileStatmentData,
 } from "./actions/LogicBlock";
-import { Block, ForeachBlock, IfBlock, WhileBlock } from "./block";
+import { Block, ForeachBlock, ProcessBlock, WhileBlock } from "./block";
 import { IContent } from "./actions/story";
 import { Scope, createScope } from "./variable";
-import grammar from "@adv.ohm-bundle";
+import grammar from "./adv.ohm";
 // const mySemantics = Grammar.createSemantics();
 // mySemantics.addOperation("parse", Actions);
 const mySemantics2 = grammar.createSemantics();
@@ -31,7 +31,7 @@ export function parse(source: string) {
   // }
 }
 
-export class AdvScriptLoader {
+export class ScriptVM {
   BLOCKSTACK: Block[] = [];
   CURRENTBLOCK: Block;
 
@@ -43,7 +43,7 @@ export class AdvScriptLoader {
     variable: Scope = createScope()
   ) {
     this.scope = variable;
-    this.CURRENTBLOCK = new IfBlock(this.scope, statements);
+    this.CURRENTBLOCK = new ProcessBlock(this.scope, statements);
     this.BLOCKSTACK = [];
     console.log(statements);
   }
@@ -128,7 +128,8 @@ export class AdvScriptLoader {
     }
     this.BLOCKSTACK.push(this.CURRENTBLOCK);
     const blockData = line.blocks[blockIndex];
-    const block = new IfBlock(this.scope, blockData, blockIndex);
+    console.log(blockData);
+    const block = new ProcessBlock(this.scope, blockData, blockIndex);
     this.CURRENTBLOCK = block;
     // this.variable.pushScope();
   }

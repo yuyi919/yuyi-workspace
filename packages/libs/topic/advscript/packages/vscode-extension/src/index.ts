@@ -1,2 +1,1 @@
-export function setup() {}
-import {} from "vscode"
+export * from "./extension"

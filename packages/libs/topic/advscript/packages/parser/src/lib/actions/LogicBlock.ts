@@ -11,7 +11,7 @@ export interface LogicStatmentData {
 export interface IfStatmentData extends LogicStatmentData {
   name: "if";
   conditions: ExpressionNodeData[];
-  blocks: StatementData[];
+  blocks: StatementData[][];
 }
 export interface IfStatement extends Node<IfStatmentData> {}
 export interface WhileStatmentData extends LogicStatmentData {
@@ -28,7 +28,7 @@ export interface ForeachStatmentData extends LogicStatmentData {
 }
 export interface ForeachStatment extends Node<ForeachStatmentData> {}
 
-export const LogicBlock = defineActions({
+export const LogicBlock = defineActions<any>({
   LogicBlock_IF(IF, LogicBlock1, ELSEIFs, LogicBlock2s, ELSE, LogicBlock3, END): IfStatmentData {
     // get conditions
     const conditions = [IF.parse()];
