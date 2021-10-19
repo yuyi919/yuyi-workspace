@@ -1,15 +1,15 @@
 import { StatementData } from ".";
-import { VariableNodeData } from "./arithmetic";
-import { ExpressionNodeData } from "./Expression";
+import { BaseNodeData } from "./base";
+import { ExpressionNodeData, IdentifierData } from "./Expression";
 
-export interface LogicStatmentData {
+export interface LogicStatmentData extends BaseNodeData {
   type: "logic";
   name: string;
 }
 export interface IfStatmentData extends LogicStatmentData {
   name: "if";
-  conditions: ExpressionNodeData[];
-  blocks: StatementData[];
+  conditions: ExpressionNodeData[][];
+  blocks: StatementData[][];
 }
 
 export interface WhileStatmentData extends LogicStatmentData {
@@ -20,7 +20,7 @@ export interface WhileStatmentData extends LogicStatmentData {
 
 export interface ForeachStatmentData extends LogicStatmentData {
   name: "foreach";
-  child: VariableNodeData;
+  child: IdentifierData;
   children: ExpressionNodeData;
   block: StatementData[];
 }
@@ -32,9 +32,9 @@ export interface LetStatmentData extends LogicStatmentData {
 }
 
 export interface LetStatmentExprData extends LogicStatmentData {
-  name: "VariableDeclaration";
+  name: "AssignExpression";
   explicit: boolean;
-  left: VariableNodeData;
+  left: IdentifierData;
   right: ExpressionNodeData;
-  expressionStr?: string
+  expressionStr?: string;
 }

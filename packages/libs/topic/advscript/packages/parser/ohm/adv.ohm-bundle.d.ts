@@ -11,7 +11,7 @@ import {
   TerminalNode
 } from 'ohm-js';
 
-export interface BKSActionDict<T> extends ActionDict<T> {
+export interface AdvScriptActionDict<T> extends ActionDict<T> {
   Scripts?: (this: NonterminalNode, arg0: IterationNode) => T;
   LogicBlock_IF?: (this: NonterminalNode, arg0: NonterminalNode, arg1: IterationNode, arg2: IterationNode, arg3: IterationNode, arg4: IterationNode, arg5: IterationNode, arg6: NonterminalNode) => T;
   LogicBlock_WHILE?: (this: NonterminalNode, arg0: NonterminalNode, arg1: IterationNode, arg2: NonterminalNode) => T;
@@ -19,94 +19,77 @@ export interface BKSActionDict<T> extends ActionDict<T> {
   LogicBlock_LET?: (this: NonterminalNode, arg0: NonterminalNode) => T;
   LogicBlock_Story?: (this: NonterminalNode, arg0: NonterminalNode) => T;
   LogicBlock?: (this: NonterminalNode, arg0: NonterminalNode) => T;
+  Comment_notes?: (this: NonterminalNode, arg0: NonterminalNode) => T;
   Comment_single?: (this: NonterminalNode, arg0: TerminalNode, arg1: NonterminalNode) => T;
   Comment_multi?: (this: NonterminalNode, arg0: TerminalNode, arg1: NonterminalNode, arg2: TerminalNode) => T;
   Comment?: (this: NonterminalNode, arg0: NonterminalNode) => T;
   comment_single?: (this: NonterminalNode, arg0: IterationNode) => T;
+  comment_note?: (this: NonterminalNode, arg0: IterationNode) => T;
   comment_multi?: (this: NonterminalNode, arg0: IterationNode) => T;
-  StoryLine_formatB?: (this: NonterminalNode, arg0: TerminalNode, arg1: NonterminalNode, arg2: NonterminalNode, arg3: TerminalNode) => T;
-  StoryLine_formatA?: (this: NonterminalNode, arg0: TerminalNode, arg1: NonterminalNode, arg2: NonterminalNode, arg3: IterationNode) => T;
-  StoryLine_formatC?: (this: NonterminalNode, arg0: TerminalNode, arg1: NonterminalNode, arg2: IterationNode) => T;
-  StoryLine_formatD?: (this: NonterminalNode, arg0: TerminalNode, arg1: NonterminalNode, arg2: TerminalNode) => T;
-  StoryLine_formatVar?: (this: NonterminalNode, arg0: IterationNode, arg1: TerminalNode, arg2: NonterminalNode, arg3: TerminalNode, arg4: IterationNode) => T;
-  StoryLine_formatE?: (this: NonterminalNode, arg0: NonterminalNode) => T;
+  comment_inline?: (this: NonterminalNode, arg0: TerminalNode, arg1: NonterminalNode, arg2: TerminalNode) => T;
+  StoryLine_templateText?: (this: NonterminalNode, arg0: NonterminalNode) => T;
+  StoryLine_plainText?: (this: NonterminalNode, arg0: NonterminalNode, arg1: IterationNode) => T;
   StoryLine?: (this: NonterminalNode, arg0: NonterminalNode) => T;
-  text?: (this: NonterminalNode, arg0: IterationNode) => T;
-  command?: (this: NonterminalNode, arg0: NonterminalNode) => T;
-  Content_mul?: (this: NonterminalNode, arg0: NonterminalNode, arg1: IterationNode, arg2: NonterminalNode) => T;
-  Content_base?: (this: NonterminalNode, arg0: NonterminalNode) => T;
-  Content?: (this: NonterminalNode, arg0: NonterminalNode) => T;
-  KeyValue_param?: (this: NonterminalNode, arg0: NonterminalNode, arg1: TerminalNode, arg2: NonterminalNode) => T;
-  KeyValue_flag?: (this: NonterminalNode, arg0: NonterminalNode) => T;
-  KeyValue?: (this: NonterminalNode, arg0: NonterminalNode) => T;
-  key?: (this: NonterminalNode, arg0: IterationNode) => T;
-  value?: (this: NonterminalNode, arg0: NonterminalNode | TerminalNode) => T;
-  ArraySpread?: (this: NonterminalNode, arg0: NonterminalNode, arg1: TerminalNode, arg2: NonterminalNode) => T;
-  ArrayItems?: (this: NonterminalNode, arg0: NonterminalNode) => T;
-  Array?: (this: NonterminalNode, arg0: TerminalNode, arg1: NonterminalNode, arg2: TerminalNode) => T;
-  Expression?: (this: NonterminalNode, arg0: NonterminalNode) => T;
-  string_doubleQuote?: (this: NonterminalNode, arg0: TerminalNode, arg1: IterationNode, arg2: TerminalNode) => T;
-  string_singleQuote?: (this: NonterminalNode, arg0: TerminalNode, arg1: IterationNode, arg2: TerminalNode) => T;
-  string?: (this: NonterminalNode, arg0: NonterminalNode) => T;
-  singleQuoteStringContent_nonEscaped?: (this: NonterminalNode, arg0: NonterminalNode) => T;
-  singleQuoteStringContent_escaped?: (this: NonterminalNode, arg0: TerminalNode, arg1: NonterminalNode) => T;
-  singleQuoteStringContent?: (this: NonterminalNode, arg0: NonterminalNode) => T;
-  doubleQuoteStringContent_nonEscaped?: (this: NonterminalNode, arg0: NonterminalNode) => T;
-  doubleQuoteStringContent_escaped?: (this: NonterminalNode, arg0: TerminalNode, arg1: NonterminalNode) => T;
-  doubleQuoteStringContent?: (this: NonterminalNode, arg0: NonterminalNode) => T;
-  singleEscapeCharacter?: (this: NonterminalNode, arg0: TerminalNode) => T;
-  escapeCharacter?: (this: NonterminalNode, arg0: NonterminalNode | TerminalNode) => T;
-  quote?: (this: NonterminalNode, arg0: TerminalNode) => T;
-  boolean?: (this: NonterminalNode, arg0: TerminalNode) => T;
-  number_sign?: (this: NonterminalNode, arg0: TerminalNode, arg1: NonterminalNode) => T;
-  number_fract?: (this: NonterminalNode, arg0: IterationNode, arg1: TerminalNode, arg2: IterationNode) => T;
-  number_hex?: (this: NonterminalNode, arg0: TerminalNode, arg1: IterationNode) => T;
-  number_whole?: (this: NonterminalNode, arg0: IterationNode) => T;
-  number?: (this: NonterminalNode, arg0: NonterminalNode) => T;
-  hexdigit?: (this: NonterminalNode, arg0: NonterminalNode | TerminalNode) => T;
-  Identifier?: (this: NonterminalNode, arg0: IterationNode, arg1: NonterminalNode) => T;
-  invalidIdentifier?: (this: NonterminalNode, arg0: IterationNode, arg1: NonterminalNode, arg2: IterationNode, arg3: NonterminalNode) => T;
-  statment_end?: (this: NonterminalNode, arg0: IterationNode, arg1: NonterminalNode | TerminalNode) => T;
+  raw?: (this: NonterminalNode, arg0: IterationNode) => T;
+  story_line?: (this: NonterminalNode, arg0: IterationNode, arg1: NonterminalNode, arg2: IterationNode, arg3: TerminalNode) => T;
+  expr_template?: (this: NonterminalNode, arg0: IterationNode) => T;
+  expr_logic?: (this: NonterminalNode, arg0: IterationNode) => T;
+  expr_quick?: (this: NonterminalNode, arg0: IterationNode) => T;
+  expr?: (this: NonterminalNode, arg0: NonterminalNode) => T;
+  plainLetter?: (this: NonterminalNode, arg0: NonterminalNode) => T;
+  chinese?: (this: NonterminalNode, arg0: NonterminalNode | TerminalNode) => T;
+  template_quick?: (this: NonterminalNode, arg0: TerminalNode, arg1: IterationNode, arg2: TerminalNode, arg3: NonterminalNode, arg4: TerminalNode) => T;
+  template_native?: (this: NonterminalNode, arg0: TerminalNode, arg1: NonterminalNode, arg2: TerminalNode) => T;
+  template?: (this: NonterminalNode, arg0: NonterminalNode) => T;
+  Fountain_macro?: (this: NonterminalNode, arg0: TerminalNode, arg1: IterationNode, arg2: TerminalNode, arg3: IterationNode) => T;
+  Fountain_characterEscape?: (this: NonterminalNode, arg0: NonterminalNode) => T;
+  Fountain_characterStatus?: (this: NonterminalNode, arg0: NonterminalNode) => T;
+  Fountain?: (this: NonterminalNode, arg0: NonterminalNode) => T;
+  fountain_character?: (this: NonterminalNode, arg0: IterationNode, arg1: TerminalNode, arg2: IterationNode, arg3: IterationNode, arg4: NonterminalNode) => T;
+  fountain_macro?: (this: NonterminalNode, arg0: TerminalNode, arg1: IterationNode, arg2: TerminalNode, arg3: NonterminalNode) => T;
+  fountain?: (this: NonterminalNode, arg0: NonterminalNode) => T;
+  Fountain_callMacro?: (this: NonterminalNode, arg0: NonterminalNode) => T;
+  command?: (this: NonterminalNode, arg0: IterationNode) => T;
+  callCommand?: (this: NonterminalNode, arg0: TerminalNode, arg1: IterationNode, arg2: TerminalNode) => T;
+  CallCommand?: (this: NonterminalNode, arg0: TerminalNode, arg1: NonterminalNode, arg2: TerminalNode) => T;
+  pipe_expr?: (this: NonterminalNode, arg0: TerminalNode, arg1: IterationNode) => T;
+  anwsome_a?: (this: NonterminalNode, arg0: TerminalNode, arg1: IterationNode, arg2: TerminalNode) => T;
+  anwsome_b?: (this: NonterminalNode, arg0: TerminalNode, arg1: IterationNode, arg2: TerminalNode) => T;
+  anwsome_c?: (this: NonterminalNode, arg0: IterationNode) => T;
+  anwsome?: (this: NonterminalNode, arg0: NonterminalNode) => T;
+  logic_statment_let?: (this: NonterminalNode, arg0: IterationNode, arg1: TerminalNode, arg2: NonterminalNode, arg3: TerminalNode) => T;
+  logic_statment_empty?: (this: NonterminalNode, arg0: IterationNode, arg1: TerminalNode) => T;
+  logic_statment?: (this: NonterminalNode, arg0: NonterminalNode) => T;
+  logic_exprs?: (this: NonterminalNode, arg0: IterationNode) => T;
+  LET?: (this: NonterminalNode, arg0: TerminalNode, arg1: NonterminalNode) => T;
+  AssignExpr?: (this: NonterminalNode, arg0: NonterminalNode, arg1: TerminalNode, arg2: NonterminalNode) => T;
+  LetAssignExpr_assign?: (this: NonterminalNode, arg0: NonterminalNode) => T;
+  LetAssignExpr_nonAssign?: (this: NonterminalNode, arg0: NonterminalNode) => T;
+  LetAssignExpr?: (this: NonterminalNode, arg0: NonterminalNode) => T;
   IF?: (this: NonterminalNode, arg0: TerminalNode, arg1: NonterminalNode) => T;
-  LET?: (this: NonterminalNode, arg0: TerminalNode, arg1: NonterminalNode, arg2: NonterminalNode) => T;
-  LetStatement_assign?: (this: NonterminalNode, arg0: NonterminalNode, arg1: TerminalNode, arg2: NonterminalNode) => T;
-  LetStatement_nonAssign?: (this: NonterminalNode, arg0: NonterminalNode) => T;
-  LetStatement?: (this: NonterminalNode, arg0: NonterminalNode) => T;
   END?: (this: NonterminalNode, arg0: TerminalNode) => T;
   ELSE?: (this: NonterminalNode, arg0: TerminalNode) => T;
   ELSEIF?: (this: NonterminalNode, arg0: TerminalNode, arg1: NonterminalNode) => T;
   WHILE?: (this: NonterminalNode, arg0: TerminalNode, arg1: NonterminalNode) => T;
   FOREACH?: (this: NonterminalNode, arg0: TerminalNode, arg1: NonterminalNode, arg2: TerminalNode, arg3: NonterminalNode) => T;
-  Exp_bool?: (this: NonterminalNode, arg0: NonterminalNode, arg1: NonterminalNode, arg2: NonterminalNode) => T;
-  Exp?: (this: NonterminalNode, arg0: NonterminalNode) => T;
-  booleanOperator?: (this: NonterminalNode, arg0: TerminalNode) => T;
-  JudgeExp_judge?: (this: NonterminalNode, arg0: NonterminalNode, arg1: NonterminalNode, arg2: NonterminalNode) => T;
-  JudgeExp?: (this: NonterminalNode, arg0: NonterminalNode) => T;
-  judgeOperator?: (this: NonterminalNode, arg0: TerminalNode) => T;
-  AddExp_add?: (this: NonterminalNode, arg0: NonterminalNode, arg1: TerminalNode, arg2: NonterminalNode) => T;
-  AddExp?: (this: NonterminalNode, arg0: NonterminalNode) => T;
-  MulExp_mul?: (this: NonterminalNode, arg0: NonterminalNode, arg1: TerminalNode, arg2: NonterminalNode) => T;
-  MulExp?: (this: NonterminalNode, arg0: NonterminalNode) => T;
-  ExpExp_power?: (this: NonterminalNode, arg0: NonterminalNode, arg1: TerminalNode, arg2: NonterminalNode) => T;
-  ExpExp?: (this: NonterminalNode, arg0: NonterminalNode) => T;
-  PriExp_paren?: (this: NonterminalNode, arg0: TerminalNode, arg1: NonterminalNode, arg2: TerminalNode) => T;
-  PriExp_pos?: (this: NonterminalNode, arg0: TerminalNode, arg1: NonterminalNode) => T;
-  PriExp_neg?: (this: NonterminalNode, arg0: TerminalNode, arg1: NonterminalNode) => T;
-  PriExp?: (this: NonterminalNode, arg0: NonterminalNode) => T;
+  statment_end?: (this: NonterminalNode, arg0: IterationNode, arg1: NonterminalNode | TerminalNode) => T;
+  key?: (this: NonterminalNode, arg0: IterationNode) => T;
+  identifier?: (this: NonterminalNode, arg0: IterationNode, arg1: NonterminalNode) => T;
+  expression?: (this: NonterminalNode, arg0: IterationNode) => T;
 }
 
-export interface BKSSemantics extends Semantics {
-  addOperation<T>(name: string, actionDict: BKSActionDict<T>): this;
-  extendOperation<T>(name: string, actionDict: BKSActionDict<T>): this;
-  addAttribute<T>(name: string, actionDict: BKSActionDict<T>): this;
-  extendAttribute<T>(name: string, actionDict: BKSActionDict<T>): this;
+export interface AdvScriptSemantics extends Semantics {
+  addOperation<T>(name: string, actionDict: AdvScriptActionDict<T>): this;
+  extendOperation<T>(name: string, actionDict: AdvScriptActionDict<T>): this;
+  addAttribute<T>(name: string, actionDict: AdvScriptActionDict<T>): this;
+  extendAttribute<T>(name: string, actionDict: AdvScriptActionDict<T>): this;
 }
 
-export interface BKSGrammar extends Grammar {
-  createSemantics(): BKSSemantics;
-  extendSemantics(superSemantics: BKSSemantics): BKSSemantics;
+export interface AdvScriptGrammar extends Grammar {
+  createSemantics(): AdvScriptSemantics;
+  extendSemantics(superSemantics: AdvScriptSemantics): AdvScriptSemantics;
 }
 
-declare const grammar: BKSGrammar;
+declare const grammar: AdvScriptGrammar;
 export default grammar;
 

@@ -1,84 +1,133 @@
-import type { Node } from "ohm-js";
-import { defineActions } from "../interface";
-export interface IContent {
-  type: "content";
-  command: "text" | (string & {});
-  flags: string[];
-  params: Record<string, any>;
-  text: string;
-}
-export const Story = defineActions({
-  StoryLine_formatA(head, command, content, foot): IContent {
-    console.warn("[Deprecated] Command beginning with `@` will no longer be supported.");
-    const res = content.parse();
+import { CommandExpressionData, defineActions, NodeTypeKind, StoryLineData } from "../interface";
+import { toSourceString } from "./_util";
+
+export const Story = defineActions<any>({
+  StoryLine(story): StoryLineData {
     return {
-      type: "content",
-      command: command.parse(),
-      params: res.params,
-      flags: res.flags,
-      text: commandToString([head, command, content, foot]),
+      ...story.parse(),
+      source: story.sourceString.replace(/\n$/, ""),
     };
   },
-  StoryLine_formatB(head, command, content, foot): IContent {
-    const res = content.parse();
-    return {
-      type: "content",
-      command: command.parse(),
-      params: res.params,
-      flags: res.flags,
-      text: commandToString([head, command, content, foot]),
-    };
-  },
-  StoryLine_formatC(head, command, foot): IContent {
-    console.warn("[Deprecated] Command beginning with `@` will no longer be supported.");
-    return {
-      type: "content",
-      command: command.parse(),
-      flags: [],
-      params: {},
-      text: commandToString([head, command, foot]),
-    };
-  },
-  StoryLine_formatD(head, command, foot): IContent {
-    return {
-      type: "content",
-      command: command.parse(),
-      flags: [],
-      params: {},
-      text: command.sourceString,
-    };
-  },
-  StoryLine_formatE(text): IContent {
+  // StoryLine_command(command): StoryLineData {
+  //   const commandData = command.parse() as CommandExpressionData;
+  //   console.log(commandData);
+  //   const { name, params, flags, ...other } = commandData;
+  //   return {
+  //     ...other,
+  //     command: name,
+  //     arguments: [flags.reduce((r, flag) => ({ ...r, [flag]: true }), { ...params })],
+  //     argumentExpression: commandData,
+  //     type: "content",
+  //     source: command.sourceString,
+  //   };
+  // },
+  StoryLine_plainText(text, pipe): StoryLineData {
     const textContent = text.parse();
+    console.log("StoryLine_plainText");
     return {
       command: "text",
-      text: textContent,
-      params: { raw: { type: "value", value: textContent } },
-      flags: [],
+      source: textContent,
+      arguments: [textContent],
+      pipe: pipe.parse(),
+      // argumentExpression: { raw: { type: "value", value: textContent } },
       type: "content",
     };
   },
-  StoryLine_formatVar(before, leftPad, identifier, rightPad, after): IContent {
+  template_quick(leftPad, text, split, pipe, rightPad) {
+    return {
+      type: "value",
+      source: [leftPad, text, split, pipe, rightPad].map((o) => o.sourceString).join(""),
+      value: text.parse(),
+      pipe: pipe.parse(),
+    };
+  },
+  template_native(leftPad, expr, rightPad) {
+    return expr.parse();
+  },
+  story_line(start, expr, pipe, end): StoryLineData {
+    console.log("story_line", expr.parse(), pipe.parse());
     return {
       command: "text",
-      text: [before, leftPad, identifier, rightPad, after].map((o) => o.sourceString).join(""),
-      params: {
-        raw: {
-          type: "array",
-          value: [before, identifier, after]
-            .map((o) => o.parse())
-            .flat(1)
-            .filter(Boolean),
+      source: expr.sourceString,
+      arguments: [
+        {
+          raw: {
+            type: NodeTypeKind.Array,
+            value: expr.parse(),
+          },
         },
-      },
-      flags: [],
+      ],
+      pipe: pipe.parse(),
       type: "content",
     };
   },
-  command(key): IContent {
-    return key.parse();
+  // story_line_pi(expr, expr2) {
+  //   console.log("story_line", [expr.parse(), expr2.parse()])
+  //   return expr.parse()
+  // },
+  StoryLine_templateText(line) {
+    return line.parse();
   },
+  fountain_character(arg0, flag, arg2, name, macro): StoryLineData {
+    return {
+      command: "character",
+      source: toSourceString(arg0, flag, arg2, name, macro),
+      arguments: [
+        {
+          name: name.parse(),
+          status: macro.parse(),
+        },
+      ],
+      type: "content",
+    }
+  },
+  fountain_macro(arg0, text, arg2, pipe) {
+    return  {
+      text: text.parse(),
+      use: pipe.parse(),
+      type: "status",
+    };
+  },
+  // Fountain_character(text): StoryLineData {
+  //   return text.parse();
+  // },
+  Fountain_characterStatus(macro) {
+    const { value: text, pipe } = macro.parse() || {};
+    return {
+      text,
+      use: pipe,
+      type: "status",
+    };
+  },
+  Fountain_macro(leftPad, expression, rightPad, command) {
+    return {
+      value: expression.parse(),
+      pipe: command.parse()?.[0],
+      type: "macro",
+    };
+  },
+  Fountain_callMacro(command) {
+    return {
+      ...command.parse(),
+      source: command.sourceString,
+      type: "callMacro",
+    };
+  },
+  Fountain_characterEscape(macro) {
+    const { value: text, pipe } = macro.parse() || {};
+    return {
+      text,
+      use: pipe,
+      type: "escape",
+    };
+  },
+  CallCommand(a, b, d) {
+    return b.parse();
+  },
+  pipe_expr(a, b) {
+    return b.parse();
+  },
+  // ...Command
 });
-function commandToString(textspec: Node[]): string {
-  return textspec.map((o, i) => o.sourceString + (i > 0 ? " " : "")).join("");
-}
+
+

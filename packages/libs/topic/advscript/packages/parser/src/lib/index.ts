@@ -1,20 +1,20 @@
-// import Grammar from "./adv.ohm";
-import { Actions, StatementData } from "./actions";
+import grammar from "../../ohm/adv.ohm-bundle";
+import { Actions } from "./actions";
+import { Block, ForeachBlock, ProcessBlock, WhileBlock } from "./block";
+import { parseExpression } from "./expression";
 import {
   ForeachStatmentData,
   IfStatmentData,
-  LetStatmentData,
-  WhileStatmentData,
-} from "./actions/LogicBlock";
-import { Block, ForeachBlock, ProcessBlock, WhileBlock } from "./block";
-import { IContent } from "./actions/story";
-import { Scope, createScope } from "./variable";
-import grammar from "./adv.ohm";
+  LetStatmentData, StatementData, StoryLineData,
+  WhileStatmentData
+} from "./interface";
+import { createScope, Scope } from "./variable";
 // const mySemantics = Grammar.createSemantics();
 // mySemantics.addOperation("parse", Actions);
 const mySemantics2 = grammar.createSemantics();
 mySemantics2.addOperation("parse", Actions);
-
+// @ts-ignore
+globalThis.parseExpression = parseExpression
 export function parse(source: string) {
   const result2 = grammar.match(source);
   if (result2.succeeded()) {
@@ -45,14 +45,14 @@ export class ScriptVM {
     this.scope = variable;
     this.CURRENTBLOCK = new ProcessBlock(this.scope, statements);
     this.BLOCKSTACK = [];
-    console.log(statements);
+    console.log(statements, variable);
   }
 
   protected [Symbol.iterator]() {
     return this;
   }
 
-  protected next(): IteratorResult<IContent> {
+  protected next(): IteratorResult<StoryLineData> {
     const { value, done } = this.CURRENTBLOCK.next();
     if (done) {
       const CURRENTBLOCK = this.BLOCKSTACK.pop();
@@ -90,15 +90,26 @@ export class ScriptVM {
     }
   }
 
-  handleContent({ params: { ...params }, ...line }: IContent) {
-    const keys = Object.keys(params);
-    for (const key of keys) {
-      params[key] = this.scope.calc(params[key]);
-      if (params[key] instanceof Array && key === "raw") {
-        params[key] = params[key].join("");
-      }
-    }
-    return { ...line, params };
+  handleContent({ arguments: args = [], ...line }: StoryLineData) {
+    return {
+      ...line,
+      arguments: args.map((params) => {
+        if (params instanceof Object) {
+          if (params.type) {
+            return this.scope.calc(params)
+          }
+          params = { ...params };
+          const keys = Object.keys(params);
+          for (const key of keys) {
+            params[key] = this.scope.calc(params[key]);
+            if (params[key] instanceof Array && key === "raw") {
+              return params[key].join("");
+            }
+          }
+        }
+        return params;
+      }),
+    };
   }
 
   private handleLogic(line: StatementData) {
@@ -128,7 +139,6 @@ export class ScriptVM {
     }
     this.BLOCKSTACK.push(this.CURRENTBLOCK);
     const blockData = line.blocks[blockIndex];
-    console.log(blockData);
     const block = new ProcessBlock(this.scope, blockData, blockIndex);
     this.CURRENTBLOCK = block;
     // this.variable.pushScope();

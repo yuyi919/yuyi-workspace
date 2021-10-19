@@ -1,4 +1,3 @@
-
 import StoryScript from ".";
 import file from "./story.avs";
 
@@ -6,8 +5,10 @@ import file from "./story.avs";
 const story = new StoryScript();
 story.load(file);
 for (const line of story) {
-  if (line.params && line.type === "content") {
-    if (line.params.raw) console.log(line.params.raw);
-    else console.log("call %s", line.command, line.params, line.flags);
+  // console.log(line)
+  if (line.type === "content") {
+    // if (line.command === "text") console.log(...line.arguments);
+    // else 
+    console.log("call %s", line.command, ...line.arguments);
   }
 }

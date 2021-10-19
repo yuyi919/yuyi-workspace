@@ -1,0 +1,92 @@
+AVS {
+
+  Main = ListOf<Process, ",">
+
+  Process 
+    = "<" Command PipeMacro? ">" -- Command 
+    | "{{" Exp PipeMacro? "}}" -- Inline
+    |  (~"|"any)* PipeMacro -- Pipe 
+    | Exp 
+
+  PipeMacro = "|" (CallExpression | #identifier | Command)
+
+  Command = #key Params?
+
+  Params 
+    = Param (#",")? Params -- multiple
+    | Param                   -- single
+
+  Param = # key "=" Exp  -- setValue
+    | key        -- setFlag
+
+  Expression 
+  = CallExpression 
+  | Array 
+  | ArraySpread
+  | literal 
+  | #identifier "=" Exp -- Assign 
+  | #identifier 
+  | "(" ArrayItems ")" -- Comma // 逗号运算符
+
+  key = ~(digit | boolean) (letter | digit | "_")+
+  literal = percet | string | number | boolean | "null"
+
+  Array = "[" ArrayItems "]"
+  ArraySpread = (number | PriExp) "..." (number | PriExp)
+
+  ArrayItems = ListOf<Exp, ",">
+
+  CallExpression = #key "(" ListOf<Exp, ","> ")"
+
+  string = "\"" doubleQuoteStringContent* "\"" -- doubleQuote
+      | "\'" singleQuoteStringContent* "\'" -- singleQuote
+// ~("\'" | "\\" ) any  -- nonEscaped
+  singleQuoteStringContent = ~("\'") any  -- nonEscaped
+      | "\\" escapeCharacter                 -- escaped
+  doubleQuoteStringContent = ~("\"") any  -- nonEscaped
+      | "\\" escapeCharacter                 -- escaped
+  singleEscapeCharacter = "'"|"\""|"\\"|"b"|"f"|"n"|"r"|"t"|"v"
+  escapeCharacter = singleEscapeCharacter | "x" | "u"
+  quote = "\"" | "\'"
+
+  boolean = "true" | "false"
+
+  number  (a number)
+    = ("-"|"+") number   -- sign
+    | digit* "." digit+  --  fract
+    | "0x" hexdigit+        --  hex
+    | digit+             --  whole
+  hexdigit
+    = "a".."f" | "A".."F" | digit
+  percet = (number_sign | number_fract | number_whole) "%"
+
+  identifier = ~(number | boolean) ("$" | "%")? key
+  invalidIdentifier(valid identifier) = ~(number | boolean) ("$" | "%")? (key " "+ key)
+  
+
+  Exp
+    = JudgeExp ("&&" | "||") Exp  -- bool
+    | JudgeExp
+
+  JudgeExp
+    = AddExp ("!=" | "==" | "??" | ">=" | "<=" | ">" | "<") AddExp     -- judge
+    | AddExp
+
+  AddExp
+  = AddExp ("+" | "-") MulExp  -- add
+  | MulExp
+
+  MulExp
+    = MulExp ("*" | "/" | "%") ExpExp  -- mul
+    | ExpExp
+
+  ExpExp
+    = PriExp "^" ExpExp  -- power
+    | PriExp
+
+  PriExp
+  = "(" Exp ")"  -- paren
+  | "+" PriExp   -- pos
+  | "-" PriExp   -- neg
+  | Expression
+}

@@ -13,7 +13,7 @@ export function reportTelemetry(
 }
 
 export function initTelemetry() {
-  //Register telemetry
+  // Register telemetry
   const packageinfo = getPackageInfo();
   if (packageinfo) {
     reporter = new VSCodeTelemetryReporter(

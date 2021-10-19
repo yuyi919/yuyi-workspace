@@ -11,13 +11,13 @@
   ],
   "repository": {
     "INLINE_EXPRESSION": {
-      "begin": "(|^)(@{)",
+      "begin": "(|^)({{)",
       "beginCaptures": {
         "2": {
           "name": "entity.name.tag.adv"
         }
       },
-      "end": "(})(|\\n)",
+      "end": "(}})(|\\n)",
       "endCaptures": {
         "1": {
           "name": "entity.name.tag.adv"

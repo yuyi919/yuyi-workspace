@@ -496,12 +496,6 @@
       "versionPolicyName": "shared"
     },
     {
-      "packageName": "vscode-advscript",
-      "projectFolder": "packages/libs/topic/advscript/packages/vscode-extension",
-      "reviewCategory": "production",
-      "versionPolicyName": "shared"
-    },
-    {
       "packageName": "@yuyi919/build-tools",
       "projectFolder": "packages/libs/tools/build-tools",
       "reviewCategory": "tools",
@@ -589,6 +583,12 @@
       "versionPolicyName": "shared"
     },
     {
+      "packageName": "@yuyi919/topic-aitalk-service",
+      "projectFolder": "packages/libs/topic/aitalk-service",
+      "reviewCategory": "production",
+      "versionPolicyName": "shared"
+    },
+    {
       "packageName": "@yuyi919/topic-rpgmz",
       "projectFolder": "packages/libs/topic/rpgmz",
       "reviewCategory": "production",
@@ -672,6 +672,12 @@
       "packageName": "@yuyi919/workspace-base-rig",
       "projectFolder": "packages/libs/tools/workspace-base-rig",
       "reviewCategory": "tools"
+    },
+    {
+      "packageName": "vscode-advscript",
+      "projectFolder": "packages/libs/topic/advscript/packages/vscode-extension",
+      "reviewCategory": "production",
+      "versionPolicyName": "shared"
     }
   ]
 }

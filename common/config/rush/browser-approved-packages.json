@@ -327,6 +327,10 @@
       "allowedCategories": [ "production" ]
     },
     {
+      "name": "cmake-js",
+      "allowedCategories": [ "production" ]
+    },
+    {
       "name": "colors",
       "allowedCategories": [ "production" ]
     },
@@ -415,6 +419,10 @@
       "allowedCategories": [ "production" ]
     },
     {
+      "name": "iconv-lite",
+      "allowedCategories": [ "production" ]
+    },
+    {
       "name": "ignore",
       "allowedCategories": [ "production" ]
     },
@@ -479,6 +487,10 @@
       "allowedCategories": [ "production" ]
     },
     {
+      "name": "npm-run-all",
+      "allowedCategories": [ "production" ]
+    },
+    {
       "name": "ohm-js",
       "allowedCategories": [ "production" ]
     },
@@ -500,6 +512,10 @@
     },
     {
       "name": "pixi.js",
+      "allowedCategories": [ "production" ]
+    },
+    {
+      "name": "pkg",
       "allowedCategories": [ "production" ]
     },
     {
@@ -688,6 +704,10 @@
     },
     {
       "name": "vue-types",
+      "allowedCategories": [ "production" ]
+    },
+    {
+      "name": "wavefile",
       "allowedCategories": [ "production" ]
     },
     {

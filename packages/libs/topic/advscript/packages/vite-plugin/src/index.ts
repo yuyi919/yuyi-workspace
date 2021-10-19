@@ -1,11 +1,27 @@
 import { Plugin } from "vite";
 import ohm from "ohm-js";
+import { relative } from "path";
 
 export const BabelTransformer: Plugin["transform"] = async function (
   code: string,
   sourceFileName: string
 ) {
   try {
+    if (/\.ohm-bundle/.test(sourceFileName)) {
+      const result = code.replace(
+        `'use strict';const ohm=require('ohm-js');module.exports=`,
+        'import * as ohm from "ohm-js"; export default '
+      );
+      const nameMatch = code.match(/"source":"(.+) \{/);
+      console.log(
+        `load ${
+          nameMatch[1]
+            ? `${nameMatch[1]}.ohm (${relative(process.cwd(), sourceFileName)})`
+            : sourceFileName
+        } ${result !== code ? "(use esmodule)" : ""}`
+      );
+      return result;
+    }
     if (/\.(txt|bks|adv|avs)$/.test(sourceFileName)) {
       return `export default \`${code}\``;
     }

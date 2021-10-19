@@ -1,7 +1,6 @@
 {
-  "name": "Fountain",
-  "scopeName": "text.source.fountain",
-  "uuid": "BA0B1FEB-1E9C-4283-8F3B-E80E7879EA91",
+  "name": "FountainScript",
+  "scopeName": "text.source.fountain.script",
   "patterns": [
     {
       "include": "#comments"

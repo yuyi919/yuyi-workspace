@@ -2,9 +2,7 @@
 /* eslint-disable no-case-declarations */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { Node } from "ohm-js";
-import { VariablePrefixKeyword } from "./interface/arithmetic";
-import { ExpressionNodeData } from "./interface/Expression";
-import { OperatorKeyword } from "./interface";
+import { IdentifierPrefixKeyword, ExpressionNodeData, OperatorKeyword, NodeTypeKind } from "./interface";
 
 export function calcExpression(left: any, operator: OperatorKeyword, right: any) {
   switch (operator) {
@@ -42,27 +40,32 @@ export function calcExpression(left: any, operator: OperatorKeyword, right: any)
       throw Error(`Unrecognized operator ${operator}`);
   }
 }
+
+class Global {}
 export function createScope() {
-  let GLOBAL: Record<string, any> = {},
+  let GLOBAL: Record<string, any> = new Global(),
     SAVE: Record<string, any> = {},
-    SCOPES: Record<string, any>[] = [];
-  let CURRENTSCOPE: Record<string, any> = {};
+    SCOPES: Record<string, any>[] = [],
+    CURRENTSCOPE: Record<string, any> = { SAVE, GLOBAL };
 
   function calculate(exp: ExpressionNodeData, node = 0) {
     if (!exp || !(exp instanceof Object)) return exp;
     switch (exp.type) {
-      case "expression": {
+      case NodeTypeKind.Expression: {
         const value = exp.value;
         return calcExpression(calculate(value.left), value.operator, calculate(value.right));
       }
-      case "variable":
+      case NodeTypeKind.Identifier:
         return calc_variable(exp.value, exp.prefix, node);
-      case "value":
+      case NodeTypeKind.Raw:
         return exp.value;
-      case "array":
+      case NodeTypeKind.Array:
         // console.log(exp.value)
         return exp.value.map((data) => calculate(data, node));
-      case "ArraySpread":
+      case NodeTypeKind.Comment:
+        // console.log(exp.value)
+        return ""
+      case NodeTypeKind.ArraySpread:
         const r = [];
         const start = calculate(exp.start);
         const end = calculate(exp.end) + 1;
@@ -71,37 +74,49 @@ export function createScope() {
         }
         return r;
       default:
-        //@ts-ignore
-        throw Error(`Unrecognized type ${exp.type}`);
+        return exp;
+      //   //@ts-ignore
+      //   throw Error(`Unrecognized type ${exp.type}`);
     }
   }
 
-  function calc_variable(name: string | number, prefix: VariablePrefixKeyword, node: number) {
+  function calc_variable(name: string | number, prefix: IdentifierPrefixKeyword, node: number) {
     switch (prefix) {
       case null:
-        return findVariableValue(name, node).value;
+        return findVariableValue(name).value;
       case "$":
-        return GLOBAL[name];
+        return findVariableValue(name, GLOBAL).value;
       case "%":
-        return SAVE[name];
+        return findVariableValue(name, SAVE).value;
       default:
         throw Error(`Unrecognized prefix ${prefix}`);
     }
   }
 
-  function findVariableValue(name: string | number, node = 0) {
+  function findVariableValue(
+    name: string | number,
+    _SCOPES: Record<string, any> | Record<string, any>[] = [...SCOPES, CURRENTSCOPE]
+  ) {
+    // console.log("find", name)
     let defined = false;
     let scope = null;
-    const _SCOPES = [...SCOPES, CURRENTSCOPE];
-    for (let i = _SCOPES.length - 1; i > -1; i--) {
-      scope = _SCOPES[i];
+    if (_SCOPES instanceof Array) {
+      for (let i = _SCOPES.length - 1; i > -1; i--) {
+        scope = _SCOPES[i];
+        if (Object.prototype.hasOwnProperty.call(scope, name)) {
+          defined = true;
+          break;
+        }
+      }
+    } else {
+      scope = _SCOPES;
       if (Object.prototype.hasOwnProperty.call(scope, name)) {
         defined = true;
-        break;
       }
     }
     if (!defined) {
-      throw Error(`${name} is not defined`);
+      const scopeName = scope === GLOBAL ? "GLOBAL" : scope === SAVE ? "SAVE" : "scope";
+      throw Error(`[${scopeName}] ${name} is not defined`);
     }
     return { scope, value: scope[name] };
   }
@@ -125,7 +140,7 @@ export function createScope() {
         // console.log("[current] %s", name, value);
       }
     } else {
-      const { scope } = findVariableValue(name, 0);
+      const { scope } = findVariableValue(name);
       scope[name] = value;
       // console.log("[scoped] %s", name, value);
     }
@@ -189,10 +204,7 @@ export function createScope() {
     },
     assign(name: string, prefix: string, right: ExpressionNodeData, explicit: boolean) {
       const value = calculate(right);
-      console.log(`set ${prefix || ""}${name}`, value, [...SCOPES, CURRENTSCOPE], {
-        GLOBAL: GLOBAL,
-        SAVE: SAVE
-      });
+      // console.log(`set ${prefix || ""}${name}`, value, [...SCOPES, CURRENTSCOPE]);
       return assign(name, prefix, value, explicit);
     },
   };

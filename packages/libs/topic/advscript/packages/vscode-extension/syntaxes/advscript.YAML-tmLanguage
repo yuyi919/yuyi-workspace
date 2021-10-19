@@ -5,7 +5,6 @@ scopeName: text.source.advscript
 fileTypes: 
   - adv
   - avs
-uuid: 8544eaea-0884-436b-8ecc-4a683eef1d2c
 
 variables:
   propertyAccess: (?:(\.)|(\?\.(?!\s*[[:digit:]])))
@@ -107,18 +106,18 @@ repository:
       - include: "#EXPRESSION"
   Fountain:
     patterns:
-      - include: text.source.fountain#title_page
-      - include: text.source.fountain#scene_headings
-      - include: text.source.fountain#section
-      - include: text.source.fountain#synopses
-      - include: text.source.fountain#transitions
-      - include: text.source.fountain#center
-      - include: text.source.fountain#dialogue
-      - include: text.source.fountain#markup
-      - include: text.source.fountain#notes
-      - include: text.source.fountain#pagebreaks
-      - include: text.source.fountain#action
-      - include: text.source.fountain#lyrics
+      - include: text.source.fountain.script#title_page
+      - include: text.source.fountain.script#scene_headings
+      - include: text.source.fountain.script#section
+      - include: text.source.fountain.script#synopses
+      - include: text.source.fountain.script#transitions
+      - include: text.source.fountain.script#center
+      - include: text.source.fountain.script#dialogue
+      - include: text.source.fountain.script#markup
+      - include: text.source.fountain.script#notes
+      - include: text.source.fountain.script#pagebreaks
+      - include: text.source.fountain.script#action
+      - include: text.source.fountain.script#lyrics
   CONTENT:
     patterns:
       - comment: COMMENT_LINE

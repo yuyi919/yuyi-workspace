@@ -1792,6 +1792,61 @@
         }
       }
     },
+    "topic-aitalk-service": {
+      "root": "libs/topic/aitalk-service",
+      "sourceRoot": "libs/topic/aitalk-service/src",
+      "projectType": "library",
+      "targets": {
+        "build": {
+          "executor": "@nrwl/workspace:run-commands",
+          "configurations": {
+            "watch": {
+              "commands": ["pnpm run build:watch"]
+            }
+          },
+          "options": {
+            "commands": ["pnpm run build"],
+            "cwd": "libs/topic/aitalk-service"
+          }
+        },
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/topic/aitalk-service/**/*.ts"]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/topic/aitalk-service"],
+          "options": {
+            "jestConfig": "libs/topic/aitalk-service/jest.config.js",
+            "passWithNoTests": true
+          }
+        },
+        "command": {
+          "executor": "@nrwl/workspace:run-commands",
+          "options": {},
+          "configurations": {
+            "format": {
+              "cwd": ".",
+              "commands": [
+                {
+                  "command": "nx generate @yuyi919/nx-plugin-workspace-helper:format --project=topic-aitalk-service --no-interactive"
+                }
+              ]
+            },
+            "remove": {
+              "cwd": ".",
+              "commands": [
+                {
+                  "command": "nx generate @nrwl/workspace:remove --projectName=topic-aitalk-service --forceRemove"
+                }
+              ]
+            }
+          }
+        }
+      }
+    },
     "web-solid-playground": {
       "root": "libs/web/solid/playground",
       "sourceRoot": "libs/web/solid/playground/src",

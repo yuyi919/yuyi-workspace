@@ -20,10 +20,7 @@ export * from "./base";
 export * from "./story";
 export * from "./LogicBlock";
 export * from "./Expression";
-export * from "./arithmetic";
 export * from "./Comment";
-// export * from "./keyvalue";
-export * from "./Exp";
 
 export interface ParsedData {
   type: string;
@@ -52,7 +49,7 @@ export type OperatorKeyword =
   | "%";
 
 import { Node } from "ohm-js";
-import { BKSActionDict } from "@adv.ohm-bundle"
+import { AVSActionDict } from "@adv.ohm-bundle";
 export interface LabelNode extends Node {
   parse(): string;
 }
@@ -64,8 +61,19 @@ export interface ParsedData {
   type: string;
   value?: any;
 }
-export function defineActions<T>(actions: BKSActionDict<T>): BKSActionDict<T> {
+export function defineActions<T>(actions: AVSActionDict<T>): AVSActionDict<T> {
   return actions;
 }
 
 export type { Node };
+
+export enum NodeTypeKind {
+  Comment = "Comment",
+  Raw = "value",
+  Array = "array",
+  ArraySpread = "ArraySpread",
+  Identifier = "identifier",
+  Statment = "statment",
+  Expression = "expression",
+  CallExpression = "CallExpression",
+}

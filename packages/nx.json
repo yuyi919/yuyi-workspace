@@ -78,6 +78,9 @@
     "topic-advscript-packages-vscode-extension": {
       "tags": ["topic", "advscript", "packages", "vscode", "vscode-extension"]
     },
+    "topic-aitalk-service": {
+      "tags": ["topic", "aitalk", "aitalk-service"]
+    },
     "ts-transformer-ast-utils": {
       "tags": ["lerna-package", "internal", "ts-transformer", "ast-utils"]
     },

@@ -1,9 +1,6 @@
-import { Arithmetic, Variable } from "./arithmetic";
 import { Base } from "./base";
 import { Comment } from "./Comment";
-import { Exp } from "./Exp";
-import { Expression } from "./Expression";
-import { Keyvalue } from "./keyvalue";
+import { Exp } from "../expression/Exp";
 import {
   ForeachStatment,
   IfStatement,
@@ -13,27 +10,13 @@ import {
 } from "./LogicBlock";
 import { Story } from "./story";
 
-export const Actions2 = {
-  Base,
-  Variable,
-  Arithmetic,
-  Keyvalue,
-  Story,
-  Expression,
-  Comment,
-  LogicBlock,
-  Exp,
-};
 export const Actions = {
   ...Base,
-  ...Variable,
-  ...Arithmetic,
-  ...Keyvalue,
   ...Story,
-  ...Expression,
   ...Comment,
   ...LogicBlock,
-  ...Exp,
+  identifier: Exp.identifier
+  // ...Exp,
 };
 
 export type Statement = LetStatment | IfStatement | ForeachStatment | WhileStatement;

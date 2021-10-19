@@ -11,7 +11,8 @@
     "esModuleInterop": true,
     "types": ["vite/client"],
     "paths": {
-      "@adv.ohm-bundle": ["./ohm/adv.ohm-bundle.d.ts"]
+      "@adv.ohm-bundle": ["./ohm/adv.ohm-bundle.d.ts"],
+      "@expression.ohm-bundle": ["./ohm/expression.ohm-bundle.d.ts"]
     },
     "tsBuildInfoFile": "./node_modules/@yuyi919/workspace-base-rig/.tsBuildInfo/topic-advscript-packages-parser.json"
   },

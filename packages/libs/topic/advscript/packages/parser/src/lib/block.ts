@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/no-misused-new */
-import { LogicStatmentData } from "./actions/LogicBlock";
-import { StatementData } from "./interface";
-import { VariableNodeData } from "./interface";
+import { LogicStatmentData, NodeTypeKind, StatementData } from "./interface";
+import { IdentifierData } from "./interface";
 import { ExpressionNodeData } from "./interface";
 import { Scope } from "./variable";
 
@@ -62,13 +61,12 @@ interface ProcessBlockData {
   currentLine: number;
   blockIndex: number;
 }
-class ProcessBlock extends Block {
+class ProcessBlock {
   data: LogicStatmentData[];
   blockIndex: number;
   currentLine: number;
   done: boolean;
   constructor(public variable: Scope, data: LogicStatmentData[], blockIndex?: number) {
-    super(variable, data, blockIndex)
     this.reset();
     this.data = data;
     this.blockIndex = blockIndex;
@@ -152,7 +150,7 @@ class ForeachBlock {
   constructor(
     public variable: Scope,
     public data: StatementData[],
-    public i: VariableNodeData,
+    public i: IdentifierData,
     public iterator: ExpressionNodeData
   ) {
     this.reset();
@@ -164,7 +162,7 @@ class ForeachBlock {
     this.variable.assign(
       this.i.value,
       this.i.prefix,
-      { type: "value", value: this.iteratorValues[this.index] },
+      { type: NodeTypeKind.Raw, value: this.iteratorValues[this.index] },
       true
     );
   }
@@ -197,7 +195,7 @@ class ForeachBlock {
         this.variable.assign(
           this.i.value,
           this.i.prefix,
-          { type: "value", value: this.iteratorValues[this.index] },
+          { type: NodeTypeKind.Raw, value: this.iteratorValues[this.index] },
           true
         );
         return this.next();

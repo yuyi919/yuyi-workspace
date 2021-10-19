@@ -7,25 +7,23 @@ export default defineConfig(async ({ mode }) => {
   return {
     resolve: {
       alias: {
-        "@adv.ohm-bundle":
-          mode === "production" ? path.resolve("./ohm/adv.ohm-bundle") : "./ohm/adv.ohm-bundle",
+        "@adv.ohm": path.resolve("./ohm/adv.ohm"),
+        "@expression.ohm": path.resolve("./ohm/expression.ohm"),
+        "ohm-js": path.resolve("./node_modules/ohm-js/src/main.js"),
       },
     },
-    plugins: [
-      dts({ copyDtsFiles: true, insertTypesEntry: true }),
-      plugin(),
-    ],
+    plugins: [dts({ copyDtsFiles: true, insertTypesEntry: true }), plugin()],
+    esbuild: {
+      loader: "ts"
+    },
     build: {
       // assetsInlineLimit: 0,
       // cssCodeSplit: false,
-      target: "esnext",
-      commonjsOptions: {
-        esmExternals: ["@adv.ohm-bundle"],
-      },
+      target: "es2017",
       polyfillDynamicImport: false,
 
       // polyfillDynamicImport: false,
-      minify: mode === "production" ? "terser" : false,
+      minify: false,
       sourcemap: true,
       lib: {
         entry: path.resolve(__dirname, "src/index.ts"),
@@ -37,7 +35,7 @@ export default defineConfig(async ({ mode }) => {
       },
     },
     optimizeDeps: {
-      include: ["ohm-js", "@adv.ohm-bundle"],
+      include: ["ohm-js"],
       exclude: ["path"],
     },
     server: {

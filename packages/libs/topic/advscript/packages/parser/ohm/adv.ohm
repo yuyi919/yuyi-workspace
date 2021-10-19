@@ -1,109 +1,109 @@
-AVS {
+AdvScript {
   Scripts
     = LogicBlock*
   LogicBlock
     = Comment
+    | logic_statment
     | IF LogicBlock* (ELSEIF LogicBlock*)* (ELSE LogicBlock*)? END  -- IF
     | WHILE LogicBlock* END  -- WHILE
     | FOREACH LogicBlock* END  -- FOREACH
     | LET                      -- LET
     | StoryLine                       -- Story
-  Comment = "//" comment_single     -- single
+    
+  Comment = comment_inline       -- notes
+          | "//" comment_single     -- single
           | "/*" comment_multi "*/"       -- multi
   comment_single = (~("\n" | "\r") any)+
+  comment_note = (~("\n" | "\r" | "]]") any)+
   comment_multi = (~("*/") any)+
+  comment_inline = "[[" comment_note "]]"
+
   StoryLine
-    = "[" command Content "]"    -- formatB
-      | "@" command Content ("\r"|";"|"\n"|end)?  -- formatA
-      | "@" command ("\r"|";"|"\n"|end)?  -- formatC
-      | "[" command "]"    -- formatD
-      | text? "@{" Identifier "}" text?  -- formatVar
-      | text -- formatE
-  text = (~("[" | "@" | "#" | "\n" | "\r" | "//" | "/*") any)+
+    = story_line  -- templateText
+      | Fountain
+      | #raw pipe_expr? -- plainText
 
-  command = key
+  raw = plainLetter+
 
-  Content 
-    = KeyValue (#",")? Content -- mul
-    | KeyValue                   -- base
+  story_line = ("~")? listOf<(raw | comment_inline | template), ""> pipe_expr? "\n"
 
-  KeyValue = # key "=" Exp  -- param
-    | key        -- flag
-  key = (letter | number | "_")+
-  value = string | number | boolean | "null"
+  expr 
+    = (~("}}")any)+ -- template 
+    | (~("\n" | "|")any)* -- logic
+    | (~(")")any)+ -- quick
 
-  ArraySpread = Exp "..." Exp
 
-  ArrayItems = ListOf<Exp, ",">
-  Array = "[" ArrayItems "]"
-  
-  Expression = Array | Identifier | value
+  plainLetter 
+    = ~("[" | "{{" | "|" | "\n" | "\r" | "//" | "/*") any
 
-  string = "\"" doubleQuoteStringContent* "\"" -- doubleQuote
-      | "\'" singleQuoteStringContent* "\'" -- singleQuote
-// ~("\'" | "\\" ) any  -- nonEscaped
-  singleQuoteStringContent = ~("\'") any  -- nonEscaped
-      | "\\" escapeCharacter                 -- escaped
-  doubleQuoteStringContent = ~("\"") any  -- nonEscaped
-      | "\\" escapeCharacter                 -- escaped
-  singleEscapeCharacter = "'"|"\""|"\\"|"b"|"f"|"n"|"r"|"t"|"v"
-  escapeCharacter = singleEscapeCharacter | "x" | "u"
-  quote = "\"" | "\'"
-  boolean = "true" | "false"
-  number  (a number)
-    = ("-"|"+") number   -- sign
-    | digit* "." digit+  --  fract
-    | "0x" hexdigit+        --  hex
-    | digit+             --  whole
-  hexdigit
-    = "a".."f" | "A".."F" | digit
-  Identifier = ~(number | boolean) ("$" | "%")? key
-  invalidIdentifier(valid identifier) = ~(number | boolean) ("$" | "%")? (key " "+ key)
-  statment_end(请换行) = (" "|";")* ("\n"|"\r"|"\t"|end)
-  IF
-    = "#if" Exp
+  chinese = letter | "，" | "（" | "）" | "“" | "”" | "：" | "." | "/" | ":"
+
+  // template_quick = (~(")")any)+
+  template
+    = "[" (~("]" | "(")any)+ "](" expr_quick ")" -- quick
+    | "{{" expr_template "}}" -- native
+
+  Fountain 
+    = fountain_character
+    | "(" (~")"any)+ ")" callCommand? -- macro
+    | Fountain_macro -- characterEscape
+    | Fountain_macro -- characterStatus
+
+  fountain
+    = space* "@" space* (~"(" any)+ fountain_macro -- character
+    | "(" (~")"any)+ ")" callCommand -- macro
+
+  Fountain_callMacro = callCommand
+
+  command = (~("]")any)+
+  callCommand = "[" anwsome+ "]"
+
+
+  CallCommand = "[" command "]"
+
+  pipe_expr = ~(logic_statment | "|if" | "|elseif" | "|else" | "|end" | "|foreach" | "|while")("|" (~("\n")any)+)
+
+  anwsome = "[" anwsome* "]" -- a
+    | "(" anwsome* ")" -- b
+    | (~("[" | "]" | "(" | ")" | "\n") any)+ -- c
+
+  logic_statment
+    = space* "|let " expr_logic ("\n") -- let
+    // | space* "|if " expr_logic ("\n") -- if
+    // | space* "|elseif " expr_logic ("\n") -- elseif
+    // | space* "|else" space* "\n" -- else
+    // | space* "|end " space* "\n" -- end
+    | space* "\n" -- empty
+
+  logic_exprs = ((~"\n")any)*
+
   LET
-    = "#let" ListOf<LetStatement, ","> #statment_end
-  LetStatement
-    = Identifier "=" Exp  -- assign
-    | Identifier         -- nonAssign
+    = "|let" ListOf<LetAssignExpr, ",">
+  
+  AssignExpr = identifier "=" expression
+  LetAssignExpr
+    = AssignExpr  -- assign
+    | identifier         -- nonAssign
+
+  IF
+    = "|if" expression
   END
-    = "#end"
+    = "|end"
   ELSE
-    = "#else"
+    = "|else"
   ELSEIF
-    = "#elseif" Exp
+    = "|elseif" expression
   WHILE
-    = "#while" Exp
+    = "|while" expression
   FOREACH
-    = "#foreach" Identifier "in" ~(invalidIdentifier)(Identifier | Array | ArraySpread | ArrayItems)
-  Exp
-    = JudgeExp booleanOperator Exp  -- bool
-    | JudgeExp
-  booleanOperator = "&&" | "||"
-  JudgeExp
-    = AddExp judgeOperator AddExp     -- judge
-    | AddExp
-  judgeOperator = "!=" | "==" | "??" | ">=" | "<=" | ">" | "<"
-  // MathExp
-  // = MathExp mathOperator MathExp  -- math
-  // | PriExp
-  // mathOperator = "+" | "-" | "*" | "/" | "^" | "%"
-  AddExp
-  = AddExp ("+" | "-") MulExp  -- add
-  // | AddExp "-" MulExp  -- minus
-  | MulExp
-  MulExp
-    = MulExp ("*" | "/" | "%") ExpExp  -- mul
-    // | MulExp "/" ExpExp  -- divide
-    // | MulExp "%" ExpExp  -- mod
-    | ExpExp
-  ExpExp
-    = PriExp "^" ExpExp  -- power
-    | PriExp
-  PriExp
-  = "(" Exp ")"  -- paren
-  | "+" PriExp   -- pos
-  | "-" PriExp   -- neg
-  | Expression
+    = "|foreach" identifier "in" expression
+    
+  statment_end(请换行) = (" "|";")* ("\n"|"\r"|"\t"|end)
+  key = ~(digit | "true" | "false") (letter | digit | "_")+
+  identifier
+   = ~(letter | "true" | "false") ("$" | "%")? key
+
+  expression 
+  = (~("[" | "]" | "|" | "{{" | "}}"| "\n" | "\r" | "//" | "/*") any)+
+
 }

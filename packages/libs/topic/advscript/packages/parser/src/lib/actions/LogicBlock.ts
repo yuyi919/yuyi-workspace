@@ -1,34 +1,31 @@
-import { StatementData } from ".";
-import { Node, defineActions, LabelNode, OperatorNode } from "../interface";
-import { VariableNode, VariableNodeData } from "./arithmetic";
-import { ValueNode, ValueNodeData } from "./base";
-import { ExpressionNode, ExpressionNodeData } from "./Expression";
-
-export interface LogicStatmentData {
-  type: "logic";
-  name: string;
-}
-export interface IfStatmentData extends LogicStatmentData {
-  name: "if";
-  conditions: ExpressionNodeData[];
-  blocks: StatementData[][];
-}
+import { parseExpression } from "../expression";
+import {
+  defineActions,
+  ExpressionNodeData,
+  ForeachStatmentData,
+  IfStatmentData,
+  LabelNode,
+  LetStatmentData,
+  LetStatmentExprData,
+  Node,
+  NodeTypeKind,
+  StatementData,
+  ValueNodeData,
+  WhileStatmentData,
+} from "../interface";
+import { VariableNode } from "../expression/Exp";
+import { AssignExprNode, ExpressionNode } from "../expression";
+import { toSourceString } from "./_util";
 export interface IfStatement extends Node<IfStatmentData> {}
-export interface WhileStatmentData extends LogicStatmentData {
-  name: "while";
-  condition: ExpressionNodeData[];
-  block: StatementData[];
-}
 export interface WhileStatement extends Node<WhileStatmentData> {}
-export interface ForeachStatmentData extends LogicStatmentData {
-  name: "foreach";
-  child: VariableNodeData;
-  children: ExpressionNodeData;
-  block: StatementData[];
-}
 export interface ForeachStatment extends Node<ForeachStatmentData> {}
 
+export interface LetStatment extends Node<LetStatmentData> {}
+
 export const LogicBlock = defineActions<any>({
+  Scripts(n) {
+    return n.children.map((node) => node.parse() as StatementData);
+  },
   LogicBlock_IF(IF, LogicBlock1, ELSEIFs, LogicBlock2s, ELSE, LogicBlock3, END): IfStatmentData {
     // get conditions
     const conditions = [IF.parse()];
@@ -111,7 +108,69 @@ export const LogicBlock = defineActions<any>({
       children: childrenVar.parse(),
     };
   },
-  LET(head: LabelNode, varStatment: LetStatmentExprArray, end): LetStatmentData {
+
+  logic_statment_let(space, head, expression, end) {
+    const vars = expression.parse() as ExpressionNodeData[];
+    const explicit = head.parse().length > 1;
+    return {
+      type: "logic",
+      name: "let",
+      explicit,
+      statements: vars.map((node) => {
+        switch (node.type) {
+          case NodeTypeKind.Identifier:
+            return {
+              type: "logic",
+              explicit,
+              left: node,
+              right: { type: NodeTypeKind.Raw, value: null } as ValueNodeData,
+            };
+          case NodeTypeKind.Expression: {
+            const { value, ...other } = node;
+            return {
+              type: "logic",
+              ...other,
+              explicit,
+              left: value.left,
+              right: value.right,
+            };
+          }
+        }
+      }),
+    };
+  },
+  expr_logic(expression) {
+    return parseExpression(`(${expression.parse()})`);
+  },
+  expr_template(text) {
+    return parseExpression(`{{${text.sourceString}}}`)?.[0];
+  },
+  expr_quick(text) {
+    try {
+      return parseExpression(`<${text.sourceString}>`)?.[0];
+    } catch (error) {
+      return text.sourceString
+    }
+  },
+  command(expression) {
+    return parseExpression(`<${expression.parse()}>`)?.[0];
+  },
+  callCommand(_, command, __) {
+    return {
+      ...parseExpression(`<${command.parse()}>`)?.[0],
+      source: `[${command.sourceString}]`
+    }
+  },
+  anwsome_a(start, content, end) {
+    return toSourceString(start, content, end)
+  },
+  anwsome_b(start, content, end) {
+    return toSourceString(start, content, end)
+  },
+  expression(expression) {
+    return parseExpression(`(${expression.parse()})`);
+  },
+  LET(head: LabelNode, varStatment: LetAssignStatmentArrayNode): LetStatmentData {
     const explicit = head.parse().length > 1;
     return {
       type: "logic",
@@ -120,45 +179,24 @@ export const LogicBlock = defineActions<any>({
       statements: explicit && varStatment.parse(),
     };
   },
-  LetStatement(append: LetStatmentExprArray) {
-    return append.parse();
-  },
-  LetStatement_assign(
-    variable: VariableNode,
-    operator: OperatorNode,
-    Exp: ValueNode
-  ): LetStatmentExprData {
+  LetAssignExpr_assign(variable: AssignExprNode) {
+    const { value, ...other } = variable.parse();
     return {
       type: "logic",
-      name: "VariableDeclaration",
+      ...other,
       explicit: true,
-      left: variable.parse(),
-      right: Exp.parse(),
+      left: value.left,
+      right: value.right,
     };
   },
-  LetStatement_nonAssign(variable: VariableNode): LetStatmentExprData {
+  LetAssignExpr_nonAssign(variable: VariableNode) {
     return {
       type: "logic",
-      name: "VariableDeclaration",
+      name: "AssignExpression",
       explicit: true,
       left: variable.parse(),
-      right: { type: "value", value: null } as ValueNodeData,
+      right: { type: NodeTypeKind.Raw, value: null } as ValueNodeData,
     };
   },
 });
-
-export interface LetStatmentData extends LogicStatmentData {
-  name: "let";
-  explicit: boolean;
-  statements: LetStatmentExprData[];
-}
-export interface LetStatment extends Node<LetStatmentData> {}
-export interface LetStatmentExprData extends LogicStatmentData {
-  name: "VariableDeclaration";
-  explicit: boolean;
-  left: VariableNodeData;
-  right: ExpressionNodeData;
-}
-
-export interface LetStatmentExpr extends Node<LetStatmentExprData> {}
-export interface LetStatmentExprArray extends Node<LetStatmentExprData[]> {}
+export type LetAssignStatmentArrayNode = Node<LetStatmentExprData[]>;
