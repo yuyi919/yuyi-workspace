@@ -1,6 +1,6 @@
 const fs = require("fs-extra");
 const path = require("path");
-const jym = require("js-yaml");
+// const jym = require("js-yaml");
 const plist2 = require("plist2");
 
 function transformGrammarRule(rule, propertyNames, transformProperty) {

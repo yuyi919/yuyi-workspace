@@ -1,8 +1,8 @@
-import { BaseNodeData, defineActions, Node } from "../interface";
+import { defineExpressionActions, Node } from "../interface";
 import { ExpressionNode } from "./Expression";
 
-export const Keyvalue = defineActions<BaseNodeData>({
-  Params_multiple(kv, space, content) {
+export const Keyvalue = defineExpressionActions<any>({
+  Params_multiple(kv, c, content) {
     const ret = {
       type: "Params",
       flags: [],
@@ -20,7 +20,7 @@ export const Keyvalue = defineActions<BaseNodeData>({
     Object.assign(ret.params, ret2.params);
     return ret;
   },
-  Params_single(kv) {
+  Params_single(kv, end) {
     const ret = {
       type: "Params",
       flags: [],

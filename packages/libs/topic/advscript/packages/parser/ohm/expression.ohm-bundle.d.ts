@@ -5,85 +5,162 @@ import {
   ActionDict,
   Grammar,
   IterationNode,
+  Namespace,
   Node,
   NonterminalNode,
   Semantics,
   TerminalNode
 } from 'ohm-js';
 
-export interface AVSActionDict<T> extends ActionDict<T> {
+export interface SuperActionDict<T> extends ActionDict<T> {
   Main?: (this: NonterminalNode, arg0: NonterminalNode) => T;
-  Process_Command?: (this: NonterminalNode, arg0: TerminalNode, arg1: NonterminalNode, arg2: IterationNode, arg3: TerminalNode) => T;
-  Process_Inline?: (this: NonterminalNode, arg0: TerminalNode, arg1: NonterminalNode, arg2: IterationNode, arg3: TerminalNode) => T;
-  Process_Pipe?: (this: NonterminalNode, arg0: IterationNode, arg1: NonterminalNode) => T;
-  Process?: (this: NonterminalNode, arg0: NonterminalNode) => T;
-  PipeMacro?: (this: NonterminalNode, arg0: TerminalNode, arg1: NonterminalNode) => T;
-  Command?: (this: NonterminalNode, arg0: NonterminalNode, arg1: IterationNode) => T;
-  Params_multiple?: (this: NonterminalNode, arg0: NonterminalNode, arg1: IterationNode, arg2: NonterminalNode) => T;
-  Params_single?: (this: NonterminalNode, arg0: NonterminalNode) => T;
+  StatmentOf?: (this: NonterminalNode, arg0: IterationNode) => T;
+  Optional?: (this: NonterminalNode, arg0: IterationNode) => T;
+  optional?: (this: NonterminalNode, arg0: IterationNode) => T;
+  stringify?: (this: NonterminalNode, arg0: Node) => T;
+  End?: (this: NonterminalNode, arg0: NonterminalNode) => T;
+  exprEnd?: (this: NonterminalNode, arg0: IterationNode) => T;
+  null?: (this: NonterminalNode, arg0: TerminalNode) => T;
+  literalOf?: (this: NonterminalNode, arg0: Node) => T;
+  boolean?: (this: NonterminalNode, arg0: TerminalNode) => T;
+  number_sign?: (this: NonterminalNode, arg0: NonterminalNode) => T;
+  number_double?: (this: NonterminalNode, arg0: NonterminalNode) => T;
+  number_int?: (this: NonterminalNode, arg0: NonterminalNode) => T;
+  number_fract?: (this: NonterminalNode, arg0: IterationNode, arg1: TerminalNode, arg2: IterationNode) => T;
+  number_whole?: (this: NonterminalNode, arg0: IterationNode) => T;
+  number?: (this: NonterminalNode, arg0: NonterminalNode) => T;
+  hex?: (this: NonterminalNode, arg0: TerminalNode, arg1: IterationNode) => T;
+  sign_apply?: (this: NonterminalNode, arg0: NonterminalNode) => T;
+  sign_signed?: (this: NonterminalNode, arg0: TerminalNode, arg1: NonterminalNode) => T;
+  sign?: (this: NonterminalNode, arg0: NonterminalNode) => T;
+  numberical?: (this: NonterminalNode, arg0: TerminalNode) => T;
+  internalEscape?: (this: NonterminalNode, arg0: TerminalNode) => T;
+  escapable?: (this: NonterminalNode, arg0: NonterminalNode) => T;
+  strictEscapable_escaped?: (this: NonterminalNode, arg0: TerminalNode, arg1: Node) => T;
+  strictEscapable?: (this: NonterminalNode, arg0: NonterminalNode) => T;
+}
+
+export interface SuperSemantics extends Semantics {
+  addOperation<T>(name: string, actionDict: SuperActionDict<T>): this;
+  extendOperation<T>(name: string, actionDict: SuperActionDict<T>): this;
+  addAttribute<T>(name: string, actionDict: SuperActionDict<T>): this;
+  extendAttribute<T>(name: string, actionDict: SuperActionDict<T>): this;
+}
+
+export interface SuperGrammar extends Grammar {
+  createSemantics(): SuperSemantics;
+  extendSemantics(superSemantics: SuperSemantics): SuperSemantics;
+}
+
+export interface BaseActionDict<T> extends SuperActionDict<T> {
+  variableName?: (this: NonterminalNode, arg0: NonterminalNode, arg1: NonterminalNode) => T;
+  variableNamePrefix?: (this: NonterminalNode, arg0: TerminalNode) => T;
+  identifier?: (this: NonterminalNode, arg0: NonterminalNode, arg1: IterationNode) => T;
+  invalidIdentifier?: (this: NonterminalNode, arg0: NonterminalNode) => T;
+  validIdentifierChar?: (this: NonterminalNode, arg0: NonterminalNode | TerminalNode) => T;
+  invalidIdentifierChar?: (this: NonterminalNode, arg0: TerminalNode) => T;
+  validIdentifierPrefixChar?: (this: NonterminalNode, arg0: NonterminalNode | TerminalNode) => T;
+}
+
+export interface BaseSemantics extends Semantics {
+  addOperation<T>(name: string, actionDict: BaseActionDict<T>): this;
+  extendOperation<T>(name: string, actionDict: BaseActionDict<T>): this;
+  addAttribute<T>(name: string, actionDict: BaseActionDict<T>): this;
+  extendAttribute<T>(name: string, actionDict: BaseActionDict<T>): this;
+}
+
+export interface BaseGrammar extends Grammar {
+  createSemantics(): BaseSemantics;
+  extendSemantics(superSemantics: BaseSemantics): BaseSemantics;
+}
+
+export interface AdvScriptActionDict<T> extends BaseActionDict<T> {
+  Main_Macro?: (this: NonterminalNode, arg0: NonterminalNode, arg1: NonterminalNode, arg2: NonterminalNode, arg3: NonterminalNode) => T;
+  Main_Inline?: (this: NonterminalNode, arg0: NonterminalNode, arg1: NonterminalNode) => T;
+  Main_Pipe?: (this: NonterminalNode, arg0: NonterminalNode, arg1: NonterminalNode) => T;
+  Main_AnonymousPipe?: (this: NonterminalNode, arg0: NonterminalNode, arg1: NonterminalNode) => T;
+  Main_Exp?: (this: NonterminalNode, arg0: NonterminalNode, arg1: NonterminalNode) => T;
+  Main?: (this: NonterminalNode, arg0: NonterminalNode) => T;
+  macroBegin?: (this: NonterminalNode, arg0: TerminalNode) => T;
+  tmplBegin?: (this: NonterminalNode, arg0: TerminalNode) => T;
+  tmplEnd?: (this: NonterminalNode, arg0: TerminalNode) => T;
+  Template?: (this: NonterminalNode, arg0: NonterminalNode, arg1: NonterminalNode, arg2: NonterminalNode, arg3: NonterminalNode) => T;
+  Macro_Call?: (this: NonterminalNode, arg0: NonterminalNode) => T;
+  Macro_Pipe_Call?: (this: NonterminalNode, arg0: NonterminalNode, arg1: NonterminalNode) => T;
+  Macro_Pipe_Expr?: (this: NonterminalNode, arg0: NonterminalNode, arg1: NonterminalNode, arg2: NonterminalNode) => T;
+  Macro_Pipe?: (this: NonterminalNode, arg0: NonterminalNode) => T;
+  pipeFlag?: (this: NonterminalNode, arg0: TerminalNode) => T;
+  pipeExprBegin?: (this: NonterminalNode, arg0: TerminalNode) => T;
+  Macro_Call_Expr?: (this: NonterminalNode, arg0: NonterminalNode, arg1: NonterminalNode) => T;
+  Params_multiple?: (this: NonterminalNode, arg0: NonterminalNode, arg1: NonterminalNode, arg2: NonterminalNode) => T;
+  Params_single?: (this: NonterminalNode, arg0: NonterminalNode, arg1: IterationNode) => T;
   Params?: (this: NonterminalNode, arg0: NonterminalNode) => T;
   Param_setValue?: (this: NonterminalNode, arg0: NonterminalNode, arg1: TerminalNode, arg2: NonterminalNode) => T;
   Param_setFlag?: (this: NonterminalNode, arg0: NonterminalNode) => T;
   Param?: (this: NonterminalNode, arg0: NonterminalNode) => T;
-  Expression_Assign?: (this: NonterminalNode, arg0: NonterminalNode, arg1: TerminalNode, arg2: NonterminalNode) => T;
-  Expression_Comma?: (this: NonterminalNode, arg0: TerminalNode, arg1: NonterminalNode, arg2: TerminalNode) => T;
   Expression?: (this: NonterminalNode, arg0: NonterminalNode) => T;
-  key?: (this: NonterminalNode, arg0: IterationNode) => T;
-  literal?: (this: NonterminalNode, arg0: NonterminalNode | TerminalNode) => T;
+  literal?: (this: NonterminalNode, arg0: NonterminalNode) => T;
   Array?: (this: NonterminalNode, arg0: TerminalNode, arg1: NonterminalNode, arg2: TerminalNode) => T;
-  ArraySpread?: (this: NonterminalNode, arg0: NonterminalNode, arg1: TerminalNode, arg2: NonterminalNode) => T;
-  ArrayItems?: (this: NonterminalNode, arg0: NonterminalNode) => T;
+  ArraySpread?: (this: NonterminalNode, arg0: NonterminalNode) => T;
+  ArrayElements?: (this: NonterminalNode, arg0: NonterminalNode) => T;
   CallExpression?: (this: NonterminalNode, arg0: NonterminalNode, arg1: TerminalNode, arg2: NonterminalNode, arg3: TerminalNode) => T;
-  string_doubleQuote?: (this: NonterminalNode, arg0: TerminalNode, arg1: IterationNode, arg2: TerminalNode) => T;
-  string_singleQuote?: (this: NonterminalNode, arg0: TerminalNode, arg1: IterationNode, arg2: TerminalNode) => T;
+  string_doubleQuote?: (this: NonterminalNode, arg0: NonterminalNode, arg1: NonterminalNode, arg2: NonterminalNode) => T;
+  string_singleQuote?: (this: NonterminalNode, arg0: NonterminalNode, arg1: NonterminalNode, arg2: NonterminalNode) => T;
   string?: (this: NonterminalNode, arg0: NonterminalNode) => T;
-  singleQuoteStringContent_nonEscaped?: (this: NonterminalNode, arg0: NonterminalNode) => T;
-  singleQuoteStringContent_escaped?: (this: NonterminalNode, arg0: TerminalNode, arg1: NonterminalNode) => T;
+  doubleQuote?: (this: NonterminalNode, arg0: TerminalNode) => T;
+  singleQuote?: (this: NonterminalNode, arg0: TerminalNode) => T;
   singleQuoteStringContent?: (this: NonterminalNode, arg0: NonterminalNode) => T;
-  doubleQuoteStringContent_nonEscaped?: (this: NonterminalNode, arg0: NonterminalNode) => T;
-  doubleQuoteStringContent_escaped?: (this: NonterminalNode, arg0: TerminalNode, arg1: NonterminalNode) => T;
   doubleQuoteStringContent?: (this: NonterminalNode, arg0: NonterminalNode) => T;
-  singleEscapeCharacter?: (this: NonterminalNode, arg0: TerminalNode) => T;
   escapeCharacter?: (this: NonterminalNode, arg0: NonterminalNode | TerminalNode) => T;
-  quote?: (this: NonterminalNode, arg0: TerminalNode) => T;
-  boolean?: (this: NonterminalNode, arg0: TerminalNode) => T;
-  number_sign?: (this: NonterminalNode, arg0: TerminalNode, arg1: NonterminalNode) => T;
-  number_fract?: (this: NonterminalNode, arg0: IterationNode, arg1: TerminalNode, arg2: IterationNode) => T;
-  number_hex?: (this: NonterminalNode, arg0: TerminalNode, arg1: IterationNode) => T;
-  number_whole?: (this: NonterminalNode, arg0: IterationNode) => T;
-  number?: (this: NonterminalNode, arg0: NonterminalNode) => T;
-  hexdigit?: (this: NonterminalNode, arg0: NonterminalNode | TerminalNode) => T;
   percet?: (this: NonterminalNode, arg0: NonterminalNode, arg1: TerminalNode) => T;
-  identifier?: (this: NonterminalNode, arg0: IterationNode, arg1: NonterminalNode) => T;
-  invalidIdentifier?: (this: NonterminalNode, arg0: IterationNode, arg1: NonterminalNode, arg2: IterationNode, arg3: NonterminalNode) => T;
-  Exp_bool?: (this: NonterminalNode, arg0: NonterminalNode, arg1: TerminalNode, arg2: NonterminalNode) => T;
+  Exp_Comma?: (this: NonterminalNode, arg0: NonterminalNode, arg1: TerminalNode, arg2: NonterminalNode) => T;
   Exp?: (this: NonterminalNode, arg0: NonterminalNode) => T;
-  JudgeExp_judge?: (this: NonterminalNode, arg0: NonterminalNode, arg1: TerminalNode, arg2: NonterminalNode) => T;
-  JudgeExp?: (this: NonterminalNode, arg0: NonterminalNode) => T;
-  AddExp_add?: (this: NonterminalNode, arg0: NonterminalNode, arg1: TerminalNode, arg2: NonterminalNode) => T;
+  TopExp_ArraySpread?: (this: NonterminalNode, arg0: NonterminalNode) => T;
+  TopExp_assign?: (this: NonterminalNode, arg0: NonterminalNode, arg1: TerminalNode, arg2: NonterminalNode) => T;
+  TopExp?: (this: NonterminalNode, arg0: NonterminalNode) => T;
+  CatchOrNullExp?: (this: NonterminalNode, arg0: NonterminalNode) => T;
+  CatchOrNullExp2?: (this: NonterminalNode, arg0: NonterminalNode) => T;
+  BinaryExp_binary?: (this: NonterminalNode, arg0: NonterminalNode, arg1: TerminalNode, arg2: NonterminalNode) => T;
+  BinaryExp?: (this: NonterminalNode, arg0: NonterminalNode) => T;
+  OrNullExp_or?: (this: NonterminalNode, arg0: NonterminalNode, arg1: TerminalNode, arg2: NonterminalNode) => T;
+  OrNullExp?: (this: NonterminalNode, arg0: NonterminalNode) => T;
+  RelationExp_relation?: (this: NonterminalNode, arg0: NonterminalNode, arg1: TerminalNode, arg2: NonterminalNode) => T;
+  RelationExp?: (this: NonterminalNode, arg0: NonterminalNode) => T;
+  SpreadExp_spread?: (this: NonterminalNode, arg0: NonterminalNode, arg1: TerminalNode, arg2: NonterminalNode) => T;
+  SpreadExp?: (this: NonterminalNode, arg0: NonterminalNode) => T;
+  AddExp_add?: (this: NonterminalNode, arg0: NonterminalNode, arg1: NonterminalNode, arg2: NonterminalNode) => T;
   AddExp?: (this: NonterminalNode, arg0: NonterminalNode) => T;
+  operator_addition?: (this: NonterminalNode, arg0: TerminalNode) => T;
   MulExp_mul?: (this: NonterminalNode, arg0: NonterminalNode, arg1: TerminalNode, arg2: NonterminalNode) => T;
   MulExp?: (this: NonterminalNode, arg0: NonterminalNode) => T;
-  ExpExp_power?: (this: NonterminalNode, arg0: NonterminalNode, arg1: TerminalNode, arg2: NonterminalNode) => T;
+  ExpExp_pow?: (this: NonterminalNode, arg0: NonterminalNode, arg1: TerminalNode, arg2: NonterminalNode) => T;
   ExpExp?: (this: NonterminalNode, arg0: NonterminalNode) => T;
-  PriExp_paren?: (this: NonterminalNode, arg0: TerminalNode, arg1: NonterminalNode, arg2: TerminalNode) => T;
-  PriExp_pos?: (this: NonterminalNode, arg0: TerminalNode, arg1: NonterminalNode) => T;
-  PriExp_neg?: (this: NonterminalNode, arg0: TerminalNode, arg1: NonterminalNode) => T;
+  IncrementExp_after?: (this: NonterminalNode, arg0: NonterminalNode, arg1: NonterminalNode) => T;
+  IncrementExp_before?: (this: NonterminalNode, arg0: NonterminalNode, arg1: NonterminalNode) => T;
+  IncrementExp?: (this: NonterminalNode, arg0: NonterminalNode) => T;
+  operator_increment?: (this: NonterminalNode, arg0: TerminalNode) => T;
+  PriExp_sign?: (this: NonterminalNode, arg0: NonterminalNode, arg1: NonterminalNode) => T;
   PriExp?: (this: NonterminalNode, arg0: NonterminalNode) => T;
+  PriExp_paren?: (this: NonterminalNode, arg0: TerminalNode, arg1: NonterminalNode, arg2: TerminalNode) => T;
+  operator_sign?: (this: NonterminalNode, arg0: IterationNode | NonterminalNode) => T;
 }
 
-export interface AVSSemantics extends Semantics {
-  addOperation<T>(name: string, actionDict: AVSActionDict<T>): this;
-  extendOperation<T>(name: string, actionDict: AVSActionDict<T>): this;
-  addAttribute<T>(name: string, actionDict: AVSActionDict<T>): this;
-  extendAttribute<T>(name: string, actionDict: AVSActionDict<T>): this;
+export interface AdvScriptSemantics extends Semantics {
+  addOperation<T>(name: string, actionDict: AdvScriptActionDict<T>): this;
+  extendOperation<T>(name: string, actionDict: AdvScriptActionDict<T>): this;
+  addAttribute<T>(name: string, actionDict: AdvScriptActionDict<T>): this;
+  extendAttribute<T>(name: string, actionDict: AdvScriptActionDict<T>): this;
 }
 
-export interface AVSGrammar extends Grammar {
-  createSemantics(): AVSSemantics;
-  extendSemantics(superSemantics: AVSSemantics): AVSSemantics;
+export interface AdvScriptGrammar extends Grammar {
+  createSemantics(): AdvScriptSemantics;
+  extendSemantics(superSemantics: AdvScriptSemantics): AdvScriptSemantics;
 }
 
-declare const grammar: AVSGrammar;
-export default grammar;
+declare const ns: {
+  Super: SuperGrammar;
+  Base: BaseGrammar;
+  AdvScript: AdvScriptGrammar;
+};
+export default ns;
 

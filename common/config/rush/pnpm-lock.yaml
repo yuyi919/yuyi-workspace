@@ -507,32 +507,82 @@ importers:
 
   ../../packages/libs/topic/advscript/packages/parser:
     specifiers:
+      '@codingame/monaco-jsonrpc': ^0.3.1
+      '@codingame/monaco-languageclient': ^0.14.0
+      '@ohm-js/cli': ~1.0.0
       '@types/jest': ~27.0.1
       '@types/node': ~16.7.2
+      '@types/ws': ~8.2.0
       '@yuyi919/advscript-vite-plugin': workspace:0.0.1
       '@yuyi919/workspace-base-rig': workspace:1.2.5
       chevrotain: ^9.0.2
+      glob: ~7.2.0
       jest: ~27.1.0
+      monaco-editor: ~0.30.1
+      monaco-editor-core: ~0.30.1
+      monaco-editor-textmate: ~3.0.0
+      monaco-textmate: ~3.0.1
       ohm-js: ^16.0.0
+      onigasm: ^2.0.0
       pkg: 4.4.6
+      reconnecting-websocket: ^3.2.2
       tslib: ~2.3.1
       typescript: 4.1.2
       vite: 2.4.4
       vite-plugin-dts: ~0.8.0
+      vite-plugin-monaco-editor: ~1.0.6
+      vscode-advscript: workspace:0.1.2
+      vscode-jsonrpc: ~6.0.0
+      vscode-languageclient: ~7.0.0
+      vscode-languageserver: 7.0.0
+      vscode-languageserver-protocol: 3.16.0
+      vscode-languageserver-textdocument: ~1.0.2
+      vscode-languageserver-types: ~3.16.0
+      vscode-oniguruma: 1.3.0
+      vscode-textmate: 5.1.1
+      vscode-uri: ~3.0.2
+      ws: ~8.2.3
+      zora: ~5.0.0
+      zora-reporters: ~1.3.0
     dependencies:
       chevrotain: 9.0.2
       ohm-js: 16.0.0
     devDependencies:
+      '@codingame/monaco-jsonrpc': 0.3.1
+      '@codingame/monaco-languageclient': 0.14.0
+      '@ohm-js/cli': 1.0.0
       '@types/jest': 27.0.1
       '@types/node': 16.7.7
+      '@types/ws': 8.2.0
       '@yuyi919/advscript-vite-plugin': link:../vite-plugin
       '@yuyi919/workspace-base-rig': link:../../../../tools/workspace-base-rig
+      glob: 7.2.0
       jest: 27.1.0
+      monaco-editor: 0.30.1
+      monaco-editor-core: 0.30.1
+      monaco-editor-textmate: 3.0.0_bdc4b7c79646fd837d0a54aad2d92cae
+      monaco-textmate: 3.0.1_onigasm@2.2.5
+      onigasm: 2.2.5
       pkg: 4.4.6
+      reconnecting-websocket: 3.2.2
       tslib: 2.3.1
       typescript: 4.1.2
       vite: 2.4.4
       vite-plugin-dts: 0.8.0_vite@2.4.4
+      vite-plugin-monaco-editor: 1.0.6_monaco-editor@0.30.1
+      vscode-advscript: link:../vscode-extension
+      vscode-jsonrpc: 6.0.0
+      vscode-languageclient: 7.0.0
+      vscode-languageserver: 7.0.0
+      vscode-languageserver-protocol: 3.16.0
+      vscode-languageserver-textdocument: 1.0.2
+      vscode-languageserver-types: 3.16.0
+      vscode-oniguruma: 1.3.0
+      vscode-textmate: 5.1.1
+      vscode-uri: 3.0.2
+      ws: 8.2.3
+      zora: 5.0.0
+      zora-reporters: 1.3.0
 
   ../../packages/libs/topic/advscript/packages/vite-plugin:
     specifiers:
@@ -968,6 +1018,7 @@ importers:
       '@types/node': ~16.7.2
       '@vue/composition-api': ^1.0.2
       '@yuyi919/shared-types': workspace:0.0.5
+      '@yuyi919/vue-shared-decorators': workspace:0.0.1
       '@yuyi919/vue-use': workspace:0.0.3
       '@yuyi919/workspace-base-rig': workspace:1.2.5
       jest: ~27.1.0
@@ -979,6 +1030,7 @@ importers:
       vue-demi: ^0.11.3
     dependencies:
       '@yuyi919/shared-types': link:../../../../../shared/packages/types
+      '@yuyi919/vue-shared-decorators': link:../../../shared/decorators
       '@yuyi919/vue-use': link:../../../use
       lodash: 4.17.21
       lodash-es: 4.17.21
@@ -1076,6 +1128,7 @@ importers:
       '@yuyi919/vue-antv-plus2-theme': workspace:0.0.1
       '@yuyi919/vue-jss': workspace:0.0.3
       '@yuyi919/vue-jsx-factory': workspace:0.0.1
+      '@yuyi919/vue-shared-decorators': workspace:0.0.1
       '@yuyi919/vue-use': workspace:0.0.3
       '@yuyi919/workspace-base-rig': workspace:1.2.5
       jest: ~27.1.0
@@ -1092,6 +1145,7 @@ importers:
       '@yuyi919/vue-antv-plus2-theme': link:../theme
       '@yuyi919/vue-jss': link:../../../jss
       '@yuyi919/vue-jsx-factory': link:../../../jsx-factory
+      '@yuyi919/vue-shared-decorators': link:../../../shared/decorators
       '@yuyi919/vue-use': link:../../../use
       lodash: 4.17.21
       lodash-es: 4.17.21
@@ -2860,6 +2914,23 @@ packages:
       exec-sh: 0.3.6
       minimist: 1.2.5
 
+  /@codingame/monaco-jsonrpc/0.3.1:
+    resolution: {integrity: sha512-Zxilei5fGV89uGJcFKDQFfZfUbWdP8/NGympXQUX/XRle4CYUabfvEOdY0Diq0NruttlRH3RdWVZ7Nw6f4TClQ==}
+    dependencies:
+      vscode-jsonrpc: 6.0.0
+    dev: true
+
+  /@codingame/monaco-languageclient/0.14.0:
+    resolution: {integrity: sha512-4KBN/GmfXqALSORrCC6O1gKPpRHvA1pi2Psma/VniG1vPpAsUHQunfL1mGOw3OWd9W1v1yRZzt+wnHB1P14UuA==}
+    engines: {vscode: ^1.50.0}
+    dependencies:
+      glob-to-regexp: 0.4.1
+      vscode-jsonrpc: 6.0.0
+      vscode-languageclient: 7.0.0
+      vscode-languageserver-textdocument: 1.0.2
+      vscode-uri: 3.0.2
+    dev: true
+
   /@dabh/diagnostics/2.0.2:
     resolution: {integrity: sha512-+A1YivoVDNNVCdfozHSR8v/jyuuLTMXwjWuxPFlFlUapXoGc+Gj9mDlTDDfrwl7rXCl2tNZ0kE8sIBO6YOn96Q==}
     dependencies:
@@ -3169,7 +3240,7 @@ packages:
       chalk: 3.0.0
       collect-v8-coverage: 1.0.1
       exit: 0.1.2
-      glob: 7.1.7
+      glob: 7.2.0
       istanbul-lib-coverage: 3.0.0
       istanbul-lib-instrument: 4.0.3
       istanbul-lib-report: 3.0.0
@@ -3201,7 +3272,7 @@ packages:
       chalk: 3.0.0
       collect-v8-coverage: 1.0.1
       exit: 0.1.2
-      glob: 7.1.7
+      glob: 7.2.0
       graceful-fs: 4.2.8
       istanbul-lib-coverage: 3.0.0
       istanbul-lib-instrument: 4.0.3
@@ -3239,7 +3310,7 @@ packages:
       chalk: 4.1.2
       collect-v8-coverage: 1.0.1
       exit: 0.1.2
-      glob: 7.1.7
+      glob: 7.2.0
       graceful-fs: 4.2.8
       istanbul-lib-coverage: 3.0.0
       istanbul-lib-instrument: 4.0.3
@@ -3675,6 +3746,15 @@ packages:
       yargs-parser: 20.0.0
     dev: false
 
+  /@ohm-js/cli/1.0.0:
+    resolution: {integrity: sha512-ybGS9OEJ8JlI9iQ5lElFNehqG/DMOA4g5dDtIEojL0y+aMtkZp0WpoOb1fbmXRMd1f2Lx0J/3as9tElrukhCNA==}
+    hasBin: true
+    dependencies:
+      commander: 8.3.0
+      fast-glob: 3.2.7
+      ohm-js: 16.0.0
+    dev: true
+
   /@opencensus/web-types/0.0.7:
     resolution: {integrity: sha512-xB+w7ZDAu3YBzqH44rCmG9/RlrOmFuDPt/bpf17eJr8eZSrLt7nc7LnWdxM9Mmoj/YKMHpxRg28txu3TcpiL+g==}
     engines: {node: '>=6.0'}
@@ -4056,7 +4136,7 @@ packages:
       '@rollup/pluginutils': 3.1.0_rollup@1.32.1
       commondir: 1.0.1
       estree-walker: 1.0.1
-      glob: 7.1.7
+      glob: 7.2.0
       is-reference: 1.2.1
       magic-string: 0.25.7
       resolve: 1.20.0
@@ -4677,6 +4757,12 @@ packages:
       source-map: 0.6.1
     dev: false
 
+  /@types/ws/8.2.0:
+    resolution: {integrity: sha512-cyeefcUCgJlEk+hk2h3N+MqKKsPViQgF5boi9TTHSK+PoR9KWBb/C5ccPcDyAqgsbAYHTwulch725DV84+pSpg==}
+    dependencies:
+      '@types/node': 16.7.7
+    dev: true
+
   /@types/yargs-parser/20.2.1:
     resolution: {integrity: sha512-7tFImggNeNBVMsn0vLrpn1H1uPrUBdnARPTpZoitY37ZrdJREzf7I16tMrlK3hen349gr1NYh8CmZQa7CTG6Aw==}
 
@@ -4870,7 +4956,7 @@ packages:
     dependencies:
       debug: 4.3.2
       eslint-visitor-keys: 1.3.0
-      glob: 7.1.7
+      glob: 7.2.0
       is-glob: 4.0.1
       lodash: 4.17.21
       semver: 7.3.5
@@ -5597,6 +5683,10 @@ packages:
 
   /arg/4.1.3:
     resolution: {integrity: sha512-58S9QDqG0Xx27YwPSt9fJxivjYl432YCwfDMfZ+71RAqUrZef7LrKQZ3LHLOwCS4FLNBplP533Zx895SeOCHvA==}
+    dev: true
+
+  /arg/5.0.1:
+    resolution: {integrity: sha512-e0hDa9H2Z9AwFkk2qDlwhoMYE4eToKarchkQHovNdLTCYMHZHeRjI71crOh+dio4K6u1IcwubQqo79Ga4CyAQA==}
     dev: true
 
   /argparse/1.0.10:
@@ -6885,7 +6975,7 @@ packages:
       bluebird: 3.7.2
       chownr: 1.1.4
       figgy-pudding: 3.5.2
-      glob: 7.1.4
+      glob: 7.2.0
       graceful-fs: 4.2.8
       infer-owner: 1.0.4
       lru-cache: 5.1.1
@@ -6907,7 +6997,7 @@ packages:
       '@npmcli/move-file': 1.1.2
       chownr: 2.0.0
       fs-minipass: 2.1.0
-      glob: 7.1.4
+      glob: 7.2.0
       infer-owner: 1.0.4
       lru-cache: 6.0.0
       minipass: 3.1.3
@@ -7334,6 +7424,10 @@ packages:
       color-string: 1.6.0
     dev: false
 
+  /colorette/1.2.2:
+    resolution: {integrity: sha512-MKGMzyfeuutC/ZJ1cba9NqcNpfeqMUcYmyF1ZFY6/Cn7CNSAKx6a+s48sqLqyAiZuaP2TcqMhoo+dlwFnVxT9w==}
+    dev: true
+
   /colorette/1.3.0:
     resolution: {integrity: sha512-ecORCqbSFP7Wm8Y6lyqMJjexBQqXSF7SSeaTyGGphogUjBlFP9m9o08wy86HL2uB7fMTxtOUzLMk7ogKcxMg1w==}
 
@@ -7370,6 +7464,11 @@ packages:
   /commander/4.1.1:
     resolution: {integrity: sha512-NOKm8xhkzAjzFx8B2v5OAHT+u5pRQc2UCa2Vq9jYL/31o2wi9mxBA7LIFs3sV5VSC49z6pEhfbMULvShKj26WA==}
     engines: {node: '>= 6'}
+    dev: true
+
+  /commander/8.3.0:
+    resolution: {integrity: sha512-OkTL9umf+He2DZkUq8f8J9of7yL6RJKI24dVITBmNfZBmri9zYZQrKkuXiKhyfPSu8tUhnVBB1iKXevvnlR4Ww==}
+    engines: {node: '>= 12'}
     dev: true
 
   /comment-json/4.1.1:
@@ -7508,7 +7607,7 @@ packages:
     resolution: {integrity: sha512-fereAvAvxDrQDOXybk3Qu3dPbOoKoysFMWtkY3mv5BsL8//OSZVL5DCLYqgRfY5cWirgRzlC+WSrxp6Bo3eNZg==}
     hasBin: true
     dependencies:
-      glob: 7.1.7
+      glob: 7.2.0
       minimatch: 3.0.4
       mkdirp: 1.0.4
       noms: 0.0.0
@@ -8122,7 +8221,6 @@ packages:
   /diff/5.0.0:
     resolution: {integrity: sha512-/VTCrvm5Z0JGty/BWHljh+BAiw3IK+2j87NGMu8Nwc/f48WoDAC395uomO9ZD117ZOBaHmkX1oyLvkVM/aIT3w==}
     engines: {node: '>=0.3.1'}
-    dev: false
 
   /diffie-hellman/5.0.3:
     resolution: {integrity: sha512-kqag/Nl+f3GwyK25fhUMYj81BUOrZ9IuJsjIcDE5icNM9FJHAVm3VcUDxdLPoQtTuUylWm6ZIknYJwwaPxsUzg==}
@@ -9119,6 +9217,10 @@ packages:
   /fast-levenshtein/2.0.6:
     resolution: {integrity: sha1-PYpcZog6FqMMqGQ+hR8Zuqd5eRc=}
 
+  /fast-plist/0.1.2:
+    resolution: {integrity: sha1-pFr/NFGWAG1AbKbNzQX2kFHvNbg=}
+    dev: true
+
   /fast-safe-stringify/2.0.8:
     resolution: {integrity: sha512-lXatBjf3WPjmWD6DpIZxkeSsCOwqI0maYMpgDlx8g4U2qi4lbjA9oH/HD2a87G+KfsUmo5WbJFmqBZlPxtptag==}
     dev: false
@@ -9665,6 +9767,10 @@ packages:
       unique-stream: 2.3.1
     dev: true
 
+  /glob-to-regexp/0.4.1:
+    resolution: {integrity: sha512-lkX1HJXwyMcprw/5YUZc2s7DrpAiHB21/V+E1rHUrVNokkvB6bqMzT0VfV6/86ZNabt1k14YOIaT7nDvOX3Iiw==}
+    dev: true
+
   /glob-watcher/5.0.5:
     resolution: {integrity: sha512-zOZgGGEHPklZNjZQaZ9f41i7F2YwE+tS5ZHrDhbBCk3stwahn5vQxnFmBJZHoYdusR6R1bLSXeGUy/BhctwKzw==}
     engines: {node: '>= 0.10'}
@@ -9701,6 +9807,16 @@ packages:
 
   /glob/7.1.7:
     resolution: {integrity: sha512-OvD9ENzPLbegENnYP5UUfJIirTg4+XwMWGaQfQTY0JenxNvvIKP3U3/tAQSPIu/lHxXYSZmpXlUHeqAIdKzBLQ==}
+    dependencies:
+      fs.realpath: 1.0.0
+      inflight: 1.0.6
+      inherits: 2.0.4
+      minimatch: 3.0.4
+      once: 1.4.0
+      path-is-absolute: 1.0.1
+
+  /glob/7.2.0:
+    resolution: {integrity: sha512-lmLf6gtyrPq8tTjSmrO94wBeQbFR3HbLHbuyD69wuyQkImp2hWqMGB47OX65FBkPffO641IP9jWa1z4ivqG26Q==}
     dependencies:
       fs.realpath: 1.0.0
       inflight: 1.0.6
@@ -10862,7 +10978,7 @@ packages:
       babel-jest: 25.5.1_@babel+core@7.15.0
       chalk: 3.0.0
       deepmerge: 4.2.2
-      glob: 7.1.7
+      glob: 7.2.0
       jest-environment-jsdom: 25.5.0
       jest-environment-node: 25.5.0
       jest-get-type: 25.2.6
@@ -10890,7 +11006,7 @@ packages:
       babel-jest: 25.5.1_@babel+core@7.15.0
       chalk: 3.0.0
       deepmerge: 4.2.2
-      glob: 7.1.7
+      glob: 7.2.0
       graceful-fs: 4.2.8
       jest-environment-jsdom: 25.5.0
       jest-environment-node: 25.5.0
@@ -10924,7 +11040,7 @@ packages:
       babel-jest: 27.1.0_@babel+core@7.15.0
       chalk: 4.1.2
       deepmerge: 4.2.2
-      glob: 7.1.7
+      glob: 7.2.0
       graceful-fs: 4.2.8
       is-ci: 3.0.0
       jest-circus: 27.1.0
@@ -10960,7 +11076,7 @@ packages:
       babel-jest: 27.1.0_@babel+core@7.15.0
       chalk: 4.1.2
       deepmerge: 4.2.2
-      glob: 7.1.7
+      glob: 7.2.0
       graceful-fs: 4.2.8
       is-ci: 3.0.0
       jest-circus: 27.1.0
@@ -11435,7 +11551,7 @@ packages:
       chalk: 3.0.0
       collect-v8-coverage: 1.0.1
       exit: 0.1.2
-      glob: 7.1.7
+      glob: 7.2.0
       graceful-fs: 4.2.8
       jest-config: 25.5.4
       jest-haste-map: 25.5.1
@@ -11474,7 +11590,7 @@ packages:
       collect-v8-coverage: 1.0.1
       execa: 5.1.1
       exit: 0.1.2
-      glob: 7.1.7
+      glob: 7.2.0
       graceful-fs: 4.2.8
       jest-haste-map: 27.1.0
       jest-message-util: 27.1.0
@@ -12782,6 +12898,33 @@ packages:
     resolution: {integrity: sha512-kHmoybcPV8Sqy59DwNDY3Jefr64lK/by/da0ViFcuA4DH0vQg5Q6Ze5VimxkfQNSC+Mls/Kx53s7TjP1RhFEDQ==}
     dev: true
 
+  /monaco-editor-core/0.30.1:
+    resolution: {integrity: sha512-WNxfchYafMZXVfysqg/ESW4MtOpYLPaIKrzudNlgwYvfYID+O/nwSZI5X+KxW84roVzHsNgFGyOOesfHFZwYUA==}
+    dev: true
+
+  /monaco-editor-textmate/3.0.0_bdc4b7c79646fd837d0a54aad2d92cae:
+    resolution: {integrity: sha512-4BK3ual4WllRpiQBDcBO8NKdbk4ukdBtnl23cRYvu1eNWOWKYOBM0rYac50HvFClSbtd5GMezLPjkaim0iM7sw==}
+    peerDependencies:
+      monaco-editor: 0.x.x
+      monaco-textmate: ^3.0.0
+    dependencies:
+      monaco-editor: 0.30.1
+      monaco-textmate: 3.0.1_onigasm@2.2.5
+    dev: true
+
+  /monaco-editor/0.30.1:
+    resolution: {integrity: sha512-B/y4+b2O5G2gjuxIFtCE2EkM17R2NM7/3F8x0qcPsqy4V83bitJTIO4TIeZpYlzu/xy6INiY/+84BEm6+7Cmzg==}
+    dev: true
+
+  /monaco-textmate/3.0.1_onigasm@2.2.5:
+    resolution: {integrity: sha512-ZxxY3OsqUczYP1sGqo97tu+CJmMBwuSW+dL0WEBdDhOZ5G1zntw72hvBc68ZQAirosWvbDKgN1dL5k173QtFww==}
+    peerDependencies:
+      onigasm: ^2.0.0
+    dependencies:
+      fast-plist: 0.1.2
+      onigasm: 2.2.5
+    dev: true
+
   /move-concurrently/1.0.1:
     resolution: {integrity: sha1-viwAX9oy4LKa8fBdfEszIUxwH5I=}
     dependencies:
@@ -13046,7 +13189,7 @@ packages:
     engines: {node: '>=10'}
     hasBin: true
     dependencies:
-      glob: 7.1.7
+      glob: 7.2.0
       ignore-walk: 3.0.4
       npm-bundled: 1.1.2
       npm-normalize-package-bin: 1.0.1
@@ -13200,7 +13343,6 @@ packages:
   /ohm-js/16.0.0:
     resolution: {integrity: sha512-e0xfOO/OdF3IE+H3VibMlW/wJr5bNJIEa5bnVvoxEjPNTJ6Djjt3seAKHu6CWfByRnJFk5TsiSX3Vz7GWoM0og==}
     engines: {node: '>=0.12.1'}
-    dev: false
 
   /omit.js/1.0.2:
     resolution: {integrity: sha512-/QPc6G2NS+8d4L/cQhbk6Yit1WTB6Us2g84A7A/1+w9d/eRGHyEqC5kkQtHVoHZ5NFWGG7tUGgrhVZwgZanKrQ==}
@@ -13237,6 +13379,12 @@ packages:
     engines: {node: '>=6'}
     dependencies:
       mimic-fn: 2.1.0
+
+  /onigasm/2.2.5:
+    resolution: {integrity: sha512-F+th54mPc0l1lp1ZcFMyL/jTs2Tlq4SqIHKIXGZOR/VkHkF9A7Fr5rRr5+ZG/lWeRsyrClLYRq7s/yFQ/XhWCA==}
+    dependencies:
+      lru-cache: 5.1.1
+    dev: true
 
   /open/7.4.2:
     resolution: {integrity: sha512-MVHddDVweXZF3awtlAS+6pgKLlm/JgxZ90+/NBurBoQctVOOB/zDdVjcyPzQ+0laDGbsWgrRkflI65sQeOgT9Q==}
@@ -14332,6 +14480,10 @@ packages:
     dependencies:
       resolve: 1.20.0
 
+  /reconnecting-websocket/3.2.2:
+    resolution: {integrity: sha512-SWSfoXiaHVOqXuPWFgGWeUxKnb5HIY7I/Fh5C/hy4wUOgeOh7YIMXEiv5/eHBlNs4tNzCrO5YDR9AH62NWle0Q==}
+    dev: true
+
   /recursive-readdir-sync/1.0.6:
     resolution: {integrity: sha1-Hb9tMvPFu4083pemxYjVR6nhPVY=}
     dev: false
@@ -14672,13 +14824,13 @@ packages:
     resolution: {integrity: sha512-uWjbaKIK3T1OSVptzX7Nl6PvQ3qAGtKEtVRjRuazjfL3Bx5eI409VZSqgND+4UNnmzLVdPj9FqFJNPqBZFve4w==}
     hasBin: true
     dependencies:
-      glob: 7.1.7
+      glob: 7.2.0
 
   /rimraf/3.0.2:
     resolution: {integrity: sha512-JZkJMZkAGFFPP2YqXZXPbMlMBgsxzE8ILs4lMIX/2o0L9UBw9O/Y3o6wFw/i9YLapcUJWwqbi3kdxIPdC62TIA==}
     hasBin: true
     dependencies:
-      glob: 7.1.7
+      glob: 7.2.0
 
   /ripemd160/2.0.2:
     resolution: {integrity: sha512-ii4iagi25WusVoiC4B4lq7pbXfAp3D9v5CwfkY33vffw2+pkDjY1D8GaN7spsxvCSx8dkPqOZCEZyfxcmJG2IA==}
@@ -15079,7 +15231,7 @@ packages:
     engines: {node: '>=4'}
     hasBin: true
     dependencies:
-      glob: 7.1.7
+      glob: 7.2.0
       interpret: 1.4.0
       rechoir: 0.6.2
 
@@ -15744,7 +15896,7 @@ packages:
     engines: {node: '>=8'}
     dependencies:
       '@istanbuljs/schema': 0.1.3
-      glob: 7.1.7
+      glob: 7.2.0
       minimatch: 3.0.4
 
   /text-hex/1.0.0:
@@ -16066,7 +16218,7 @@ packages:
     dependencies:
       '@ts-nameof/common': 4.2.1
       '@ts-nameof/transforms-ts': 4.2.1
-      glob: 7.1.7
+      glob: 7.2.0
       typescript: 4.1.2
     dev: false
 
@@ -16093,7 +16245,7 @@ packages:
       typescript: '>2.7.0'
     dependencies:
       chalk: 4.1.2
-      glob: 7.1.7
+      glob: 7.2.0
       global-prefix: 3.0.0
       minimist: 1.2.5
       resolve: 1.20.0
@@ -16783,6 +16935,14 @@ packages:
       - supports-color
     dev: true
 
+  /vite-plugin-monaco-editor/1.0.6_monaco-editor@0.30.1:
+    resolution: {integrity: sha512-PbAc45pIm/g53ZlvjdIZ9vzGx5kabKkdY1dXW0pu2KUJekqWtDKb9c9kd/o8fQ6/B8PbhWoai2oC9r14RqQXtA==}
+    peerDependencies:
+      monaco-editor: 0.29.x
+    dependencies:
+      monaco-editor: 0.30.1
+    dev: true
+
   /vite-plugin-solid/2.0.3:
     resolution: {integrity: sha512-NiyYUGema6ODxEGFl9ytqQ0ucQNiHJ3XkzcfmtrBOsIna53F3FnU7n9NEss+RrsogAErgZK7eeSvYpdurgDVSA==}
     dependencies:
@@ -16869,6 +17029,46 @@ packages:
     engines: {vscode: ^1.5.0}
     dev: false
 
+  /vscode-jsonrpc/6.0.0:
+    resolution: {integrity: sha512-wnJA4BnEjOSyFMvjZdpiOwhSq9uDoK8e/kpRJDTaMYzwlkrhG1fwDIZI94CLsLzlCK5cIbMMtFlJlfR57Lavmg==}
+    engines: {node: '>=8.0.0 || >=10.0.0'}
+    dev: true
+
+  /vscode-languageclient/7.0.0:
+    resolution: {integrity: sha512-P9AXdAPlsCgslpP9pRxYPqkNYV7Xq8300/aZDpO35j1fJm/ncize8iGswzYlcvFw5DQUx4eVk+KvfXdL0rehNg==}
+    engines: {vscode: ^1.52.0}
+    dependencies:
+      minimatch: 3.0.4
+      semver: 7.3.5
+      vscode-languageserver-protocol: 3.16.0
+    dev: true
+
+  /vscode-languageserver-protocol/3.16.0:
+    resolution: {integrity: sha512-sdeUoAawceQdgIfTI+sdcwkiK2KU+2cbEYA0agzM2uqaUy2UpnnGHtWTHVEtS0ES4zHU0eMFRGN+oQgDxlD66A==}
+    dependencies:
+      vscode-jsonrpc: 6.0.0
+      vscode-languageserver-types: 3.16.0
+    dev: true
+
+  /vscode-languageserver-textdocument/1.0.2:
+    resolution: {integrity: sha512-T7uPC18+f8mYE4lbVZwb3OSmvwTZm3cuFhrdx9Bn2l11lmp3SvSuSVjy2JtvrghzjAo4G6Trqny2m9XGnFnWVA==}
+    dev: true
+
+  /vscode-languageserver-types/3.16.0:
+    resolution: {integrity: sha512-k8luDIWJWyenLc5ToFQQMaSrqCHiLwyKPHKPQZ5zz21vM+vIVUSvsRpcbiECH4WR88K2XZqc4ScRcZ7nk/jbeA==}
+    dev: true
+
+  /vscode-languageserver/7.0.0:
+    resolution: {integrity: sha512-60HTx5ID+fLRcgdHfmz0LDZAXYEV68fzwG0JWwEPBode9NuMYTIxuYXPg4ngO8i8+Ou0lM7y6GzaYWbiDL0drw==}
+    hasBin: true
+    dependencies:
+      vscode-languageserver-protocol: 3.16.0
+    dev: true
+
+  /vscode-oniguruma/1.3.0:
+    resolution: {integrity: sha512-m4Br19v6XD4MRbVrgsLNSZgQrBzk1BCMCleL8+GrcoGxKEJJd62zOFcTaoQR3hCrSlLqoxWmJ7Cc0VieVV3iTQ==}
+    dev: true
+
   /vscode-test/1.6.1:
     resolution: {integrity: sha512-086q88T2ca1k95mUzffvbzb7esqQNvJgiwY4h29ukPhFo8u+vXOOmelUoU5EQUHs3Of8+JuQ3oGdbVCqaxuTXA==}
     engines: {node: '>=8.9.3'}
@@ -16879,6 +17079,14 @@ packages:
       unzipper: 0.10.11
     transitivePeerDependencies:
       - supports-color
+    dev: true
+
+  /vscode-textmate/5.1.1:
+    resolution: {integrity: sha512-5VHjF+Fglf9d2JI5OyQ7FHutK6/29G0qYyD920K0SWO7uY8JTWbqyKAHEtfB/ZDk2fOe/E23n3wz9fHXKi63yg==}
+    dev: true
+
+  /vscode-uri/3.0.2:
+    resolution: {integrity: sha512-jkjy6pjU1fxUvI51P+gCsxg1u2n8LSt0W6KrCNQceaziKzff74GoWmjVG46KieVzybO1sttPQmYfrwSHey7GUA==}
     dev: true
 
   /vue-class-component/7.2.6_vue@2.6.14:
@@ -17275,6 +17483,19 @@ packages:
       utf-8-validate:
         optional: true
 
+  /ws/8.2.3:
+    resolution: {integrity: sha512-wBuoj1BDpC6ZQ1B7DWQBYVLphPWkm8i9Y0/3YdHjHKHiohOJ1ws+3OccDWtH+PoC9DZD5WOTrJvNbWvjS6JWaA==}
+    engines: {node: '>=10.0.0'}
+    peerDependencies:
+      bufferutil: ^4.0.1
+      utf-8-validate: ^5.0.2
+    peerDependenciesMeta:
+      bufferutil:
+        optional: true
+      utf-8-validate:
+        optional: true
+    dev: true
+
   /xml-name-validator/3.0.0:
     resolution: {integrity: sha512-A5CUptxDsvxKJEU3yO6DuWBSJz/qizqzJKOMIfUJHETbBw/sFaDxgd6fxm1ewUaM0jZ444Fc5vC5ROYurg/4Pw==}
 
@@ -17434,3 +17655,16 @@ packages:
       validator: 8.2.0
     optionalDependencies:
       commander: 2.20.3
+
+  /zora-reporters/1.3.0:
+    resolution: {integrity: sha512-wO2xKMoHFaV/V/Id1gdZUejaJ9//VXqFWppiwSvhmKymNzvXL8JliHXsYaKuKQQtsVNRIVnxk9LZPJb9BIOCkQ==}
+    hasBin: true
+    dependencies:
+      arg: 5.0.1
+      colorette: 1.2.2
+      diff: 5.0.0
+    dev: true
+
+  /zora/5.0.0:
+    resolution: {integrity: sha512-fA6RdNLtzcCxy4m+HsWYVBnme7Jt1Ez4OgEMo62i6LanJCHawAhZ0n57hetWO35M/057eLVFRbtq7JTBpFNybg==}
+    dev: true

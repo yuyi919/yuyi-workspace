@@ -6,6 +6,7 @@ import {
   SetupContext,
 } from "@vue/composition-api";
 import { Types } from "@yuyi919/shared-types";
+import type { TypedPropsGroup } from "@yuyi919/vue-shared-decorators";
 import { cloneDeep, omit } from "lodash";
 import Vue from "vue";
 import { getFromVueComponent } from "../optionResolver";
@@ -15,14 +16,7 @@ export interface TypedPropOptions<T, Required extends boolean> {
   default?: T | (() => T) | null;
   validator?: any;
 }
-export type TypedPropsGroup<T> = {
-  [K in keyof T]-?: {
-    type: PropType<T[K]>;
-    required: T extends { [key in K]-?: T[K] } ? true : false;
-    default?: any;
-    validator?: any;
-  };
-};
+
 export {
   Component,
   createPropExtractor,
@@ -32,8 +26,9 @@ export {
   initDefaultProps,
   Prop,
   PropTypes,
+  TypedPropsGroup,
+  WalkHandler,
 } from "@yuyi919/vue-shared-decorators";
-
 
 export type VModelDefine<K extends string = string> = {
   prop?: K;

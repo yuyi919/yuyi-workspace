@@ -17,7 +17,7 @@ export const SmartGrid = defineComponent({
   setup(props: ResolvedGridProps, context) {
     const elRef = useNamedRef<HTMLDivElement>("elRef");
     const store = reactive(new GridCore(props));
-    FormGridContext.provide(store);
+    FormGridContext.provide(store as GridCore);
     const [getInherit] = useInherit(context);
     useEffect(() => {
       elRef.value && store.mount(elRef.value);

@@ -28,6 +28,11 @@ export function extractProps<T>(target: Types.Consturctor<T>): TypedPropsGroup<T
   return target[UNSAFE_STORE_PROPS_KEY as unknown as string] ?? target.props;
 }
 
+export type WalkHandler<T, R extends T> = (
+  props: Partial<T>,
+  walker: (propName: keyof T, propValue: T[keyof T], options: TypedPropOptions<any, boolean>) => any
+) => R;
+
 /**
  * 从PropsClass中提取Vue props配置集合
  *
@@ -43,7 +48,7 @@ export function extractProps<T>(target: Types.Consturctor<T>): TypedPropsGroup<T
 export function extractUnsafeProps<T, R extends T>(
   target: Types.Consturctor<T>,
   configure?: (props: T) => R
-) {
+): readonly [TypedPropsGroup<T>, WalkHandler<T, R>] {
   const propDefinitions = extractPropsWith(target, UNSAFE_WALKER) as TypedPropsGroup<T>;
   // console.log(target.props);
   const extractor = createPropExtractor<T, R>(extractProps(target), configure);

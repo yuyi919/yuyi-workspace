@@ -1,0 +1,347 @@
+Super {
+  Main = literalOf<(null | boolean | number)>
+
+  optional<T> = T?
+  stringify<T> = T
+
+  End($END$) = end
+  exprEnd($Exp$) = (";" | space)+
+
+  prefix<P, C> = P C
+
+  null = "null"
+  
+  linePad = lineSpace*
+  lineSpace = ~"\n" space
+  padOf<T> = linePad T linePad
+  lPadOf<T> = linePad T
+  rPadOf<T> = T linePad
+  contentOf<T, Content> 
+    = T Content T -- paren
+    | ~(contentOf_paren<T, Content>) stringify<escapable<(T |"\n")>+> -- escaped
+    | T -- self
+  
+  literalOf<T> = T
+
+  boolean($boolean$) = "true" | "false"
+
+  number($number$)
+    = num* "." num+ -- fract
+    | num+ -- whole
+
+  sign<T>($number$)
+    = stringify<T> -- apply
+    | ("-" | "+") stringify<T> -- signed
+
+  num($num$) = digit
+
+  internalEscape = "'" | "\"" | "\\" | "b" | "f" | "n" | "r" | "t" | "v"
+
+  escapable<T> = strictEscapable<T, T>
+  strictEscapable<Escaped, NonEscaped> 
+    = "\\" (internalEscape | "x" | "u" | Escaped)  -- escaped
+    | ~NonEscaped any
+}
+
+Base <: Super {
+
+  literal($literal$) = percet | literalOf<(string | number | boolean | null)> 
+
+  number += sign<hex>   -- sign
+    | sign<number_fract> -- double
+    | sign<number_whole> -- int
+
+  hex($hexNumber$) = "0x" ("a".."f" | "A".."F" | num)+
+
+  string
+    = doubleQuote stringify<doubleQuoteStringContent*> doubleQuote -- doubleQuote
+    | singleQuote stringify<singleQuoteStringContent*> singleQuote -- singleQuote
+  doubleQuote($doubleQuote$) = "\""
+  singleQuote($singleQuote$) = "'"
+
+  singleQuoteStringContent = strictEscapable<escapeCharacter, "'">
+  doubleQuoteStringContent = strictEscapable<escapeCharacter, "\"">
+  
+  escapeCharacter = internalEscape | "x" | "u" | ~(alnum|space)any
+  
+  percet = (number_double | number_int) "%" ~(literal | variableName)
+
+  variableName($variableName$) = stringify<(variableNamePrefix?)> identifier
+  variableNamePrefix($variableNamePrefix$) = "$" | "%"
+
+  identifier = ~invalidIdentifier(validIdentifierPrefixChar ~invalidIdentifierChar (validIdentifierChar)*)
+  invalidIdentifier($invalidIdentifier$) = boolean | number | null
+
+  validIdentifierChar($validIdentifierChar$[:alnum: | "_" | "$"]) = alnum | "_" | "$"
+  invalidIdentifierChar($invalidIdentifierChar$["#" | "@" | ...$spicalChar$]) = "#" | "@"
+  validIdentifierPrefixChar($validIdentifierPrefixChar$) =  ~(variableNamePrefix)(letter | "_")
+
+  op = op_comma | op_logic | op_orNull | op_eq | op_rel | op_add | op_mul | op_pow | op_invert
+  op_comma = ","
+  op_logic = "&&" | "||"
+  op_orNull = "??"
+  op_eq = "==" | "!="
+  op_rel = "<=" | "<" | ">=" | ">"
+  op_add = "-" | "+"
+  op_mul = "%" | "/" | "*"
+  op_pow = "^"
+  op_invert = "!"
+
+}
+
+AdvScript <: Base {
+  Main := Statement
+
+  Statement
+    = macroBegin Macro_Call optional<(Macro_Pipe | #pipeFlag)> (exprEnd | End) -- Macro
+    | Template End -- Inline
+    | Macro_Pipe (exprEnd | End) -- Pipe
+    | #pipeFlag (exprEnd | End) -- AnonymousPipe
+    | Exp (exprEnd | End) -- Exp
+    | End
+
+  macroBegin($macroBegin$) = "@"
+  tmplBegin($tmplBegin$) = "{{"
+  tmplEnd($tmplEnd$) = "}}"
+
+  Template = tmplBegin Exp optional<(Macro_Pipe | #pipeFlag)> tmplEnd
+
+  Macro_Call = (CallExpression | Macro_Call_Expr)
+  Macro_Pipe
+    = pipeFlag Macro_Call -- Call
+    | pipeFlag pipeExprBegin Exp -- Expr
+
+  pipeFlag($pipeFlag$) = "|"
+  pipeExprBegin($pipeExprBegin$) = "="
+
+  Macro_Call_Expr = #identifier optional<Params>
+
+  Params 
+    = Param #space Params -- multiple
+    | Param  ";"*                      -- single
+
+  Param = identifier "=" Exp    -- setValue
+    | identifier                   -- setFlag
+
+  Array($Array$)= "[" ArrayElements "]"
+  ArraySpread($ArraySpread$) = SpreadExp_spread
+
+  ArrayElements($ArrayElements$) = ListOf<TopExp, ",">
+
+  CallExpression($CallExpression$) = #identifier "(" ListOf<TopExp, ","> ")"
+
+  Exp
+    = Exp op_comma Exp -- Comma
+    | TopExp
+
+  TopExp
+    = SpreadExp_spread -- ArraySpread
+    | #variableName "=" TopExp -- assign
+    | LogicExp
+
+  CatchOrNullExp($CatchOrNullExp$) = ~LogicExp_logic RelationExp
+  CatchOrNullExp2($CatchOrNullExp$) = ~OrNullExp_or LogicExp
+
+  LogicExp
+    = LogicExp op_logic CatchOrNullExp2  -- logic
+    | OrNullExp
+
+  OrNullExp
+    = OrNullExp op_orNull CatchOrNullExp  -- or
+    | EqualExp
+
+  EqualExp
+    = EqualExp op_eq EqualExp  -- eq
+    | RelationExp
+
+  RelationExp
+    = RelationExp op_rel RelationExp     -- rel
+    | SpreadExp
+
+  SpreadExp
+    = SpreadExp op_spread SpreadExp  -- spread
+    | AddExp
+
+  AddExp
+    = AddExp op_add MulExp  -- add
+    | MulExp
+
+  MulExp
+    = MulExp op_mul ExpExp  -- mul
+    | ExpExp
+
+  ExpExp
+    = PriExp op_pow ExpExp  -- pow
+    | IncrementExp
+    | op_invert PriExp -- invert
+    | ~number (op_add PriExp)   -- sign
+    | PriExp
+
+  IncrementExp($Exp$)
+    = #variableName op_increment -- after
+    | op_increment #variableName -- before
+
+  PriExp($Exp$) 
+    = "(" Exp ")" -- paren // parenthesis
+    | CallExpression 
+    | Array
+    | variableName
+    | literal
+  
+  op += op_increment | op_spread
+  op_increment = "--" | "++"
+  op_spread = "..."
+
+}
+
+AdvFountain <: AdvScript {
+  main = storyLine+
+
+  commentBlock 
+    = comment_inline       -- notes
+    | "//" blockPad comment_single linePad -- single
+    | "/*" blockPad comment_multi blockPad "*/"      -- multi
+
+  comment_single = stringify<escapable<("\n" | "\r")>+>
+  comment_note = stringify<escapable<("\n" | "\r" | "]" | "[")>+>
+  comment_multi = stringify<(escapable<("*/")> | "\n")+>
+  comment_inline = "[[" comment_note "]]"
+
+  storyLine
+    = logicBlock
+    | commentBlock
+    | storyLineBlock
+    | lineOf<story>
+    | emptyLine -- empty
+
+  storyLineBlock
+    = blockOf<fountain_character, ((~fountain_character fountain) | story_line | story_plain | story_command), lineEnd>
+    | linesOf<story, story, lineEnd>
+    | startStatmentOf<(story_centered | story_transition | story_command)>
+
+  story
+    = ">" linePad stringify<escapable<("<" | "\n")>+> "<" -- centered
+    | ">" linePad stringify<escapable<("[" | "\n" | "<")>+> optional<command> -- transition
+    | ("~")? text optional<expr_pipe>   -- line
+    | ("~")? plainText optional<expr_pipe> "\n" -- plain
+    | command -- command
+
+  emptyLine = "\n"+
+  blockPad = space*
+  lineEnd = ("\n" | end)
+
+  fountain
+    = linePad characterName linePad (modify_macro | optional<command>) -- character
+    | modify_macro -- character_action
+    | "  " -- forceEmpty
+
+  characterName 
+    = prefix<upper, (~"@" (upper|digit|"_"))+> -- plain
+    | "@" linePad stringify<(~("(" | space) any)+> -- esc
+  
+
+  lineOf<T> = T lineEnd
+  startStatmentOf<T> = emptyLine? T linePad lineEnd emptyLine?
+  statmentOf<T> = emptyLine? linePad T linePad lineEnd emptyLine?
+  blockOf<Begin, Child, End> = lineOf<Begin> (lineOf<Child>)* End
+  blockOf2<Begin, Child, End> = lineOf<Begin> Child* End
+  linesOf<Begin, Child, End> = lineOf<Begin> (lineOf<Child>)+ End
+
+  text = textPiece+
+  textPiece
+   = styled<textPiece> -- styled
+   | template
+   | plainText
+
+  styled<T> = 
+    | "**" (~(styled_bold<T>) T)+ "**"? -- bold
+    | "*" (~(styled_italic<T>) T)+ "*"? -- italic
+    | "_" (~(styled_underline<T>) T)+ "_"? -- underline
+    | T
+  plainText = stringify<(~(styled<(~"\n" any)+> | template | ctlKey<any+> | lineEnd) any)+>
+  // plainText = stringify<(~(commentBlock | ctlKey<any+> | lineEnd) escapable<("|" | "*" | "_")>)+>
+  plainText2 = stringify<escapable<("*" | "_" | "@" |  "[" | "]" | "{{" | "}}" | "{" | "}" | "|" | "\n" | "//" | "/*")>+> -- plain
+
+  modify_macro = "(" stringify<escapable<")">+> ")" optional<command>
+
+  expr(格式不正确)
+    = expr_template
+    | expr_logic
+    | expr_auto
+    | expr_pipe
+
+  expr_template = awesomeExpr
+  expr_logic = stringify<escapable<("\n" | "|")>*>
+  expr_auto = awesomeExpr
+  expr_pipe = ~(logic_statment | "|if" | "|elseif" | "|else" | "|end" | "|foreach" | "|while")("|" escapable<"\n">*)
+
+  template
+    = "[" awesomeExpr "](" expr_auto ")" -- label
+    | "{{" optional<expr_template> "}}" -- native 
+    | comment_inline
+
+
+  command = "[" (awesomeExpr | escapable<("["|"]")>+) "]"
+
+  awesome = "[" awesomeExprOptional "]" -- a
+    | "(" awesomeExprOptional ")" -- b
+    | "{{" awesomeExprOptional "}}" -- c
+    | escapable<("[" | "]" | "(" | ")" | "}}" | "{{" | "\n")>+ -- z
+
+
+  parenOf<S, C, E> = S C E
+
+  awesomeExpr = stringify<awesome+>
+  awesomeExprOptional = stringify<awesome*>
+
+  logicBlock
+    = logic_statment
+    | logic_blockIf<storyLine>
+    | logic_blockForeach<storyLine>
+    // | blockOf<logic_block_begin, storyLine, statmentOf<logic_end>>
+  
+  logic_statment
+    = linePad ctlKey<"let "> expr_logic ("\n") -- let
+
+  logic_blockIf<T> = statmentOf<logic_if> lPadOf<T>* (statmentOf<logic_elseIf> lPadOf<T>*)* (statmentOf<logic_else> lPadOf<T>*)? statmentOf<logic_end>
+  logic_if = ctlKey<"if"> padOf<expr_logic>
+  logic_elseIf = ctlKey<"elseif"> padOf<expr_logic>
+  logic_else = ctlKey<"else">
+
+  logic_foreach = ctlKey<"foreach"> padOf<variableName> "in" padOf<expr_logic>
+  logic_blockForeach<T> = blockOf2<logic_foreach, lPadOf<T>, statmentOf<logic_end>>
+
+  ctlKey<key> = "|" lPadOf<key> // control statment 
+
+  logic_block_begin = linePad logic_begin
+  logic_begin
+    = ctlKey<"while "> linePad "\n" -- while
+    // | space* "|end" space* "\n" -- end
+    // | space* "\n" -- empty
+
+  logic_end = ctlKey<"end">
+
+  logic_exprs = escapable<"\n">*
+
+  // LET
+  //   = "|let" ListOf<LetAssignExpr, ",">
+  
+  // AssignExpr = variableName "=" expression
+  // LetAssignExpr
+  //   = AssignExpr  -- assign
+  //   | variableName         -- nonAssign
+  // IF
+  //   = "|if" expression
+  // END
+  //   = "|end"
+  // ELSE
+  //   = "|else"
+  // ELSEIF
+  //   = "|elseif" expression
+  // WHILE
+  //   = "|while" expression
+  // FOREACH
+  //   = "|foreach" variableName "in" expression
+  // expression = stringify<escapable<("[" | "]" | "|" | "{{" | "}}"| "\n" | "\r" | "//" | "/*")>+>
+
+}

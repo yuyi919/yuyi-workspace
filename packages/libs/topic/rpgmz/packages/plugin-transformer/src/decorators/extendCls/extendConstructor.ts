@@ -39,21 +39,27 @@ export function autoExtendConstructor<Args extends any[], T extends new (...args
     let newClsFactory = function trick() {
       // @ts-ignore
       // eslint-disable-next-line prefer-const
-      class TClassAnonymous extends Target {
+      return class extends Target {
         constructor(...args: Args) {
           super(...(args as Args));
           extend(this as InstanceType<T>, args);
         }
-      }
-      return TClassAnonymous;
+      };
     };
-    const trickClsName = newClsFactory().name || "_TEMP";
-    eval(
-      `newClsFactory = ${newClsFactory
+    console.log(Target.name || "awesome", newClsFactory);
+    return eval(
+      `(${function trick() {
+        // @ts-ignore
+        // eslint-disable-next-line prefer-const
+        return class extends Target {
+          constructor(...args: Args) {
+            super(...(args as Args));
+            extend(this as InstanceType<T>, args);
+          }
+        };
+      }
         .toString()
-        .replace("class extends", `class ${trickClsName} extends`)
-        .replaceAll(trickClsName, newTargeName)}`
-    );
-    return newClsFactory();
+        .replace("class extends", `class ${newTargeName} extends`)})`
+    )();
   }
 }

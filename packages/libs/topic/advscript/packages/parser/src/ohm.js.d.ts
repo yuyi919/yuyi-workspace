@@ -1,12 +1,13 @@
-import { ParsedData } from "./interface";
+import { ParserContext } from "./lib/ParserContext";
 
 declare module "ohm-js" {
-  class Semantics {
-    get sourceString(): string;
-    get sourceValue(): string;
-  }
+  class Semantics {}
 
-  interface Node<T = any> {
-    parse(): T
+  class Node<T = any> {
+    parse(): T;
+    get parserContext(): ParserContext;
+  }
+  interface IterationNode<T = any> {
+    parse(): T[];
   }
 }

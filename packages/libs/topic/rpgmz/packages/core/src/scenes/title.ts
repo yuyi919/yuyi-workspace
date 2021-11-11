@@ -59,7 +59,7 @@ export class Scene_Title extends Scene_Base {
 
   update(): void {
     if (!this.isBusy()) {
-      // this._commandWindow!.open();
+      this._commandWindow!.open();
     }
     super.update();
   }

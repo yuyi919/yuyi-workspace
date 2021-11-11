@@ -12,14 +12,16 @@
     "types": ["vite/client"],
     "paths": {
       "@adv.ohm-bundle": ["./ohm/adv.ohm-bundle.d.ts"],
-      "@expression.ohm-bundle": ["./ohm/expression.ohm-bundle.d.ts"]
+      "@expression.ohm-bundle": ["./ohm/expression.ohm-bundle.d.ts"],
+      "@yuyi919/zora": ["./src/test/zora-wrapper.ts"]
     },
     "tsBuildInfoFile": "./node_modules/@yuyi919/workspace-base-rig/.tsBuildInfo/topic-advscript-packages-parser.json"
   },
-  "exclude": [
-    "src/**/*.spec.ts",
-    "src/**/*.test.ts",
-    "**/__test__/**"
-  ],
-  "include": ["src/**/*.ts"]
+  "exclude": ["src/**/*.spec.ts", "src/**/*.test.ts", "**/__test__/**"],
+  "include": ["./node_modules/**/*.d.ts", "src/**/*.ts"],
+  "references": [
+    {
+      "path": "./tsconfig.spec.json"
+    }
+  ]
 }

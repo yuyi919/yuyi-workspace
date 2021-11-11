@@ -2,8 +2,12 @@
   "extends": "./tsconfig.json",
   "compilerOptions": {
     "outDir": "./node_modules/@yuyi919/workspace-base-rig/temp/out-tsc",
-    "module": "commonjs",
-    "types": ["jest", "node"]
+    "module": "ESNext",
+    "types": ["jest", "node"],
+    "paths": {
+      "@yuyi919/zora": ["./src/test/zora-wrapper.ts"]
+    },
+    "tsBuildInfoFile": "./node_modules/@yuyi919/workspace-base-rig/.tsBuildInfo/topic-advscript-packages-parser-spec.json"
   },
   "include": [
     "src/**/*.spec.ts",

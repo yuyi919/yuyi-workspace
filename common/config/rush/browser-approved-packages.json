@@ -23,6 +23,14 @@
       "allowedCategories": [ "production" ]
     },
     {
+      "name": "@codingame/monaco-jsonrpc",
+      "allowedCategories": [ "production" ]
+    },
+    {
+      "name": "@codingame/monaco-languageclient",
+      "allowedCategories": [ "production" ]
+    },
+    {
       "name": "@microsoft/api-extractor",
       "allowedCategories": [ "tools" ]
     },
@@ -61,6 +69,10 @@
     {
       "name": "@nrwl/workspace",
       "allowedCategories": [ "production", "tools" ]
+    },
+    {
+      "name": "@ohm-js/cli",
+      "allowedCategories": [ "production" ]
     },
     {
       "name": "@rollup/plugin-babel",
@@ -403,6 +415,10 @@
       "allowedCategories": [ "production", "tools" ]
     },
     {
+      "name": "glob",
+      "allowedCategories": [ "production" ]
+    },
+    {
       "name": "goober",
       "allowedCategories": [ "production" ]
     },
@@ -487,11 +503,31 @@
       "allowedCategories": [ "production" ]
     },
     {
+      "name": "monaco-editor",
+      "allowedCategories": [ "production" ]
+    },
+    {
+      "name": "monaco-editor-core",
+      "allowedCategories": [ "production" ]
+    },
+    {
+      "name": "monaco-editor-textmate",
+      "allowedCategories": [ "production" ]
+    },
+    {
+      "name": "monaco-textmate",
+      "allowedCategories": [ "production" ]
+    },
+    {
       "name": "npm-run-all",
       "allowedCategories": [ "production" ]
     },
     {
       "name": "ohm-js",
+      "allowedCategories": [ "production" ]
+    },
+    {
+      "name": "onigasm",
       "allowedCategories": [ "production" ]
     },
     {
@@ -528,6 +564,10 @@
     },
     {
       "name": "readability-scores",
+      "allowedCategories": [ "production" ]
+    },
+    {
+      "name": "reconnecting-websocket",
       "allowedCategories": [ "production" ]
     },
     {
@@ -659,11 +699,19 @@
       "allowedCategories": [ "production" ]
     },
     {
+      "name": "vite-plugin-monaco-editor",
+      "allowedCategories": [ "production" ]
+    },
+    {
       "name": "vite-plugin-solid",
       "allowedCategories": [ "production" ]
     },
     {
       "name": "vite-plugin-vue2",
+      "allowedCategories": [ "production" ]
+    },
+    {
+      "name": "vscode-advscript",
       "allowedCategories": [ "production" ]
     },
     {
@@ -675,7 +723,39 @@
       "allowedCategories": [ "production" ]
     },
     {
+      "name": "vscode-languageclient",
+      "allowedCategories": [ "production" ]
+    },
+    {
+      "name": "vscode-languageserver",
+      "allowedCategories": [ "production" ]
+    },
+    {
+      "name": "vscode-languageserver-protocol",
+      "allowedCategories": [ "production" ]
+    },
+    {
+      "name": "vscode-languageserver-textdocument",
+      "allowedCategories": [ "production" ]
+    },
+    {
+      "name": "vscode-languageserver-types",
+      "allowedCategories": [ "production" ]
+    },
+    {
+      "name": "vscode-oniguruma",
+      "allowedCategories": [ "production" ]
+    },
+    {
       "name": "vscode-test",
+      "allowedCategories": [ "production" ]
+    },
+    {
+      "name": "vscode-textmate",
+      "allowedCategories": [ "production" ]
+    },
+    {
+      "name": "vscode-uri",
       "allowedCategories": [ "production" ]
     },
     {
@@ -715,7 +795,19 @@
       "allowedCategories": [ "production" ]
     },
     {
+      "name": "ws",
+      "allowedCategories": [ "production" ]
+    },
+    {
       "name": "yargs",
+      "allowedCategories": [ "production" ]
+    },
+    {
+      "name": "zora",
+      "allowedCategories": [ "production" ]
+    },
+    {
+      "name": "zora-reporters",
       "allowedCategories": [ "production" ]
     }
   ]

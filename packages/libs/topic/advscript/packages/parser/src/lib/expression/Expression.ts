@@ -1,65 +1,74 @@
+import { toSource } from "../actions/_util";
 import {
   AssignExprData,
-  CallExpressionData,
-  defineActions,
+  CallExpression,
+  CommaExpression,
+  defineExpressionActions,
+  ExpressionKind,
   ExpressionNodeData,
   Node,
   NodeTypeKind,
-  OperatorNode,
+  TemplateExpression,
+  CallMacroExpression,
+  createCallExpression,
+  BinaryExpression,
+  ArraySpreadExpressionData,
+  createExpression,
+  createBinaryExpression,
 } from "../interface";
-import { VariableNode } from "./Exp";
+import { OperatorNode, VariableNode } from "./Exp";
 
 export type AssignExprArrayNode = Node<AssignExprData[]>;
 export type AssignExprNode = Node<AssignExprData>;
 export type ExpressionNode = Node<ExpressionNodeData>;
+export type CommaExpressionNode = Node<CommaExpression>;
+export type CallMacroExpressionNode = Node<CallMacroExpression>;
+export type TemplateExpressionNode = Node<TemplateExpression>;
+export type CallExpressionNode = Node<CallExpression>;
 
-export const Expression = defineActions<any>({
-  Expression(node) {
+export function visitExpressionNode<Node extends ExpressionNodeData, T>(
+  data: Node,
+  visitor: (node: ExpressionNodeData) => T
+): T[] {
+  if (data.kind === ExpressionKind.Comma) {
+    return data.value.map(visitor);
+  }
+  return [visitor(data)] as any;
+}
+export const Expression = defineExpressionActions<any>({
+  Template(_, expr: ExpressionNode, pipe, $): TemplateExpression {
+    return {
+      type: NodeTypeKind.Expression,
+      kind: ExpressionKind.Template,
+      value: expr.parse(),
+      pipe: pipe.parse(),
+    };
+  },
+  CallExpression(name, head, args, foot): CallExpression {
+    return createCallExpression(name.parse(), args.parse(), toSource(name, head, args, foot));
+  },
+  TopExp_ArraySpread(spread: Node<BinaryExpression>): ArraySpreadExpressionData {
+    const { value } = spread.parse();
+    return {
+      type: NodeTypeKind.Expression,
+      kind: ExpressionKind.ArraySpreadLiteral,
+      start: value.left,
+      end: value.right,
+    };
+  },
+  Exp_Comma(node, _, nextNode: ExpressionNode): CommaExpression {
     const data = node.parse();
-    return data instanceof Array
-      ? data
-      : {
-          ...data,
-          source: node.sourceString,
-        };
+    const next = nextNode.parse();
+    return createExpression(ExpressionKind.Comma, {
+      value: next.kind === ExpressionKind.Comma ? [data, ...next.value] : [data, next],
+    }) as CommaExpression;
   },
-  CallExpression(callName, head, args, foot): CallExpressionData {
-    return {
-      type: NodeTypeKind.CallExpression,
-      arguments: args.parse(),
-      name: callName.parse(),
-    };
-  },
-  Exp_bool(JudgeExp: ExpressionNode, booleanOperator: OperatorNode, Exp: ExpressionNode) {
-    return {
-      type: NodeTypeKind.Expression,
-      value: {
-        left: JudgeExp.parse(),
-        operator: booleanOperator.parse(),
-        right: Exp.parse(),
-      },
-    };
-  },
-  JudgeExp_judge(left: ExpressionNode, operator: OperatorNode, right: ExpressionNode) {
-    return {
-      type: NodeTypeKind.Expression,
-      value: {
-        left: left.parse(),
-        operator: operator.parse(),
-        right: right.parse(),
-      },
-    };
-  },
-  Expression_Comma(start, content, end) {
-    return content.parse().value;
-  },
-  Expression_Assign(variable: VariableNode, operator, Exp: ExpressionNode): AssignExprData {
-    return {
-      type: NodeTypeKind.Expression,
+  TopExp_assign(variable: VariableNode, _, Exp: ExpressionNode): AssignExprData {
+    return createExpression(ExpressionKind.Assign, {
       value: {
         left: variable.parse(),
         right: Exp.parse(),
       },
-    };
+    });
   },
 });

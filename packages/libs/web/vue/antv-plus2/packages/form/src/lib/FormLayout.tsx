@@ -1,10 +1,10 @@
-import { usePrefixCls, cls } from "../__builtins__";
-import { computed, defineComponent } from "vue-demi";
+import { extractUnsafeProps } from "@yuyi919/vue-antv-plus2-helper";
 import { useInherit } from "@yuyi919/vue-use";
-import { extractProps, extractUnsafeProps } from "@yuyi919/vue-antv-plus2-helper";
+import { computed, defineComponent } from "vue-demi";
+import { cls, usePrefixCls } from "../__builtins__";
+import { FormLayoutDeepContext, FormLayoutShallowContext, useFormDeepLayout } from "./context";
 import { FormLayoutItem } from "./FormItem";
 import { FormLayoutProps } from "./FormLayoutProps";
-import { useFormDeepLayout, FormLayoutDeepContext, FormLayoutShallowContext } from "./context";
 // console.log(Definitions.extractProps(IFormLayoutProps), Definitions.extractProps(LayoutProps));
 const [FormLayoutPropsConfig, normlize] = extractUnsafeProps(FormLayoutProps, (props) => {
   return {

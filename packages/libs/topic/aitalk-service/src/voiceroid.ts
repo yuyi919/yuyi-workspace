@@ -1,4 +1,4 @@
-// import { strict as assert } from "assert";
+import { strict as assert } from "assert";
 import { logger } from "./logger";
 
 const debug = logger.debug.bind(logger);
@@ -151,10 +151,10 @@ export class Config {
     public voiceDirName: string,
     options: VoiceOption = {}
   ) {
-    // assert(typeof name === "string" && name.length > 0);
-    // assert(typeof baseDirPath === "string" && baseDirPath.length > 0);
-    // assert(typeof voiceDirName === "string" && voiceDirName.length > 0);
-    // assert(typeof options === "object");
+    assert(typeof name === "string" && name.length > 0);
+    assert(typeof baseDirPath === "string" && baseDirPath.length > 0);
+    assert(typeof voiceDirName === "string" && voiceDirName.length > 0);
+    assert(typeof options === "object");
     debug("name=%s path=%s voice=%s options=%o", name, baseDirPath, voiceDirName, options);
 
     this.name = name;

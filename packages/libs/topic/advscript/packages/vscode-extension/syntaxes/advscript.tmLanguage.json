@@ -40,7 +40,7 @@
         },
         {
           "comment": "VARIABLE_SP",
-          "match": "((\\$|#)([_$[:alpha:]][_$[:alnum:]]*))((?=[= <>+-\\\\*/^%])|\\b|$)",
+          "match": "((\\$|#|%)([_$[:alpha:]][_$[:alnum:]]*))((?=[= <>+-\\\\*/^%])|\\b|$)",
           "name": "entity.name.function.macro.adv"
         },
         {
@@ -84,7 +84,7 @@
     "MACRO_CALL_PARAM": {
       "patterns": [
         {
-          "match": "( ([_$[:alpha:]][_$[:alnum:]]*))(=((?!( |(\\n|\\]|\\|))).+?)|)(?=( |(\\n|\\]|\\|)))",
+          "match": "( ([_$[:alpha:]][_$[:alnum:]]*))(=((?!( |\\||(\\n|\\]|\\|)(?=(?!\\()))).+?)|)(?=( |\\||(\\n|\\]|\\|)(?=(?!\\())))",
           "captures": {
             "1": {
               "name": "entity.name.tag.adv"
@@ -100,6 +100,54 @@
         }
       ]
     },
+    "MACRO_USE_EXPRESSION": {
+      "name": "meta.brace.round.ts",
+      "begin": "(\\|\\=)",
+      "beginCaptures": {
+        "1": {
+          "name": "entity.name.function.macro.adv"
+        }
+      },
+      "end": "(\\n)",
+      "endCaptures": {
+        "1": {
+          "name": "entity.name.function.macro.adv"
+        }
+      },
+      "patterns": [
+        {
+          "include": "#EXPRESSION"
+        }
+      ]
+    },
+    "MACRO_TEMPLATE_EXPRESSION": {
+      "name": "meta.brace.round.ts",
+      "match": "((\\[)(.+)(\\]\\()(.+)(\\)))",
+      "captures": {
+        "2": {
+          "name": "entity.name.function.macro.adv"
+        },
+        "3": {
+          "name": "markup.raw"
+        },
+        "4": {
+          "name": "entity.name.function.macro.adv"
+        },
+        "5": {
+          "patterns": [
+            {
+              "include": "#MACRO_CALL_PARAM"
+            },
+            {
+              "include": "#MACRO_CALL_EXPRESSION"
+            }
+          ]
+        },
+        "6": {
+          "name": "entity.name.function.macro.adv"
+        }
+      }
+    },
     "MACRO_CALL_EXPRESSION": {
       "name": "meta.brace.round.ts",
       "begin": "((\\[|\\|)[ \\t]*(([_$[:alpha:]][_$[:alnum:]]*)\\b|))",
@@ -108,7 +156,7 @@
           "name": "entity.name.function.macro.adv"
         }
       },
-      "end": "(\\]|\\n)",
+      "end": "(((\\])(?=(?! \\) )))|(?=\\n))",
       "endCaptures": {
         "1": {
           "name": "entity.name.function.macro.adv"
@@ -128,6 +176,9 @@
           "include": "#CALL_EXPRESSION"
         },
         {
+          "include": "#MACRO_USE_EXPRESSION"
+        },
+        {
           "include": "#MACRO_CALL_EXPRESSION"
         },
         {
@@ -137,6 +188,12 @@
     },
     "MACRO_CALL": {
       "patterns": [
+        {
+          "include": "#MACRO_TEMPLATE_EXPRESSION"
+        },
+        {
+          "include": "#MACRO_USE_EXPRESSION"
+        },
         {
           "include": "#MACRO_CALL_EXPRESSION"
         }
@@ -160,12 +217,15 @@
       },
       "patterns": [
         {
-          "match": "( ([_$[:alpha:]][_$[:alnum:]]*))(?=( |=))",
+          "match": "( ([_$[:alpha:]][_$[:alnum:]]*))(?=( |=|(\\n|\\]|\\|)(?=(?!\\())))",
           "captures": {
             "2": {
               "name": "entity.name.tag.adv"
             }
           }
+        },
+        {
+          "include": "#MACRO_CALL_EXPRESSION"
         },
         {
           "include": "#EXPRESSION"

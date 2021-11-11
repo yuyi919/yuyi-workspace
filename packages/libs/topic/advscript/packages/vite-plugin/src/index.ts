@@ -1,6 +1,7 @@
 import { Plugin } from "vite";
 import ohm from "ohm-js";
 import { relative } from "path";
+import { escapeRegExp } from "lodash"
 
 export const BabelTransformer: Plugin["transform"] = async function (
   code: string,
@@ -23,7 +24,7 @@ export const BabelTransformer: Plugin["transform"] = async function (
       return result;
     }
     if (/\.(txt|bks|adv|avs)$/.test(sourceFileName)) {
-      return `export default \`${code}\``;
+      return `export default \`${escapeRegExp(code)}\``;
     }
     if (/\.ohm$/.test(sourceFileName)) {
       const myGrammar = ohm.grammar(code);

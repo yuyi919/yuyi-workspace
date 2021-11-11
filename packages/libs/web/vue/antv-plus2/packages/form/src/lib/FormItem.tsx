@@ -1,8 +1,8 @@
-import { useEffect, useElementRect, useInherit, useNamedRef, useState } from "@yuyi919/vue-use";
 import { Types } from "@yuyi919/shared-types";
 import { getGridSpanStyle, useGridSpan } from "@yuyi919/vue-antv-plus2-shared";
+import { useEffect, useElementRect, useInherit, useNamedRef, useState } from "@yuyi919/vue-use";
 import { Icon, Popover, Tooltip } from "ant-design-vue";
-import { computed, defineComponent, watch } from "vue-demi";
+import { computed, defineComponent } from "vue-demi";
 import { cls, usePrefixCls } from "../__builtins__";
 import { FormLayoutShallowContext, useFormLayout } from "./context";
 import { FormItemPropConfig, FormItemProps, useFormLayoutItemProps } from "./FormItemProps";

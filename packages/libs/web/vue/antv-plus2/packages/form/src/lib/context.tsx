@@ -3,9 +3,9 @@ import { createContext } from "@yuyi919/vue-use";
 import { FormLayoutProps } from "./FormLayoutProps";
 
 export const FormLayoutDeepContext =
-  createContext<ComputedRef<FormLayoutProps>>("FormLayoutDeepContext");
+  createContext<ComputedRef<FormLayoutProps | undefined>>("FormLayoutDeepContext");
 
-export const FormLayoutShallowContext = createContext<ComputedRef<FormLayoutProps>>(
+export const FormLayoutShallowContext = createContext<ComputedRef<FormLayoutProps | undefined>>(
   "FormLayoutShallowContext"
 );
 

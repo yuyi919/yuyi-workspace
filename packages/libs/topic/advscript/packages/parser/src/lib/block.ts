@@ -1,49 +1,40 @@
 /* eslint-disable @typescript-eslint/no-misused-new */
-import { LogicStatmentData, NodeTypeKind, StatementData } from "./interface";
-import { IdentifierData } from "./interface";
-import { ExpressionNodeData } from "./interface";
-import { Scope } from "./variable";
+import {
+  createLiteralExpression,
+  DocumentLine,
+  ExpressionNodeData,
+  NodeTypeKind,
+  VariableIdentifier,
+} from "./interface";
+import { Scope } from "./scope";
 
-export abstract class Block {
+interface BlockGenerator<T = unknown, TReturn = any, TNext = unknown>
+  extends Iterator<T, TReturn, TNext> {
+  // NOTE: 'next' is defined using a tuple to ensure we report the correct assignability errors in all places.
+  next(...args: [] | [TNext]): IteratorResult<T, TReturn>;
+  return?: (value: TReturn) => IteratorResult<T, TReturn>;
+  throw?: (e: any) => IteratorResult<T, TReturn>;
+  [Symbol.iterator](): BlockGenerator<T, TReturn, TNext>;
+}
+export abstract class LogicBlock {
   currentLine: number;
   done: boolean;
-  constructor(public variable: Scope, public data: any[], public blockIndex?: number) {
-    this.reset();
+  constructor(public variable: Scope, public data: DocumentLine[], public blockIndex = 0) {
+    this.reset(data);
     this.variable.pushScope();
   }
 
-  reset() {
-    this.data = [];
+  reset(data: DocumentLine[]) {
+    this.data = data;
     this.currentLine = 0;
     this.done = false;
   }
-  getData(): {
-    type: string;
-    currentLine: number;
-    blockIndex?: number;
-  } {
-    return {
-      type: "if",
-      currentLine: this.currentLine,
-      blockIndex: this.blockIndex,
-    };
-  }
-  [Symbol.iterator]() {
-    return this;
-  }
-  next(): Partial<IteratorResult<any>> {
-    if (this.currentLine < this.data.length) {
-      const line = this.data[this.currentLine++];
-      return { value: line, done: false };
-    } else {
-      // !this.done && this.variable.popScope();
-      // this.done = true;
-      return { done: true };
-    }
-  }
+  abstract getData(): BlockData;
+  abstract createGenerate(): BlockGenerator<DocumentLine>;
 }
+
 export type LetLogic = {
-  type: "logic";
+  type: NodeTypeKind.Logic;
   name: "let";
   explicit: true;
   left: {
@@ -56,64 +47,47 @@ export type LetLogic = {
     value: 123;
   };
 };
-interface ProcessBlockData {
+interface BlockData {
   type: string;
   currentLine: number;
-  blockIndex: number;
+  blockIndex?: number;
 }
-class ProcessBlock {
-  data: LogicStatmentData[];
-  blockIndex: number;
-  currentLine: number;
-  done: boolean;
-  constructor(public variable: Scope, data: LogicStatmentData[], blockIndex?: number) {
-    this.reset();
-    this.data = data;
-    this.blockIndex = blockIndex;
-    this.variable.pushScope();
+class ProcessBlock extends LogicBlock {
+  constructor(public variable: Scope, public data: DocumentLine[], blockIndex?: number) {
+    super(variable, data, blockIndex);
   }
-  reset() {
-    this.data = [];
-    this.currentLine = 0;
-    this.done = false;
-  }
-  getData(): ProcessBlockData {
+  getData(): BlockData {
     return {
       type: "if",
       currentLine: this.currentLine,
       blockIndex: this.blockIndex,
     };
   }
+  createGenerate() {
+    return this;
+  }
   [Symbol.iterator]() {
     return this;
   }
-  next() {
+  next(): IteratorResult<DocumentLine, void> {
     if (this.currentLine < this.data.length) {
       const line = this.data[this.currentLine++];
-      return { value: line, done: false };
+      return { value: line as DocumentLine, done: false };
     } else {
       // !this.done && this.variable.popScope();
       // this.done = true;
-      return { done: true };
+      return { done: true, value: void 0 };
     }
   }
 }
 
-class WhileBlock {
-  data: any;
-  condition: any;
-  currentLine: number;
-  done: boolean;
-  constructor(public variable: Scope, data, condition) {
-    this.reset();
-    this.data = data;
-    this.condition = condition;
-    this.variable.pushScope();
-  }
-  reset() {
-    this.data = [];
-    this.currentLine = 0;
-    this.done = false;
+class WhileBlock extends LogicBlock {
+  constructor(
+    public variable: Scope,
+    public data: DocumentLine[],
+    public condition: ExpressionNodeData
+  ) {
+    super(variable, data);
   }
   getData() {
     return {
@@ -121,61 +95,59 @@ class WhileBlock {
       currentLine: this.currentLine,
     };
   }
+  createGenerate() {
+    return this;
+  }
   [Symbol.iterator]() {
     return this;
   }
-  next(): Partial<IteratorResult<any>> {
+  next(): IteratorResult<any> {
     if (this.currentLine < this.data.length) {
       const line = this.data[this.currentLine++];
       return { value: line, done: false };
     } else {
-      if (this.variable.calc(this.condition)) {
+      if (this.variable.calculate(this.condition)) {
         this.currentLine = 0;
         this.variable.switchScope();
         return this.next();
       } else {
         // !this.done && this.variable.popScope();
         // this.done = true;
-        return { done: true };
+        return { done: true, value: void 0 };
       }
     }
   }
 }
 
-class ForeachBlock {
+class ForeachBlock extends LogicBlock {
   index: number;
-  currentLine: number;
-  done: boolean;
   iteratorValues: any[];
   constructor(
     public variable: Scope,
-    public data: StatementData[],
-    public i: IdentifierData,
+    public data: DocumentLine[],
+    public i: VariableIdentifier,
     public iterator: ExpressionNodeData
   ) {
-    this.reset();
-    this.data = data;
-    this.i = i;
-    this.iteratorValues = this.variable.calc(iterator);
+    super(variable, data);
+    this.iteratorValues = this.variable.calculate(iterator);
     this.index = 0;
     this.variable.pushScope();
     this.variable.assign(
-      this.i.value,
+      this.i.text,
       this.i.prefix,
-      { type: NodeTypeKind.Raw, value: this.iteratorValues[this.index] },
+      createLiteralExpression(this.iteratorValues[this.index]),
       true
     );
-  }
-  reset() {
-    this.data = [];
-    this.currentLine = 0;
-    this.done = false;
   }
   getData() {
     return {
       type: "foreach",
       currentLine: this.currentLine,
     };
+  }
+
+  createGenerate() {
+    return this;
   }
 
   [Symbol.iterator]() {
@@ -193,9 +165,9 @@ class ForeachBlock {
         this.index++;
         this.variable.switchScope();
         this.variable.assign(
-          this.i.value,
+          this.i.text,
           this.i.prefix,
-          { type: NodeTypeKind.Raw, value: this.iteratorValues[this.index] },
+          createLiteralExpression(this.iteratorValues[this.index]),
           true
         );
         return this.next();

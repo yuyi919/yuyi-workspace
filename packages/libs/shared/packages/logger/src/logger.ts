@@ -105,9 +105,8 @@ class GlobalLoggerMap extends Map<string, Logger> {
 }
 const globalLoggerMap = new GlobalLoggerMap();
 
-interface LogRecord 
-// extends Partial<import("source-map").MappedPosition> 
-{
+interface LogRecord {
+  // extends Partial<import("source-map").MappedPosition>
   sourceContent?: string;
   sourceLine?: string;
   args: any[];
@@ -418,8 +417,8 @@ function getTrack(logger: Logger, currentId: number) {
       //       }
       //       return result;
       //     })
-      //   : 
-        {},
+      //   :
+      {},
       {
         result,
         hasSource,

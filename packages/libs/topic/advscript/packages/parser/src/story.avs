@@ -55,8 +55,8 @@
 # 角色演出块
 =简要介绍角色块的语法
 
-@Yukari (喜悦)[喜び|position([0, 0, .5, 50%])]
-对[[测试]]话[测试.com](http://www.baidu.com)内容|お話
+@Yukari (喜悦)[喜び|position([0, "\]", .5, 50%])]
+对[[测试]]话[测试.com](http://www.baidu.com)内容这是谁|お話
 正常|お話2
 正常[测试.com](app a=1 | app)|お話3
 
@@ -64,10 +64,11 @@
 
 >123<
 
-//[ceshi arg="123" flag=test() | test]
+[ceshi arg="123" flag=test() | test]
 
 123{{ 123 | pipe }}
 
 //[ccc]
 
 aaa|as12
+

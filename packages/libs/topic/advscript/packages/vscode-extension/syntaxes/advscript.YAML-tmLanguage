@@ -13,7 +13,9 @@ variables:
   constantIdentifier: '[[:upper:]][_$[:digit:][:upper:]]*'
   label: ({{identifier}})\s*(:)
   macroStart: (\[|\|)[ \t]*
-  macroEnd: (\n|\]|\|)
+  macroEnd: (\n|\]|\|)(?=(?!\())
+  parenRight: \)
+  macroCallEnd: ((\])(?=(?! {{parenRight}} )))
 
 patterns:
   - include: "#Script"
@@ -34,7 +36,7 @@ repository:
         match: \b([0-9]+)\b
         name: constant.numeric.adv
       - comment: VARIABLE_SP
-        match: ((\$|#){{identifier}})((?=[= <>+-\\*/^%])|\b|$)
+        match: ((\$|#|%){{identifier}})((?=[= <>+-\\*/^%])|\b|$)
         name: entity.name.function.macro.adv
       - comment: VARIABLE
         match: ({{identifier}})((?=[= <>+-\\*/^%])|\b|$)
@@ -59,20 +61,48 @@ repository:
       - include: "#EXPRESSION"
   MACRO_CALL_PARAM:
     patterns:
-      - match: ( {{identifier}})(=((?!( |{{macroEnd}})).+?)|)(?=( |{{macroEnd}}))
+      - match: ( {{identifier}})(=((?!( |\||{{macroEnd}})).+?)|)(?=( |\||{{macroEnd}}))
         captures:
           "1":
             name: entity.name.tag.adv
           "3":
             patterns:
               - include: "#EXPRESSION"
+  MACRO_USE_EXPRESSION:
+    name: meta.brace.round.ts
+    begin: (\|\=)
+    beginCaptures:
+      "1": 
+        name: entity.name.function.macro.adv
+    end: (\n)
+    endCaptures:     
+      "1":    
+        name: entity.name.function.macro.adv
+    patterns:
+      - include: "#EXPRESSION"
+  MACRO_TEMPLATE_EXPRESSION:
+    name: meta.brace.round.ts
+    match: ((\[)(.+)(\]\()(.+)(\)))
+    captures:
+      "2": 
+        name: entity.name.function.macro.adv
+      "3":    
+        name: markup.raw
+      "4":    
+        name: entity.name.function.macro.adv
+      "5": 
+        patterns:
+          - include: "#MACRO_CALL_PARAM"
+          - include: "#MACRO_CALL_EXPRESSION"
+      "6":    
+        name: entity.name.function.macro.adv
   MACRO_CALL_EXPRESSION:
     name: meta.brace.round.ts
     begin: ({{macroStart}}({{identifier}}\b|))
     beginCaptures:
       "1": 
         name: entity.name.function.macro.adv
-    end: (\]|\n)
+    end: ({{macroCallEnd}}|(?=\n))
     endCaptures:     
       "1":    
         name: entity.name.function.macro.adv
@@ -82,10 +112,13 @@ repository:
         patterns:
           - include: "#EXPRESSION"
       - include: "#CALL_EXPRESSION"
+      - include: "#MACRO_USE_EXPRESSION"
       - include: "#MACRO_CALL_EXPRESSION"
       - include: "#MACRO_CALL_PARAM"
   MACRO_CALL:
     patterns:
+      - include: "#MACRO_TEMPLATE_EXPRESSION"
+      - include: "#MACRO_USE_EXPRESSION"
       - include: "#MACRO_CALL_EXPRESSION"
   TAG_COMMAND:
     begin: ^ *?(\[)(\b{{identifier}})\b
@@ -99,10 +132,11 @@ repository:
       "1":
         name: entity.name.function.macro.adv
     patterns:
-      - match: ( {{identifier}})(?=( |=))
+      - match: ( {{identifier}})(?=( |=|{{macroEnd}}))
         captures:
           "2":
             name: entity.name.tag.adv
+      - include: "#MACRO_CALL_EXPRESSION"
       - include: "#EXPRESSION"
   Fountain:
     patterns:

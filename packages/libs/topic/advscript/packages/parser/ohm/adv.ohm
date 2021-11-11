@@ -1,109 +1,465 @@
-AdvScript {
-  Scripts
-    = LogicBlock*
-  LogicBlock
-    = Comment
-    | logic_statment
-    | IF LogicBlock* (ELSEIF LogicBlock*)* (ELSE LogicBlock*)? END  -- IF
-    | WHILE LogicBlock* END  -- WHILE
-    | FOREACH LogicBlock* END  -- FOREACH
-    | LET                      -- LET
-    | StoryLine                       -- Story
-    
-  Comment = comment_inline       -- notes
-          | "//" comment_single     -- single
-          | "/*" comment_multi "*/"       -- multi
-  comment_single = (~("\n" | "\r") any)+
-  comment_note = (~("\n" | "\r" | "]]") any)+
-  comment_multi = (~("*/") any)+
-  comment_inline = "[[" comment_note "]]"
+Super {
+  Main = literalOf<(null | boolean | number)>
 
-  StoryLine
-    = story_line  -- templateText
-      | Fountain
-      | #raw pipe_expr? -- plainText
+  optional<T> = T?
+  stringify<T> = T
 
-  raw = plainLetter+
+  End($END$) = end
+  exprEnd($Exp$) = (";" | space)+
 
-  story_line = ("~")? listOf<(raw | comment_inline | template), ""> pipe_expr? "\n"
+  join<P, C> = P C
+  startWith<P, C> = P C
+  endWith<C, S> = C S
 
-  expr 
-    = (~("}}")any)+ -- template 
-    | (~("\n" | "|")any)* -- logic
-    | (~(")")any)+ -- quick
-
-
-  plainLetter 
-    = ~("[" | "{{" | "|" | "\n" | "\r" | "//" | "/*") any
-
-  chinese = letter | "，" | "（" | "）" | "“" | "”" | "：" | "." | "/" | ":"
-
-  // template_quick = (~(")")any)+
-  template
-    = "[" (~("]" | "(")any)+ "](" expr_quick ")" -- quick
-    | "{{" expr_template "}}" -- native
-
-  Fountain 
-    = fountain_character
-    | "(" (~")"any)+ ")" callCommand? -- macro
-    | Fountain_macro -- characterEscape
-    | Fountain_macro -- characterStatus
-
-  fountain
-    = space* "@" space* (~"(" any)+ fountain_macro -- character
-    | "(" (~")"any)+ ")" callCommand -- macro
-
-  Fountain_callMacro = callCommand
-
-  command = (~("]")any)+
-  callCommand = "[" anwsome+ "]"
-
-
-  CallCommand = "[" command "]"
-
-  pipe_expr = ~(logic_statment | "|if" | "|elseif" | "|else" | "|end" | "|foreach" | "|while")("|" (~("\n")any)+)
-
-  anwsome = "[" anwsome* "]" -- a
-    | "(" anwsome* ")" -- b
-    | (~("[" | "]" | "(" | ")" | "\n") any)+ -- c
-
-  logic_statment
-    = space* "|let " expr_logic ("\n") -- let
-    // | space* "|if " expr_logic ("\n") -- if
-    // | space* "|elseif " expr_logic ("\n") -- elseif
-    // | space* "|else" space* "\n" -- else
-    // | space* "|end " space* "\n" -- end
-    | space* "\n" -- empty
-
-  logic_exprs = ((~"\n")any)*
-
-  LET
-    = "|let" ListOf<LetAssignExpr, ",">
+  null = "null"
   
-  AssignExpr = identifier "=" expression
-  LetAssignExpr
-    = AssignExpr  -- assign
-    | identifier         -- nonAssign
+  centerOf<L, C, R> = L C R
 
-  IF
-    = "|if" expression
-  END
-    = "|end"
-  ELSE
-    = "|else"
-  ELSEIF
-    = "|elseif" expression
-  WHILE
-    = "|while" expression
-  FOREACH
-    = "|foreach" identifier "in" expression
+
+  lineBreak = "\n"
+  linePad = lineSpace*
+  lineSpace(space) = ~lineBreak space
+  lineEnd($LineEnd$) = linePad (lineBreak | end)
+
+  padWith<T> = centerOf<linePad, T, linePad>
+  multiplePadWith<T> = centerOf<space*, T, space*>
+  preSpaceWith<T> = startWith<lineSpace+, T>
+  leftPadWith<T> = startWith<linePad, T>
+  rightPadWith<T> = endWith<T, linePad>
+
+  bracketSyntax<L, C, R> = centerOf<L, multiplePadWith<C>, R>
+  bracketText<L, C, R> = centerOf<L, multiplePadWith<stringify<(~startWith<space*, R> C)+>>, R>
+
+  bracketSyntaxInline<L, C, R> = centerOf<L, padWith<C>, R>
+  bracketTextInline<L, C, R> = centerOf<L, padWith<stringify<(esc<char> | ~(lineBreak | startWith<linePad, R>) C)+>>, R>
+
+  simpleBracketSyntax<C, LR> = bracketSyntax<LR, C, LR>
+  simpleBracketText<C, LR> = bracketText<LR, C, LR>
+
+  simpleBracketSyntaxInline<C, LR> = bracketSyntaxInline<LR, C, LR>
+  simpleBracketTextInline<C, LR> = bracketTextInline<LR, C, LR>
+  
+  sourceOf<T> = T
+  
+  literalOf<T> = T
+
+  boolean($boolean$) = "true" | "false"
+
+  char = ~space any
+
+  number($number$)
+    = num* "." num+ -- fract
+    | num+ -- whole
+
+  sign<T>($number$)
+    = stringify<T> -- apply
+    | ("-" | "+") stringify<T> -- signed
+
+
+  num($num$) = digit
+
+  internalEscape = "'" | "\"" | "\\" | "b" | "f" | "n" | "r" | "t" | "v"
+
+  esc<T> = startWith<&"\\", oresc<T>>
+  noesc<T> = ~(&"\\") T
+  oresc<T> = "\\"? T
+  escWith<T> = strictEscWith<T, T>
+  strictEscWith<Escaped, NonEscaped> = esc<(internalEscape | "x" | "u" | Escaped)> | ~NonEscaped any
+
+  ignore<T> = T
+  
+  single<T> = endWith<T, &(~T any?)>
+  dobule<T> = join<noesc<T>, T>
+
+  tokenOf<T> = single<noesc<T>>
+  dobuleTokenOf<T> = join<noesc<T>, single<T>>
+
+  parenL = "("
+  parenR = ")"
+  bracketL = "["
+  bracketR = "]"
+  // tokenOf2<T> = noesc<single2<T>>
+}
+
+Base <: Super {
+
+  literal($literal$) = percet | literalOf<(string | number | boolean | null)> 
+
+  number += sign<hex>   -- sign
+    | sign<number_fract> -- double
+    | sign<number_whole> -- int
+
+  hex($hexNumber$) = "0x" ("a".."f" | "A".."F" | num)+
+
+  string
+    = simpleBracketSyntaxInline<stringify<strictEscWith<char, "\"">*>, "\""> -- doubleQuote
+    | simpleBracketSyntaxInline<stringify<strictEscWith<char, "\'">*>, "\'"> -- singleQuote
+  
+  // escapeCharacter = internalEscape | "x" | "u" | ~(alnum|space)any
+  
+  percet = (number_double | number_int) "%" ~(literal | variableName)
+
+  variableName($variableName$) = stringify<(variableNamePrefix?)> identifier
+  variableNamePrefix($variableNamePrefix$) = "$" | "%"
+
+  identifier = ~invalidIdentifier(validIdentifierPrefixChar ~invalidIdentifierChar (validIdentifierChar)*)
+  invalidIdentifier($invalidIdentifier$) = boolean | number | null
+
+  validIdentifierChar($validIdentifierChar$[:alnum: | "_" | "$"]) = alnum | "_" | "$"
+  invalidIdentifierChar($invalidIdentifierChar$["#" | "@" | ...$spicalChar$]) = "#" | "@"
+  validIdentifierPrefixChar($validIdentifierPrefixChar$) =  ~(variableNamePrefix)(letter | "_")
+
+  op = op_comma | op_logic | op_orNull | op_eq | op_rel | op_add | op_mul | op_pow | op_invert
+  op_comma = ","
+  op_logic = "&&" | "||"
+  op_orNull = "??"
+  op_eq = "==" | "!="
+  op_rel = "<=" | "<" | ">=" | ">"
+  op_add = "-" | "+"
+  op_mul = "%" | "/" | "*"
+  op_pow = "^"
+  op_invert = "!"
+
+}
+
+AdvScript <: Base {
+  Main := Statement
+
+  Statement
+    = macroBegin Macro_Call optional<(Macro_Pipe | #pipeFlag)> (exprEnd | End) -- Macro
+    | Template End -- Inline
+    | Macro_Pipe (exprEnd | End) -- Pipe
+    | #pipeFlag (exprEnd | End) -- AnonymousPipe
+    | Exp (exprEnd | End) -- Exp
+    | End
+
+  macroBegin($macroBegin$) = "@"
+  tmplBegin($tmplBegin$) = "{{"
+  tmplEnd($tmplEnd$) = "}}"
+
+  Template = tmplBegin Exp optional<(Macro_Pipe | #pipeFlag)> tmplEnd
+
+  Macro_Call = (CallExpression | Macro_Call_Expr)
+  Macro_Pipe
+    = pipeFlag Macro_Call -- Call
+    | pipeFlag pipeExprBegin Exp -- Expr
+
+  pipeFlag($pipeFlag$) = token_split
+  pipeExprBegin($pipeExprBegin$) = "="
+
+  Macro_Call_Expr = #identifier optional<Params>
+
+  Params 
+    = Param (#space | ",") Params -- multiple
+    | Param  ";"*                      -- single
+
+  Param = identifier "=" TopExp    -- setValue
+    | identifier                   -- setFlag
+
+  Array($Array$)= "[" ArrayElements "]"
+  ArraySpread($ArraySpread$) = SpreadExp_spread
+
+  ArrayElements($ArrayElements$) = ListOf<TopExp, ",">
+
+  CallExpression($CallExpression$) = #identifier "(" ListOf<TopExp, ","> ")"
+
+  Exp
+    = Exp op_comma Exp -- Comma
+    | TopExp
+
+  TopExp
+    = SpreadExp_spread -- ArraySpread
+    | #variableName "=" TopExp -- assign
+    | LogicExp
+
+  CatchOrNullExp($CatchOrNullExp$) = ~LogicExp_logic RelationExp
+  CatchOrNullExp2($CatchOrNullExp$) = ~OrNullExp_or LogicExp
+
+  LogicExp
+    = LogicExp op_logic CatchOrNullExp2  -- logic
+    | OrNullExp
+
+  OrNullExp
+    = OrNullExp op_orNull CatchOrNullExp  -- or
+    | EqualExp
+
+  EqualExp
+    = EqualExp op_eq EqualExp  -- eq
+    | RelationExp
+
+  RelationExp
+    = RelationExp op_rel RelationExp     -- rel
+    | SpreadExp
+
+  SpreadExp
+    = SpreadExp op_spread SpreadExp  -- spread
+    | AddExp
+
+  AddExp
+    = AddExp op_add MulExp  -- add
+    | MulExp
+
+  MulExp
+    = MulExp op_mul ExpExp  -- mul
+    | ExpExp
+
+  ExpExp
+    = PriExp op_pow ExpExp  -- pow
+    | IncrementExp
+    | op_invert PriExp -- invert
+    | ~number (op_add PriExp)   -- sign
+    | PriExp
+
+  IncrementExp($Exp$)
+    = #variableName op_increment -- after
+    | op_increment #variableName -- before
+
+  PriExp($Exp$) 
+    = "(" Exp ")" -- paren // parenthesis
+    | CallExpression 
+    | Array
+    | variableName
+    | literal
+  
+  op += op_increment | op_spread
+  op_increment = "--" | "++"
+  op_spread = "..."
+
+  token_split = "|"
+}
+
+AdvFountain <: AdvScript {
+  main = statment+ | end
+  statment = (content | errorBoundary)
+
+  parenWith<T> = bracketSyntaxInline<parenL, T, parenR> | bracketSyntaxInline<"（", T, "）">
+  parenStringWith<T> = bracketTextInline<parenL, T, parenR> | bracketTextInline<"（", T, "）">
+
+  bracketWith<T> = bracketSyntaxInline<bracketL, T, bracketR> | bracketSyntaxInline<"【", T, "】">
+  bracketStringWith<T> = bracketTextInline<bracketL, T, bracketR> | bracketTextInline<"【", T, "】">
+  
+
+  stringWith<Char> = stringify<Char+>
+
+  errorBoundary 
+    = ignoreError
+    | logicError
+    | characterError
+    | commandError
+    | actionError
+    | otherError
+
+  characterError = statementOf<rawOf<startWith<sToken_character, (~lineBreak any)*>>>
+  actionError = linesOf<action_plain>
+  commandError = linesOf<command>
+  logicError = block_logic | logicStatment
+  ignoreError = linesOf<(comment | ignore<&emptyLine>)>
+  otherError = linesOf<~textSyntax_action rawOf<(~lineBreak any)+>> -- raw
+
+  comment
+    = comment_inline       -- notes
+    | bracketTextInline<"[[", any, ("]]" | &lineBreak)>  -- inline
+    | startWith<startWith<"//", linePad>, stringify<endWith<escWith<lineBreak>*, &lineEnd>>> -- single
+    | bracketText<join<"/", "*"+>, any, join<"*"+, "/">>       -- multi
+
+  block_comment($Comment$) = groupUntil<comment, &ignore<(logicStatment | block_command | block_textSyntax | errorBoundary)>>
+  groupUntil<T, UNTIL> = syntaxListOf<T, blockEndOf<UNTIL>>
+
+  content
+    = block_logic
+    | block_comment
+    | emptyLine -- empty
+    | block_command
+    | block_textSyntax
+
+  block_textSyntax = block_dialogue | block_action
+
+  inlineSyntax = ~command_pageBreak command | comment
+
+  contentBlockEnd = startWith<(lineOf<textSyntax_space> | lineEnd), (textSyntax_action | logicStatment)>
+
+  block_action($ActionBlock$) = contentBlockLinesOf<action_start, action_content, action_end>
+  action_start = ~(command_transition | command_pageBreak) action_plain
+  action_plain = textSyntax_action | textSyntax_space
+  action_content = inlineSyntax | textSyntax_action | textSyntax_space
+  action_end = blockEndOf<&contentBlockEnd>
+  
+  block_dialogue($CharacterBlock$) = contentBlockLinesOf<character_call, dialogue_content, dialogue_end>
+  character_call = padWith<character_name> (optional<character_call_macro> | optional<macro>)
+  character_call_macro = character_modifier optional<macro>
+  character_modifier = parenStringWith<any>
+  dialogue_action = padWith<character_call_macro>
+  dialogue_content = dialogue_action | inlineSyntax | leftPadWith<textSyntax_dialogue> | textSyntax_space
+  character_name
+    = join<upper, (upper|digit|"_")+> -- plain
+    | startWith<"@", stringify<(~(character_modifier | "\n") any)+>> -- esc
+  dialogue_end = blockEndOf<&contentBlockEnd>
+  
+  block_command($CommandBlock$) = groupUntil<command, &(comment)>
+  command = command_transition | command_macro | command_pageBreak
+  command_transition($Command:Transition$) = ">" leftPadWith<stringify<escWith<("[" | lineBreak | "<")>+>> (~"<" optional<macro>)
+  command_macro($Command:CallMacro$) = macro
+  command_pageBreak($Command:PageBreak$) = "==="
+
+
+  sToken = 
+    | sToken_character
+    | sToken_action
+    | sToken_lyrics
+  
+  sToken_character($sToken_character$) = "@"
+  sToken_action($sToken_action$) = "!"
+  sToken_lyrics = "~"
+
+  textSyntax = textSyntax_action | textSyntax_dialogue | textSyntax_space
+
+  textSyntax_action = startWith<~sToken_character &any, (sToken_action | sToken_lyrics)?> rightPadWith<textContent> optional<expr_pipe>
+
+  textSyntax_dialogue = sToken_lyrics? &(~sToken_action any) rightPadWith<textContent> optional<expr_pipe>
+  textSyntax_space = lineSpace+
+
+  emptyLine($EmptyLine$) = lineBreak+
+
+  blockEnd($blockEnd$) = linePad (lineBreak | end)
+  blockEndOf<T>($blockEnd$) = blockEnd | T | &logicStatment
+
+  lineOf<T> = endWith<T, lineEnd>
+  linesOf<T> = endWith<lineOf<T>+, emptyLine?>
+
+  syntaxListOf<Child, End> = syntaxBlockLinesOf<Child, syntaxOf<(Child | &ignore<lineSpace+>)>, End>
+  syntaxOf<T> = T | startWith<ignore<emptyLine+>, ~errorBoundary T>
+
+  contentLinesOf<Child, End> = contentBlockLinesOf<Child, Child, End>
+  // 块内语句之间可以使用
+  syntaxBlockLinesOf<Begin, Child, End> = syntaxBlockOf<lineOf<Begin>, lineOf<Child>, End>
+  contentBlockLinesOf<Begin, Child, End> = contentBlockOf<lineOf<Begin>, lineOf<Child>, End>
+
+  
+  syntaxBlockOf<Begin, Child, End> = Begin Child* End
+  contentBlockOf<Begin, Child, End> = Begin Child* End
+  nonemptyBlockOf<Begin, Child, End> = Begin Child+ End
+  nonemptyContentBlockOf<Begin, Child, End> = Begin Child+ End
+
+  statmentBreak($StatmentBreak$) = (block_comment | emptyLine)
+  startStatmentOf<T> = bracketSyntaxInline<&(statmentBreak*), T, statmentBreak+>
+  statementOf<T> = bracketSyntaxInline<&(statmentBreak*), startWith<linePad, T>, (statmentBreak+ | end)>
+
+  textContent = styled_centered<(centeredContent | escToken)+> -- centered
+    | withText<(textPiece | escToken)+> -- plain
+
+  // textSyntax_paren<Content> 
+
+  styled_centered<T> = centeredL T centeredR
+  centeredL = rightPadWith<">">
+  centeredR = leftPadWith<"<">
+
+  centeredContent = styled<centeredContent> 
+    | template
+    | plainTextUntil<(plainText_until | centeredR)>
+  
+  withText<T> = T
+  textPiece
+   = styled<textPiece> -- styled
+    | template
+    | plainText
+
+  escToken = oresc<~token_split char>
+
+  // fountain中的强调（Emphasis）语法
+  styled<T>($Emphasis$) =
+    | "**" withText<(~(styled_bold<T>) T)+> "**" -- bold
+    | "*" withText<(~(styled_italic<T>) T)+> "*" -- italic
+    | "_" withText<(~(styled_underline<T>) T)+> "_" -- underline
+
+  plainText_until = comment | template | macro | token_split | lineEnd | "_" | "*"
+  plainText($plainText$) = plainTextUntil<plainText_until>
+  plainTextUntil<Until> = rawOf<strictEscWith<char, (Until | lineBreak)>+> // app
+  rawOf<T> = stringify<T>
+
+  expr($Expr$)
+    = expr_template
+    | expr_logic
+    | expr_auto
+    | expr_pipe
+
+  expr_template = embbedExprUntil<"}}">
+  expr_logic = embbedExprUntil<lineBreak>
+  expr_auto = embbedExprUntil<")">
+  expr_pipe($PipeExp$) = token_split embbedExprUntil<token_split>?
+
+  template($TemplateExp$)
+    = bracketSyntaxInline<tokenOf<"[">, plainTextUntil<"](">, tokenOf<"]">> bracketSyntaxInline<"(", expr_auto, ")"> -- label
+    | bracketSyntaxInline<"{{", optional<expr_template>, "}}"> -- native 
+    | comment_inline
+    | rawOf<bracketSyntaxInline<"[", embbedExprUntil<"]">, "]">> -- macro
+
+  macro = bracketSyntaxInline<tokenOf<"[">, embbedExprUntil<"]">, tokenOf<"]">>
+  
+  // awesomeExpr($awesomeExpr$) = embbedExprUntil<("[" | "]" | "(" | ")" | "}}" | "{{")>
+  embbedExprUntil<Exclude>($awesomeExpr$) = stringify<(sourceOf<string> | strictEscWith<char, (Exclude | lineBreak)>)+>
+
+
+  block_logic($LogicStatment$)
+    = statementOf<logicSyntax_let>
+    | logic_blockIf<content>
+    | logic_blockForeach<content>
+    | logic_blockWhile<content>
+    // | contentBlockLinesOf<logic_block_begin, storyLine, statementOf<logic_end>>
+  
+  logicSyntax($logicSyntax$)
+    = ctlKey<scriptToken_var> leftPadWith<expr_logic> -- let
+    | ctlKey<~scriptToken_var scriptToken>
+  logicStatment = statementOf<padWith<logicSyntax>>
+
+  logic_blockIf<T> = statementOf<logic_if> leftPadWith<T>* (statementOf<logic_elseIf> T*)* (statementOf<logic_else> T*)? statementOf<logic_end>
+  logic_if = ctlKey<scriptToken_if> padWith<expr_logic>
+  logic_elseIf = ctlKey<scriptToken_elseif> padWith<expr_logic>
+  logic_else = ctlKey<scriptToken_else>
+
+  scriptToken = scriptToken_var | scriptToken_if | scriptToken_elseif | scriptToken_else | scriptToken_end | scriptToken_for | scriptToken_while
+
+  scriptToken_var = "let"
+  scriptToken_if = "if"
+  scriptToken_elseif = "elseif"
+  scriptToken_else = "else"
+  scriptToken_end = "end"
+  scriptToken_for = "foreach"
+  scriptToken_in = "in"
+  scriptToken_while = "while"
+
+
+  logic_blockForeach<T> = syntaxBlockOf<lineOf<logic_foreach>, leftPadWith<T>, statementOf<logic_end>>
+  logic_foreach = ctlKey<scriptToken_for> preSpaceWith<variableName> preSpaceWith<scriptToken_in> preSpaceWith<expr_logic>
+
+  logic_blockWhile<T> = syntaxBlockOf<lineOf<logic_while>, leftPadWith<T>, statementOf<logic_end>>
+  logic_while = ctlKey<scriptToken_while> preSpaceWith<expr_logic>
+
+  ctlKey<key> = leftPadWith<join<token_split, key>> // control statment keyword
+
+  logic_end = ctlKey<scriptToken_end>
+
+  tokens
+    = token*
     
-  statment_end(请换行) = (" "|";")* ("\n"|"\r"|"\t"|end)
-  key = ~(digit | "true" | "false") (letter | digit | "_")+
-  identifier
-   = ~(letter | "true" | "false") ("$" | "%")? key
+  token
+    = comment 
+    // | kwSelectorPrefix | kwSelectorPart 
+    | valueToken 
+    | keyword 
+    // | instVarAccess
+    // | javaStyleSelector 
+    // | binSelector 
+    | any
+  valueToken = sToken
+  // instVarAccess
+  //   = "." spaces varName ~(spaces "(")
+  // javaStyleSelector
+  //   = "." spaces varName &(spaces "(")
+  // kwSelectorPrefix
+  //   = varName &(space+ expStart)
+  // expStart
+  //   = valueToken | "(" | "{"
 
-  expression 
-  = (~("[" | "]" | "|" | "{{" | "}}"| "\n" | "\r" | "//" | "/*") any)+
+  keyword = ctlKey<scriptToken>
 
 }

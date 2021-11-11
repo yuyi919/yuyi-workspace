@@ -1,70 +1,40 @@
-import grammar, { AVSGrammar } from "../../../ohm/expression.ohm-bundle";
-import { Node } from "ohm-js";
-import { Base } from "../actions/base";
-import { CommandExpressionData, PipeExpressionData } from "../interface";
-import { Exp } from "./Exp";
-import { Expression } from "./Expression";
-import { Keyvalue } from "./keyvalue";
+// import grammar from "../../../ohm/expression.ohm-bundle";
+import { AdvFountain as grammar } from "../grammars";
+import {
+  ExpressionNodeData,
+} from "../interface";
+import { printError } from "../util";
+import { SyntaxError } from "./SyntaxError";
 
 export * from "./Exp";
 export * from "./Expression";
-export { semantics as ExpressionSemantics };
+// export { semantics as ExpressionSemantics };
+import { Semantics } from "../parser"
 
-const semantics = (grammar as AVSGrammar).createSemantics();
-
-semantics.addOperation("parse", {
-  ...Exp,
-  ...Expression,
-  ...Keyvalue,
-  ...Base,
-  Process_Command(_, command: Node<CommandExpressionData>, pipe, $) {
-    return {
-      ...command.parse(),
-      pipe: pipe.parse() || [],
-      text: command.sourceString,
-    };
-  },
-  Process_Inline(_, expr, pipe, $) {
-    return {
-      ...expr.parse(),
-      pipe: pipe.parse(),
-    };
-  },
-  Process_Pipe(_, expr) {
-    return expr.parse();
-  },
-  PipeMacro(_, command: Node<CommandExpressionData>): PipeExpressionData {
-    return {
-      ...command.parse(),
-      type: "pipe",
-    };
-  },
-  Command(command, params): CommandExpressionData {
-    const res = params.parse()?.[0] || {};
-    return {
-      type: "command",
-      name: command.parse(),
-      params: res.params || {},
-      flags: res.flags || [],
-      pipe: [],
-    };
-  },
-});
-
-export function parseExpression(source: string) {
-  const result2 = grammar.match(source);
-  if (result2.succeeded()) {
-    const list = semantics(result2).parse();
-    const data = list instanceof Array ? list.flat(1) : [list];
-    console.log("=>", ...data);
-    return data;
-  } else {
-    throw Error(result2.message);
+export function tryParseExpression(source: string, template?: Record<string, string>) {
+  try {
+    return parseExpression(source, template);
+  } catch (error) {
+    printError(error);
   }
-  // const result = Grammar.match(source);
-  // if (result.succeeded()) {
-  //   return mySemantics(result).parse();
-  // } else {
-  //   throw Error(result.message);
-  // }
+}
+
+export function parseExpression(source: string, template?: Record<string, string>) {
+  // console.log(grammar.trace(source, "Exp").toString());
+  try {
+    const result = grammar.match(source, "Main");
+    if (result.succeeded()) {
+      // console.log(result2);
+      const data = Semantics(result).parse() as ExpressionNodeData;
+      // console.log(source, "=>", data);
+      return data;
+    }
+    throw Error(result.message);
+  } catch (error) {
+    if (error instanceof Error && !error.message.startsWith("Missing semantic action")) {
+      // console.log({ e: error });
+      throw new SyntaxError(error, template);
+    }
+    throw error;
+  }
 }

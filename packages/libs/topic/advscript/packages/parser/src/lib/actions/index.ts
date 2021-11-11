@@ -15,7 +15,7 @@ export const Actions = {
   ...Story,
   ...Comment,
   ...LogicBlock,
-  identifier: Exp.identifier
+  variableName: Exp.variableName,
   // ...Exp,
 };
 

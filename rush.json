@@ -677,7 +677,7 @@
       "packageName": "vscode-advscript",
       "projectFolder": "packages/libs/topic/advscript/packages/vscode-extension",
       "reviewCategory": "production",
-      "versionPolicyName": "shared"
+      "versionPolicyName": "advscript"
     }
   ]
 }

@@ -1,92 +1,177 @@
-AVS {
+Super {
+  Main = literalOf<(null | boolean | number)>
 
-  Main = ListOf<Process, ",">
+  StatmentOf<T> = T*
 
-  Process 
-    = "<" Command PipeMacro? ">" -- Command 
-    | "{{" Exp PipeMacro? "}}" -- Inline
-    |  (~"|"any)* PipeMacro -- Pipe 
-    | Exp 
+  Optional<T> = T?
+  optional<T> = T?
+  stringify<T> = T
 
-  PipeMacro = "|" (CallExpression | #identifier | Command)
+  End($END$) = end
+  exprEnd($Exp$) = (";" | space)+
 
-  Command = #key Params?
+  null = "null"
+  
+  
+  literalOf<T> = T
+
+  boolean($boolean$) = "true" | "false"
+
+  number($number$)
+    = sign<hex>   -- sign
+    | sign<number_fract> -- double
+    | sign<number_whole> -- int
+    | numberical* "." numberical+ -- fract
+    | numberical+ -- whole
+
+  hex($hexNumber$) = "0x" ("a".."f" | "A".."F" | numberical)+
+
+  sign<T>($number$)
+    = stringify<T> -- apply
+    | ("-" | "+") stringify<T> -- signed
+
+  numberical($numberical$) = "0".."9"
+
+  internalEscape = "'" | "\"" | "\\" | "b" | "f" | "n" | "r" | "t" | "v"
+
+  escapable<T> = strictEscapable<T, T>
+  strictEscapable<Escaped, NonEscaped> 
+    = "\\" (internalEscape | "x" | "u" | Escaped)  -- escaped
+    | ~NonEscaped any
+}
+
+Base <: Super {
+
+  variableName($variableName$) = stringify<(variableNamePrefix?)> identifier
+  variableNamePrefix($variableNamePrefix$) = "$" | "%"
+
+  identifier = ~invalidIdentifier(validIdentifierPrefixChar ~invalidIdentifierChar (validIdentifierChar)*)
+  invalidIdentifier($invalidIdentifier$) = boolean | number | null
+
+  validIdentifierChar($validIdentifierChar$[:alnum: | "_" | "$"]) = alnum | "_" | "$"
+  invalidIdentifierChar($invalidIdentifierChar$["#" | "@" | ...$spicalChar$]) = "#" | "@"
+  validIdentifierPrefixChar($validIdentifierPrefixChar$) =  ~(variableNamePrefix)(letter | "_")
+
+}
+
+AdvScript <: Base {
+  Main 
+    := macroBegin Macro_Call optional<(Macro_Pipe | #pipeFlag)> (exprEnd | End) -- Macro
+    | Template End -- Inline
+    | Macro_Pipe (exprEnd | End) -- Pipe
+    | #pipeFlag (exprEnd | End) -- AnonymousPipe
+    | Exp (exprEnd | End) -- Exp
+    | End
+
+  macroBegin($macroBegin$) = "@"
+  tmplBegin($tmplBegin$) = "{{"
+  tmplEnd($tmplEnd$) = "}}"
+
+  Template = tmplBegin Exp optional<(Macro_Pipe | #pipeFlag)> tmplEnd
+
+  Macro_Call = (CallExpression | Macro_Call_Expr)
+  Macro_Pipe
+    = pipeFlag Macro_Call -- Call
+    | pipeFlag pipeExprBegin Exp -- Expr
+
+  pipeFlag($pipeFlag$) = "|"
+  pipeExprBegin($pipeExprBegin$) = "="
+
+  Macro_Call_Expr = #identifier optional<Params>
 
   Params 
-    = Param (#",")? Params -- multiple
-    | Param                   -- single
+    = Param #space Params -- multiple
+    | Param  ";"*                      -- single
 
-  Param = # key "=" Exp  -- setValue
-    | key        -- setFlag
-
-  Expression 
+  Param = identifier "=" Exp    -- setValue
+    | identifier                   -- setFlag
+  
+  Expression($Exp$)
   = CallExpression 
-  | Array 
-  | ArraySpread
-  | literal 
-  | #identifier "=" Exp -- Assign 
-  | #identifier 
-  | "(" ArrayItems ")" -- Comma // 逗号运算符
+  | Array
+  | literal
+  | #variableName
 
-  key = ~(digit | boolean) (letter | digit | "_")+
-  literal = percet | string | number | boolean | "null"
+  literal($literal$) = percet | literalOf<(string | number | boolean | null)> 
 
-  Array = "[" ArrayItems "]"
-  ArraySpread = (number | PriExp) "..." (number | PriExp)
+  Array($Array$)= "[" ArrayElements "]"
+  ArraySpread($ArraySpread$) = SpreadExp_spread
 
-  ArrayItems = ListOf<Exp, ",">
+  ArrayElements($ArrayElements$) = ListOf<TopExp, ",">
 
-  CallExpression = #key "(" ListOf<Exp, ","> ")"
+  CallExpression($CallExpression$) = #identifier "(" ListOf<TopExp, ","> ")"
 
-  string = "\"" doubleQuoteStringContent* "\"" -- doubleQuote
-      | "\'" singleQuoteStringContent* "\'" -- singleQuote
-// ~("\'" | "\\" ) any  -- nonEscaped
-  singleQuoteStringContent = ~("\'") any  -- nonEscaped
-      | "\\" escapeCharacter                 -- escaped
-  doubleQuoteStringContent = ~("\"") any  -- nonEscaped
-      | "\\" escapeCharacter                 -- escaped
-  singleEscapeCharacter = "'"|"\""|"\\"|"b"|"f"|"n"|"r"|"t"|"v"
-  escapeCharacter = singleEscapeCharacter | "x" | "u"
-  quote = "\"" | "\'"
+  string
+    = doubleQuote stringify<doubleQuoteStringContent*> doubleQuote -- doubleQuote
+    | singleQuote stringify<singleQuoteStringContent*> singleQuote -- singleQuote
+  doubleQuote($doubleQuote$) = "\""
+  singleQuote($singleQuote$) = "'"
 
-  boolean = "true" | "false"
+  singleQuoteStringContent = strictEscapable<escapeCharacter, "'">
+  doubleQuoteStringContent = strictEscapable<escapeCharacter, "\"">
+  
+  escapeCharacter = internalEscape | "x" | "u" | ~(alnum|space)any
 
-  number  (a number)
-    = ("-"|"+") number   -- sign
-    | digit* "." digit+  --  fract
-    | "0x" hexdigit+        --  hex
-    | digit+             --  whole
-  hexdigit
-    = "a".."f" | "A".."F" | digit
-  percet = (number_sign | number_fract | number_whole) "%"
+  
+  percet = (number_double | number_int) "%" ~(literal | variableName)
 
-  identifier = ~(number | boolean) ("$" | "%")? key
-  invalidIdentifier(valid identifier) = ~(number | boolean) ("$" | "%")? (key " "+ key)
   
 
   Exp
-    = JudgeExp ("&&" | "||") Exp  -- bool
-    | JudgeExp
+    = Exp "," Exp -- Comma
+    | TopExp
+    
+  TopExp
+    = SpreadExp_spread -- ArraySpread
+    | #variableName "=" TopExp -- assign
+    | BinaryExp
 
-  JudgeExp
-    = AddExp ("!=" | "==" | "??" | ">=" | "<=" | ">" | "<") AddExp     -- judge
+  CatchOrNullExp($CatchOrNullExp$) = ~BinaryExp_binary RelationExp
+  CatchOrNullExp2($CatchOrNullExp$) = ~OrNullExp_or BinaryExp
+
+  BinaryExp
+    = BinaryExp ("&&" | "||") CatchOrNullExp2  -- binary
+    | OrNullExp
+    
+  OrNullExp
+    = OrNullExp "??" CatchOrNullExp  -- or
+    | RelationExp
+
+  RelationExp
+    = RelationExp ("!=" | "==" | ">=" | "<=" | ">" | "<") RelationExp     -- relation
+    | SpreadExp
+
+  SpreadExp
+    = SpreadExp "..." SpreadExp  -- spread
     | AddExp
 
   AddExp
-  = AddExp ("+" | "-") MulExp  -- add
-  | MulExp
+    = AddExp operator_addition MulExp  -- add
+    | MulExp
+
+  operator_addition = "-" | "+"
 
   MulExp
-    = MulExp ("*" | "/" | "%") ExpExp  -- mul
+    = MulExp ("%" | "/" | "*") ExpExp  -- mul
     | ExpExp
 
   ExpExp
-    = PriExp "^" ExpExp  -- power
+    = ExpExp "^" PriExp  -- pow
+    | IncrementExp
     | PriExp
+    
+  IncrementExp($Exp$) 
+    = #variableName operator_increment -- after
+    | operator_increment #variableName -- before
+
+  operator_increment = "--" | "++"
 
   PriExp
-  = "(" Exp ")"  -- paren
-  | "+" PriExp   -- pos
-  | "-" PriExp   -- neg
+  = PriExp_paren
   | Expression
+  | operator_sign PriExp_paren   -- sign
+
+  PriExp_paren($Exp$) = "(" Exp ")"
+  operator_sign($Exp$) = (operator_addition | ("!"+))
+
 }

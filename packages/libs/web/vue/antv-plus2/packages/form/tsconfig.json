@@ -6,7 +6,8 @@
     "module": "esnext",
     "rootDir": "./src",
     "strict": true,
-    "target": "ES2019"
+    "target": "ES2019",
+    "types": ["@yuyi919/vue-shared-decorators", "jest", "node"]
   },
   "references": [
     {
