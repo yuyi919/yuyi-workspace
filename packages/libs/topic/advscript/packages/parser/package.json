@@ -11,10 +11,11 @@
     "build:watch": "vite build",
     "dev": "vite",
     "pack:pkg": "pkg --options max-http-header-size=65536 --targets node12.18.1-win-x64 --out-path pack .",
-    "ohm:generate": "ohm generateBundles --withTypes ohm/adv.ohm"
+    "ohm:generate": "ohm generateBundles --withTypes ohm/adv.ohm",
+    "prettier": "prettier -cw ./src/**"
   },
   "dependencies": {
-    "chevrotain": "^9.0.2",
+    "chevrotain": "^9.1.0",
     "ohm-js": "^16.0.0"
   },
   "pkg": {
@@ -41,6 +42,7 @@
     "typescript": "4.1.2",
     "zora": "~5.0.0",
     "zora-reporters": "~1.3.0",
+    "prettier": "^2.3.1",
     "ws": "~8.2.3",
     "@types/ws": "~8.2.0",
     "@ohm-js/cli": "~1.0.0",
@@ -54,7 +56,7 @@
     "monaco-textmate": "~3.0.1",
     "monaco-editor-core": "~0.30.1",
     "vscode-languageserver-types": "~3.16.0",
-		"vscode-languageserver-protocol": "3.16.0",
+    "vscode-languageserver-protocol": "3.16.0",
     "vscode-languageserver": "7.0.0",
     "vscode-uri": "~3.0.2",
     "vscode-languageserver-textdocument": "~1.0.2",
@@ -62,7 +64,9 @@
     "@codingame/monaco-languageclient": "^0.14.0",
     "reconnecting-websocket": "^3.2.2",
     "vscode-languageclient": "~7.0.0",
-    "vscode-jsonrpc": "~6.0.0"
+    "vscode-jsonrpc": "~6.0.0",
+    "glob-to-regexp": "~0.4.1",
+    "regexp-to-ast": "~0.5.0"
   },
   "engines": {
     "node": ">=12.14.0"

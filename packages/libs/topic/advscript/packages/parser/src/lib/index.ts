@@ -175,7 +175,7 @@ export class ScriptVM {
         blockIndex++;
       }
     }
-    this.handleChildren(line.blocks[blockIndex], blockIndex)
+    this.handleChildren(line.blocks[blockIndex], blockIndex);
     // this.variable.pushScope();
   }
 
@@ -218,4 +218,4 @@ export class ScriptVM {
 
 // export { parse } from "./fountain";
 
-export * from "./interface"
+export * from "./interface";

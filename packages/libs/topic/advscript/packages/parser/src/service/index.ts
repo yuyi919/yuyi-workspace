@@ -1,11 +1,15 @@
-import type { Uri } from "./monaco.export";
+import type { URI as Uri } from "vscode-uri";
+
 export interface IAvsLanguageOptions {}
 export abstract class AvsLanguageService {
   constructor(public options: IAvsLanguageOptions) {}
+
   _onDidChange = new monaco.Emitter<void>();
+
   get onDidChange() {
     return this._onDidChange.event;
   }
+
   protected applyChangeEvent() {
     this._onDidChange.fire();
   }

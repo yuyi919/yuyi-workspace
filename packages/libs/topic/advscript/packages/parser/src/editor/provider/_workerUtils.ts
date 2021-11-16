@@ -1,7 +1,6 @@
 import * as lsTypes from "vscode-languageserver-types";
 import { editor, MarkerSeverity, languages, Uri } from "../monaco.export";
 
-
 export function toCompletionItemKind(kind: number) {
   const mItemKind = languages.CompletionItemKind;
 

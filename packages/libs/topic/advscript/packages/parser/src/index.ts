@@ -16,8 +16,15 @@ export class AdvScript {
   }
 
   public load(id: string, source: TemplateStringsArray | string, range?: IIncrementRange[]) {
+    return this.exec(this.parse(id, source, range));
+  }
+
+  public parse(id: string, source: TemplateStringsArray | string, range?: IIncrementRange[]) {
     this.parser = createParser(id);
-    const statments = this.parseLines(source, range);
+    return this._parseLines(source, range);
+  }
+
+  public exec(statments: DocumentLine[]) {
     console.time("[Story] compile");
     this.loader.exec(statments);
     console.timeEnd("[Story] compile");
@@ -28,7 +35,7 @@ export class AdvScript {
     return this.loader.createGenerator();
   }
 
-  parseLines(source: string | TemplateStringsArray, range?: IIncrementRange[]) {
+  private _parseLines(source: string | TemplateStringsArray, range?: IIncrementRange[]) {
     let result: DocumentLine[];
     const text = typeof source === "string" ? source : source[0];
     if (!range) {

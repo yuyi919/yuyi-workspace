@@ -5,4 +5,5 @@
 import { createVSCodeApi } from "./vscode-api";
 import { Services } from "./services";
 
-export = createVSCodeApi(Services.get);
+// @ts-ignore
+export = createVSCodeApi((...args) => Services.get(...args)) as typeof import("vscode");

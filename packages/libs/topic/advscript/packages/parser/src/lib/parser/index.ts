@@ -479,7 +479,7 @@ export const parse = function (
         current_depth = thistoken.level;
         cobj.level = thistoken.level;
         cobj.children = [];
-        cobj.range = new Range(thistoken.line, 0, thistoken.line, thistoken.text.length)
+        cobj.range = new Range(thistoken.line, 0, thistoken.line, thistoken.text.length);
         cobj.section = true;
 
         const level = current_depth > 1 && latestSection(current_depth - 1);

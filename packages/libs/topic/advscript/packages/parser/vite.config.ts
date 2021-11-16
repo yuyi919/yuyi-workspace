@@ -12,8 +12,9 @@ export default defineConfig(async ({ mode }) => {
         "@expression.ohm": path.resolve("./ohm/expression.ohm"),
         "ohm-js": path.resolve("./node_modules/ohm-js/src/main.js"),
         "@yuyi919/zora": path.resolve("./src/test/zora-wrapper.ts"),
-        vscode: path.resolve("./node_modules/@codingame/monaco-languageclient/lib/vscode-compatibility.js"),
-        "@codingame/monaco-languageclient": path.resolve("./node_modules/@codingame/monaco-languageclient/src/index.ts")
+        vscode: path.resolve("./src/editor/languageclient/vscode-compatibility.ts"),
+        "langium/lib":  path.resolve("./src/service/factory/"),
+        langium:  path.resolve("./src/service/factory/index.ts"),
       },
     },
     plugins: [
@@ -55,9 +56,12 @@ export default defineConfig(async ({ mode }) => {
       include: [
         "ohm-js",
         "monaco-textmate",
-        "monaco-editor-textmate"
+        "monaco-editor-textmate",
+        "monaco-editor-core",
+        "vscode-jsonrpc",
+        "vscode-languageclient",
       ],
-      exclude: ["path", "zora-reporters", "@addLibs", "vscode", "@codingame/monaco-languageclient"],
+      exclude: ["path", "zora-reporters", "@addLibs"],
     },
     server: {
       // host: Configuration.defaults.development.host,

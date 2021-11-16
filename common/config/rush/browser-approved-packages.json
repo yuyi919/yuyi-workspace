@@ -419,6 +419,10 @@
       "allowedCategories": [ "production" ]
     },
     {
+      "name": "glob-to-regexp",
+      "allowedCategories": [ "production" ]
+    },
+    {
       "name": "goober",
       "allowedCategories": [ "production" ]
     },
@@ -464,6 +468,10 @@
     },
     {
       "name": "jss-preset-default",
+      "allowedCategories": [ "production" ]
+    },
+    {
+      "name": "langium",
       "allowedCategories": [ "production" ]
     },
     {
@@ -576,6 +584,10 @@
     },
     {
       "name": "regenerator-runtime",
+      "allowedCategories": [ "production" ]
+    },
+    {
+      "name": "regexp-to-ast",
       "allowedCategories": [ "production" ]
     },
     {
@@ -720,6 +732,10 @@
     },
     {
       "name": "vscode-extension-telemetry",
+      "allowedCategories": [ "production" ]
+    },
+    {
+      "name": "vscode-jsonrpc",
       "allowedCategories": [ "production" ]
     },
     {

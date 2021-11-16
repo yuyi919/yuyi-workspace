@@ -10,9 +10,10 @@ import {
 export type CommentBlock = SingleCommentNodeData | MultiCommentNodeData;
 export type CommentNodeData = InlineCommentNodeData | SingleCommentNodeData | MultiCommentNodeData;
 enum CommentKind {
-  Single
+  Single,
 }
-export interface SingleCommentNodeData extends BaseNodeData<NodeTypeKind.Comment, CommentKind.Single> {
+export interface SingleCommentNodeData
+  extends BaseNodeData<NodeTypeKind.Comment, CommentKind.Single> {
   value: string;
 }
 

@@ -19,7 +19,7 @@ export function createLiteralExpression(value: any, source?: Source): LiteralExp
     {
       value,
     },
-    source ?? JSON.stringify(value)
+    source
   );
 }
 

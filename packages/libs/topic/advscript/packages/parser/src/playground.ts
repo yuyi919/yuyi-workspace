@@ -7,87 +7,21 @@ import { DocumentLine, isStatmentArray, LogickStatmentKind, NodeTypeKind } from 
 import { getParserContext } from "./lib/parser";
 import { createScope } from "./lib/scope";
 import file from "./line.avs";
-// import * as monaco2 from "monaco-editor-core";
-// import { listen } from "@codingame/monaco-jsonrpc";
-import {
-    Disposable, CancellationToken, Event, Emitter
-} from 'vscode-jsonrpc';
-console.log(Disposable, CancellationToken, Event, Emitter)
-// import {
-//   MessageConnection,
-//   MonacoLanguageClient,
-//   MonacoServices,
-//   createConnection,
-// } from "@codingame/monaco-languageclient";
-// import { CloseAction, ErrorAction } from "vscode-languageclient";
-// import ReconnectingWebSocket from "reconnecting-websocket";
-// const url = createUrl("/sampleServer");
-// const webSocket = createWebSocket(url);
-// // listen when the web socket is opened
-// listen({
-//   webSocket,
-//   onConnection: (connection) => {
-//     // create and start the language client
-//     const languageClient = createLanguageClient(connection);
-//     const disposable = languageClient.start();
-//     connection.onClose(() => disposable.dispose());
-//   },
-// });
-// console.log(ErrorAction, CloseAction);
 
-// function createLanguageClient(connection: MessageConnection): MonacoLanguageClient {
-//   return new MonacoLanguageClient({
-//     name: "Sample Language Client",
-//     clientOptions: {
-//       // use a language id as a document selector
-//       documentSelector: ["json"],
-//       // disable the default error handler
-//       errorHandler: {
-//         error: () => ErrorAction.Continue,
-//         closed: () => CloseAction.DoNotRestart,
-//       },
-//     },
-//     // create a language client connection from the JSON RPC connection on demand
-//     connectionProvider: {
-//       get: (errorHandler, closeHandler) => {
-//         return Promise.resolve(createConnection(connection, errorHandler, closeHandler));
-//       },
-//     },
-//   });
-// }
-// function createUrl(path: string): string {
-//   const protocol = location.protocol === "https:" ? "wss" : "ws";
-//   return `${protocol}://${location.host}${location.pathname}${path}`;
-// }
+import { startClientService } from "./startClient2";
 
-// function createWebSocket(url: string): WebSocket {
-//   return new ReconnectingWebSocket(
-//     url,
-//     [],
-//     Object.create({
-//       maxReconnectionDelay: 10000,
-//       minReconnectionDelay: 1000,
-//       reconnectionDelayGrowFactor: 1.3,
-//       connectionTimeout: 10000,
-//       maxRetries: Infinity,
-//       debug: false,
-//     })
-//   );
-// }
-
-// // install Monaco language client services
-// MonacoServices.install(monaco2);
 globalThis.parseExpression = (source: string) => tryParseExpression(source, Zh_CN);
 globalThis.createScope = createScope;
 
 function run() {
-  const services = new EmbeddedTypescriptWorker();
   const languageId = "advscript";
-  services.init().then(() => services.registerCompletionItemProvider("advscript"));
-  services.addExtraLib(() => import("@addLibs/testLib/*").then((data) => data.default));
+  // const services = new EmbeddedTypescriptWorker();
+  // services.init().then(() => services.registerCompletionItemProvider("advscript"));
+  // services.addExtraLib(() => import("@addLibs/testLib/*").then((data) => data.default));
   bootstrap(monaco, languageId, async () => {
     await getWorker();
-    return providers;
+    // return providers;
+    return {};
   }).then(async (helper) => {
     const editor = monaco.editor.create(document.querySelector("#editor"), {
       peekWidgetDefaultFocus: "tree",
@@ -96,8 +30,13 @@ function run() {
       model: monaco.editor.createModel(file, languageId, monaco.Uri.file("./main.avs")),
       codeActionsOnSaveTimeout: 1000,
       "semanticHighlighting.enabled": true,
+      glyphMargin: true,
+      lightbulb: {
+        enabled: true,
+      },
     });
-    services.setupEditor(editor);
+    startClientService(editor.getModel().uri);
+    // services.setupEditor(editor);
     helper.injectCSS();
     // console.log(editor.getModel().getLanguageId());
     // editor.revealRangeInCenter(range)
@@ -139,29 +78,29 @@ function run() {
     //     },
     //   },
     // ]);
-    editor.deltaDecorations(
-      [],
-      [
-        {
-          range: {
-            startLineNumber: 61,
-            startColumn: 5,
-            endLineNumber: 62,
-            endColumn: 5,
-          },
-          options: {
-            // inlineClassName: "inlineClassName",
-            // className: "className",
-            // hoverMessage: { value: "hoverMessage"},
-            // after: {
-            //   content: "after"
-            // },
-            glyphMarginClassName: "errorIcon",
-            glyphMarginHoverMessage: { value: "glyphMarginHoverMessage" },
-          },
-        },
-      ]
-    );
+    // editor.deltaDecorations(
+    //   [],
+    //   [
+    //     {
+    //       range: {
+    //         startLineNumber: 61,
+    //         startColumn: 5,
+    //         endLineNumber: 62,
+    //         endColumn: 5,
+    //       },
+    //       options: {
+    //         // inlineClassName: "inlineClassName",
+    //         // className: "className",
+    //         // hoverMessage: { value: "hoverMessage"},
+    //         // after: {
+    //         //   content: "after"
+    //         // },
+    //         glyphMarginClassName: "errorIcon",
+    //         glyphMarginHoverMessage: { value: "glyphMarginHoverMessage" },
+    //       },
+    //     },
+    //   ]
+    // );
   });
 }
 run();
@@ -233,7 +172,8 @@ const providers: Partial<LanguageInfo> = {
   inlayHintsProvider: {
     provideInlayHints(model, range, token) {
       const tokens = [] as monaco.languages.InlayHint[];
-      const context = getParserContext(model.id);
+      const context = getParserContext(model.uri.toString());
+      if (!context) return tokens;
       for (const {
         text,
         source: {
@@ -257,7 +197,8 @@ const providers: Partial<LanguageInfo> = {
     provideFoldingRanges(model, context, token) {
       // console.log("context", context);
       const ranges: monaco.languages.FoldingRange[] = [];
-      const parsedDocument = getParserContext(model.id);
+      const parsedDocument = getParserContext(model.uri.toString());
+      if (!parsedDocument) return ranges;
       // console.log(
       //   "provideFoldingRanges",
       //   model.getLineCount(),

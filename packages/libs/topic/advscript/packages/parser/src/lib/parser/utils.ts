@@ -52,7 +52,6 @@ export const getCharactersWhoSpokeBeforeLast = (parsedDocument: any, position: v
   return previousCharacters;
 };
 
-
 /**
  * Calculate an approximation of how long a line of dialogue would take to say
  */

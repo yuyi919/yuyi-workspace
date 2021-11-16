@@ -59,8 +59,8 @@ export interface SourceNode {
   };
   printError: void;
   ctorName: string;
-  context: ParserContext
-};
+  context: ParserContext;
+}
 
 export interface SourceRange {
   line: number;

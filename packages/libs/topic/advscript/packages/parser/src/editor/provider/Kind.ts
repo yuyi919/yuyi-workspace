@@ -1,4 +1,3 @@
-
 export class Kind {
   public static unknown: string = "";
   public static keyword: string = "keyword";

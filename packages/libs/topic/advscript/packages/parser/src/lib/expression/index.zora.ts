@@ -88,8 +88,16 @@ describe("表达式解析", ({ test }) => {
     );
 
     expect.equals(parseExpression("1%"), createPrecetLiteralExpression(1), "百分比字面量");
-    expect.equals(parseExpression("a++"), createIncrementExpression("a", "++", false, "a++"), "百分比字面量");
-    expect.equals(parseExpression("++a"), createIncrementExpression("a", "++", true, "++a"), "百分比字面量");
+    expect.equals(
+      parseExpression("a++"),
+      createIncrementExpression("a", "++", false, "a++"),
+      "百分比字面量"
+    );
+    expect.equals(
+      parseExpression("++a"),
+      createIncrementExpression("a", "++", true, "++a"),
+      "百分比字面量"
+    );
     expect.throwError(() => parseExpression("1||2??3"), `Expected $CatchOrNullExp$`, "错误提示");
     expect.throwError(() => parseExpression("1??2&&3"), `Expected $CatchOrNullExp$`, "错误提示");
 

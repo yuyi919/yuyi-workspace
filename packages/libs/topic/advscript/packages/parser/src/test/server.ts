@@ -29,7 +29,7 @@ const locateOnFS = map((message) => {
 export default async (server: ViteDevServer) => {
   const reporter = compose([createDiffReporter(), locateOnFS]);
   const webSocketServer = new WebSocket.WebSocketServer({
-    port: webSocketPort
+    port: webSocketPort,
   });
   let connected = false;
   webSocketServer.on("connection", (ws) => {
@@ -41,7 +41,7 @@ export default async (server: ViteDevServer) => {
     console.debug("client disconnected");
   });
 
-  return webSocketServer
+  return webSocketServer;
 };
 
 async function* streamRunFromSocket(socket) {

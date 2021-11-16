@@ -144,7 +144,8 @@ export const Exp = defineExpressionActions({
   ExpExp_sign(sign, expr: ExpressionNode): BinaryExpression {
     const value = expr.parse();
     console.log(expr, expr.source.getLineAndColumn(), value);
-    if (value.kind === ExpressionKind.Literal) throw createNodeError("Expected $number$ or $Exp$", expr);
+    if (value.kind === ExpressionKind.Literal)
+      throw createNodeError("Expected $number$ or $Exp$", expr);
     return createBinaryExpression(
       createLiteralExpression(0),
       sign.parse(),

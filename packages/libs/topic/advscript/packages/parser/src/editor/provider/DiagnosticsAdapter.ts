@@ -1,11 +1,11 @@
 import { IDisposable } from "../monaco.export";
 import { editor, Editor } from "../monaco.export";
 import { toDiagnostics } from "../provider/_workerUtils";
-import { WorkerAccessor, AvsLanguageService } from "../language";
+import { WorkerAccessor, AvsLanguageService } from "../../service";
 
 export class DiagnosticsAdapter {
   private _disposables: IDisposable[] = [];
-  private _listener: { [uri: string]: IDisposable; } = Object.create(null);
+  private _listener: { [uri: string]: IDisposable } = Object.create(null);
 
   constructor(
     private _languageId: string,

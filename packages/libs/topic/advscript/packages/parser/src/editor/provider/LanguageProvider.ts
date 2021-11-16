@@ -18,7 +18,7 @@ export class TmgLanguageProvider {
   private registry: Registry;
   private tokensProviderCache: TokensProviderCache;
 
-  private debug = false
+  private debug = false;
 
   constructor(private config: SimpleLanguageInfoProviderConfig) {
     const { grammars, fetchGrammar, theme, onigLib, monaco } = config;
@@ -97,7 +97,7 @@ export class TmgLanguageProvider {
   ): Promise<LanguageInfo> {
     await waitMonaco();
     if (addition instanceof Function) {
-      addition = await addition()
+      addition = await addition();
     }
     const [tokensProvider, configuration] = await Promise.all([
       this.getTokensProviderForLanguage(language),

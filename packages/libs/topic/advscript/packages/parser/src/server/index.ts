@@ -1,68 +1,65 @@
+import * as rpc from "@codingame/monaco-jsonrpc";
 import {
-  _Connection as Connection,
-  TextDocuments,
-  createConnection,
-  ProposedFeatures,
-  MessageReader,
-  MessageWriter,
-} from "vscode-languageserver/lib/browser/main";
+  CodeActionParams,
+  ColorPresentationParams,
+  DidChangeTextDocumentParams,
+  DocumentColorParams,
+  DocumentRangeFormattingParams,
+  DocumentSymbolParams,
+  ExecuteCommandParams,
+  FoldingRangeParams,
+  TextDocumentPositionParams,
+  TextDocumentSyncKind,
+} from "vscode-languageserver-protocol";
+import { TextDocument } from "vscode-languageserver-textdocument";
 import {
-  Diagnostic,
+  Color,
+  ColorInformation,
+  ColorPresentation,
   Command,
-  CompletionList,
   CompletionItem,
+  CompletionList,
+  Diagnostic,
+  FoldingRange,
   Hover,
   SymbolInformation,
   TextEdit,
-  FoldingRange,
-  ColorInformation,
-  ColorPresentation,
 } from "vscode-languageserver-types";
-import * as TextDocumentImpl from "vscode-languageserver-textdocument";
 import {
-  TextDocumentPositionParams,
-  DocumentRangeFormattingParams,
-  ExecuteCommandParams,
-  CodeActionParams,
-  FoldingRangeParams,
-  DocumentColorParams,
-  ColorPresentationParams,
-  TextDocumentSyncKind,
-} from "vscode-languageserver-protocol";
-
+  createConnection,
+  DidOpenTextDocumentParams,
+  MessageReader,
+  MessageWriter,
+  TextDocumentChangeEvent,
+  TextDocuments,
+  _Connection as Connection,
+} from "vscode-languageserver/lib/browser/main";
 import { URI } from "vscode-uri";
-import { AvsLanguageService } from "../editor/language";
-import * as rpc from "@codingame/monaco-jsonrpc";
+import { AvsLanguageService } from "../service";
 
 export function launch(socket: rpc.IWebSocket) {
   const reader = new rpc.WebSocketMessageReader(socket);
   const writer = new rpc.WebSocketMessageWriter(socket);
-  return startServer(reader, writer)
+  return startServer(reader, writer);
 }
-export function startServer(reader: MessageReader, writer: MessageWriter): JsonServer {
-  const connection = createConnection(reader as any, writer as any);
-  const server = new JsonServer(connection);
+export function startServer(reader: MessageReader, writer: MessageWriter): LanguageServer {
+  const connection = createConnection(reader as any, writer as any, {});
+  const server = new LanguageServer(connection);
   server.start();
   return server;
 }
 
-export class JsonServer {
+export class LanguageServer {
   protected workspaceRoot: URI | undefined;
 
-  protected readonly documents = new TextDocuments(TextDocumentImpl.TextDocument);
+  protected readonly documents = new TextDocuments(TextDocument);
 
-  protected readonly jsonService: AvsLanguageService;
+  protected readonly service: AvsLanguageService;
 
   protected readonly pendingValidationRequests = new Map<string, number>();
 
   constructor(protected readonly connection: Connection) {
     this.documents.listen(this.connection);
-    // this.documents.onDidChangeContent((change) => this.validate(change.document));
-    // this.documents.onDidClose((event) => {
-    //   this.cleanPendingValidation(event.document);
-    //   this.cleanDiagnostics(event.document);
-    // });
-
     this.connection.onInitialize((params) => {
       if (params.workspaceFolders) {
         this.workspaceRoot = URI.file(params.workspaceFolders[0].uri);
@@ -74,7 +71,7 @@ export class JsonServer {
           codeActionProvider: true,
           completionProvider: {
             resolveProvider: true,
-            triggerCharacters: ['"', ":"],
+            triggerCharacters: ['"', ":", " ", "=", ".", "(", "[", "@", "\n"],
           },
           hoverProvider: true,
           documentSymbolProvider: true,
@@ -87,54 +84,101 @@ export class JsonServer {
         },
       };
     });
-    // this.connection.onCodeAction((params) => this.codeAction(params));
-    // this.connection.onCompletion((params) => this.completion(params));
-    // this.connection.onCompletionResolve((item) => this.resolveCompletion(item));
-    // this.connection.onExecuteCommand((params) => this.executeCommand(params));
-    // this.connection.onHover((params) => this.hover(params));
-    // this.connection.onDocumentSymbol((params) => this.findDocumentSymbols(params));
-    // this.connection.onDocumentRangeFormatting((params) => this.format(params));
-    // this.connection.onDocumentColor((params) => this.findDocumentColors(params));
-    // this.connection.onColorPresentation((params) => this.getColorPresentations(params));
-    // this.connection.onFoldingRanges((params) => this.getFoldingRanges(params));
+    this.documents.onDidChangeContent((change) => this.doDidChangeContent(change));
+    this.documents.onDidClose((event) => this.doDidClose(event));
+    this.connection.onDidChangeTextDocument((params) => this.onDidChangeTextDocument(params));
+    this.connection.onDidOpenTextDocument((params) => this.onDidOpenTextDocument(params));
+    this.connection.onCodeAction((params) => this.doCodeAction(params));
+    this.connection.onCompletion((params) => this.doCompletion(params));
+    this.connection.onCompletionResolve((item) => this.doResolveCompletion(item));
+    this.connection.onExecuteCommand((params) => this.doExecuteCommand(params));
+    this.connection.onHover((params) => this.doHover(params));
+    this.connection.onDocumentSymbol((params) => this.doDocumentSymbols(params));
+    this.connection.onDocumentRangeFormatting((params) => this.doDocumentRangeFormatting(params));
+    this.connection.onDocumentColor((params) => this.doDocumentColors(params));
+    this.connection.onColorPresentation((params) => this.doColorPresentations(params));
+    this.connection.onFoldingRanges((params) => this.doFoldingRanges(params));
+  }
+
+  private doDidClose(event: TextDocumentChangeEvent<TextDocument>) {
+    this.cleanPendingValidation(event.document);
+    this.cleanDiagnostics(event.document);
+  }
+
+  private onDidChangeTextDocument(params: DidChangeTextDocumentParams) {
+    const document = this.documents.get(params.textDocument.uri);
+    if (!document) {
+      return [];
+    }
+    this.connection.console.log(JSON.stringify(params.contentChanges));
+  }
+  private onDidOpenTextDocument(params: DidOpenTextDocumentParams) {
+    const document = this.documents.get(params.textDocument.uri);
+    if (!document) {
+      return [];
+    }
+    this.connection.console.log(JSON.stringify(params.textDocument));
+  }
+  private doDidChangeContent(change: TextDocumentChangeEvent<TextDocument>): any {
+    return this.validate(change.document);
   }
 
   start() {
     this.connection.listen();
   }
 
-  // protected getFoldingRanges(params: FoldingRangeParams): FoldingRange[] {
-  //   const document = this.documents.get(params.textDocument.uri);
-  //   if (!document) {
-  //     return [];
-  //   }
-  //   return this.jsonService.getFoldingRanges(document);
-  // }
+  protected doFoldingRanges(params: FoldingRangeParams): FoldingRange[] {
+    const document = this.documents.get(params.textDocument.uri);
+    if (!document) {
+      return [];
+    }
+    // return this.jsonService.getFoldingRanges(document);
+    return [];
+  }
 
-  // protected findDocumentColors(params: DocumentColorParams): Thenable<ColorInformation[]> {
-  //   const document = this.documents.get(params.textDocument.uri);
-  //   if (!document) {
-  //     return Promise.resolve([]);
-  //   }
-  //   const jsonDocument = this.getJSONDocument(document);
-  //   return this.jsonService.findDocumentColors(document, jsonDocument);
-  // }
+  /**
+   * 文档中的颜色标记
+   * @param params
+   */
+  protected doDocumentColors(params: DocumentColorParams): Thenable<ColorInformation[]> {
+    const document = this.documents.get(params.textDocument.uri);
+    if (!document) {
+      return Promise.resolve([]);
+    }
+    // const jsonDocument = this.getJSONDocument(document);
+    // return this.jsonService.findDocumentColors(document, jsonDocument);
+    return Promise.resolve([
+      {
+        range: { start: { line: 1, character: 1 }, end: { line: 1, character: 1 } },
+        color: Color.create(255, 255, 255, 1),
+      },
+    ] as ColorInformation[]);
+  }
 
-  // protected getColorPresentations(params: ColorPresentationParams): ColorPresentation[] {
-  //   const document = this.documents.get(params.textDocument.uri);
-  //   if (!document) {
-  //     return [];
-  //   }
-  //   const jsonDocument = this.getJSONDocument(document);
-  //   return this.jsonService.getColorPresentations(
-  //     document,
-  //     jsonDocument,
-  //     params.color,
-  //     params.range
-  //   );
-  // }
+  protected doColorPresentations(params: ColorPresentationParams): ColorPresentation[] {
+    const document = this.documents.get(params.textDocument.uri);
+    if (!document) {
+      return [];
+    }
+    // const jsonDocument = this.getJSONDocument(document);
+    // return this.jsonService.getColorPresentations(
+    //   document,
+    //   jsonDocument,
+    //   params.color,
+    //   params.range
+    // );
+    return [
+      {
+        label: "red",
+        textEdit: {
+          newText: "222",
+          range: { start: { line: 2, character: 2 }, end: { line: 2, character: 5 } },
+        },
+      },
+    ];
+  }
 
-  protected codeAction(params: CodeActionParams): Command[] {
+  protected doCodeAction(params: CodeActionParams): Command[] {
     const document = this.documents.get(params.textDocument.uri);
     if (!document) {
       return [];
@@ -154,53 +198,56 @@ export class JsonServer {
     ];
   }
 
-  // protected format(params: DocumentRangeFormattingParams): TextEdit[] {
-  //   const document = this.documents.get(params.textDocument.uri);
-  //   return document ? this.jsonService.format(document, params.range, params.options) : [];
-  // }
+  protected doDocumentRangeFormatting(params: DocumentRangeFormattingParams): TextEdit[] {
+    const document = this.documents.get(params.textDocument.uri);
+    // return document ? this.jsonService.format(document, params.range, params.options) : [];
+    return [];
+  }
 
-  // protected findDocumentSymbols(params: DocumentSymbolParams): SymbolInformation[] {
-  //   const document = this.documents.get(params.textDocument.uri);
-  //   if (!document) {
-  //     return [];
-  //   }
-  //   const jsonDocument = this.getJSONDocument(document);
-  //   return this.jsonService.findDocumentSymbols(document, jsonDocument);
-  // }
+  protected doDocumentSymbols(params: DocumentSymbolParams): SymbolInformation[] {
+    const document = this.documents.get(params.textDocument.uri);
+    if (!document) {
+      return [];
+    }
+    // const jsonDocument = this.getJSONDocument(document);
+    // return this.jsonService.findDocumentSymbols(document, jsonDocument);
+    return [];
+  }
 
-  // protected executeCommand(params: ExecuteCommandParams): any {
-  //   if (params.command === "json.documentUpper" && params.arguments) {
-  //     const versionedTextDocumentIdentifier = params.arguments[0];
-  //     const document = this.documents.get(versionedTextDocumentIdentifier.uri);
-  //     if (document) {
-  //       this.connection.workspace.applyEdit({
-  //         documentChanges: [
-  //           {
-  //             textDocument: versionedTextDocumentIdentifier,
-  //             edits: [
-  //               {
-  //                 range: {
-  //                   start: { line: 0, character: 0 },
-  //                   end: { line: Number.MAX_SAFE_INTEGER, character: Number.MAX_SAFE_INTEGER },
-  //                 },
-  //                 newText: document.getText().toUpperCase(),
-  //               },
-  //             ],
-  //           },
-  //         ],
-  //       });
-  //     }
-  //   }
-  // }
+  protected doExecuteCommand(params: ExecuteCommandParams): any {
+    if (params.command === "json.documentUpper" && params.arguments) {
+      const versionedTextDocumentIdentifier = params.arguments[0];
+      const document = this.documents.get(versionedTextDocumentIdentifier.uri);
+      if (document) {
+        this.connection.workspace.applyEdit({
+          documentChanges: [
+            {
+              textDocument: versionedTextDocumentIdentifier,
+              edits: [
+                {
+                  range: {
+                    start: { line: 0, character: 0 },
+                    end: { line: Number.MAX_SAFE_INTEGER, character: Number.MAX_SAFE_INTEGER },
+                  },
+                  newText: document.getText().toUpperCase(),
+                },
+              ],
+            },
+          ],
+        });
+      }
+    }
+  }
 
-  // protected hover(params: TextDocumentPositionParams): Thenable<Hover | null> {
-  //   const document = this.documents.get(params.textDocument.uri);
-  //   if (!document) {
-  //     return Promise.resolve(null);
-  //   }
-  //   const jsonDocument = this.getJSONDocument(document);
-  //   return this.jsonService.doHover(document, params.position, jsonDocument);
-  // }
+  protected doHover(params: TextDocumentPositionParams): Thenable<Hover | null> {
+    const document = this.documents.get(params.textDocument.uri);
+    if (!document) {
+      return Promise.resolve(null);
+    }
+    // const jsonDocument = this.getJSONDocument(document);
+    // return this.jsonService.doHover(document, params.position, jsonDocument);
+    return Promise.resolve(null);
+  }
 
   // protected async resolveSchema(url: string): Promise<string> {
   //   const uri = URI.parse(url);
@@ -221,64 +268,64 @@ export class JsonServer {
   //   }
   // }
 
-  // protected resolveCompletion(item: CompletionItem): Thenable<CompletionItem> {
-  //   return this.jsonService.doResolve(item);
-  // }
+  protected doResolveCompletion(item: CompletionItem): Thenable<CompletionItem> {
+    // return this.jsonService.doResolve(item);
+    return Promise.resolve(item);
+  }
 
-  // protected completion(params: TextDocumentPositionParams): Thenable<CompletionList | null> {
-  //   const document = this.documents.get(params.textDocument.uri);
-  //   if (!document) {
-  //     return Promise.resolve(null);
-  //   }
-  //   const jsonDocument = this.getJSONDocument(document);
-  //   return this.jsonService.doComplete(document, params.position, jsonDocument);
-  // }
+  protected doCompletion(params: TextDocumentPositionParams): Thenable<CompletionList | null> {
+    const document = this.documents.get(params.textDocument.uri);
+    this.connection.console.log(document.getText());
+    if (!document) {
+      return Promise.resolve(null);
+    }
+    // const jsonDocument = this.getJSONDocument(document);
+    // return this.jsonService.doComplete(document, params.position, jsonDocument);
+    return Promise.resolve(null);
+  }
 
-  // protected validate(document: TextDocumentImpl.TextDocument): void {
-  //   this.cleanPendingValidation(document);
-  //   this.pendingValidationRequests.set(
-  //     document.uri,
-  //     setTimeout(() => {
-  //       this.pendingValidationRequests.delete(document.uri);
-  //       this.doValidate(document);
-  //     })
-  //   );
-  // }
+  protected validate(document: TextDocument): void {
+    this.cleanPendingValidation(document);
+    this.pendingValidationRequests.set(
+      document.uri,
+      setTimeout(() => {
+        this.pendingValidationRequests.delete(document.uri);
+        this.doValidate(document);
+      }) as unknown as number
+    );
+  }
 
-  // protected cleanPendingValidation(document: TextDocumentImpl.TextDocument): void {
-  //   const request = this.pendingValidationRequests.get(document.uri);
-  //   if (request !== undefined) {
-  //     clearTimeout(request);
-  //     this.pendingValidationRequests.delete(document.uri);
-  //   }
-  // }
+  protected cleanPendingValidation(document: TextDocument): void {
+    const request = this.pendingValidationRequests.get(document.uri);
+    if (request !== undefined) {
+      clearTimeout(request);
+      this.pendingValidationRequests.delete(document.uri);
+    }
+  }
 
-  // protected doValidate(document: TextDocumentImpl.TextDocument): void {
-  //   if (document.getText().length === 0) {
-  //     this.cleanDiagnostics(document);
-  //     return;
-  //   }
-  //   const jsonDocument = this.getJSONDocument(document);
-  //   this.jsonService
-  //     .doValidation(document, jsonDocument)
-  //     .then((diagnostics) => this.sendDiagnostics(document, diagnostics));
-  // }
+  protected doValidate(document: TextDocument): void {
+    if (document.getText().length === 0) {
+      this.cleanDiagnostics(document);
+      return;
+    }
+    // const jsonDocument = this.getJSONDocument(document);
+    // this.jsonService
+    //   .doValidation(document, jsonDocument)
+    //   .then((diagnostics) => this.sendDiagnostics(document, diagnostics));
+  }
 
-  // protected cleanDiagnostics(document: TextDocumentImpl.TextDocument): void {
-  //   this.sendDiagnostics(document, []);
-  // }
+  protected cleanDiagnostics(document: TextDocument): void {
+    this.sendDiagnostics(document, []);
+  }
 
-  // protected sendDiagnostics(
-  //   document: TextDocumentImpl.TextDocument,
-  //   diagnostics: Diagnostic[]
-  // ): void {
-  //   this.connection.sendDiagnostics({
-  //     uri: document.uri,
-  //     diagnostics,
-  //   });
-  // }
+  protected sendDiagnostics(document: TextDocument, diagnostics: Diagnostic[]): void {
+    this.connection.sendDiagnostics({
+      uri: document.uri,
+      diagnostics,
+    });
+  }
 
-  // protected getJSONDocument(document: TextDocumentImpl.TextDocument): JSONDocument {
+  // protected getJSONDocument(document: TextDocument): JSONDocument {
   //   return this.jsonService.parseJSONDocument(document);
   // }
 }

@@ -56,7 +56,7 @@ export enum MultiplicationOpertaor {
 }
 export enum AutomicOpertaor {
   "^",
-  "!"
+  "!",
 }
 export enum IncrementOpertaor {
   "++",

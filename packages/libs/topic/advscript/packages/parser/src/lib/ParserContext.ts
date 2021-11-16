@@ -21,7 +21,12 @@ export class ParserContext implements IParseoutput {
   lengthDialogue: number;
   parseTime: number;
   properties: IScreenProperties;
-  inlayHintTokens: { text: string; source: SourceNode; mode: "pre" | "post", offsetCol?: number }[] = [];
+  inlayHintTokens: {
+    text: string;
+    source: SourceNode;
+    mode: "pre" | "post";
+    offsetCol?: number;
+  }[] = [];
 
   public flush() {
     this.init();
@@ -188,6 +193,7 @@ export class ParserContext implements IParseoutput {
     if (result.succeeded()) {
       const cst = semantics(result);
       // console.log("matcher", result, cst);
+      console.log(cst);
       return wrap(cst as Node);
     } else {
       throw Error(result.message);

@@ -12,7 +12,7 @@ export interface MyCompletionItem extends languages.CompletionItem {
 
 export class SuggestAdapter extends Adapter implements monaco.languages.CompletionItemProvider {
   public get triggerCharacters(): string[] {
-    return ["."];
+    return [".", "="];
   }
 
   public async provideCompletionItems(

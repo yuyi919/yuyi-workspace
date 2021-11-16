@@ -1,4 +1,4 @@
-import { AvsLanguageService, IAvsLanguageOptions } from "../language";
+import { AvsLanguageService, IAvsLanguageOptions } from "../../service";
 import type { worker } from "../monaco.export";
 export interface ISetupConfig extends IAvsLanguageOptions {}
 export class AvsWorker extends AvsLanguageService {

@@ -1,15 +1,13 @@
 // import grammar from "../../../ohm/expression.ohm-bundle";
 import { AdvFountain as grammar } from "../grammars";
-import {
-  ExpressionNodeData,
-} from "../interface";
+import { ExpressionNodeData } from "../interface";
 import { printError } from "../util";
 import { SyntaxError } from "./SyntaxError";
 
 export * from "./Exp";
 export * from "./Expression";
 // export { semantics as ExpressionSemantics };
-import { Semantics } from "../parser"
+import { Semantics } from "../parser";
 
 export function tryParseExpression(source: string, template?: Record<string, string>) {
   try {
