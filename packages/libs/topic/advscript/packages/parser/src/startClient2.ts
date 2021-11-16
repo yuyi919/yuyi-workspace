@@ -1,14 +1,20 @@
 /* eslint-disable @typescript-eslint/no-this-alias */
 import {
+  LangiumDocument,
+  LangiumServices,
+  LanguageMetaData,
+  OperationCancelled,
+  startCancelableOperation,
+  TextDocumentFactory,
+} from "langium";
+import {
   AbstractCancellationTokenSource,
   CancellationToken,
   Connection,
-  FileChangeType,
   HandlerResult,
   InitializeResult,
   RequestHandler,
   TextDocumentIdentifier,
-  TextDocuments,
   TextDocumentSyncKind,
 } from "vscode-languageserver";
 import { URI } from "vscode-uri";
@@ -18,15 +24,7 @@ import {
   ProtocolToMonacoConverter,
   TextDocument,
 } from "./editor/languageclient";
-import { appendChanged, getPositionOfLineAndCharacter } from "./service/adapter";
-import {
-  LangiumDocument,
-  LangiumServices,
-  LanguageMetaData,
-  OperationCancelled,
-  startCancelableOperation,
-  TextDocumentFactory,
-} from "./service/factory";
+import { appendChanged } from "./service/adapter";
 import { createBrowerServices } from "./service/module";
 
 function services2InitializeResult(services: LangiumServices, hasWorkspaceFolder?: boolean) {

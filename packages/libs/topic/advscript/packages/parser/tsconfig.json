@@ -14,8 +14,8 @@
       "@adv.ohm-bundle": ["./ohm/adv.ohm-bundle.d.ts"],
       "@expression.ohm-bundle": ["./ohm/expression.ohm-bundle.d.ts"],
       "@yuyi919/zora": ["./src/test/zora-wrapper.ts"],
-      "langium": ["./src/service/factory/index.ts"],
-      "langium/lib/*": ["./src/service/factory/*"]
+      "langium": ["./src/service/langium-compatibility/index.ts"],
+      "langium/lib/*": ["./src/service/langium-compatibility/*"]
     },
     "tsBuildInfoFile": "./node_modules/@yuyi919/workspace-base-rig/.tsBuildInfo/topic-advscript-packages-parser.json"
   },

@@ -13,8 +13,8 @@ export default defineConfig(async ({ mode }) => {
         "ohm-js": path.resolve("./node_modules/ohm-js/src/main.js"),
         "@yuyi919/zora": path.resolve("./src/test/zora-wrapper.ts"),
         vscode: path.resolve("./src/editor/languageclient/vscode-compatibility.ts"),
-        "langium/lib":  path.resolve("./src/service/factory/"),
-        langium:  path.resolve("./src/service/factory/index.ts"),
+        "langium/lib":  path.resolve("./src/service/langium-compatibility/"),
+        langium:  path.resolve("./src/service/langium-compatibility/index.ts"),
       },
     },
     plugins: [

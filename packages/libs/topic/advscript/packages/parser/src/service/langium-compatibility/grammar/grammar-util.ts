@@ -6,7 +6,7 @@
 
 import { TextDocument } from "vscode-languageserver-textdocument";
 import { documentFromText, PrecomputedScopes } from "../documents/document";
-import * as ast from "../grammar/generated/ast";
+import * as ast from "./generated/ast";
 import { CompositeCstNodeImpl } from "../parser/cst-node-builder";
 import { LangiumServices } from "../services";
 import { AstNode, AstNodeDescription, CstNode } from "../syntax-tree";
