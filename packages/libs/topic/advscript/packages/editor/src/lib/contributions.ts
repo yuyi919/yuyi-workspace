@@ -1,9 +1,6 @@
 import { monaco, Uri } from "./monaco.export";
 import { ScopeNameInfo } from "./provider";
 import languageConfigurationUrl from "vscode-advscript/language-configuration.json?url";
-import HTMLPListUrl from "/HTML.plist?url";
-import TypeScriptPListUrl from "/TypeScript.plist?url";
-import CssPListUrl from "/css.plist?url";
 import FountainPListUrl from "vscode-advscript/syntaxes/fountain.tmlanguage.json?url";
 import AdvScriptPListUrl from "vscode-advscript/syntaxes/advscript.tmLanguage.json?url";
 import InjectUrl from "vscode-advscript/syntaxes/injection-inline-expression.tmLanguage.json?url";
@@ -33,19 +30,22 @@ export interface DemoScopeNameInfo extends ScopeNameInfo {
   embeddedLanguages?: Record<string, string>;
   injectTo?: string[];
 }
+// import HTMLPListUrl from "/textmate-syntaxes/HTML.plist?url";
+// import TypeScriptPListUrl from "/textmate-syntaxes/TypeScript.plist?url";
+// import CssPListUrl from "/textmate-syntaxes/css.plist?url";
 export const grammerList = [
   {
     scopeName: "html",
-    path: HTMLPListUrl,
+    path: "/textmate-syntaxes/html.plist",
   },
   {
     scopeName: "source.ts",
-    path: TypeScriptPListUrl,
+    path: "/textmate-syntaxes/typescript.plist",
     language: "typescript",
   },
   {
     scopeName: "css",
-    path: CssPListUrl,
+    path: "/textmate-syntaxes/css.plist",
   },
   {
     language: "fountain-script",

@@ -3,7 +3,7 @@ import {
   findLeafNodeAtOffset,
   LangiumDocument,
   LangiumServices,
-  OperationCancelled,
+  OperationCancelled
 } from "langium";
 import { _Connection } from "vscode-languageserver";
 import {
@@ -16,7 +16,7 @@ import {
   ReferenceParams,
   RenameParams,
   TextDocumentPositionParams,
-  TextDocumentSyncKind,
+  TextDocumentSyncKind
 } from "vscode-languageserver-protocol";
 import { TextDocument } from "vscode-languageserver-textdocument";
 import {
@@ -32,7 +32,7 @@ import {
   TextDocumentIdentifier,
   TextDocumentItem,
   VersionedTextDocumentIdentifier,
-  WorkspaceEdit,
+  WorkspaceEdit
 } from "vscode-languageserver-types";
 import { URI as Uri } from "vscode-uri";
 import type { Monaco, TMonaco } from "../lib";
