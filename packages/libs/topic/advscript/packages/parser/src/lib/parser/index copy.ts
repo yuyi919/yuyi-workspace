@@ -6,7 +6,7 @@ import {
   trimCharacterForceSymbol,
 } from "./utils";
 import { token, create_token } from "./token copy";
-import { Range, Position } from "monaco-editor";
+// import { Range, Position } from "../../editor/monaco.export";
 // import { AddDialogueNumberDecoration } from "./providers/Decorations";
 
 export class CoreConfig {
@@ -181,7 +181,7 @@ export const parse = function (
   generate_html: boolean,
   config = cfg
 ): parseoutput {
-  let lastEditor: vscode.Uri;
+  // let lastEditor: vscode.Uri;
   const script = original_script,
     result: parseoutput = {
       title_page: [],
@@ -428,10 +428,10 @@ export const parse = function (
         const cobj: StructToken = new StructToken();
         cobj.text = thistoken.text;
         cobj.children = null;
-        cobj.range = new Range(
-          new Position(thistoken.line, 0),
-          new Position(thistoken.line, thistoken.text.length)
-        );
+        // cobj.range = new Range(
+        //   // new Position(thistoken.line, 0),
+        //   // new Position(thistoken.line, thistoken.text.length)
+        // );
 
         if (current_depth == 0) {
           cobj.id = "/" + thistoken.line;
@@ -480,10 +480,10 @@ export const parse = function (
         current_depth = thistoken.level;
         cobj.level = thistoken.level;
         cobj.children = [];
-        cobj.range = new Range(
-          new Position(thistoken.line, 0),
-          new Position(thistoken.line, thistoken.text.length)
-        );
+        // cobj.range = new Range(
+        //   new Position(thistoken.line, 0),
+        //   new Position(thistoken.line, thistoken.text.length)
+        // );
         cobj.section = true;
 
         const level = current_depth > 1 && latestSection(current_depth - 1);
@@ -510,7 +510,7 @@ export const parse = function (
         state = "dialogue";
         thistoken.type = "character";
         thistoken.takeNumber = takeCount++;
-        if (config.print_dialogue_numbers) AddDialogueNumberDecoration(thistoken);
+        // if (config.print_dialogue_numbers) AddDialogueNumberDecoration(thistoken);
         thistoken.text = trimCharacterForceSymbol(thistoken.text);
         if (thistoken.text[thistoken.text.length - 1] === "^") {
           if (cfg.use_dual_dialogue) {

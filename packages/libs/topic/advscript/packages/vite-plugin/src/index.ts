@@ -34,7 +34,7 @@ export const BabelTransformer: Plugin["transform"] = async function (
        */
       // @ts-ignore
       const recipe = myGrammar.toRecipe();
-      return `import ohm from "ohm-js";export default ohm.makeRecipe(${recipe});`;
+      return `import ohm from "ohm-js/dist/ohm.min.js";export default ohm.makeRecipe(${recipe});`;
     }
     return code;
   } catch (ex) {

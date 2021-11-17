@@ -3,13 +3,14 @@
   "version": "0.0.1",
   "description": "",
   "author": "",
-  "main": "dist/index.js",
-  "module": "lib/index.js",
+  "main": "dist/index.cjs.js",
+  "module": "dist/index.es.js",
   "types": "dist/index.d.ts",
   "scripts": {
     "build": "vite build",
     "build:watch": "vite build",
-    "dev": "vite",
+    "build2": "vite build -c ./playground.vite.config.ts",
+    "dev": "vite -c ./playground.vite.config.ts",
     "pack:pkg": "pkg --options max-http-header-size=65536 --targets node12.18.1-win-x64 --out-path pack .",
     "ohm:generate": "ohm generateBundles --withTypes ohm/adv.ohm",
     "prettier": "prettier -cw ./src/**"
@@ -31,6 +32,7 @@
   "devDependencies": {
     "@types/jest": "~27.0.1",
     "@types/node": "~16.7.2",
+    "@types/vscode": "~1.61.0",
     "@yuyi919/workspace-base-rig": "workspace:1.2.5",
     "@yuyi919/advscript-vite-plugin": "workspace:0.0.1",
     "vscode-advscript": "workspace:0.1.2",

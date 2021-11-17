@@ -147,6 +147,10 @@
       "allowedCategories": [ "production" ]
     },
     {
+      "name": "@yuyi919/advscript-parser",
+      "allowedCategories": [ "production" ]
+    },
+    {
       "name": "@yuyi919/advscript-vite-plugin",
       "allowedCategories": [ "production" ]
     },

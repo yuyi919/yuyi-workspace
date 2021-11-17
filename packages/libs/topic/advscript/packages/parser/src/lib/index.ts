@@ -219,3 +219,6 @@ export class ScriptVM {
 // export { parse } from "./fountain";
 
 export * from "./interface";
+
+export * from "./parser";
+export * from "./parser/index";

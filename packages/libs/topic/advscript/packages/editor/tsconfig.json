@@ -1,0 +1,21 @@
+{
+  "extends": "./node_modules/@yuyi919/workspace-base-rig/profiles/tsc/tsconfig-base.json",
+  "compilerOptions": {
+    "emitDeclarationOnly": true,
+    "outDir": "./dist",
+    "rootDir": "./src",
+    "target": "ESNext",
+    "module": "ESNext",
+    "moduleResolution": "node",
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
+    "types": ["vite/client"],
+    "tsBuildInfoFile": "./node_modules/@yuyi919/workspace-base-rig/.tsBuildInfo/topic-advscript-packages-editor.json",
+    "paths": {
+      "langium": ["./src/service/langium-compatibility/index.ts"],
+      "langium/lib/*": ["./src/service/langium-compatibility/*"]
+    }
+  },
+  "exclude": ["src/**/*.spec.ts", "src/**/*.test.ts", "**/__test__/**"],
+  "include": ["./node_modules/**/*.d.ts", "src/**/*.ts"]
+}

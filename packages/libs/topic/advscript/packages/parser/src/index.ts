@@ -50,3 +50,5 @@ export class AdvScript {
     return result;
   }
 }
+
+export * from "./lib"

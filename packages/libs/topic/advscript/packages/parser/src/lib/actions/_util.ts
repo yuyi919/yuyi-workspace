@@ -1,4 +1,4 @@
-import { Node, Interval } from "ohm-js";
+import type { Node, Interval } from "ohm-js";
 import { padStart } from "lodash";
 import { assignSourceNode, Source, SourceFileNode, SourceNode, SourceRange } from "../interface";
 import { printError } from "../util";

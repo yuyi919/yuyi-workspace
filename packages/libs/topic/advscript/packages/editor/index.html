@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="test" />
+  <!--preload-links-->
+  <title>Demo</title>
+  <style>
+    .warningIcon{
+      display:block;
+      background:url("../assets/icons/warningicon.png");
+      background-size: contain;
+      background-repeat: no-repeat;
+    }
+
+    .errorIcon {
+      display:block;
+      background:url("../assets/icons/erroricon.png");
+      background-size: contain;
+      background-repeat: no-repeat;
+    }
+  </style>
+</head>
+
+<body style="margin:0;padding:0">
+  <noscript>You need to enable JavaScript to run this app.</noscript>
+  <div id="root">
+    <!--ssr-outlet-->
+    <div style="height: 100vh; overflow: hidden;width:" id="editor"></div>
+  </div>
+
+  <script src="/src/main.ts" type="module"></script>
+</body>
+
+</html>

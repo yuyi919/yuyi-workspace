@@ -1,4 +1,4 @@
-import { Node as TerminalNode } from "ohm-js";
+import type { Node as TerminalNode } from "ohm-js";
 import { assignNode, InternalRange } from "../actions/_util";
 import { ParserContext } from "../ParserContext";
 

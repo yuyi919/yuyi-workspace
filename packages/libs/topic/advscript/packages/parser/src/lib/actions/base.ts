@@ -1,4 +1,4 @@
-import { IterationNode, Node } from "ohm-js";
+import type { IterationNode, Node } from "ohm-js";
 import {
   createIgnoreNode,
   defineActions,

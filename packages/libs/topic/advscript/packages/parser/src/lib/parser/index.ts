@@ -6,7 +6,6 @@ import {
   trimCharacterForceSymbol,
 } from "./utils";
 import { token, create_token, TokenType } from "./token";
-import { Range, Position } from "monaco-editor";
 // import { AddDialogueNumberDecoration } from "./providers/Decorations";
 
 export class CoreConfig {
@@ -430,7 +429,7 @@ export const parse = function (
         const cobj: StructToken = new StructToken();
         cobj.text = thistoken.text;
         cobj.children = null;
-        cobj.range = new Range(thistoken.line, 0, thistoken.line, thistoken.text.length);
+        // cobj.range = new Range(thistoken.line, 0, thistoken.line, thistoken.text.length);
 
         if (current_depth == 0) {
           cobj.id = "/" + thistoken.line;
@@ -479,7 +478,7 @@ export const parse = function (
         current_depth = thistoken.level;
         cobj.level = thistoken.level;
         cobj.children = [];
-        cobj.range = new Range(thistoken.line, 0, thistoken.line, thistoken.text.length);
+        // cobj.range = new Range(thistoken.line, 0, thistoken.line, thistoken.text.length);
         cobj.section = true;
 
         const level = current_depth > 1 && latestSection(current_depth - 1);

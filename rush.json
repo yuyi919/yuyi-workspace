@@ -484,6 +484,12 @@
       "reviewCategory": "production"
     },
     {
+      "packageName": "@yuyi919/advscript-editor",
+      "projectFolder": "packages/libs/topic/advscript/packages/editor",
+      "reviewCategory": "production",
+      "versionPolicyName": "shared"
+    },
+    {
       "packageName": "@yuyi919/advscript-parser",
       "projectFolder": "packages/libs/topic/advscript/packages/parser",
       "reviewCategory": "production",

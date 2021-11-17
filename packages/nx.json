@@ -69,6 +69,9 @@
     "topic-advscript": {
       "tags": ["topic", "advscript"]
     },
+    "topic-advscript-packages-editor": {
+      "tags": ["topic", "advscript", "packages", "editor"]
+    },
     "topic-advscript-packages-parser": {
       "tags": ["topic", "advscript", "packages", "parser"]
     },

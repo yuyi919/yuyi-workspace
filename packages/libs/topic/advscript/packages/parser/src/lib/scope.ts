@@ -2,7 +2,7 @@
 /* eslint-disable no-case-declarations */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { cloneDeep } from "lodash";
-import { Node } from "ohm-js";
+import type { Node } from "ohm-js";
 import { parseExpression } from "./expression";
 import {
   CommentBlock,

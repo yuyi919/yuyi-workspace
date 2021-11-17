@@ -1,4 +1,4 @@
-import { Grammar, Matcher, Node, Semantics as MatchSemantics } from "ohm-js";
+import type { Grammar, Matcher, Node, Semantics as MatchSemantics } from "ohm-js";
 import { IIncrementRange } from "..";
 import { InternalRange } from "./actions/_util";
 import { DocumentLine, SourceNode } from "./interface";
