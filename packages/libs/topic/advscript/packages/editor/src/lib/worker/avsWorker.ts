@@ -7,11 +7,6 @@ export class AvsWorker extends AvsLanguageService {
       ...options,
       monaco,
     });
-    console.log("AvsWorker", this, {
-      ...options,
-      monaco,
-      self,
-    });
   }
   async getScriptVersion(uri: string) {
     return 1;

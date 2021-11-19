@@ -1,18 +1,16 @@
-import { monaco } from "./lib";
 import { listen } from "@codingame/monaco-jsonrpc";
-import { Monaco } from "./lib";
-import { getWorker } from "./lib/worker";
-import { MonacoServiceWrapper } from "./MonacoServiceAdapter";
+import ReconnectingWebSocket from "reconnecting-websocket";
+import { monaco, Monaco } from "./lib";
 import {
+  CloseAction,
+  createConnection,
+  ErrorAction,
   MessageConnection,
   MonacoLanguageClient,
   MonacoServices,
-  createConnection,
-  CloseAction,
-  ErrorAction,
 } from "./lib/languageclient";
-import ReconnectingWebSocket from "reconnecting-websocket";
-import { AvsWorker } from "./lib/worker/avsWorker";
+import { getWorker } from "./lib/worker";
+import { MonacoServiceWrapper } from "./MonacoServiceAdapter";
 import { AvsLanguageService } from "./service";
 
 export function startClient() {
@@ -73,13 +71,13 @@ export function startClient() {
 }
 
 export async function startClientService(_monaco: typeof Monaco) {
-  const service = await getWorker();
+  const service =  new AvsLanguageService({ monaco: _monaco }); //await getWorker();
   const adapter = new MonacoServiceWrapper(_monaco, service, "advscript");
   return adapter.initialize();
 }
 
-export async function startClientService2(_monaco: typeof Monaco) {
-  const service = new AvsLanguageService({ monaco: _monaco });
-  const adapter = new MonacoServiceWrapper(_monaco, service, "advscript");
-  return adapter.initialize();
-}
+// export async function startClientService2(_monaco: typeof Monaco) {
+//   const service = new AvsLanguageService({ monaco: _monaco });
+//   const adapter = new MonacoServiceWrapper(_monaco, service, "advscript");
+//   return adapter.initialize();
+// }

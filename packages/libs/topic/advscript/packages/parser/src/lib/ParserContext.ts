@@ -101,6 +101,7 @@ export class ParserContext implements IParseoutput {
       this.matcher.replaceInputRange(range.startIdx, range.endIdx, range.content);
       // console.log(matcher.getInput())
     }
+    console.log(source, this.matcher.getInput())
     // const tokens = this.getSemanticsResult(
     //   Semantics,
     //   this.matcher,

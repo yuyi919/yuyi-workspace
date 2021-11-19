@@ -3,6 +3,7 @@ import fs from "fs-extra";
 import ohm from "ohm-js";
 import path, { relative } from "path";
 import { Plugin } from "vite";
+import MagicString from "magic-string";
 
 export function VitePluginStoryScript(): Plugin {
   return {
@@ -27,6 +28,14 @@ export function VitePluginStoryScript(): Plugin {
     },
   };
 }
+
+function toResult(code: string) {
+  const str = new MagicString(code);
+  return {
+    code: str.toString(),
+    map: str.generateMap(),
+  };
+}
 export const BabelTransformer: Plugin["transform"] = async function (
   code: string,
   sourceFileName: string
@@ -45,10 +54,10 @@ export const BabelTransformer: Plugin["transform"] = async function (
             : sourceFileName
         } ${result !== code ? "(use esmodule)" : ""}`
       );
-      return result;
+      return toResult(result);
     }
     if (/\.(txt|bks|adv|avs)$/.test(sourceFileName)) {
-      return `export default \`${escapeRegExp(code)}\``;
+      return toResult(`export default \`${escapeRegExp(code)}\``);
     }
     if (/\.ohm$/.test(sourceFileName)) {
       const grammars = ohm.grammars(code);
@@ -69,22 +78,14 @@ export const BabelTransformer: Plugin["transform"] = async function (
        * `toRecipe()`为内部方法，预先将ohm语法解析为序列化json
        * 然后调用`ohm.makeRecipe(recipe)`(同样是内部语法)返回完整的解析器
        */
-      return {
-        code: output + "\nexport default ns;",
-        map: { mappings: "" },
-      };
+      return toResult(output + "\nexport default ns;");
     }
     if (/@libs/.test(sourceFileName)) {
       console.log(sourceFileName);
     }
-    return {
-      code,
-      map: { mappings: "" },
-    };
+    return toResult(code);
   } catch (ex) {
     console.error(ex);
     throw ex;
   }
 };
-
-

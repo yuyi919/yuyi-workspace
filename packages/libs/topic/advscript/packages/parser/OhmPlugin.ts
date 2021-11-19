@@ -1,6 +1,7 @@
 import glob from "glob";
 import { relative, resolve } from "path";
 import { Plugin, ResolvedConfig } from "vite";
+import MagicString from "magic-string"
 const defaultVirtualFileId = "@addLibs/";
 export const RawWorkspacePlugin = ({
   root = ".",
@@ -46,6 +47,7 @@ export const RawWorkspacePlugin = ({
             );
           }
         }
+        const result = new MagicString(`const obj = {};\n${groups.join("\n")}\nexport default obj;`)
 
         // const modulesDir = join(config.root, "/node_modules/");
         // const replaceFiles: string[] = files.map((f, i) => {
@@ -53,7 +55,8 @@ export const RawWorkspacePlugin = ({
         //   return `import ${g1 + i} from ${g2}${resolver.fileToRequest(f)}${g2}`;
         // });
         return {
-          code: `const obj = {};\n${groups.join("\n")}\nexport default obj;`,
+          code: result.toString(),
+          map: result.generateMap()
         };
       }
     },

@@ -3,19 +3,34 @@ import { VitePluginStoryScript } from "../parser/VitePluginStoryScript";
 import path from "path";
 import { defineConfig, UserConfigFn } from "vite";
 import monacoEditorPlugin from "vite-plugin-monaco-editor";
-
+import { VitePluginLanguageServer } from "./VitePluginLanguageServer";
+import builtins from "rollup-plugin-node-builtins";
 export default defineConfig(async ({ mode }) => {
+  const isProd = mode === "production";
+  console.log("isProd:", isProd);
   return {
     resolve: {
       alias: {
         "@yuyi919/zora": path.resolve("./src/test/zora-wrapper.ts"),
-        vscode: path.resolve("./src/lib/languageclient/vscode-compatibility.ts"),
-        "langium/lib": path.resolve("./src/service/langium-compatibility/"),
+        vscode: path.resolve("./libs/vscode-languageclient/vscode-compatibility.js"),
+        "langium/lib": path.resolve("./src/service/langium-compatibility/src"),
         langium: path.resolve("./src/service/langium-compatibility/index.ts"),
-        "@yuyi919/advscript-parser": path.resolve("../parser/src/index.ts"),
+        "@yuyi919/advscript-parser": isProd
+          ? path.resolve("./node_modules/@yuyi919/advscript-parser")
+          : path.resolve("../parser/src/index.ts"),
       },
     },
-    plugins: [monacoEditorPlugin(), VitePluginStoryScript(), RawWorkspacePlugin({ root: "./src" })],
+    plugins: [
+      monacoEditorPlugin(),
+      VitePluginLanguageServer(),
+      VitePluginStoryScript(),
+      RawWorkspacePlugin({ root: "./src" }),
+      {
+        name: "builtins",
+        enforce: "pre",
+        ...builtins({ crypto: true }),
+      },
+    ],
     // esbuild: {
     //   loader: "ts",
     // },
@@ -25,8 +40,23 @@ export default defineConfig(async ({ mode }) => {
       // polyfillDynamicImport: false,
 
       // polyfillDynamicImport: false,
-      minify: mode === "producton" ? "terser" : false,
-      sourcemap: true,
+      minify: isProd ? "terser" : false,
+      commonjsOptions: {
+        include: [/node_modules/, /vscode/],
+      },
+      rollupOptions: {
+        // output: {
+        //   manualChunks(id) {
+        //     if (id.indexOf("monaco-editor") > -1) {
+        //       return "monaco-core";
+        //     }
+        //     if (id.indexOf("/src/") > -1) {
+        //       return "index";
+        //     }
+        //   },
+        // },
+        external: ["os", "path"],
+      },
       // lib: {
       //   entry: path.resolve(__dirname, "src/index.ts"),
       //   fileName: "index",
@@ -47,7 +77,6 @@ export default defineConfig(async ({ mode }) => {
         "monaco-textmate",
         "monaco-editor-textmate",
         "monaco-editor-core",
-        "vscode",
         "vscode-jsonrpc",
         "vscode-languageclient",
         "vscode-languageserver",
@@ -62,13 +91,15 @@ export default defineConfig(async ({ mode }) => {
         "vscode-languageserver-types",
         "@codingame/monaco-jsonrpc",
       ],
-      exclude: ["path", "zora-reporters", "@addLibs", "@yuyi919/advscript-parser"],
+      exclude: ["vscode", "path", "zora-reporters", "@addLibs", "@yuyi919/advscript-parser"],
     },
     server: {
       // host: Configuration.defaults.development.host,
       port: 3000, // Configuration.defaults.development.port,
-      strictPort: true,
       force: true,
+      fs: {
+        strict: false,
+      },
     },
   };
 }) as UserConfigFn;

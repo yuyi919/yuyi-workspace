@@ -611,6 +611,14 @@
       "allowedCategories": [ "production" ]
     },
     {
+      "name": "rollup-plugin-node-builtins",
+      "allowedCategories": [ "production" ]
+    },
+    {
+      "name": "rollup-plugin-node-globals",
+      "allowedCategories": [ "production" ]
+    },
+    {
       "name": "rollup-plugin-node-polyfills",
       "allowedCategories": [ "production" ]
     },

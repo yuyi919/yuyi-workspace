@@ -5,6 +5,7 @@
  ******************************************************************************/
 
 import {
+  AstNode,
   AstNodeDescription,
   DefaultScopeComputation,
   interruptAndCheck,
@@ -13,54 +14,80 @@ import {
   PrecomputedScopes,
 } from "langium";
 import { CancellationToken } from "vscode-jsonrpc";
-import { DomainModelNameProvider } from "./advscript-provider";
+import { AdvscriptModelNameProvider } from "./advscript-provider";
 import {
-  CharacterDefine,
+  isDocument,
   isCharacter,
-  isCharacterDefine,
   isDialog,
-  isModel,
-  Model,
+  Document,
+  CharactersDeclare,
+  isCharactersDeclare,
+  Declare,
+  MacroDeclare,
+  isMacroDeclare,
+  isMacro,
 } from "./generated/ast";
 
-export class DomainModelScopeComputation extends DefaultScopeComputation {
+export class ScopeComputation extends DefaultScopeComputation {
   constructor(services: LangiumServices) {
     super(services);
   }
+  declare nameProvider: AdvscriptModelNameProvider;
 
   async computeScope(
     document: LangiumDocument,
     cancelToken = CancellationToken.None
   ): Promise<PrecomputedScopes> {
-    const model = document.parseResult.value as Model;
-    const scopes = new Map<any, any>();
+    const model = document.parseResult.value as Document;
+    const scopes = new Map<AstNode, AstNodeDescription[]>();
     await this.processContainer(model, scopes, document, cancelToken);
-    // const next = await super.computeScope(document, cancelToken)
-    return scopes;
+    const next = await super.computeScope(document, cancelToken);
+    console.log(scopes);
+    return scopes; //scopes;
   }
 
   protected async processContainer(
-    container: Model | CharacterDefine,
+    container: Document | CharactersDeclare | MacroDeclare,
     scopes: PrecomputedScopes,
     document: LangiumDocument,
     cancelToken: CancellationToken
   ): Promise<AstNodeDescription[]> {
     const localDescriptions: AstNodeDescription[] = [];
-    for (const element of isModel(container)
+    for (const element of isDocument(container)
       ? [...container.defines, ...container.contents]
       : container.elements) {
       interruptAndCheck(cancelToken);
       if (isCharacter(element)) {
         const description = this.descriptions.createDescription(element, element.name, document);
         localDescriptions.push(description);
+        const children: AstNodeDescription[] = [];
+        element.modifiers.forEach((el) => {
+          children.push(this.descriptions.createDescription(element, "modifiers." + el.name, document));
+        });
+        scopes.set(element, children);
+      } else 
+      if (isMacro(element)) {
+        const description = this.descriptions.createDescription(element, element.name, document);
+        localDescriptions.push(description);
+        const children: AstNodeDescription[] = [];
+        element.args.forEach((el) => {
+          children.push(this.descriptions.createDescription(element, "macro." + el.name, document));
+        });
+        scopes.set(element, children);
       } else if (isDialog(element)) {
         const description = this.descriptions.createDescription(
           element,
-          "Characters." + element.name?.$refText,
+          element.ref?.$refText,
           document
         );
         localDescriptions.push(description);
-      } else if (isCharacterDefine(element)) {
+        const children: AstNodeDescription[] = [];
+        element.elements.forEach((el) => {
+          children.push(this.descriptions.createDescription(element, el.$refText, document));
+        });
+        scopes.set(element, children);
+        console.log("Dialog", element, children)
+      } else if (this.nameProvider.isDeepPathedNode(element)) {
         const nestedDescriptions = await this.processContainer(
           element,
           scopes,
@@ -72,6 +99,7 @@ export class DomainModelScopeComputation extends DefaultScopeComputation {
           const qualified = this.createQualifiedDescription(element, description, document);
           localDescriptions.push(qualified);
         }
+        console.log("isCharactersDeclare", element.$type, nestedDescriptions, localDescriptions);
       }
     }
     scopes.set(container, localDescriptions);
@@ -79,14 +107,11 @@ export class DomainModelScopeComputation extends DefaultScopeComputation {
   }
 
   protected createQualifiedDescription(
-    pack: CharacterDefine,
+    pack: Declare,
     description: AstNodeDescription,
     document: LangiumDocument
   ): AstNodeDescription {
-    const name = (this.nameProvider as DomainModelNameProvider).getQualifiedName(
-      pack.name,
-      description.name
-    );
+    const name = this.nameProvider.getQualifiedName(pack, description.name);
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     return this.descriptions.createDescription(description.node!, name, document);
   }

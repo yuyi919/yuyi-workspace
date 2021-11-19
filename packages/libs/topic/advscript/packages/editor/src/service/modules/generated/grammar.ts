@@ -3,22 +3,26 @@
  * DO NOT EDIT MANUALLY!
  ******************************************************************************/
 
-import { loadGrammar, Grammar } from "langium";
+import { loadGrammar, Grammar } from 'langium';
 
 let loaded: Grammar | undefined;
-export const grammar = (): Grammar =>
-  loaded ||
-  (loaded = loadGrammar(`{
+export const grammar = (): Grammar => loaded || (loaded = loadGrammar(`{
   "$type": "Grammar",
   "usedGrammars": [],
   "hiddenTokens": [],
-  "metamodelDeclarations": [],
+  "metamodelDeclarations": [
+    {
+      "$type": "ReferencedMetamodel",
+      "ePackage": "./aoo"
+    }
+  ],
   "rules": [
     {
       "$type": "ParserRule",
       "parameters": [],
-      "name": "Model",
+      "name": "Document",
       "hiddenTokens": [],
+      "entry": true,
       "alternatives": {
         "$type": "Group",
         "elements": [
@@ -30,8 +34,9 @@ export const grammar = (): Grammar =>
               "$type": "RuleCall",
               "arguments": [],
               "rule": {
-                "$refText": "Define"
-              }
+                "$refText": "Declare"
+              },
+              "elements": []
             },
             "cardinality": "*",
             "elements": []
@@ -39,19 +44,6 @@ export const grammar = (): Grammar =>
           {
             "$type": "Alternatives",
             "elements": [
-              {
-                "$type": "Assignment",
-                "feature": "hellos",
-                "operator": "+=",
-                "terminal": {
-                  "$type": "RuleCall",
-                  "arguments": [],
-                  "rule": {
-                    "$refText": "Hello"
-                  }
-                },
-                "elements": []
-              },
               {
                 "$type": "Assignment",
                 "feature": "contents",
@@ -71,11 +63,12 @@ export const grammar = (): Grammar =>
                       "$type": "RuleCall",
                       "arguments": [],
                       "rule": {
-                        "$refText": "Echo"
+                        "$refText": "Action"
                       }
                     }
                   ]
                 },
+                "cardinality": "+",
                 "elements": []
               },
               {
@@ -95,7 +88,7 @@ export const grammar = (): Grammar =>
     {
       "$type": "ParserRule",
       "parameters": [],
-      "name": "Define",
+      "name": "Identifier",
       "hiddenTokens": [],
       "alternatives": {
         "$type": "Alternatives",
@@ -104,7 +97,7 @@ export const grammar = (): Grammar =>
             "$type": "RuleCall",
             "arguments": [],
             "rule": {
-              "$refText": "CharacterDefine"
+              "$refText": "Macro"
             },
             "elements": []
           },
@@ -112,7 +105,92 @@ export const grammar = (): Grammar =>
             "$type": "RuleCall",
             "arguments": [],
             "rule": {
-              "$refText": "OtherDefine"
+              "$refText": "Param"
+            },
+            "elements": []
+          }
+        ]
+      }
+    },
+    {
+      "$type": "ParserRule",
+      "parameters": [],
+      "name": "QualifiedName",
+      "hiddenTokens": [],
+      "alternatives": {
+        "$type": "Group",
+        "elements": [
+          {
+            "$type": "Assignment",
+            "feature": "name",
+            "operator": "+=",
+            "terminal": {
+              "$type": "CrossReference",
+              "type": {
+                "$refText": "Identifier"
+              }
+            },
+            "cardinality": "+",
+            "elements": []
+          },
+          {
+            "$type": "Group",
+            "elements": [
+              {
+                "$type": "RuleCall",
+                "arguments": [],
+                "rule": {
+                  "$refText": "Token_P"
+                },
+                "elements": []
+              },
+              {
+                "$type": "Assignment",
+                "feature": "name",
+                "operator": "+=",
+                "terminal": {
+                  "$type": "CrossReference",
+                  "type": {
+                    "$refText": "Identifier"
+                  }
+                },
+                "cardinality": "+"
+              }
+            ],
+            "cardinality": "*"
+          }
+        ]
+      }
+    },
+    {
+      "$type": "ParserRule",
+      "parameters": [],
+      "name": "Declare",
+      "hiddenTokens": [],
+      "alternatives": {
+        "$type": "Alternatives",
+        "elements": [
+          {
+            "$type": "RuleCall",
+            "arguments": [],
+            "rule": {
+              "$refText": "CharactersDeclare"
+            },
+            "elements": []
+          },
+          {
+            "$type": "RuleCall",
+            "arguments": [],
+            "rule": {
+              "$refText": "MacroDeclare"
+            },
+            "elements": []
+          },
+          {
+            "$type": "RuleCall",
+            "arguments": [],
+            "rule": {
+              "$refText": "OtherDeclare"
             },
             "elements": []
           },
@@ -130,14 +208,14 @@ export const grammar = (): Grammar =>
     {
       "$type": "ParserRule",
       "parameters": [],
-      "name": "CharacterDefine",
+      "name": "CharactersDeclare",
       "hiddenTokens": [],
       "alternatives": {
         "$type": "Group",
         "elements": [
           {
             "$type": "Assignment",
-            "feature": "name",
+            "feature": "kind",
             "operator": "=",
             "terminal": {
               "$type": "Keyword",
@@ -146,8 +224,11 @@ export const grammar = (): Grammar =>
             "elements": []
           },
           {
-            "$type": "Keyword",
-            "value": ":"
+            "$type": "RuleCall",
+            "arguments": [],
+            "rule": {
+              "$refText": "Token_Colon"
+            }
           },
           {
             "$type": "RuleCall",
@@ -192,19 +273,22 @@ export const grammar = (): Grammar =>
             "$type": "RuleCall",
             "arguments": [],
             "rule": {
-              "$refText": "WS"
+              "$refText": "SPACE"
             },
             "elements": []
-          },
-          {
-            "$type": "Keyword",
-            "value": "-"
           },
           {
             "$type": "RuleCall",
             "arguments": [],
             "rule": {
-              "$refText": "WS"
+              "$refText": "Token_Minus"
+            }
+          },
+          {
+            "$type": "RuleCall",
+            "arguments": [],
+            "rule": {
+              "$refText": "SPACE"
             }
           },
           {
@@ -215,22 +299,133 @@ export const grammar = (): Grammar =>
               "$type": "RuleCall",
               "arguments": [],
               "rule": {
-                "$refText": "AnyPlainText"
+                "$refText": "ID"
               }
             }
           },
           {
-            "$type": "Assignment",
-            "feature": "params",
-            "operator": "+=",
-            "terminal": {
-              "$type": "RuleCall",
-              "arguments": [],
-              "rule": {
-                "$refText": "Param"
+            "$type": "Group",
+            "elements": [
+              {
+                "$type": "RuleCall",
+                "arguments": [],
+                "rule": {
+                  "$refText": "WS"
+                },
+                "elements": []
+              },
+              {
+                "$type": "RuleCall",
+                "arguments": [],
+                "rule": {
+                  "$refText": "Token_PL"
+                }
+              },
+              {
+                "$type": "RuleCall",
+                "arguments": [],
+                "rule": {
+                  "$refText": "WS"
+                },
+                "cardinality": "?"
+              },
+              {
+                "$type": "Assignment",
+                "feature": "modifiers",
+                "operator": "+=",
+                "terminal": {
+                  "$type": "RuleCall",
+                  "arguments": [],
+                  "rule": {
+                    "$refText": "Modifier"
+                  }
+                },
+                "cardinality": "+"
+              },
+              {
+                "$type": "Group",
+                "elements": [
+                  {
+                    "$type": "Keyword",
+                    "value": ",",
+                    "elements": []
+                  },
+                  {
+                    "$type": "RuleCall",
+                    "arguments": [],
+                    "rule": {
+                      "$refText": "WS"
+                    },
+                    "cardinality": "?"
+                  },
+                  {
+                    "$type": "Assignment",
+                    "feature": "modifiers",
+                    "operator": "+=",
+                    "terminal": {
+                      "$type": "RuleCall",
+                      "arguments": [],
+                      "rule": {
+                        "$refText": "Modifier"
+                      }
+                    },
+                    "cardinality": "+"
+                  }
+                ],
+                "cardinality": "*"
+              },
+              {
+                "$type": "RuleCall",
+                "arguments": [],
+                "rule": {
+                  "$refText": "WS"
+                },
+                "cardinality": "?"
+              },
+              {
+                "$type": "RuleCall",
+                "arguments": [],
+                "rule": {
+                  "$refText": "Token_PR"
+                }
               }
-            },
+            ],
+            "cardinality": "?"
+          },
+          {
+            "$type": "Group",
+            "elements": [
+              {
+                "$type": "RuleCall",
+                "arguments": [],
+                "rule": {
+                  "$refText": "WS"
+                },
+                "elements": []
+              },
+              {
+                "$type": "Assignment",
+                "feature": "elements",
+                "operator": "+=",
+                "terminal": {
+                  "$type": "RuleCall",
+                  "arguments": [],
+                  "rule": {
+                    "$refText": "Param"
+                  }
+                },
+                "cardinality": "+"
+              }
+            ],
             "cardinality": "*"
+          },
+          {
+            "$type": "RuleCall",
+            "arguments": [],
+            "rule": {
+              "$refText": "WS"
+            },
+            "cardinality": "?"
           },
           {
             "$type": "RuleCall",
@@ -245,7 +440,270 @@ export const grammar = (): Grammar =>
     {
       "$type": "ParserRule",
       "parameters": [],
-      "name": "OtherDefine",
+      "name": "Modifier",
+      "hiddenTokens": [],
+      "alternatives": {
+        "$type": "Assignment",
+        "feature": "name",
+        "operator": "=",
+        "terminal": {
+          "$type": "RuleCall",
+          "arguments": [],
+          "rule": {
+            "$refText": "ID"
+          }
+        },
+        "elements": []
+      }
+    },
+    {
+      "$type": "ParserRule",
+      "parameters": [],
+      "name": "MacroDeclare",
+      "hiddenTokens": [],
+      "alternatives": {
+        "$type": "Group",
+        "elements": [
+          {
+            "$type": "Assignment",
+            "feature": "kind",
+            "operator": "=",
+            "terminal": {
+              "$type": "Keyword",
+              "value": "Macros"
+            },
+            "elements": []
+          },
+          {
+            "$type": "RuleCall",
+            "arguments": [],
+            "rule": {
+              "$refText": "Token_Colon"
+            }
+          },
+          {
+            "$type": "RuleCall",
+            "arguments": [],
+            "rule": {
+              "$refText": "WS"
+            },
+            "cardinality": "?"
+          },
+          {
+            "$type": "RuleCall",
+            "arguments": [],
+            "rule": {
+              "$refText": "EOL"
+            }
+          },
+          {
+            "$type": "Assignment",
+            "feature": "elements",
+            "operator": "+=",
+            "terminal": {
+              "$type": "RuleCall",
+              "arguments": [],
+              "rule": {
+                "$refText": "Macro"
+              }
+            },
+            "cardinality": "+"
+          }
+        ]
+      }
+    },
+    {
+      "$type": "ParserRule",
+      "parameters": [],
+      "name": "Macro",
+      "hiddenTokens": [],
+      "alternatives": {
+        "$type": "Group",
+        "elements": [
+          {
+            "$type": "RuleCall",
+            "arguments": [],
+            "rule": {
+              "$refText": "SPACE"
+            },
+            "elements": []
+          },
+          {
+            "$type": "RuleCall",
+            "arguments": [],
+            "rule": {
+              "$refText": "Token_Minus"
+            }
+          },
+          {
+            "$type": "RuleCall",
+            "arguments": [],
+            "rule": {
+              "$refText": "SPACE"
+            }
+          },
+          {
+            "$type": "Assignment",
+            "feature": "name",
+            "operator": "=",
+            "terminal": {
+              "$type": "RuleCall",
+              "arguments": [],
+              "rule": {
+                "$refText": "ID"
+              }
+            }
+          },
+          {
+            "$type": "Group",
+            "elements": [
+              {
+                "$type": "RuleCall",
+                "arguments": [],
+                "rule": {
+                  "$refText": "WS"
+                },
+                "elements": []
+              },
+              {
+                "$type": "RuleCall",
+                "arguments": [],
+                "rule": {
+                  "$refText": "Token_PL"
+                }
+              },
+              {
+                "$type": "RuleCall",
+                "arguments": [],
+                "rule": {
+                  "$refText": "WS"
+                },
+                "cardinality": "?"
+              },
+              {
+                "$type": "Assignment",
+                "feature": "groups",
+                "operator": "+=",
+                "terminal": {
+                  "$type": "CrossReference",
+                  "type": {
+                    "$refText": "Character"
+                  },
+                  "terminal": {
+                    "$type": "RuleCall",
+                    "arguments": [],
+                    "rule": {
+                      "$refText": "ID"
+                    }
+                  }
+                },
+                "cardinality": "+"
+              },
+              {
+                "$type": "Group",
+                "elements": [
+                  {
+                    "$type": "Keyword",
+                    "value": ",",
+                    "elements": []
+                  },
+                  {
+                    "$type": "RuleCall",
+                    "arguments": [],
+                    "rule": {
+                      "$refText": "WS"
+                    },
+                    "cardinality": "?"
+                  },
+                  {
+                    "$type": "Assignment",
+                    "feature": "groups",
+                    "operator": "+=",
+                    "terminal": {
+                      "$type": "CrossReference",
+                      "type": {
+                        "$refText": "Character"
+                      },
+                      "terminal": {
+                        "$type": "RuleCall",
+                        "arguments": [],
+                        "rule": {
+                          "$refText": "ID"
+                        }
+                      }
+                    },
+                    "cardinality": "+"
+                  }
+                ],
+                "cardinality": "*"
+              },
+              {
+                "$type": "RuleCall",
+                "arguments": [],
+                "rule": {
+                  "$refText": "WS"
+                },
+                "cardinality": "?"
+              },
+              {
+                "$type": "RuleCall",
+                "arguments": [],
+                "rule": {
+                  "$refText": "Token_PR"
+                }
+              }
+            ],
+            "cardinality": "?"
+          },
+          {
+            "$type": "Group",
+            "elements": [
+              {
+                "$type": "RuleCall",
+                "arguments": [],
+                "rule": {
+                  "$refText": "WS"
+                },
+                "elements": []
+              },
+              {
+                "$type": "Assignment",
+                "feature": "args",
+                "operator": "+=",
+                "terminal": {
+                  "$type": "RuleCall",
+                  "arguments": [],
+                  "rule": {
+                    "$refText": "Param"
+                  }
+                },
+                "cardinality": "+"
+              }
+            ],
+            "cardinality": "*"
+          },
+          {
+            "$type": "RuleCall",
+            "arguments": [],
+            "rule": {
+              "$refText": "WS"
+            },
+            "cardinality": "?"
+          },
+          {
+            "$type": "RuleCall",
+            "arguments": [],
+            "rule": {
+              "$refText": "EOL"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "$type": "ParserRule",
+      "parameters": [],
+      "name": "OtherDeclare",
       "hiddenTokens": [],
       "alternatives": {
         "$type": "Group",
@@ -264,8 +722,11 @@ export const grammar = (): Grammar =>
             "elements": []
           },
           {
-            "$type": "Keyword",
-            "value": ":"
+            "$type": "RuleCall",
+            "arguments": [],
+            "rule": {
+              "$refText": "Token_Colon"
+            }
           },
           {
             "$type": "RuleCall",
@@ -276,13 +737,13 @@ export const grammar = (): Grammar =>
           },
           {
             "$type": "Assignment",
-            "feature": "value",
+            "feature": "elements",
             "operator": "=",
             "terminal": {
               "$type": "RuleCall",
               "arguments": [],
               "rule": {
-                "$refText": "AnyPlainText"
+                "$refText": "SafeText"
               }
             }
           },
@@ -305,16 +766,8 @@ export const grammar = (): Grammar =>
         "$type": "Group",
         "elements": [
           {
-            "$type": "RuleCall",
-            "arguments": [],
-            "rule": {
-              "$refText": "WS"
-            },
-            "elements": []
-          },
-          {
             "$type": "Assignment",
-            "feature": "key",
+            "feature": "name",
             "operator": "=",
             "terminal": {
               "$type": "RuleCall",
@@ -322,22 +775,122 @@ export const grammar = (): Grammar =>
               "rule": {
                 "$refText": "ID"
               }
-            }
+            },
+            "elements": []
           },
           {
-            "$type": "Keyword",
-            "value": "="
+            "$type": "RuleCall",
+            "arguments": [],
+            "rule": {
+              "$refText": "WS"
+            },
+            "cardinality": "?"
+          },
+          {
+            "$type": "RuleCall",
+            "arguments": [],
+            "rule": {
+              "$refText": "ParamInitial"
+            },
+            "cardinality": "?"
+          }
+        ]
+      }
+    },
+    {
+      "$type": "ParserRule",
+      "parameters": [],
+      "name": "UseParam",
+      "hiddenTokens": [],
+      "alternatives": {
+        "$type": "Group",
+        "elements": [
+          {
+            "$type": "Assignment",
+            "feature": "ref",
+            "operator": "=",
+            "terminal": {
+              "$type": "CrossReference",
+              "type": {
+                "$refText": "Param"
+              },
+              "terminal": {
+                "$type": "RuleCall",
+                "arguments": [],
+                "rule": {
+                  "$refText": "ID"
+                }
+              }
+            },
+            "elements": []
+          },
+          {
+            "$type": "RuleCall",
+            "arguments": [],
+            "rule": {
+              "$refText": "WS"
+            },
+            "cardinality": "?"
+          },
+          {
+            "$type": "RuleCall",
+            "arguments": [],
+            "rule": {
+              "$refText": "ParamInitial"
+            },
+            "cardinality": "?"
+          }
+        ]
+      }
+    },
+    {
+      "$type": "ParserRule",
+      "parameters": [],
+      "name": "ParamInitial",
+      "hiddenTokens": [],
+      "fragment": true,
+      "alternatives": {
+        "$type": "Group",
+        "elements": [
+          {
+            "$type": "RuleCall",
+            "arguments": [],
+            "rule": {
+              "$refText": "Token_Equal"
+            },
+            "elements": []
+          },
+          {
+            "$type": "RuleCall",
+            "arguments": [],
+            "rule": {
+              "$refText": "WS"
+            },
+            "cardinality": "?"
           },
           {
             "$type": "Assignment",
             "feature": "value",
             "operator": "=",
             "terminal": {
-              "$type": "RuleCall",
-              "arguments": [],
-              "rule": {
-                "$refText": "Literal"
-              }
+              "$type": "Alternatives",
+              "elements": [
+                {
+                  "$type": "RuleCall",
+                  "arguments": [],
+                  "rule": {
+                    "$refText": "LiteralExpression"
+                  },
+                  "elements": []
+                },
+                {
+                  "$type": "RuleCall",
+                  "arguments": [],
+                  "rule": {
+                    "$refText": "PlainText"
+                  }
+                }
+              ]
             }
           }
         ]
@@ -346,70 +899,8 @@ export const grammar = (): Grammar =>
     {
       "$type": "ParserRule",
       "parameters": [],
-      "name": "Literal",
+      "name": "PlainText",
       "hiddenTokens": [],
-      "type": "Literal",
-      "alternatives": {
-        "$type": "Alternatives",
-        "elements": [
-          {
-            "$type": "RuleCall",
-            "arguments": [],
-            "rule": {
-              "$refText": "StringLiteral"
-            },
-            "elements": []
-          },
-          {
-            "$type": "RuleCall",
-            "arguments": [],
-            "rule": {
-              "$refText": "NumberLiteral"
-            },
-            "elements": []
-          }
-        ]
-      }
-    },
-    {
-      "$type": "ParserRule",
-      "parameters": [],
-      "name": "StringLiteral",
-      "hiddenTokens": [],
-      "type": "Literal",
-      "alternatives": {
-        "$type": "Assignment",
-        "feature": "value",
-        "operator": "=",
-        "terminal": {
-          "$type": "Alternatives",
-          "elements": [
-            {
-              "$type": "RuleCall",
-              "arguments": [],
-              "rule": {
-                "$refText": "STRING"
-              },
-              "elements": []
-            },
-            {
-              "$type": "RuleCall",
-              "arguments": [],
-              "rule": {
-                "$refText": "AnyPlainText"
-              }
-            }
-          ]
-        },
-        "elements": []
-      }
-    },
-    {
-      "$type": "ParserRule",
-      "parameters": [],
-      "name": "NumberLiteral",
-      "hiddenTokens": [],
-      "type": "Literal",
       "alternatives": {
         "$type": "Assignment",
         "feature": "value",
@@ -418,7 +909,7 @@ export const grammar = (): Grammar =>
           "$type": "RuleCall",
           "arguments": [],
           "rule": {
-            "$refText": "INT"
+            "$refText": "AnyPlainText"
           }
         },
         "elements": []
@@ -427,14 +918,14 @@ export const grammar = (): Grammar =>
     {
       "$type": "ParserRule",
       "parameters": [],
-      "name": "Hello",
+      "name": "Call",
       "hiddenTokens": [],
       "alternatives": {
         "$type": "Group",
         "elements": [
           {
             "$type": "Keyword",
-            "value": "Hello:",
+            "value": "[",
             "elements": []
           },
           {
@@ -442,36 +933,155 @@ export const grammar = (): Grammar =>
             "arguments": [],
             "rule": {
               "$refText": "WS"
-            }
+            },
+            "cardinality": "?"
           },
           {
             "$type": "Assignment",
-            "feature": "person",
+            "feature": "ref",
             "operator": "=",
             "terminal": {
               "$type": "CrossReference",
               "type": {
-                "$refText": "Character"
+                "$refText": "Macro"
               },
               "terminal": {
                 "$type": "RuleCall",
                 "arguments": [],
                 "rule": {
-                  "$refText": "QualifiedName"
+                  "$refText": "ID"
                 }
               }
             }
           },
           {
-            "$type": "Keyword",
-            "value": "!"
+            "$type": "Group",
+            "elements": [
+              {
+                "$type": "RuleCall",
+                "arguments": [],
+                "rule": {
+                  "$refText": "WS"
+                },
+                "elements": []
+              },
+              {
+                "$type": "Assignment",
+                "feature": "args",
+                "operator": "+=",
+                "terminal": {
+                  "$type": "RuleCall",
+                  "arguments": [],
+                  "rule": {
+                    "$refText": "UseParam"
+                  }
+                },
+                "cardinality": "+"
+              }
+            ],
+            "cardinality": "*"
           },
           {
             "$type": "RuleCall",
             "arguments": [],
             "rule": {
-              "$refText": "EOL"
+              "$refText": "WS"
+            },
+            "cardinality": "?"
+          },
+          {
+            "$type": "Assignment",
+            "feature": "pipe",
+            "operator": "=",
+            "terminal": {
+              "$type": "RuleCall",
+              "arguments": [],
+              "rule": {
+                "$refText": "Pipe"
+              }
+            },
+            "cardinality": "?"
+          },
+          {
+            "$type": "Keyword",
+            "value": "]"
+          }
+        ]
+      }
+    },
+    {
+      "$type": "ParserRule",
+      "parameters": [],
+      "name": "Pipe",
+      "hiddenTokens": [],
+      "alternatives": {
+        "$type": "Group",
+        "elements": [
+          {
+            "$type": "Keyword",
+            "value": "|",
+            "elements": []
+          },
+          {
+            "$type": "RuleCall",
+            "arguments": [],
+            "rule": {
+              "$refText": "WS"
+            },
+            "cardinality": "?"
+          },
+          {
+            "$type": "Assignment",
+            "feature": "ref",
+            "operator": "=",
+            "terminal": {
+              "$type": "CrossReference",
+              "type": {
+                "$refText": "Macro"
+              },
+              "terminal": {
+                "$type": "RuleCall",
+                "arguments": [],
+                "rule": {
+                  "$refText": "ID"
+                }
+              }
             }
+          },
+          {
+            "$type": "Group",
+            "elements": [
+              {
+                "$type": "RuleCall",
+                "arguments": [],
+                "rule": {
+                  "$refText": "WS"
+                },
+                "elements": []
+              },
+              {
+                "$type": "Assignment",
+                "feature": "args",
+                "operator": "+=",
+                "terminal": {
+                  "$type": "RuleCall",
+                  "arguments": [],
+                  "rule": {
+                    "$refText": "UseParam"
+                  }
+                },
+                "cardinality": "+"
+              }
+            ],
+            "cardinality": "*"
+          },
+          {
+            "$type": "RuleCall",
+            "arguments": [],
+            "rule": {
+              "$refText": "WS"
+            },
+            "cardinality": "?"
           }
         ]
       }
@@ -488,13 +1098,13 @@ export const grammar = (): Grammar =>
             "$type": "RuleCall",
             "arguments": [],
             "rule": {
-              "$refText": "AT"
+              "$refText": "TOKEN_AT"
             },
             "elements": []
           },
           {
             "$type": "Assignment",
-            "feature": "name",
+            "feature": "ref",
             "operator": "=",
             "terminal": {
               "$type": "CrossReference",
@@ -505,10 +1115,142 @@ export const grammar = (): Grammar =>
                 "$type": "RuleCall",
                 "arguments": [],
                 "rule": {
-                  "$refText": "QualifiedName"
+                  "$refText": "ID"
                 }
               }
             }
+          },
+          {
+            "$type": "RuleCall",
+            "arguments": [],
+            "rule": {
+              "$refText": "WS"
+            },
+            "cardinality": "?"
+          },
+          {
+            "$type": "Group",
+            "elements": [
+              {
+                "$type": "RuleCall",
+                "arguments": [],
+                "rule": {
+                  "$refText": "Token_PL"
+                },
+                "elements": []
+              },
+              {
+                "$type": "RuleCall",
+                "arguments": [],
+                "rule": {
+                  "$refText": "WS"
+                },
+                "cardinality": "?"
+              },
+              {
+                "$type": "Assignment",
+                "feature": "elements",
+                "operator": "+=",
+                "terminal": {
+                  "$type": "CrossReference",
+                  "type": {
+                    "$refText": "Modifier"
+                  },
+                  "terminal": {
+                    "$type": "RuleCall",
+                    "arguments": [],
+                    "rule": {
+                      "$refText": "ID"
+                    }
+                  }
+                },
+                "cardinality": "+"
+              },
+              {
+                "$type": "Group",
+                "elements": [
+                  {
+                    "$type": "Keyword",
+                    "value": ",",
+                    "elements": []
+                  },
+                  {
+                    "$type": "RuleCall",
+                    "arguments": [],
+                    "rule": {
+                      "$refText": "WS"
+                    },
+                    "cardinality": "?"
+                  },
+                  {
+                    "$type": "Assignment",
+                    "feature": "elements",
+                    "operator": "+=",
+                    "terminal": {
+                      "$type": "CrossReference",
+                      "type": {
+                        "$refText": "Modifier"
+                      },
+                      "terminal": {
+                        "$type": "RuleCall",
+                        "arguments": [],
+                        "rule": {
+                          "$refText": "ID"
+                        }
+                      }
+                    },
+                    "cardinality": "+"
+                  }
+                ],
+                "cardinality": "?"
+              },
+              {
+                "$type": "RuleCall",
+                "arguments": [],
+                "rule": {
+                  "$refText": "WS"
+                },
+                "cardinality": "?"
+              },
+              {
+                "$type": "RuleCall",
+                "arguments": [],
+                "rule": {
+                  "$refText": "Token_PR"
+                }
+              }
+            ],
+            "cardinality": "?"
+          },
+          {
+            "$type": "Group",
+            "elements": [
+              {
+                "$type": "RuleCall",
+                "arguments": [],
+                "rule": {
+                  "$refText": "WS"
+                },
+                "cardinality": "?",
+                "elements": []
+              },
+              {
+                "$type": "RuleCall",
+                "arguments": [],
+                "rule": {
+                  "$refText": "Call"
+                }
+              },
+              {
+                "$type": "RuleCall",
+                "arguments": [],
+                "rule": {
+                  "$refText": "WS"
+                },
+                "cardinality": "?"
+              }
+            ],
+            "cardinality": "?"
           },
           {
             "$type": "RuleCall",
@@ -519,15 +1261,16 @@ export const grammar = (): Grammar =>
           },
           {
             "$type": "Assignment",
-            "feature": "dialogs",
-            "operator": "=",
+            "feature": "contents",
+            "operator": "+=",
             "terminal": {
               "$type": "RuleCall",
               "arguments": [],
               "rule": {
-                "$refText": "DialogContent"
+                "$refText": "Echo"
               }
-            }
+            },
+            "cardinality": "*"
           },
           {
             "$type": "RuleCall",
@@ -542,21 +1285,33 @@ export const grammar = (): Grammar =>
     {
       "$type": "ParserRule",
       "parameters": [],
-      "name": "DialogContent",
+      "name": "Action",
       "hiddenTokens": [],
       "alternatives": {
-        "$type": "Assignment",
-        "feature": "contents",
-        "operator": "+=",
-        "terminal": {
-          "$type": "RuleCall",
-          "arguments": [],
-          "rule": {
-            "$refText": "Echo"
+        "$type": "Group",
+        "elements": [
+          {
+            "$type": "Assignment",
+            "feature": "content",
+            "operator": "+=",
+            "terminal": {
+              "$type": "RuleCall",
+              "arguments": [],
+              "rule": {
+                "$refText": "Echo"
+              }
+            },
+            "elements": [],
+            "cardinality": "+"
+          },
+          {
+            "$type": "RuleCall",
+            "arguments": [],
+            "rule": {
+              "$refText": "EOL"
+            }
           }
-        },
-        "cardinality": "*",
-        "elements": []
+        ]
       }
     },
     {
@@ -578,9 +1333,23 @@ export const grammar = (): Grammar =>
                   "$type": "RuleCall",
                   "arguments": [],
                   "rule": {
-                    "$refText": "Template"
+                    "$refText": "AtInline"
                   },
                   "elements": []
+                },
+                {
+                  "$type": "RuleCall",
+                  "arguments": [],
+                  "rule": {
+                    "$refText": "Template"
+                  }
+                },
+                {
+                  "$type": "RuleCall",
+                  "arguments": [],
+                  "rule": {
+                    "$refText": "Call"
+                  }
                 },
                 {
                   "$type": "RuleCall",
@@ -595,6 +1364,19 @@ export const grammar = (): Grammar =>
             "elements": []
           },
           {
+            "$type": "Assignment",
+            "feature": "pipe",
+            "operator": "=",
+            "terminal": {
+              "$type": "RuleCall",
+              "arguments": [],
+              "rule": {
+                "$refText": "Pipe"
+              }
+            },
+            "cardinality": "?"
+          },
+          {
             "$type": "RuleCall",
             "arguments": [],
             "rule": {
@@ -607,37 +1389,53 @@ export const grammar = (): Grammar =>
     {
       "$type": "ParserRule",
       "parameters": [],
-      "name": "QualifiedName",
+      "name": "AtInline",
       "hiddenTokens": [],
-      "type": "string",
       "alternatives": {
         "$type": "Group",
         "elements": [
           {
-            "$type": "RuleCall",
-            "arguments": [],
-            "rule": {
-              "$refText": "ID"
-            },
+            "$type": "Keyword",
+            "value": "[@",
             "elements": []
           },
           {
-            "$type": "Group",
-            "elements": [
-              {
-                "$type": "Keyword",
-                "value": ".",
-                "elements": []
+            "$type": "RuleCall",
+            "arguments": [],
+            "rule": {
+              "$refText": "WS"
+            },
+            "cardinality": "?"
+          },
+          {
+            "$type": "Assignment",
+            "feature": "ref",
+            "operator": "=",
+            "terminal": {
+              "$type": "CrossReference",
+              "type": {
+                "$refText": "Character"
               },
-              {
+              "terminal": {
                 "$type": "RuleCall",
                 "arguments": [],
                 "rule": {
                   "$refText": "ID"
                 }
               }
-            ],
-            "cardinality": "*"
+            }
+          },
+          {
+            "$type": "RuleCall",
+            "arguments": [],
+            "rule": {
+              "$refText": "WS"
+            },
+            "cardinality": "?"
+          },
+          {
+            "$type": "Keyword",
+            "value": "]"
           }
         ]
       }
@@ -652,30 +1450,40 @@ export const grammar = (): Grammar =>
         "elements": [
           {
             "$type": "Keyword",
-            "value": "@[",
+            "value": "{{",
             "elements": []
           },
           {
+            "$type": "RuleCall",
+            "arguments": [],
+            "rule": {
+              "$refText": "WS"
+            },
+            "cardinality": "?"
+          },
+          {
             "$type": "Assignment",
-            "feature": "name",
+            "feature": "expression",
             "operator": "=",
             "terminal": {
-              "$type": "CrossReference",
-              "type": {
-                "$refText": "Character"
-              },
-              "terminal": {
-                "$type": "RuleCall",
-                "arguments": [],
-                "rule": {
-                  "$refText": "QualifiedName"
-                }
+              "$type": "RuleCall",
+              "arguments": [],
+              "rule": {
+                "$refText": "Expression"
               }
             }
           },
           {
+            "$type": "RuleCall",
+            "arguments": [],
+            "rule": {
+              "$refText": "WS"
+            },
+            "cardinality": "?"
+          },
+          {
             "$type": "Keyword",
-            "value": "]"
+            "value": "}}"
           }
         ]
       }
@@ -693,7 +1501,7 @@ export const grammar = (): Grammar =>
           "$type": "RuleCall",
           "arguments": [],
           "rule": {
-            "$refText": "PlainText"
+            "$refText": "SafeText"
           }
         },
         "elements": []
@@ -702,7 +1510,49 @@ export const grammar = (): Grammar =>
     {
       "$type": "ParserRule",
       "parameters": [],
-      "name": "PlainText",
+      "name": "SafeText",
+      "hiddenTokens": [],
+      "type": "string",
+      "alternatives": {
+        "$type": "Group",
+        "elements": [
+          {
+            "$type": "RuleCall",
+            "arguments": [],
+            "rule": {
+              "$refText": "SafeTextPiece"
+            },
+            "elements": []
+          },
+          {
+            "$type": "Alternatives",
+            "elements": [
+              {
+                "$type": "RuleCall",
+                "arguments": [],
+                "rule": {
+                  "$refText": "SafeTextPiece"
+                },
+                "elements": []
+              },
+              {
+                "$type": "RuleCall",
+                "arguments": [],
+                "rule": {
+                  "$refText": "TOKEN_AT"
+                },
+                "elements": []
+              }
+            ],
+            "cardinality": "*"
+          }
+        ]
+      }
+    },
+    {
+      "$type": "ParserRule",
+      "parameters": [],
+      "name": "SafeTextPiece",
       "hiddenTokens": [],
       "type": "string",
       "alternatives": {
@@ -712,7 +1562,7 @@ export const grammar = (): Grammar =>
             "$type": "RuleCall",
             "arguments": [],
             "rule": {
-              "$refText": "WS"
+              "$refText": "SPACE"
             },
             "cardinality": "+",
             "elements": []
@@ -737,7 +1587,7 @@ export const grammar = (): Grammar =>
             "$type": "RuleCall",
             "arguments": [],
             "rule": {
-              "$refText": "INT"
+              "$refText": "NUMBER"
             },
             "elements": []
           },
@@ -750,17 +1600,22 @@ export const grammar = (): Grammar =>
             "elements": []
           },
           {
-            "$type": "Keyword",
-            "value": "!",
+            "$type": "RuleCall",
+            "arguments": [],
+            "rule": {
+              "$refText": "ESC"
+            },
             "elements": []
           },
           {
-            "$type": "Keyword",
-            "value": ":",
+            "$type": "RuleCall",
+            "arguments": [],
+            "rule": {
+              "$refText": "ESC_Markup"
+            },
             "elements": []
           }
-        ],
-        "cardinality": "+"
+        ]
       }
     },
     {
@@ -789,13 +1644,19 @@ export const grammar = (): Grammar =>
             "elements": []
           },
           {
-            "$type": "Keyword",
-            "value": "!",
+            "$type": "RuleCall",
+            "arguments": [],
+            "rule": {
+              "$refText": "Token_Colon"
+            },
             "elements": []
           },
           {
-            "$type": "Keyword",
-            "value": ":",
+            "$type": "RuleCall",
+            "arguments": [],
+            "rule": {
+              "$refText": "ESC"
+            },
             "elements": []
           }
         ],
@@ -803,11 +1664,588 @@ export const grammar = (): Grammar =>
       }
     },
     {
-      "$type": "TerminalRule",
+      "$type": "ParserRule",
+      "parameters": [],
+      "name": "ESC_Markup",
+      "hiddenTokens": [],
+      "type": "string",
+      "alternatives": {
+        "$type": "Alternatives",
+        "elements": [
+          {
+            "$type": "RuleCall",
+            "arguments": [],
+            "rule": {
+              "$refText": "Token_Minus"
+            },
+            "elements": []
+          },
+          {
+            "$type": "RuleCall",
+            "arguments": [],
+            "rule": {
+              "$refText": "Token_Equal"
+            },
+            "elements": []
+          },
+          {
+            "$type": "RuleCall",
+            "arguments": [],
+            "rule": {
+              "$refText": "Token_Colon"
+            },
+            "elements": []
+          },
+          {
+            "$type": "RuleCall",
+            "arguments": [],
+            "rule": {
+              "$refText": "Token_PR"
+            },
+            "elements": []
+          },
+          {
+            "$type": "RuleCall",
+            "arguments": [],
+            "rule": {
+              "$refText": "Token_PL"
+            },
+            "elements": []
+          },
+          {
+            "$type": "RuleCall",
+            "arguments": [],
+            "rule": {
+              "$refText": "Token_P"
+            },
+            "elements": []
+          },
+          {
+            "$type": "RuleCall",
+            "arguments": [],
+            "rule": {
+              "$refText": "INLINE_COMMENT"
+            },
+            "elements": []
+          },
+          {
+            "$type": "Keyword",
+            "value": "Characters",
+            "elements": []
+          },
+          {
+            "$type": "Keyword",
+            "value": "[[",
+            "elements": []
+          },
+          {
+            "$type": "Keyword",
+            "value": "}}",
+            "elements": []
+          },
+          {
+            "$type": "Keyword",
+            "value": ",",
+            "elements": []
+          },
+          {
+            "$type": "Keyword",
+            "value": "]",
+            "elements": []
+          }
+        ]
+      }
+    },
+    {
+      "$type": "ParserRule",
+      "parameters": [],
+      "name": "TOKEN_AT",
+      "hiddenTokens": [],
+      "type": "string",
+      "alternatives": {
+        "$type": "Keyword",
+        "value": "@",
+        "elements": []
+      }
+    },
+    {
+      "$type": "ParserRule",
+      "parameters": [],
+      "name": "Token_Equal",
+      "hiddenTokens": [],
+      "type": "string",
+      "alternatives": {
+        "$type": "Keyword",
+        "value": "=",
+        "elements": []
+      }
+    },
+    {
+      "$type": "ParserRule",
+      "parameters": [],
+      "name": "Token_Minus",
+      "hiddenTokens": [],
+      "type": "string",
+      "alternatives": {
+        "$type": "Keyword",
+        "value": "-",
+        "elements": []
+      }
+    },
+    {
+      "$type": "ParserRule",
+      "parameters": [],
+      "name": "Token_Colon",
+      "hiddenTokens": [],
+      "type": "string",
+      "alternatives": {
+        "$type": "Keyword",
+        "value": ":",
+        "elements": []
+      }
+    },
+    {
+      "$type": "ParserRule",
+      "parameters": [],
+      "name": "Token_PL",
+      "hiddenTokens": [],
+      "type": "string",
+      "alternatives": {
+        "$type": "Keyword",
+        "value": "(",
+        "elements": []
+      }
+    },
+    {
+      "$type": "ParserRule",
+      "parameters": [],
+      "name": "Token_PR",
+      "hiddenTokens": [],
+      "type": "string",
+      "alternatives": {
+        "$type": "Keyword",
+        "value": ")",
+        "elements": []
+      }
+    },
+    {
+      "$type": "ParserRule",
+      "parameters": [],
+      "name": "Token_P",
+      "hiddenTokens": [],
+      "type": "string",
+      "alternatives": {
+        "$type": "Keyword",
+        "value": ".",
+        "elements": []
+      }
+    },
+    {
+      "$type": "ParserRule",
+      "parameters": [],
       "name": "WS",
+      "hiddenTokens": [],
+      "type": "string",
+      "alternatives": {
+        "$type": "RuleCall",
+        "arguments": [],
+        "rule": {
+          "$refText": "SPACE"
+        },
+        "cardinality": "+",
+        "elements": []
+      }
+    },
+    {
+      "$type": "ParserRule",
+      "parameters": [],
+      "name": "Expression",
+      "hiddenTokens": [],
+      "alternatives": {
+        "$type": "RuleCall",
+        "arguments": [],
+        "rule": {
+          "$refText": "Addition"
+        },
+        "elements": []
+      }
+    },
+    {
+      "$type": "ParserRule",
+      "parameters": [],
+      "name": "Addition",
+      "hiddenTokens": [],
+      "type": "Expression",
+      "alternatives": {
+        "$type": "Group",
+        "elements": [
+          {
+            "$type": "RuleCall",
+            "arguments": [],
+            "rule": {
+              "$refText": "Multiplication"
+            },
+            "elements": []
+          },
+          {
+            "$type": "Group",
+            "elements": [
+              {
+                "$type": "Alternatives",
+                "elements": [
+                  {
+                    "$type": "Group",
+                    "elements": [
+                      {
+                        "$type": "Action",
+                        "type": "Addition",
+                        "feature": "left",
+                        "operator": "=",
+                        "elements": []
+                      },
+                      {
+                        "$type": "Keyword",
+                        "value": "+"
+                      }
+                    ]
+                  },
+                  {
+                    "$type": "Group",
+                    "elements": [
+                      {
+                        "$type": "Action",
+                        "type": "Subtraction",
+                        "feature": "left",
+                        "operator": "=",
+                        "elements": []
+                      },
+                      {
+                        "$type": "Keyword",
+                        "value": "-"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "$type": "Assignment",
+                "feature": "right",
+                "operator": "=",
+                "terminal": {
+                  "$type": "RuleCall",
+                  "arguments": [],
+                  "rule": {
+                    "$refText": "Multiplication"
+                  }
+                }
+              }
+            ],
+            "cardinality": "*"
+          }
+        ]
+      }
+    },
+    {
+      "$type": "ParserRule",
+      "parameters": [],
+      "name": "Multiplication",
+      "hiddenTokens": [],
+      "type": "Expression",
+      "alternatives": {
+        "$type": "Group",
+        "elements": [
+          {
+            "$type": "RuleCall",
+            "arguments": [],
+            "rule": {
+              "$refText": "PrimaryExpression"
+            },
+            "elements": []
+          },
+          {
+            "$type": "Group",
+            "elements": [
+              {
+                "$type": "Alternatives",
+                "elements": [
+                  {
+                    "$type": "Group",
+                    "elements": [
+                      {
+                        "$type": "Action",
+                        "type": "Multiplication",
+                        "feature": "left",
+                        "operator": "=",
+                        "elements": []
+                      },
+                      {
+                        "$type": "Keyword",
+                        "value": "*"
+                      }
+                    ]
+                  },
+                  {
+                    "$type": "Group",
+                    "elements": [
+                      {
+                        "$type": "Action",
+                        "type": "Division",
+                        "feature": "left",
+                        "operator": "=",
+                        "elements": []
+                      },
+                      {
+                        "$type": "Keyword",
+                        "value": "/"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "$type": "Assignment",
+                "feature": "right",
+                "operator": "=",
+                "terminal": {
+                  "$type": "RuleCall",
+                  "arguments": [],
+                  "rule": {
+                    "$refText": "PrimaryExpression"
+                  }
+                }
+              }
+            ],
+            "cardinality": "*"
+          }
+        ]
+      }
+    },
+    {
+      "$type": "ParserRule",
+      "parameters": [],
+      "name": "PrimaryExpression",
+      "hiddenTokens": [],
+      "type": "Expression",
+      "alternatives": {
+        "$type": "Alternatives",
+        "elements": [
+          {
+            "$type": "Group",
+            "elements": [
+              {
+                "$type": "Keyword",
+                "value": "(",
+                "elements": []
+              },
+              {
+                "$type": "RuleCall",
+                "arguments": [],
+                "rule": {
+                  "$refText": "Expression"
+                }
+              },
+              {
+                "$type": "Keyword",
+                "value": ")"
+              }
+            ]
+          },
+          {
+            "$type": "Group",
+            "elements": [
+              {
+                "$type": "Action",
+                "type": "AssignExpression",
+                "elements": []
+              },
+              {
+                "$type": "Assignment",
+                "feature": "ref",
+                "operator": "=",
+                "terminal": {
+                  "$type": "CrossReference",
+                  "type": {
+                    "$refText": "Macro"
+                  },
+                  "terminal": {
+                    "$type": "RuleCall",
+                    "arguments": [],
+                    "rule": {
+                      "$refText": "ID"
+                    }
+                  }
+                }
+              },
+              {
+                "$type": "RuleCall",
+                "arguments": [],
+                "rule": {
+                  "$refText": "Token_Equal"
+                }
+              },
+              {
+                "$type": "Assignment",
+                "feature": "right",
+                "operator": "=",
+                "terminal": {
+                  "$type": "RuleCall",
+                  "arguments": [],
+                  "rule": {
+                    "$refText": "Expression"
+                  }
+                }
+              }
+            ]
+          },
+          {
+            "$type": "Group",
+            "elements": [
+              {
+                "$type": "Action",
+                "type": "RefExpression",
+                "elements": []
+              },
+              {
+                "$type": "Assignment",
+                "feature": "ref",
+                "operator": "=",
+                "terminal": {
+                  "$type": "CrossReference",
+                  "type": {
+                    "$refText": "Macro"
+                  },
+                  "terminal": {
+                    "$type": "RuleCall",
+                    "arguments": [],
+                    "rule": {
+                      "$refText": "QualifiedName"
+                    }
+                  }
+                }
+              }
+            ]
+          },
+          {
+            "$type": "Group",
+            "elements": [
+              {
+                "$type": "Action",
+                "type": "LiteralExpression",
+                "elements": []
+              },
+              {
+                "$type": "RuleCall",
+                "arguments": [],
+                "rule": {
+                  "$refText": "LiteralExpression"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "$type": "ParserRule",
+      "parameters": [],
+      "name": "LiteralExpression",
+      "hiddenTokens": [],
+      "alternatives": {
+        "$type": "Alternatives",
+        "elements": [
+          {
+            "$type": "RuleCall",
+            "arguments": [],
+            "rule": {
+              "$refText": "BooleanLiteral"
+            },
+            "elements": []
+          },
+          {
+            "$type": "RuleCall",
+            "arguments": [],
+            "rule": {
+              "$refText": "StringLiteral"
+            },
+            "elements": []
+          },
+          {
+            "$type": "RuleCall",
+            "arguments": [],
+            "rule": {
+              "$refText": "NumberLiteral"
+            },
+            "elements": []
+          }
+        ]
+      }
+    },
+    {
+      "$type": "ParserRule",
+      "parameters": [],
+      "name": "StringLiteral",
+      "hiddenTokens": [],
+      "type": "LiteralExpression",
+      "alternatives": {
+        "$type": "Assignment",
+        "feature": "value",
+        "operator": "=",
+        "terminal": {
+          "$type": "RuleCall",
+          "arguments": [],
+          "rule": {
+            "$refText": "STRING"
+          }
+        },
+        "elements": []
+      }
+    },
+    {
+      "$type": "ParserRule",
+      "parameters": [],
+      "name": "NumberLiteral",
+      "hiddenTokens": [],
+      "type": "LiteralExpression",
+      "alternatives": {
+        "$type": "Assignment",
+        "feature": "value",
+        "operator": "=",
+        "terminal": {
+          "$type": "RuleCall",
+          "arguments": [],
+          "rule": {
+            "$refText": "NUMBER"
+          }
+        },
+        "elements": []
+      }
+    },
+    {
+      "$type": "ParserRule",
+      "parameters": [],
+      "name": "BooleanLiteral",
+      "hiddenTokens": [],
+      "type": "LiteralExpression",
+      "alternatives": {
+        "$type": "Assignment",
+        "feature": "value",
+        "operator": "=",
+        "terminal": {
+          "$type": "RuleCall",
+          "arguments": [],
+          "rule": {
+            "$refText": "BOOLEAN"
+          }
+        },
+        "elements": []
+      }
+    },
+    {
+      "$type": "TerminalRule",
+      "name": "SPACE",
       "terminal": {
         "$type": "RegexToken",
-        "regex": "([ \\\\f\\\\t\\\\v\\\\u00a0\\\\u1680\\\\u2000-\\\\u200a\\\\u2028\\\\u2029\\\\u202f\\\\u205f\\\\u3000\\\\ufeff]+)",
+        "regex": "([ \\\\f\\\\t\\\\v\\\\u00a0\\\\u1680\\\\u2000-\\\\u200a\\\\u2028\\\\u2029\\\\u202f\\\\u205f\\\\u3000\\\\ufeff])",
         "elements": []
       }
     },
@@ -822,15 +2260,6 @@ export const grammar = (): Grammar =>
     },
     {
       "$type": "TerminalRule",
-      "name": "AT",
-      "terminal": {
-        "$type": "RegexToken",
-        "regex": "(?!\\\\s)@",
-        "elements": []
-      }
-    },
-    {
-      "$type": "TerminalRule",
       "name": "ID",
       "terminal": {
         "$type": "RegexToken",
@@ -840,11 +2269,11 @@ export const grammar = (): Grammar =>
     },
     {
       "$type": "TerminalRule",
-      "name": "INT",
+      "name": "NUMBER",
       "type": "number",
       "terminal": {
         "$type": "RegexToken",
-        "regex": "[0-9]+\\\\b",
+        "regex": "[0-9]+(\\\\.[0-9])?\\\\b",
         "elements": []
       }
     },
@@ -862,7 +2291,35 @@ export const grammar = (): Grammar =>
       "name": "OTHER",
       "terminal": {
         "$type": "RegexToken",
-        "regex": "((?!@|\\\\/\\\\*|\\\\s)\\\\W|(?!person|hello)\\\\w)(((?!@)\\\\S)*?)",
+        "regex": "((?!(@|\\\\/\\\\*|-|=|\\\\:|\\\\s|\\\\)|\\\\(|\\\\[|\\\\]|{{|\\\\||\\\\.|\\\\\\\\))\\\\W|(?!Characters)\\\\w)((?!\\\\[|\\\\]|!)\\\\S*?)",
+        "elements": []
+      }
+    },
+    {
+      "$type": "TerminalRule",
+      "name": "INLINE_COMMENT",
+      "terminal": {
+        "$type": "RegexToken",
+        "regex": "(?!\\\\\\\\)\\\\[\\\\[(.+)\\\\]\\\\]",
+        "elements": []
+      }
+    },
+    {
+      "$type": "TerminalRule",
+      "name": "ESC",
+      "terminal": {
+        "$type": "RegexToken",
+        "regex": "\\\\\\\\\\\\S",
+        "elements": []
+      }
+    },
+    {
+      "$type": "TerminalRule",
+      "name": "BOOLEAN",
+      "type": "boolean",
+      "terminal": {
+        "$type": "RegexToken",
+        "regex": "\\\\b(true|false)\\\\b",
         "elements": []
       }
     },

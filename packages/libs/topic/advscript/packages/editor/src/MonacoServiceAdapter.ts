@@ -1,4 +1,4 @@
-import { InitializeResult } from "vscode-languageserver-protocol";
+import { InitializeResult, PublishDiagnosticsParams } from "vscode-languageserver-protocol";
 import { Monaco, MonacoEditorRegisterAdapter, TMonaco } from "./lib";
 import type { AdvScriptService } from "./service";
 
@@ -36,15 +36,27 @@ export class MonacoServiceWrapper extends MonacoEditorRegisterAdapter {
   addDocumentsHandler() {
     this.addDispose(
       this._monaco.editor.onDidCreateModel((model) => {
-        this.service.doDocumentLoaded(model.uri.toString(), model.getValue());
+        this.service
+          .doDocumentLoaded(model.uri.toString(), model.getValue())
+          .then(this.updateModelMarkers.bind(this, model));
         const MONACO_URI: Monaco.Uri = model.uri;
         const MONACO_URI_STRING = MONACO_URI.toString();
         this.addDispose(
           model.onDidChangeContent((event) => {
-            this.service.doDidChangeContent(MONACO_URI_STRING, model.getValue(), event.changes);
+            this.service
+              .doDidChangeContent(MONACO_URI_STRING, model.getValue(), event.changes)
+              .then(this.updateModelMarkers.bind(this, model));
           })
         );
       })
+    );
+  }
+  protected updateModelMarkers(model: Monaco.editor.ITextModel, params: PublishDiagnosticsParams) {
+    console.log("onDidDiagnostics", params);
+    this._monaco.editor.setModelMarkers(
+      model,
+      this.languageId,
+      this.p2m.asDiagnostics(params.diagnostics)
     );
   }
 

@@ -34,8 +34,8 @@ export function getParserContext(id: string) {
   return ParserMap.get(id);
 }
 export function createParser(id?: string) {
-  console.log("createParser", id);
   if (ParserMap.has(id)) return ParserMap.get(id).flush();
+  console.log("createParser", id);
   const parser = new ParserContext(grammar);
   ParserMap.set(id, parser);
   return parser;

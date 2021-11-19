@@ -10,13 +10,13 @@ import {
 } from "langium";
 import {
   AdvscriptScopeProvider,
-  DomainModelDescriptionProvider,
-  DomainModelNameProvider,
+  AstNodeDescriptionProvider,
+  AdvscriptModelNameProvider,
   HoverProvider,
   Linker,
 } from "./advscript-provider";
 import { AdvscriptValidationRegistry, AdvscriptValidator } from "./advscript-validator";
-import { DomainModelScopeComputation } from "./domain-model-scope";
+import { ScopeComputation } from "./domain-model-scope";
 // import { OhmParser } from "./custom";
 import { AdvscriptGeneratedModule } from "./generated/module";
 
@@ -35,7 +35,7 @@ export type AdvscriptAddedServices = {
  */
 export type AdvscriptServices = LangiumServices & AdvscriptAddedServices;
 
-class JsonSerializer extends DefaultJsonSerializer {
+class A extends DefaultJsonSerializer {
   serialize(node: AstNode, space?: string | number): string {
     try {
       return super.serialize(node, space);
@@ -59,21 +59,28 @@ export const AdvscriptModule: Module<
   },
   references: {
     Linker: (injector) => new Linker(injector),
-    ScopeComputation: (injector) => new DomainModelScopeComputation(injector),
-    NameProvider: (injector) => new DomainModelNameProvider(injector),
-    ScopeProvider: (injector) => new AdvscriptScopeProvider(injector),
+    ScopeComputation: (injector) => new ScopeComputation(injector),
+    NameProvider: (injector) => new AdvscriptModelNameProvider(injector),
+    ScopeProvider: (i) => new AdvscriptScopeProvider(i),
   },
   index: {
-    AstNodeDescriptionProvider: (injector) => new DomainModelDescriptionProvider(injector),
+    AstNodeDescriptionProvider: (injector) => new AstNodeDescriptionProvider(injector),
   },
   serializer: {
-    JsonSerializer: (injector) => new JsonSerializer(injector),
+    JsonSerializer: (i) => new A(i),
+  },
+  // parser: {
+  //     LangiumParser: (service) => new OhmParser(service) as any,
+  // },
+  parser: {
+    ParserConfig: () => ({
+      skipValidations: true,
+    }),
   },
   lsp: {
     HoverProvider: (service) => new HoverProvider(service),
   },
 };
-
 /**
  * Inject the full set of language services by merging three modules:
  *  - Langium default services

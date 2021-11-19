@@ -42,20 +42,21 @@ export class WrapperMonacoLanguages extends MonacoLanguages {
         if (!this.matchModel(selector, MonacoModelIdentifier.fromModel(model))) {
           return void 0;
         }
+        const range = model.getWordUntilPosition(position);
         const result = await provider.resolveRenameLocation(
           {
             textDocument: this.m2p.asTextDocumentIdentifier(model),
-            position: this.m2p.asPosition(position.lineNumber, position.column),
+            position: this.m2p.asPosition(position.lineNumber, range.startColumn),
           },
           token
         );
-        console.log("resolveRenameLocation", result)
         if (result) {
+          console.log("resolveRenameLocation", result, this.p2m.asRange(result.range));
           return { range: this.p2m.asRange(result.range), text: result.text };
         }
         return {
-          rejectReason: "此元素无法重命名"
-        }
+          rejectReason: "此元素无法重命名",
+        };
       },
     } as monaco.languages.RenameProvider;
   }

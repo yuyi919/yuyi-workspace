@@ -9,7 +9,7 @@ window.MonacoEnvironment = {
     const url =
       g(moduleId, label) ??
       (typeof setupUrls[label] === "string" ? setupUrls[label] : (setupUrls[label] as Function)());
-    console.log("getWorkerUrl", moduleId, label, "=>", url);
+    console.debug("getWorkerUrl", moduleId, label, "=>", url);
     return url;
   },
   getWorker(_, label) {

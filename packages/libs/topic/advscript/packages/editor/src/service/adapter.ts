@@ -183,15 +183,16 @@ export class OhmParser extends AbstractLangiumParser {
   constructor(private readonly services: LangiumServices) {
     super(services);
   }
+  prevTextDocument: TextDocument;
   parse<T extends AstNode = AstNode>(input: LangiumDocument<T>): ParseResult<T> {
     const text = input.textDocument.getText();
     const changed = this.fireChange(input);
-    const lines = text.split("\n");
+    console.log("OhmParser", input);
     const ranges = changed
       .map((changed) => {
         if (TextDocumentContentChangeEvent.isIncremental(changed)) {
-          const startIndex = getPositionOfLineAndCharacter(lines, changed.range.start);
-          const endIndex = getPositionOfLineAndCharacter(lines, changed.range.end);
+          const startIndex = this.prevTextDocument.offsetAt(changed.range.start); // getPositionOfLineAndCharacter(lines, changed.range.start);
+          const endIndex = this.prevTextDocument.offsetAt(changed.range.end); //getPositionOfLineAndCharacter(lines, changed.range.end);
           return {
             startIdx: startIndex,
             endIdx: endIndex,
@@ -201,7 +202,7 @@ export class OhmParser extends AbstractLangiumParser {
         }
       })
       .filter(Boolean);
-    console.log(ranges);
+    this.prevTextDocument = bumpTextDocument(input.textDocument);
     return {
       value: {
         $type: "Main",
@@ -210,7 +211,8 @@ export class OhmParser extends AbstractLangiumParser {
           text,
           ranges.length > 0 ? ranges : void 0
         ) as any,
-      } as T,
+        elements: [],
+      } as any as T,
       parserErrors: [],
       lexerErrors: [],
     };
@@ -226,7 +228,9 @@ export class OhmParser extends AbstractLangiumParser {
     return changed.splice(0, changed.length);
   }
 }
-
+function bumpTextDocument(doc: TextDocument) {
+  return TextDocument.create(doc.uri, doc.languageId, doc.version, doc.getText());
+}
 const changedMap = new Map<string, TextDocumentContentChangeEvent[]>();
 
 export function appendChanged(uri: string, event: TextDocumentContentChangeEvent) {

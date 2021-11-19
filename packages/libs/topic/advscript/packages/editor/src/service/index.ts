@@ -1,9 +1,10 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import {
   AstNode,
   findLeafNodeAtOffset,
   LangiumDocument,
   LangiumServices,
-  OperationCancelled
+  OperationCancelled,
 } from "langium";
 import { _Connection } from "vscode-languageserver";
 import {
@@ -13,10 +14,11 @@ import {
   DocumentSymbolParams,
   FoldingRangeParams,
   InitializeResult,
+  PublishDiagnosticsParams,
   ReferenceParams,
   RenameParams,
   TextDocumentPositionParams,
-  TextDocumentSyncKind
+  TextDocumentSyncKind,
 } from "vscode-languageserver-protocol";
 import { TextDocument } from "vscode-languageserver-textdocument";
 import {
@@ -32,55 +34,37 @@ import {
   TextDocumentIdentifier,
   TextDocumentItem,
   VersionedTextDocumentIdentifier,
-  WorkspaceEdit
+  WorkspaceEdit,
 } from "vscode-languageserver-types";
 import { URI as Uri } from "vscode-uri";
 import type { Monaco, TMonaco } from "../lib";
 import { MonacoToProtocolConverter } from "../lib/languageclient/monaco-converter";
 import { appendChanged } from "./adapter";
-import { createLangiumServices } from "./module";
-
-// export function createDocument(uri: string) {
-//   return TextDocument.create(
-//     model,
-//     model.getLanguageId(),
-//     model.getVersionId(),
-//     model.getValue()
-//   );
-// }
-
+import { createLangiumServices, ILSPModuleContext } from "./module";
+import { ServiceMockConnection } from "./ServiceMockConnection";
 export abstract class AdvScriptService {
   static serviceId = 0;
   protected m2p: MonacoToProtocolConverter;
-  protected id?: string;
+  public id?: string;
   protected languageId?: string;
+  protected services: LangiumServices;
+  protected connection: ServiceMockConnection;
 
-  protected _connection = {} as {
-    [K in keyof _Connection]: _Connection[K] extends (handle: (...args: infer A) => any) => any
-      ? Monaco.Emitter<A>
-      : Monaco.Emitter<any[]>;
-  };
-
-  constructor(protected _monaco: TMonaco, protected services: LangiumServices) {
+  constructor(
+    protected _monaco: TMonaco,
+    factory: (context: ILSPModuleContext) => LangiumServices
+  ) {
     this.m2p = new MonacoToProtocolConverter(_monaco);
+    const connection = ServiceMockConnection.create(_monaco);
+    const services = factory({ connection });
     this.languageId = services.LanguageMetaData.languageId;
     this.id = this.languageId + ":" + AdvScriptService.serviceId++;
-    console.log(this.id);
-    services.documents.TextDocuments.listen(
-      new Proxy<_Connection>({} as _Connection, {
-        get: (target: _Connection, p: keyof _Connection, receiver: _Connection) => {
-          if (!this._connection[p]) {
-            this._connection[p] = new _monaco.Emitter<any>();
-          }
-          return (handle: any) => {
-            this._connection[p].event((args) => {
-              console.log(p, args);
-              handle(...args);
-            });
-          };
-        },
-      })
-    );
+    console.log(this.id, services);
+    this.services = services;
+    this.connection = connection;
+    const documents = services.documents.TextDocuments;
+    // Make the text document manager listen on the connection for open, change and close text document events.
+    documents.listen(connection);
   }
 
   async doInitialize() {
@@ -98,29 +82,55 @@ export abstract class AdvScriptService {
       rangeLength,
       text,
     }));
+    console.log("doDidChangeContent", contentChanges);
     contentChanges.forEach((changed) => {
       appendChanged(uri, changed);
     });
-    this._connection.onDidChangeTextDocument.fire([
-      {
-        textDocument: VersionedTextDocumentIdentifier.create(uri, version),
-        contentChanges,
-      },
-    ]);
+    this.connection.didChangeTextDocument({
+      textDocument: VersionedTextDocumentIdentifier.create(uri, version),
+      contentChanges,
+    });
     this.doDiagnostics(uri);
+    return this.getDiagnostics();
   }
 
+  getDiagnostics() {
+    return new Promise<PublishDiagnosticsParams>((resolve) => {
+      const dispose = this.connection.onDidDiagnostics(([params]: [PublishDiagnosticsParams]) => {
+        resolve(params);
+        dispose.dispose();
+      });
+    });
+  }
   async doDocumentLoaded(uri: string, content: string) {
     const version = await this.getScriptVersion(uri);
-    this._connection.onDidOpenTextDocument.fire([
-      {
-        textDocument: TextDocumentItem.create(uri, this.languageId, version, content),
-      },
-    ]);
-    this.doDiagnostics(uri);
+    this.connection.didOpenTextDocument({
+      textDocument: TextDocumentItem.create(uri, this.languageId, version, content),
+    });
+    this.services.documents.DocumentBuilder.update([this._monaco.Uri.parse(uri)], []);
+    return this.getDiagnostics();
   }
 
   private pendingValidationRequests = new Map<string, number>();
+
+  async cleanDiagnostics(uri: string) {
+    this.connection.sendDiagnostics({
+      uri,
+      diagnostics: [],
+      version: await this.getScriptVersion(uri),
+    });
+    // this._monaco.editor.setModelMarkers(uri, this.id, []);
+  }
+
+  async sendDiagnostics(uri: string) {
+    this.connection.sendDiagnostics({
+      uri,
+      diagnostics: [],
+      version: await this.getScriptVersion(uri),
+    });
+    // this._monaco.editor.setModelMarkers(uri, this.id, []);
+  }
+
   private cleanPendingChange(document: TextDocument) {
     const request = this.pendingValidationRequests.get(document.uri);
     if (request !== undefined) {
@@ -128,11 +138,6 @@ export abstract class AdvScriptService {
       this.pendingValidationRequests.delete(document.uri);
     }
   }
-
-  cleanDiagnostics(uri: string) {
-    // this._monaco.editor.setModelMarkers(uri, this.id, []);
-  }
-
   protected doDiagnostics(uri: string) {
     const document = this.getDocumentWithUri(uri).textDocument;
     this.cleanPendingChange(document);
@@ -148,14 +153,13 @@ export abstract class AdvScriptService {
         }
         try {
           await this.services.documents.DocumentBuilder.update([this._monaco.Uri.parse(uri)], []);
-          console.log(this.services.index.IndexManager);
         } catch (err) {
           if (err !== OperationCancelled) {
             console.error("Error: ", err);
             throw err;
           }
         }
-      }, 200) as unknown as number
+      }) as unknown as number
     );
   }
 
@@ -220,7 +224,6 @@ export abstract class AdvScriptService {
   async doProvideRenameEdits(params: RenameParams): Promise<WorkspaceEdit> {
     const document = this.getDocumentWithParams(params);
     const result = await this.services.lsp.RenameHandler.renameElement(document, params);
-    console.log("doProvideRenameEdits", result);
     return result;
   }
 
@@ -298,7 +301,7 @@ export interface IAvsLanguageOptions {
 export class AvsLanguageService extends AdvScriptService {
   constructor(public options: IAvsLanguageOptions) {
     const { monaco: _monaco } = options;
-    super(_monaco, createLangiumServices(_monaco));
+    super(_monaco, (context) => createLangiumServices(_monaco, context));
     this._onDidChange = new _monaco.Emitter<void>();
   }
 

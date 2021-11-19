@@ -9,6 +9,11 @@ import { launch } from "./src/server";
 export function VitePluginLanguageServer(): Plugin {
   return {
     name: "vite-plugin-languageserver",
+    // load(id){
+    //   if (id.indexOf("os")>-1) {
+    //     return `export const EOL = '\n';`
+    //   }
+    // },
     configureServer(server) {
       const wss = new ws.Server({
         noServer: true,
