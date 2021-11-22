@@ -72,6 +72,9 @@
     "topic-advscript-packages-editor": {
       "tags": ["topic", "advscript", "packages", "editor"]
     },
+    "topic-advscript-packages-language-services": {
+      "tags": ["topic", "advscript", "packages", "language-services"]
+    },
     "topic-advscript-packages-parser": {
       "tags": ["topic", "advscript", "packages", "parser"]
     },

@@ -5,3 +5,4 @@
 /.rush
 *.log
 .tsBuildInfo
+./packages/langium
