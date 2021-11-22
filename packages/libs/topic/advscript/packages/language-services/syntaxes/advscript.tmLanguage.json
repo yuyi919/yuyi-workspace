@@ -1,0 +1,48 @@
+{
+  "name": "advscript",
+  "scopeName": "source.advscript",
+  "fileTypes": [
+    ".avs",
+    ".adv"
+  ],
+  "patterns": [
+    {
+      "include": "#comments"
+    },
+    {
+      "name": "keyword.control.advscript",
+      "match": "\\b(Characters|end|if|let|Macros)\\b"
+    }
+  ],
+  "repository": {
+    "comments": {
+      "patterns": [
+        {
+          "name": "comment.block.advscript",
+          "begin": "/\\*",
+          "beginCaptures": {
+            "0": {
+              "name": "punctuation.definition.comment.advscript"
+            }
+          },
+          "end": "\\*/",
+          "endCaptures": {
+            "0": {
+              "name": "punctuation.definition.comment.advscript"
+            }
+          }
+        },
+        {
+          "begin": "//",
+          "beginCaptures": {
+            "1": {
+              "name": "punctuation.whitespace.comment.leading.advscript"
+            }
+          },
+          "end": "(?=$)",
+          "name": "comment.line.advscript"
+        }
+      ]
+    }
+  }
+}

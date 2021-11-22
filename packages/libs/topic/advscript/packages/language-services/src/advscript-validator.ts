@@ -1,8 +1,7 @@
 import { LangiumDocument, ValidationAcceptor, ValidationCheck, ValidationRegistry } from "langium";
 import { CodeActionProvider } from "langium/lib/lsp/code-action";
 import { template } from "lodash";
-import { CodeActionParams } from "vscode-languageserver-protocol";
-import { CodeAction, CodeActionKind, Command, Diagnostic } from "vscode-languageserver-types";
+import { CodeAction, CodeActionKind, CodeActionParams, Command, Diagnostic } from "vscode-languageserver-protocol";
 import { AdvscriptServices } from "./advscript-module";
 import {
   AdvscriptAstType,
@@ -11,7 +10,7 @@ import {
   CharactersDeclare,
   Macro,
   MacroDeclare,
-  Param,
+  Param
 } from "./generated/ast";
 
 /**

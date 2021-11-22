@@ -10,9 +10,14 @@
     "build": "tsc --build --force",
     "build:dev": "tsc --build",
     "build:watch": "tsc --build --watch",
-    "dev": "tsc --build --watch"
+    "dev": "tsc --build --watch",
+    "langium": "node ../langium/packages/langium-cli/bin/langium.js",
+    "langium:generate": "rushx langium generate",
+    "langium:watch": "rushx langium generate --watch"
   },
   "dependencies": {
+    "vscode-languageserver-protocol": "3.16.0",
+    "vscode-uri": "~3.0.2"
   },
   "devDependencies": {
     "@types/jest": "~27.0.1",
@@ -23,13 +28,7 @@
     "jest": "~27.1.0",
     "tsdx": "^0.14.1",
     "tslib": "~2.3.1",
-    "typescript": "4.1.2",
-    "vscode-languageserver-types": "~3.16.0",
-    "vscode-languageserver-protocol": "3.16.0",
-    "vscode-languageserver": "7.0.0",
-    "vscode-uri": "~3.0.2",
-    "vscode-languageserver-textdocument": "~1.0.2",
-    "vscode-jsonrpc": "~6.0.0"
+    "typescript": "4.1.2"
   },
   "files": [
     "dist",

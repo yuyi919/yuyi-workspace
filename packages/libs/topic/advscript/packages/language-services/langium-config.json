@@ -1,0 +1,9 @@
+{
+    "languageId": "advscript",
+    "grammar": "src/advscript.langium",
+    "fileExtensions": [".avs", ".adv"],
+    "out": "src/generated",
+    "textMate": {
+        "out": "syntaxes/advscript.tmLanguage.json"
+    }
+}

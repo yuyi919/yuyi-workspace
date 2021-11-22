@@ -593,12 +593,11 @@ importers:
       tsdx: ^0.14.1
       tslib: ~2.3.1
       typescript: 4.1.2
-      vscode-jsonrpc: ~6.0.0
-      vscode-languageserver: 7.0.0
       vscode-languageserver-protocol: 3.16.0
-      vscode-languageserver-textdocument: ~1.0.2
-      vscode-languageserver-types: ~3.16.0
       vscode-uri: ~3.0.2
+    dependencies:
+      vscode-languageserver-protocol: 3.16.0
+      vscode-uri: 3.0.2
     devDependencies:
       '@types/jest': 27.0.1
       '@types/node': 16.7.7
@@ -609,12 +608,6 @@ importers:
       tsdx: 0.14.1_@types+node@16.7.7
       tslib: 2.3.1
       typescript: 4.1.2
-      vscode-jsonrpc: 6.0.0
-      vscode-languageserver: 7.0.0
-      vscode-languageserver-protocol: 3.16.0
-      vscode-languageserver-textdocument: 1.0.2
-      vscode-languageserver-types: 3.16.0
-      vscode-uri: 3.0.2
 
   ../../packages/libs/topic/advscript/packages/parser:
     specifiers:
@@ -17271,7 +17264,6 @@ packages:
   /vscode-jsonrpc/6.0.0:
     resolution: {integrity: sha512-wnJA4BnEjOSyFMvjZdpiOwhSq9uDoK8e/kpRJDTaMYzwlkrhG1fwDIZI94CLsLzlCK5cIbMMtFlJlfR57Lavmg==}
     engines: {node: '>=8.0.0 || >=10.0.0'}
-    dev: true
 
   /vscode-languageclient/7.0.0:
     resolution: {integrity: sha512-P9AXdAPlsCgslpP9pRxYPqkNYV7Xq8300/aZDpO35j1fJm/ncize8iGswzYlcvFw5DQUx4eVk+KvfXdL0rehNg==}
@@ -17287,7 +17279,6 @@ packages:
     dependencies:
       vscode-jsonrpc: 6.0.0
       vscode-languageserver-types: 3.16.0
-    dev: true
 
   /vscode-languageserver-textdocument/1.0.2:
     resolution: {integrity: sha512-T7uPC18+f8mYE4lbVZwb3OSmvwTZm3cuFhrdx9Bn2l11lmp3SvSuSVjy2JtvrghzjAo4G6Trqny2m9XGnFnWVA==}
@@ -17295,7 +17286,6 @@ packages:
 
   /vscode-languageserver-types/3.16.0:
     resolution: {integrity: sha512-k8luDIWJWyenLc5ToFQQMaSrqCHiLwyKPHKPQZ5zz21vM+vIVUSvsRpcbiECH4WR88K2XZqc4ScRcZ7nk/jbeA==}
-    dev: true
 
   /vscode-languageserver/7.0.0:
     resolution: {integrity: sha512-60HTx5ID+fLRcgdHfmz0LDZAXYEV68fzwG0JWwEPBode9NuMYTIxuYXPg4ngO8i8+Ou0lM7y6GzaYWbiDL0drw==}
@@ -17326,7 +17316,6 @@ packages:
 
   /vscode-uri/3.0.2:
     resolution: {integrity: sha512-jkjy6pjU1fxUvI51P+gCsxg1u2n8LSt0W6KrCNQceaziKzff74GoWmjVG46KieVzybO1sttPQmYfrwSHey7GUA==}
-    dev: true
 
   /vue-class-component/7.2.6_vue@2.6.14:
     resolution: {integrity: sha512-+eaQXVrAm/LldalI272PpDe3+i4mPis0ORiMYxF6Ae4hyuCh15W8Idet7wPUEs4N4YptgFHGys4UrgNQOMyO6w==}

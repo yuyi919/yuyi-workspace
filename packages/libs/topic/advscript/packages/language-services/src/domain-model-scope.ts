@@ -13,7 +13,7 @@ import {
   LangiumServices,
   PrecomputedScopes,
 } from "langium";
-import { CancellationToken } from "vscode-jsonrpc";
+import { CancellationToken } from "vscode-languageserver-protocol";
 import { AdvscriptModelNameProvider } from "./advscript-provider";
 import {
   CharactersDeclare,

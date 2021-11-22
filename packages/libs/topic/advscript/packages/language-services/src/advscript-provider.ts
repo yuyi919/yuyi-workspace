@@ -20,8 +20,7 @@ import {
   streamAllContents,
 } from "langium";
 import { AstNodeHoverProvider } from "langium/lib/lsp/hover-provider";
-import { CancellationToken } from "vscode-languageserver";
-import { Hover } from "vscode-languageserver-protocol";
+import { CancellationToken, Hover } from "vscode-languageserver-protocol";
 import { AdvscriptServices } from "./advscript-module";
 import {
   AdvscriptAstReference,
