@@ -1,0 +1,19 @@
+{
+  "extends": "./node_modules/@yuyi919/workspace-base-rig/profiles/tsc/tsconfig-base.json",
+  "compilerOptions": {
+    "rootDir": "./src",
+    "paths": {
+      "langium": ["../langium/packages/langium"],
+      "langium/*": ["../langium/packages/langium/*"]
+    },
+    "esModuleInterop": true
+  },
+  "references": [
+    {
+      "path": "./tsconfig.lib.json"
+    },
+    {
+      "path": "./tsconfig.cjs.json"
+    }
+  ]
+}

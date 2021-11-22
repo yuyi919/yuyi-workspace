@@ -179,6 +179,7 @@ export abstract class AdvScriptService {
   }
 
   async doProvideCodeActions(params: CodeActionParams): Promise<(Command | CodeAction)[]> {
+    await this.getScriptVersion(params.textDocument.uri);
     if (!this.services.lsp.CodeActionProvider) {
       return;
     }

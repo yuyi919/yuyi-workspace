@@ -16,8 +16,8 @@ import { TextDocument } from "vscode-languageserver-textdocument";
 import { URI } from "vscode-uri";
 import { Monaco } from "../lib";
 import { createDefaultModule, OhmParser } from "./adapter";
-import { AdvscriptModule } from "./modules/advscript-module";
-import { AdvscriptGeneratedModule } from "./modules/generated/module";
+import { AdvscriptModule } from "@yuyi919/advscript-language-services";
+import { AdvscriptGeneratedModule } from "@yuyi919/advscript-language-services";
 
 function createBrowerServices<T extends PartialLangiumServices>(
   module?: Module<LangiumServices, T>,

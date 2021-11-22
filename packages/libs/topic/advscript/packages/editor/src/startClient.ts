@@ -71,7 +71,7 @@ export function startClient() {
 }
 
 export async function startClientService(_monaco: typeof Monaco) {
-  const service =  new AvsLanguageService({ monaco: _monaco }); //await getWorker();
+  const service =  new AvsLanguageService({ monaco: _monaco }) // await getWorker();
   const adapter = new MonacoServiceWrapper(_monaco, service, "advscript");
   return adapter.initialize();
 }

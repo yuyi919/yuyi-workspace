@@ -511,6 +511,7 @@ importers:
       '@types/node': ~16.7.2
       '@types/vscode': ~1.61.0
       '@types/ws': ~8.2.0
+      '@yuyi919/advscript-language-services': workspace:0.0.1
       '@yuyi919/advscript-parser': workspace:0.0.1
       '@yuyi919/workspace-base-rig': workspace:1.2.5
       chevrotain: ^9.1.0
@@ -542,6 +543,7 @@ importers:
       vscode-uri: ~3.0.2
       ws: ~8.2.3
     dependencies:
+      '@yuyi919/advscript-language-services': link:../language-services
       '@yuyi919/advscript-parser': link:../parser
       chevrotain: 9.1.0
     devDependencies:
@@ -579,6 +581,40 @@ importers:
       vscode-textmate: 5.1.1
       vscode-uri: 3.0.2
       ws: 8.2.3
+
+  ../../packages/libs/topic/advscript/packages/language-services:
+    specifiers:
+      '@types/jest': ~27.0.1
+      '@types/node': ~16.7.2
+      '@types/vscode': ~1.61.0
+      '@yuyi919/advscript-parser': workspace:0.0.1
+      '@yuyi919/workspace-base-rig': workspace:1.2.5
+      jest: ~27.1.0
+      tsdx: ^0.14.1
+      tslib: ~2.3.1
+      typescript: 4.1.2
+      vscode-jsonrpc: ~6.0.0
+      vscode-languageserver: 7.0.0
+      vscode-languageserver-protocol: 3.16.0
+      vscode-languageserver-textdocument: ~1.0.2
+      vscode-languageserver-types: ~3.16.0
+      vscode-uri: ~3.0.2
+    devDependencies:
+      '@types/jest': 27.0.1
+      '@types/node': 16.7.7
+      '@types/vscode': 1.61.0
+      '@yuyi919/advscript-parser': link:../parser
+      '@yuyi919/workspace-base-rig': link:../../../../tools/workspace-base-rig
+      jest: 27.1.0
+      tsdx: 0.14.1_@types+node@16.7.7
+      tslib: 2.3.1
+      typescript: 4.1.2
+      vscode-jsonrpc: 6.0.0
+      vscode-languageserver: 7.0.0
+      vscode-languageserver-protocol: 3.16.0
+      vscode-languageserver-textdocument: 1.0.2
+      vscode-languageserver-types: 3.16.0
+      vscode-uri: 3.0.2
 
   ../../packages/libs/topic/advscript/packages/parser:
     specifiers:

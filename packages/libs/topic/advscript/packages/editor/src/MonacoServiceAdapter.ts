@@ -90,6 +90,9 @@ export class MonacoServiceWrapper extends MonacoEditorRegisterAdapter {
     this.languages.registerDefinitionProvider([this.languageId], {
       provideDefinition: this.bind(this.service.doProvideDefinition),
     });
+    this.languages.registerTypeDefinitionProvider([this.languageId], {
+      provideTypeDefinition: this.bind(this.service.doProvideDefinition),
+    });
   }
 
   addDocumentHighlightsHandler() {

@@ -24,7 +24,7 @@
    * Specify one of: "pnpmVersion", "npmVersion", or "yarnVersion".  See the Rush documentation
    * for details about these alternatives.
    */
-  "pnpmVersion": "6.14.5",
+  "pnpmVersion": "6.22.2",
   // "npmVersion": "4.5.0",
   // "yarnVersion": "1.9.4",
   /**
@@ -164,7 +164,7 @@
    * and set projectFolderMaxDepth to a large number.
    */
   // "projectFolderMinDepth": 2,
-  "projectFolderMaxDepth": 7,
+  "projectFolderMaxDepth": 8,
   /**
    * Today the npmjs.com registry enforces fairly strict naming rules for packages, but in the early
    * days there was no standard and hardly any enforcement.  A few large legacy projects are still using
@@ -486,6 +486,12 @@
     {
       "packageName": "@yuyi919/advscript-editor",
       "projectFolder": "packages/libs/topic/advscript/packages/editor",
+      "reviewCategory": "production",
+      "versionPolicyName": "shared"
+    },
+    {
+      "packageName": "@yuyi919/advscript-language-services",
+      "projectFolder": "packages/libs/topic/advscript/packages/language-services",
       "reviewCategory": "production",
       "versionPolicyName": "shared"
     },

@@ -13,8 +13,11 @@ export default defineConfig(async ({ mode }) => {
       alias: {
         "@yuyi919/zora": path.resolve("./src/test/zora-wrapper.ts"),
         vscode: path.resolve("./libs/vscode-languageclient/vscode-compatibility.js"),
-        "langium/lib": path.resolve("./src/service/langium-compatibility/src"),
-        langium: path.resolve("./src/service/langium-compatibility/index.ts"),
+        "langium/lib": path.resolve("../langium/packages/langium/src"),
+        langium: path.resolve("../langium/packages/langium/src/index.ts"),
+        "@yuyi919/advscript-language-services": isProd
+        ? path.resolve("./node_modules/@yuyi919/advscript-language-services")
+        : path.resolve("../language-services/src/index.ts"),
         "@yuyi919/advscript-parser": isProd
           ? path.resolve("./node_modules/@yuyi919/advscript-parser")
           : path.resolve("../parser/src/index.ts"),

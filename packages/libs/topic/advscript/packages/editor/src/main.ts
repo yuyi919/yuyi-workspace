@@ -8,7 +8,7 @@ import {
 } from "@yuyi919/advscript-parser";
 import { bootstrap, LanguageInfo, monaco } from "./lib";
 import { EmbeddedTypescriptWorker } from "./lib/provider/setupTsMode";
-import file from "./line.avs?raw";
+import file from "./line.avs";
 import { startClient, startClientService } from "./startClient";
 function run() {
   const languageId = "advscript";
@@ -29,6 +29,7 @@ function run() {
       model: model,
       codeActionsOnSaveTimeout: 1000,
       "semanticHighlighting.enabled": true,
+      useShadowDOM: true,
       glyphMargin: true,
       lightbulb: {
         enabled: true,
