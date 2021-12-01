@@ -1,6 +1,17 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import type {
+  RemoteClient,
+  RemoteConsole,
+  RemoteTracer,
+  ServerRequestHandler,
+  Telemetry,
+  _Connection,
+  _Languages,
+  _RemoteWindow,
+  _RemoteWorkspace,
+} from "vscode-languageserver";
+import type {
   CancellationToken,
   CodeAction,
   CodeActionParams,
@@ -79,17 +90,6 @@ import type {
   WorkspaceEdit,
   WorkspaceSymbolParams,
 } from "vscode-languageserver-protocol";
-import type {
-  RemoteClient,
-  RemoteConsole,
-  RemoteTracer,
-  ServerRequestHandler,
-  Telemetry,
-  _Connection,
-  _Languages,
-  _RemoteWindow,
-  _RemoteWorkspace,
-} from "vscode-languageserver";
 import type { CallHierarchy } from "vscode-languageserver/lib/common/callHierarchy";
 import type { Configuration } from "vscode-languageserver/lib/common/configuration";
 import type { FileOperationsFeatureShape } from "vscode-languageserver/lib/common/fileOperations";
@@ -101,70 +101,18 @@ import type { ShowDocumentFeatureShape } from "vscode-languageserver/lib/common/
 import type { WorkspaceFolders } from "vscode-languageserver/lib/common/workspaceFolders";
 import type { Monaco, TMonaco } from "../lib";
 
-// export function createDocument(uri: string) {
-//   return TextDocument.create(
-//     model,
-//     model.getLanguageId(),
-//     model.getVersionId(),
-//     model.getValue()
-//   );
-// }
-
-export class ServiceMockConnection implements _Connection {
-  _connection = {} as {
+class ServiceMockConnection implements _Connection {
+  protected _connection = {} as {
     [K in keyof _Connection]: _Connection[K] extends (handle: (...args: infer A) => any) => any
       ? Monaco.Emitter<A>
-      : Monaco.Emitter<any[]>;
+      : never;
   };
-
-  static create(_monaco: TMonaco) {
-    return new ServiceMockConnection().proxy(_monaco);
-  }
-
-  proxy(_monaco: TMonaco) {
-    const connection = new Proxy<this>(this, {
-      get: (
-        target: ServiceMockConnection,
-        p: keyof ServiceMockConnection,
-        receiver: ServiceMockConnection
-      ) => {
-        if (p === "onDidDiagnostics" || p === "sendDiagnostics") {
-          register(target, "sendDiagnostics", _monaco);
-          return target[p].bind(receiver);
-        }
-        if (!(target[p] instanceof Function)) {
-          return target[p];
-        }
-        register(target, p, _monaco);
-        return (handle: any) => {
-          try {
-            if (target[p] instanceof Function)
-              return Reflect.apply(target[p] as Function, receiver, [handle]);
-          } catch (error) {
-            console.log("proxy", p, error.message);
-            target._connection[p].event((args) => {
-              console.log(p, args);
-              handle(...args);
-            });
-          }
-        };
-      },
-    });
-    return connection;
-  }
-
-  didChangeTextDocument(params: DidChangeTextDocumentParams) {
-    console.log("didChangeTextDocument", params);
-    this._connection.onDidChangeTextDocument.fire([params]);
-  }
-  didOpenTextDocument(params: DidOpenTextDocumentParams) {
-    console.log("didOpenTextDocument", params);
-    this._connection.onDidOpenTextDocument.fire([params]);
-  }
+  protected _sendDiagnostics: monaco.Emitter<PublishDiagnosticsParams>;
 
   listen() {
     return this._connection;
   }
+
   onRequest<R, PR, E, RO>(
     type: ProtocolRequestType0<R, PR, E, RO>,
     handler: RequestHandler0<R, E>
@@ -239,11 +187,7 @@ export class ServiceMockConnection implements _Connection {
   }
 
   sendDiagnostics(params: PublishDiagnosticsParams): void {
-    this._connection.sendDiagnostics.fire([params]);
-  }
-
-  get onDidDiagnostics() {
-    return this._connection.sendDiagnostics.event;
+    this._sendDiagnostics.fire(params);
   }
 
   onInitialize(
@@ -278,7 +222,9 @@ export class ServiceMockConnection implements _Connection {
     throw new Error("Method not implemented.");
   }
   onDidOpenTextDocument(handler: NotificationHandler<DidOpenTextDocumentParams>): void {
-    throw new Error("Method not implemented.");
+    this._connection.onDidOpenTextDocument.event(([e]) => {
+      handler(e);
+    });
   }
   onDidChangeTextDocument(handler: NotificationHandler<DidChangeTextDocumentParams>): void {
     throw new Error("Method not implemented.");
@@ -477,8 +423,69 @@ export class ServiceMockConnection implements _Connection {
     throw new Error("Method not implemented.");
   }
 }
-function register(target: ServiceMockConnection, p: string, _monaco: typeof Monaco) {
-  if (!target._connection[p]) {
-    target._connection[p] = new _monaco.Emitter<any>();
+export class ServiceMockConnectionWrapper extends ServiceMockConnection {
+  static create(_monaco: TMonaco) {
+    const connection = new ServiceMockConnectionWrapper();
+    connection._sendDiagnostics = new _monaco.Emitter();
+    return new Proxy<ServiceMockConnectionWrapper>(connection, {
+      get: (
+        target: ServiceMockConnectionWrapper,
+        p: keyof ServiceMockConnectionWrapper,
+        receiver: ServiceMockConnection
+      ) => {
+        if (p === "sendDiagnostics") {
+          return target[p].bind(receiver);
+        }
+        if (!(target[p] instanceof Function)) {
+          return target[p];
+        }
+        ServiceMockConnectionWrapper.register(target, p, _monaco);
+        return (handle: any) => {
+          try {
+            if (target[p] instanceof Function)
+              return Reflect.apply(target[p] as Function, receiver, [handle]);
+          } catch (error) {
+            if (error.message === "Method not implemented.") {
+              // console.debug("proxy", p, error.message);
+              target._connection[p].event((args) => {
+                // console.debug(p, args, handle);
+                handle(...args);
+              });
+              return;
+            }
+            throw error;
+          }
+        };
+      },
+    });
+  }
+
+  static register(target: ServiceMockConnectionWrapper, p: string, _monaco: typeof Monaco) {
+    if (!target._connection[p]) {
+      target._connection[p] = new _monaco.Emitter<any>();
+    }
+  }
+
+  static didChangeTextDocument(
+    connection: ServiceMockConnectionWrapper,
+    params: DidChangeTextDocumentParams
+  ) {
+    connection._connection.onDidChangeTextDocument.fire([params]);
+  }
+
+  static didOpenTextDocument(
+    connection: ServiceMockConnectionWrapper,
+    params: DidOpenTextDocumentParams
+  ) {
+    connection._connection.onDidOpenTextDocument.fire([params]);
+  }
+
+  static onDidDiagnostics(
+    connection: ServiceMockConnection,
+    handler: NotificationHandler<PublishDiagnosticsParams>
+  ) {
+    return (connection as ServiceMockConnectionWrapper)._sendDiagnostics.event((param) => {
+      return handler(param);
+    });
   }
 }

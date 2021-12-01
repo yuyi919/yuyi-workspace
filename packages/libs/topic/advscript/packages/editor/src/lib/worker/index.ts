@@ -1,14 +1,16 @@
 import { Uri, editor } from "../monaco.export";
 import { setupWorkerUrl } from "../hackMonaco";
 import type { AvsWorker as IAvsWorker } from "./avsWorker";
-import createWorker from "./avs.worker?worker&inline";
+// import createWorker from "./avs.worker?worker&inline";
 
 const languageLabel = "advscript";
-setupWorkerUrl(languageLabel, createWorker);
+// setupWorkerUrl(languageLabel, createWorker);
+
 
 let worker: editor.MonacoWebWorker<IAvsWorker>;
 export async function getWorker() {
   if (!worker) {
+    await import("./createWorker")
     console.log("createWorker");
     worker = editor.createWebWorker<IAvsWorker>({
       // module that exports the create() method and returns a `TypeScriptWorker` instance

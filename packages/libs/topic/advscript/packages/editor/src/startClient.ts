@@ -12,6 +12,7 @@ import {
 import { getWorker } from "./lib/worker";
 import { MonacoServiceWrapper } from "./MonacoServiceAdapter";
 import { AvsLanguageService } from "./service";
+import { createSyntaxDiagramsCode } from "chevrotain";
 
 export function startClient() {
   function createLanguageClient(connection: MessageConnection): MonacoLanguageClient {
@@ -71,7 +72,19 @@ export function startClient() {
 }
 
 export async function startClientService(_monaco: typeof Monaco) {
-  const service =  new AvsLanguageService({ monaco: _monaco }) // await getWorker();
+  const service = new AvsLanguageService({ monaco: _monaco }); // await getWorker();
+  // const service = await getWorker();
+
+  // create the HTML Text
+  // service.getSerializedGastProductions().then((generate) => {
+  //   const htmlText = createSyntaxDiagramsCode(generate);
+  //   const innerFrame = document.createElement("iframe") as HTMLIFrameElement;
+
+  //   // Update the iframe src to visually render the diagrams.
+  //   // https://stackoverflow.com/questions/10418644/creating-an-iframe-with-given-html-dynamically/10419102#10419102
+  //   innerFrame.src = "data:text/html;charset=utf-8," + encodeURIComponent(htmlText);
+  //   document.getElementById("root")?.appendChild(innerFrame);
+  // });
   const adapter = new MonacoServiceWrapper(_monaco, service, "advscript");
   return adapter.initialize();
 }

@@ -731,6 +731,10 @@
       "allowedCategories": [ "production" ]
     },
     {
+      "name": "vite-plugin-monaco-editor-nls",
+      "allowedCategories": [ "production" ]
+    },
+    {
       "name": "vite-plugin-solid",
       "allowedCategories": [ "production" ]
     },

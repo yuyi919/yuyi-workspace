@@ -56,7 +56,7 @@ export const BabelTransformer: Plugin["transform"] = async function (
       );
       return toResult(result);
     }
-    if (/\.(txt|bks|adv|avs)$/.test(sourceFileName)) {
+    if (/(?<!\*)\.(txt|bks|adv|avs)$/.test(sourceFileName)) {
       return toResult(`export default \`${escapeRegExp(code)}\``);
     }
     if (/\.ohm$/.test(sourceFileName)) {

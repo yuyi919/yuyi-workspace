@@ -1,4 +1,4 @@
-import { IAvsWorker } from "..";
+import { IAvsWorker } from "../worker";
 import { Uri } from "../monaco.export";
 import { Editor, editor } from "../monaco.export";
 

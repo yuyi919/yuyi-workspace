@@ -1,16 +1,41 @@
-import { InitializeResult, PublishDiagnosticsParams } from "vscode-languageserver-protocol";
+import type * as Lsp from "vscode-languageserver-protocol";
+import { TextDocumentIdentifier } from "vscode-languageserver-protocol";
 import { Monaco, MonacoEditorRegisterAdapter, TMonaco } from "./lib";
-import type { AdvScriptService } from "./service";
+import type { AvsLanguageService } from "./service";
+
+class Waiter<T> {
+  protected _wait: Promise<T>;
+  protected _resolved = false;
+  protected resolve: ((value: T) => void)[] = [];
+  wait() {
+    return this._wait;
+  }
+  createNext() {
+    this._wait = new Promise<T>((_resolve) => {
+      this.resolve.push(_resolve);
+    });
+    return {
+      next: (value: T) => {
+        if (this.resolve.length > 0) {
+          this.resolve.forEach((resolve) => resolve(value));
+          this.resolve = [];
+        }
+      },
+    };
+  }
+}
 
 export class MonacoServiceWrapper extends MonacoEditorRegisterAdapter {
-  private initializeResult: InitializeResult<any>;
+  private initializeResult: Lsp.InitializeResult<any>;
   constructor(
     public _monaco: TMonaco,
-    public service: AdvScriptService,
+    public service: AvsLanguageService,
     private languageId: string
   ) {
     super(_monaco);
   }
+
+  attached = new Set<string>();
 
   async initialize(model?: Monaco.editor.ITextModel) {
     if (!this.initializeResult) {
@@ -36,29 +61,56 @@ export class MonacoServiceWrapper extends MonacoEditorRegisterAdapter {
   addDocumentsHandler() {
     this.addDispose(
       this._monaco.editor.onDidCreateModel((model) => {
-        this.service
-          .doDocumentLoaded(model.uri.toString(), model.getValue())
-          .then(this.updateModelMarkers.bind(this, model));
         const MONACO_URI: Monaco.Uri = model.uri;
         const MONACO_URI_STRING = MONACO_URI.toString();
+        const { next } = this.DiagnosticsTick.createNext();
+        this.service.doDocumentLoaded(MONACO_URI_STRING, model.getValue()).then((param) => {
+          if (this.attached.has(MONACO_URI_STRING)) {
+            this.updateModelMarkers(model, param);
+          }
+          next();
+        });
+        this.addDispose(
+          model.onDidChangeAttached(() => {
+            this.attached.add(MONACO_URI_STRING);
+            console.log("onDidChangeAttached", MONACO_URI_STRING);
+          })
+        );
+        let requestId = -1;
         this.addDispose(
           model.onDidChangeContent((event) => {
-            this.service
-              .doDidChangeContent(MONACO_URI_STRING, model.getValue(), event.changes)
-              .then(this.updateModelMarkers.bind(this, model));
+            if (this.attached.has(MONACO_URI_STRING)) {
+              const { next } = this.DiagnosticsTick.createNext();
+              const id = ++requestId;
+              this.service
+                .doDidChangeContent(MONACO_URI_STRING, model.getValue(), event.changes)
+                .then((params) => {
+                  // console.log("check", id, requestId);
+                  if (id === requestId) {
+                    this.updateModelMarkers(model, params);
+                    requestId = -1;
+                    next();
+                  }
+                });
+            }
           })
         );
       })
     );
   }
-  protected updateModelMarkers(model: Monaco.editor.ITextModel, params: PublishDiagnosticsParams) {
-    console.log("onDidDiagnostics", params);
+  DiagnosticsTick = new Waiter<void>();
+
+  protected updateModelMarkers = (
+    model: Monaco.editor.ITextModel,
+    params: Lsp.PublishDiagnosticsParams
+  ) => {
+    console.log("updateModelMarkers", params);
     this._monaco.editor.setModelMarkers(
       model,
       this.languageId,
       this.p2m.asDiagnostics(params.diagnostics)
     );
-  }
+  };
 
   addCompletionHandler() {
     this.languages.registerCompletionItemProvider([this.languageId], {
@@ -85,6 +137,23 @@ export class MonacoServiceWrapper extends MonacoEditorRegisterAdapter {
     this.languages.registerDocumentSymbolProvider([this.languageId], {
       provideDocumentSymbols: this.bind(this.service.doProvideDocumentSymbols),
     });
+    const { semanticTokensProvider } = this.initializeResult.capabilities;
+    if (semanticTokensProvider) {
+      this.languages.registerDocumentSemanticTokensProvider(
+        [this.languageId],
+        {
+          provideDocumentSemanticTokens: this.bind(this.service.doDocumentSemanticTokens),
+        },
+        semanticTokensProvider.legend
+      );
+      this.languages.registerDocumentRangeSemanticTokensProvider(
+        [this.languageId],
+        {
+          provideDocumentRangeSemanticTokens: this.bind(this.service.doDocumentSemanticTokens),
+        },
+        semanticTokensProvider.legend
+      );
+    }
   }
   addGotoDefinitionHandler() {
     this.languages.registerDefinitionProvider([this.languageId], {
@@ -122,7 +191,16 @@ export class MonacoServiceWrapper extends MonacoEditorRegisterAdapter {
 
   bind<T extends (params: any) => any, Args extends Parameters<T>>(target: T) {
     return (async (params, token) => {
+      if (
+        !TextDocumentIdentifier.is(params.textDocument) ||
+        !this.attached.has(params.textDocument.uri)
+      ) {
+        console.debug("Stop Event", params);
+        return;
+      }
+
       try {
+        await this.DiagnosticsTick.wait();
         const result = (await target.apply(this.service, [params])) as any;
         // console.log("bind", target.name, params, token, result);
         // if (result) {

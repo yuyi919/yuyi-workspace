@@ -52,7 +52,8 @@
     "vscode-jsonrpc": "~6.0.0",
     "glob-to-regexp": "~0.4.1",
     "regexp-to-ast": "~0.5.0",
-    "rollup-plugin-node-builtins": "~2.1.2"
+    "rollup-plugin-node-builtins": "~2.1.2",
+    "vite-plugin-monaco-editor-nls": "~1.0.8"
   },
   "files": [
     "dist",

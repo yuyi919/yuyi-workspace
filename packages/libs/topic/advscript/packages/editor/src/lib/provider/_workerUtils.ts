@@ -1,112 +1,110 @@
-import * as lsTypes from "vscode-languageserver-types";
+import { CompletionItemKind, DiagnosticSeverity, Diagnostic } from "vscode-languageserver-protocol";
 import { editor, MarkerSeverity, languages, Uri } from "../monaco.export";
 
 export function toCompletionItemKind(kind: number) {
   const mItemKind = languages.CompletionItemKind;
 
   switch (kind) {
-    case lsTypes.CompletionItemKind.Text:
+    case CompletionItemKind.Text:
       return mItemKind.Text;
-    case lsTypes.CompletionItemKind.Method:
+    case CompletionItemKind.Method:
       return mItemKind.Method;
-    case lsTypes.CompletionItemKind.Function:
+    case CompletionItemKind.Function:
       return mItemKind.Function;
-    case lsTypes.CompletionItemKind.Constructor:
+    case CompletionItemKind.Constructor:
       return mItemKind.Constructor;
-    case lsTypes.CompletionItemKind.Field:
+    case CompletionItemKind.Field:
       return mItemKind.Field;
-    case lsTypes.CompletionItemKind.Variable:
+    case CompletionItemKind.Variable:
       return mItemKind.Variable;
-    case lsTypes.CompletionItemKind.Class:
+    case CompletionItemKind.Class:
       return mItemKind.Class;
-    case lsTypes.CompletionItemKind.Interface:
+    case CompletionItemKind.Interface:
       return mItemKind.Interface;
-    case lsTypes.CompletionItemKind.Module:
+    case CompletionItemKind.Module:
       return mItemKind.Module;
-    case lsTypes.CompletionItemKind.Property:
+    case CompletionItemKind.Property:
       return mItemKind.Property;
-    case lsTypes.CompletionItemKind.Unit:
+    case CompletionItemKind.Unit:
       return mItemKind.Unit;
-    case lsTypes.CompletionItemKind.Value:
+    case CompletionItemKind.Value:
       return mItemKind.Value;
-    case lsTypes.CompletionItemKind.Enum:
+    case CompletionItemKind.Enum:
       return mItemKind.Enum;
-    case lsTypes.CompletionItemKind.Keyword:
+    case CompletionItemKind.Keyword:
       return mItemKind.Keyword;
-    case lsTypes.CompletionItemKind.Snippet:
+    case CompletionItemKind.Snippet:
       return mItemKind.Snippet;
-    case lsTypes.CompletionItemKind.Color:
+    case CompletionItemKind.Color:
       return mItemKind.Color;
-    case lsTypes.CompletionItemKind.File:
+    case CompletionItemKind.File:
       return mItemKind.File;
-    case lsTypes.CompletionItemKind.Reference:
+    case CompletionItemKind.Reference:
       return mItemKind.Reference;
   }
   return mItemKind.Property;
 }
 
-export function fromCompletionItemKind(
-  kind: languages.CompletionItemKind
-): lsTypes.CompletionItemKind {
+export function fromCompletionItemKind(kind: languages.CompletionItemKind): CompletionItemKind {
   const mItemKind = languages.CompletionItemKind;
 
   switch (kind) {
     case mItemKind.Text:
-      return lsTypes.CompletionItemKind.Text;
+      return CompletionItemKind.Text;
     case mItemKind.Method:
-      return lsTypes.CompletionItemKind.Method;
+      return CompletionItemKind.Method;
     case mItemKind.Function:
-      return lsTypes.CompletionItemKind.Function;
+      return CompletionItemKind.Function;
     case mItemKind.Constructor:
-      return lsTypes.CompletionItemKind.Constructor;
+      return CompletionItemKind.Constructor;
     case mItemKind.Field:
-      return lsTypes.CompletionItemKind.Field;
+      return CompletionItemKind.Field;
     case mItemKind.Variable:
-      return lsTypes.CompletionItemKind.Variable;
+      return CompletionItemKind.Variable;
     case mItemKind.Class:
-      return lsTypes.CompletionItemKind.Class;
+      return CompletionItemKind.Class;
     case mItemKind.Interface:
-      return lsTypes.CompletionItemKind.Interface;
+      return CompletionItemKind.Interface;
     case mItemKind.Module:
-      return lsTypes.CompletionItemKind.Module;
+      return CompletionItemKind.Module;
     case mItemKind.Property:
-      return lsTypes.CompletionItemKind.Property;
+      return CompletionItemKind.Property;
     case mItemKind.Unit:
-      return lsTypes.CompletionItemKind.Unit;
+      return CompletionItemKind.Unit;
     case mItemKind.Value:
-      return lsTypes.CompletionItemKind.Value;
+      return CompletionItemKind.Value;
     case mItemKind.Enum:
-      return lsTypes.CompletionItemKind.Enum;
+      return CompletionItemKind.Enum;
     case mItemKind.Keyword:
-      return lsTypes.CompletionItemKind.Keyword;
+      return CompletionItemKind.Keyword;
     case mItemKind.Snippet:
-      return lsTypes.CompletionItemKind.Snippet;
+      return CompletionItemKind.Snippet;
     case mItemKind.Color:
-      return lsTypes.CompletionItemKind.Color;
+      return CompletionItemKind.Color;
     case mItemKind.File:
-      return lsTypes.CompletionItemKind.File;
+      return CompletionItemKind.File;
     case mItemKind.Reference:
-      return lsTypes.CompletionItemKind.Reference;
+      return CompletionItemKind.Reference;
   }
-  return lsTypes.CompletionItemKind.Property;
+  return CompletionItemKind.Property;
 }
 
-export function toSeverity(lsSeverity: lsTypes.DiagnosticSeverity | number): monaco.MarkerSeverity {
+export function toSeverity(lsSeverity: DiagnosticSeverity | number): monaco.MarkerSeverity {
   switch (lsSeverity) {
-    case lsTypes.DiagnosticSeverity.Error:
+    case DiagnosticSeverity.Error:
       return MarkerSeverity.Error;
-    case lsTypes.DiagnosticSeverity.Warning:
+    case DiagnosticSeverity.Warning:
       return MarkerSeverity.Warning;
-    case lsTypes.DiagnosticSeverity.Information:
+    case DiagnosticSeverity.Information:
       return MarkerSeverity.Info;
-    case lsTypes.DiagnosticSeverity.Hint:
+    case DiagnosticSeverity.Hint:
       return MarkerSeverity.Hint;
     default:
       return MarkerSeverity.Info;
   }
 }
 
-export function toDiagnostics(resource: Uri, diag: lsTypes.Diagnostic): editor.IMarkerData {
+export function toDiagnostics(resource: Uri, diag: Diagnostic): editor.IMarkerData {
   const code = typeof diag.code === "number" ? String(diag.code) : <string>diag.code;
   return {
     severity: toSeverity(diag.severity),

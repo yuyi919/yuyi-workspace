@@ -61,9 +61,13 @@ export class ParserContext implements IParseoutput {
     this.inlayHintTokens.push({ text, mode, source, offsetCol });
   }
 
+  static registered = false;
   constructor(public grammar: Grammar, public matcher = grammar.matcher()) {
     this.init();
-    this.register();
+    if (!ParserContext.registered) {
+      this.register();
+      ParserContext.registered = true;
+    }
   }
 
   mark(
@@ -101,7 +105,7 @@ export class ParserContext implements IParseoutput {
       this.matcher.replaceInputRange(range.startIdx, range.endIdx, range.content);
       // console.log(matcher.getInput())
     }
-    console.log(source, this.matcher.getInput())
+    console.log(source === this.matcher.getInput());
     // const tokens = this.getSemanticsResult(
     //   Semantics,
     //   this.matcher,

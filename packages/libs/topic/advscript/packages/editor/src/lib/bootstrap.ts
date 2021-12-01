@@ -1,40 +1,30 @@
-import { castArray } from "lodash";
 import { createOnigScanner, createOnigString, loadWASM } from "vscode-oniguruma";
 import { DemoScopeNameInfo, grammerList, languages } from "./contributions";
 import { TMonaco, monaco } from "./monaco.export";
 import { ScopeName, TmgLanguageProvider, TextMateGrammar } from "./provider";
 import { LanguageId, LanguageInfo, registerLanguages } from "./register";
-import theme from "./theme";
 import { rehydrateRegexps } from "./util";
-import onigUrl from "vscode-oniguruma/release/onig.wasm?url"
+import onigUrl from "vscode-oniguruma/release/onig.wasm?url";
+import { convertTheme } from "./convertTheme";
 
 export async function bootstrap(
   monaco: TMonaco,
   language: LanguageId,
   addition?: Partial<LanguageInfo> | (() => Promise<Partial<LanguageInfo>>)
 ) {
-  monaco.editor.defineTheme("OneDark", {
-    base: "vs-dark",
-    inherit: true,
-    colors: theme.colors || {},
-    rules: theme.tokenColors
-      .map((setting) => {
-        return castArray(setting.scope).map(
-          (scope) => ({ token: scope, ...setting.settings } as monaco.editor.ITokenThemeRule)
-        );
-      })
-      .flat(),
-  });
+  const { theme, monacoTheme } = convertTheme();
+  monaco.editor.defineTheme("OneDark", monacoTheme);
+  const BASE_URL = import.meta.env.BASE_URL;
   const grammars = grammerList.reduce((r, i) => {
     return {
       ...r,
       [i.scopeName]: {
         ...i,
-        path: i.path.replace(/^\./, "/node_modules/vscode-advscript"),
+        path: i.path.replace("${BASE_URL}", BASE_URL),
       },
     };
   }, {} as { [scopeName: string]: DemoScopeNameInfo });
-  console.log(grammars)
+  console.debug(grammars);
   const fetchGrammar = async (scopeName: ScopeName): Promise<TextMateGrammar> => {
     const { path } = grammars[scopeName];
     const uri = path;
@@ -65,23 +55,17 @@ export async function bootstrap(
     fetchGrammar,
     configurations: languages.map((language) => language.id),
     fetchConfiguration,
-    theme: {
-      name: theme.name,
-      settings: theme.tokenColors,
-    },
+    theme,
     onigLib,
     monaco,
   });
+  // provider.injectCSS();
   registerLanguages(
     languages,
     (language: LanguageId) => provider.fetchLanguageInfo(language, addition),
     monaco
   );
-  return {
-    async injectCSS() {
-      provider.injectCSS();
-    },
-  };
+  return provider;
 }
 
 // Taken from https://github.com/microsoft/vscode/blob/829230a5a83768a3494ebbc61144e7cde9105c73/src/vs/workbench/services/textMate/browser/textMateService.ts#L33-L40

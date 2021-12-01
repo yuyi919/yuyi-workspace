@@ -45,7 +45,7 @@
 			"request": "launch",
             "runtimeExecutable": "${execPath}",
 			"args": [
-				"${workspaceFolder}/packages",
+				"${workspaceFolder}/",
 				"--extensionDevelopmentPath=${workspaceFolder}/packages/langium/packages/langium-vscode"
 			]
 		},

@@ -30,7 +30,7 @@ Semantics.addAttribute("parseExpression", {
 
 const ParserMap = new Map<string, ParserContext>();
 export function getParserContext(id: string) {
-  console.log("getParserContext", id);
+  // console.log("getParserContext", id);
   return ParserMap.get(id);
 }
 export function createParser(id?: string) {

@@ -4,7 +4,7 @@
     "rootDir": "./src",
     "paths": {
       "langium": ["../langium/packages/langium"],
-      "langium/*": ["../langium/packages/langium/*"]
+      "langium/lib/*": ["../langium/packages/langium/lib/*"]
     },
     "esModuleInterop": true
   },

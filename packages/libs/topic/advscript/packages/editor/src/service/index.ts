@@ -1,61 +1,52 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import {
+  isCharacterDeclareKind,
+  isDeclareKind,
+  isMacroDeclare,
+  isMacrosDeclareKind,
+} from "@yuyi919/advscript-language-services";
+import { isCharactersDeclare } from "@yuyi919/advscript-language-services";
+import { isModifier } from "@yuyi919/advscript-language-services";
+import { isOtherDeclare } from "@yuyi919/advscript-language-services";
+import { Document, AdvscriptServices, ISerializedGast } from "@yuyi919/advscript-language-services";
+import {
   AstNode,
   findLeafNodeAtOffset,
   LangiumDocument,
   LangiumServices,
   OperationCancelled,
+  streamAllContents,
+  streamContents,
 } from "langium";
-import { _Connection } from "vscode-languageserver";
+import { debounce } from "lodash";
+import type * as Lsp from "vscode-languageserver-protocol";
 import {
-  CodeActionParams,
-  CompletionParams,
-  DocumentHighlightParams,
-  DocumentSymbolParams,
-  FoldingRangeParams,
-  InitializeResult,
-  PublishDiagnosticsParams,
-  ReferenceParams,
-  RenameParams,
-  TextDocumentPositionParams,
-  TextDocumentSyncKind,
-} from "vscode-languageserver-protocol";
-import { TextDocument } from "vscode-languageserver-textdocument";
-import {
-  CodeAction,
-  Command,
-  CompletionList,
-  DocumentHighlight,
-  DocumentSymbol,
-  FoldingRange,
-  Hover,
-  Location,
-  Range,
-  TextDocumentIdentifier,
   TextDocumentItem,
+  TextDocumentSyncKind,
   VersionedTextDocumentIdentifier,
-  WorkspaceEdit,
-} from "vscode-languageserver-types";
-import { URI as Uri } from "vscode-uri";
+} from "vscode-languageserver-protocol";
 import type { Monaco, TMonaco } from "../lib";
 import { MonacoToProtocolConverter } from "../lib/languageclient/monaco-converter";
-import { appendChanged } from "./adapter";
 import { createLangiumServices, ILSPModuleContext } from "./module";
-import { ServiceMockConnection } from "./ServiceMockConnection";
+import { ServiceMockConnectionWrapper } from "./ServiceMockConnection";
+import { createRequest } from "./_utils";
+
 export abstract class AdvScriptService {
   static serviceId = 0;
   protected m2p: MonacoToProtocolConverter;
   public id?: string;
   protected languageId?: string;
-  protected services: LangiumServices;
-  protected connection: ServiceMockConnection;
+  protected services: AdvscriptServices;
+  protected connection: ServiceMockConnectionWrapper;
+
+  protected initialized: Lsp.InitializeResult;
 
   constructor(
     protected _monaco: TMonaco,
-    factory: (context: ILSPModuleContext) => LangiumServices
+    factory: (context: ILSPModuleContext) => AdvscriptServices
   ) {
     this.m2p = new MonacoToProtocolConverter(_monaco);
-    const connection = ServiceMockConnection.create(_monaco);
+    const connection = ServiceMockConnectionWrapper.create(_monaco);
     const services = factory({ connection });
     this.languageId = services.LanguageMetaData.languageId;
     this.id = this.languageId + ":" + AdvScriptService.serviceId++;
@@ -68,7 +59,7 @@ export abstract class AdvScriptService {
   }
 
   async doInitialize() {
-    return this.getInitializeResult(this.services);
+    return (this.initialized = this.getInitializeResult(this.services));
   }
 
   async doDidChangeContent(
@@ -76,94 +67,72 @@ export abstract class AdvScriptService {
     content: string,
     changes: Monaco.editor.IModelContentChange[]
   ) {
-    const version = await this.getScriptVersion(uri);
+    const version = this._getScriptVersion(uri);
     const contentChanges = changes.map(({ range, rangeLength, text }) => ({
       range: this.m2p.asRange(range),
       rangeLength,
       text,
     }));
-    console.log("doDidChangeContent", contentChanges);
-    contentChanges.forEach((changed) => {
-      appendChanged(uri, changed);
-    });
-    this.connection.didChangeTextDocument({
+    // console.log("doDidChangeContent", contentChanges);
+    ServiceMockConnectionWrapper.didChangeTextDocument(this.connection, {
       textDocument: VersionedTextDocumentIdentifier.create(uri, version),
       contentChanges,
     });
     this.doDiagnostics(uri);
-    return this.getDiagnostics();
+    return this.getDiagnostics(uri);
   }
 
-  getDiagnostics() {
-    return new Promise<PublishDiagnosticsParams>((resolve) => {
-      const dispose = this.connection.onDidDiagnostics(([params]: [PublishDiagnosticsParams]) => {
-        resolve(params);
-        dispose.dispose();
+  getDiagnostics(uri: string) {
+    return new Promise<Lsp.PublishDiagnosticsParams>((resolve) => {
+      const dispose = ServiceMockConnectionWrapper.onDidDiagnostics(this.connection, (params) => {
+        if (params.uri === uri) {
+          // console.log("onDid getDiagnostics", params);
+          resolve(params);
+          dispose.dispose();
+        }
       });
     });
   }
+
   async doDocumentLoaded(uri: string, content: string) {
-    const version = await this.getScriptVersion(uri);
-    this.connection.didOpenTextDocument({
+    const version = this._getScriptVersion(uri);
+    ServiceMockConnectionWrapper.didOpenTextDocument(this.connection, {
       textDocument: TextDocumentItem.create(uri, this.languageId, version, content),
     });
-    this.services.documents.DocumentBuilder.update([this._monaco.Uri.parse(uri)], []);
-    return this.getDiagnostics();
+    return this.getDiagnostics(uri);
   }
-
-  private pendingValidationRequests = new Map<string, number>();
 
   async cleanDiagnostics(uri: string) {
     this.connection.sendDiagnostics({
       uri,
       diagnostics: [],
-      version: await this.getScriptVersion(uri),
+      version: this._getScriptVersion(uri),
     });
-    // this._monaco.editor.setModelMarkers(uri, this.id, []);
   }
 
-  async sendDiagnostics(uri: string) {
-    this.connection.sendDiagnostics({
-      uri,
-      diagnostics: [],
-      version: await this.getScriptVersion(uri),
-    });
-    // this._monaco.editor.setModelMarkers(uri, this.id, []);
-  }
-
-  private cleanPendingChange(document: TextDocument) {
-    const request = this.pendingValidationRequests.get(document.uri);
-    if (request !== undefined) {
-      clearTimeout(request);
-      this.pendingValidationRequests.delete(document.uri);
-    }
-  }
-  protected doDiagnostics(uri: string) {
+  diagnosticsRequest = createRequest(async (uri) => {
     const document = this.getDocumentWithUri(uri).textDocument;
-    this.cleanPendingChange(document);
-    this.pendingValidationRequests.set(
-      document.uri,
-      setTimeout(async () => {
-        this.pendingValidationRequests.delete(document.uri);
-        const text = document.getText();
-        // console.log(text, text.length);
-        if (text.length === 0) {
-          this.cleanDiagnostics(uri);
-          return;
-        }
-        try {
-          await this.services.documents.DocumentBuilder.update([this._monaco.Uri.parse(uri)], []);
-        } catch (err) {
-          if (err !== OperationCancelled) {
-            console.error("Error: ", err);
-            throw err;
-          }
-        }
-      }) as unknown as number
-    );
+    const text = document.getText();
+    // console.log(text, text.length);
+    if (text.length === 0) {
+      this.cleanDiagnostics(uri);
+      return;
+    }
+    try {
+      await this.services.documents.DocumentBuilder.update([this._monaco.Uri.parse(uri)], []);
+    } catch (err) {
+      if (err !== OperationCancelled) {
+        console.error("Error: ", err);
+        throw err;
+      }
+    }
+  }, 200);
+
+  protected doDiagnostics(uri: string) {
+    this.diagnosticsRequest.do(uri);
   }
 
-  async doProvideCompletionItems(params: CompletionParams): Promise<CompletionList> {
+  async doProvideCompletionItems(params: Lsp.CompletionParams): Promise<Lsp.CompletionList> {
     const document = this.getDocumentWithParams(params);
     const result = await this.services.lsp.completion.CompletionProvider.getCompletion(
       document,
@@ -172,15 +141,16 @@ export abstract class AdvScriptService {
     return result;
   }
 
-  async doFindReferences(params: ReferenceParams): Promise<Location[]> {
+  async doFindReferences(params: Lsp.ReferenceParams): Promise<Lsp.Location[]> {
     const document = this.getDocumentWithParams(params);
     const result = await this.services.lsp.ReferenceFinder.findReferences(document, params);
     return result;
   }
 
-  async doProvideCodeActions(params: CodeActionParams): Promise<(Command | CodeAction)[]> {
-    await this.getScriptVersion(params.textDocument.uri);
-    if (!this.services.lsp.CodeActionProvider) {
+  async doProvideCodeActions(
+    params: Lsp.CodeActionParams
+  ): Promise<(Lsp.Command | Lsp.CodeAction)[]> {
+    if (!this.services.lsp.CodeActionProvider || !this.isDocumentLoaded(params)) {
       return;
     }
     const document = this.getDocumentWithParams(params);
@@ -188,47 +158,53 @@ export abstract class AdvScriptService {
     return result;
   }
 
-  async doProvideDocumentSymbols(params: DocumentSymbolParams): Promise<DocumentSymbol[]> {
+  private isDocumentLoaded(params: Lsp.CodeActionParams): boolean {
+    return !!this.services.documents.TextDocuments.get(params.textDocument.uri);
+  }
+
+  async doProvideDocumentSymbols(params: Lsp.DocumentSymbolParams): Promise<Lsp.DocumentSymbol[]> {
     const document = this.getDocumentWithParams(params);
     const result = await this.services.lsp.DocumentSymbolProvider.getSymbols(document, params);
     return result;
   }
 
-  async doProvideDeclaration(params: TextDocumentPositionParams): Promise<Location[]> {
+  async doProvideDeclaration(params: Lsp.TextDocumentPositionParams): Promise<Lsp.Location[]> {
     return this.doProvideDefinition(params);
   }
 
-  async doProvideDefinition(params: TextDocumentPositionParams): Promise<Location[]> {
+  async doProvideDefinition(params: Lsp.TextDocumentPositionParams): Promise<Lsp.Location[]> {
     const document = this.getDocumentWithParams(params);
     const results = await this.services.lsp.GoToResolver.goToDefinition(document, params);
     return results.map((locat) => ({ range: locat.targetRange, uri: locat.targetUri }));
   }
 
-  async doProvideDocumentHighlights(params: DocumentHighlightParams): Promise<DocumentHighlight[]> {
+  async doProvideDocumentHighlights(
+    params: Lsp.DocumentHighlightParams
+  ): Promise<Lsp.DocumentHighlight[]> {
     const document = this.getDocumentWithParams(params);
     const result = await this.services.lsp.DocumentHighlighter.findHighlights(document, params);
     return result;
   }
 
-  async doProvideHover(params: TextDocumentPositionParams): Promise<Hover> {
+  async doProvideHover(params: Lsp.TextDocumentPositionParams): Promise<Lsp.Hover> {
     const document = this.getDocumentWithParams(params);
     const result = await this.services.lsp.HoverProvider.getHoverContent(document, params);
     return result;
   }
 
-  async doProvideFoldingRanges(params: FoldingRangeParams): Promise<FoldingRange[]> {
+  async doProvideFoldingRanges(params: Lsp.FoldingRangeParams): Promise<Lsp.FoldingRange[]> {
     const document = this.getDocumentWithParams(params);
     const result = await this.services.lsp.FoldingRangeProvider.getFoldingRanges(document, params);
     return result;
   }
 
-  async doProvideRenameEdits(params: RenameParams): Promise<WorkspaceEdit> {
+  async doProvideRenameEdits(params: Lsp.RenameParams): Promise<Lsp.WorkspaceEdit> {
     const document = this.getDocumentWithParams(params);
     const result = await this.services.lsp.RenameHandler.renameElement(document, params);
     return result;
   }
 
-  async doResolveRenameLocation(params: TextDocumentPositionParams) {
+  async doResolveRenameLocation(params: Lsp.TextDocumentPositionParams) {
     const document = this.getDocumentWithParams(params);
     const range = await this.services.lsp.RenameHandler.prepareRename(document, params);
     const text = range && this.findTextWithRange(document, range);
@@ -240,21 +216,25 @@ export abstract class AdvScriptService {
     }
   }
 
+  async doDocumentSemanticTokens(params: Lsp.SemanticTokensParams | Lsp.SemanticTokensRangeParams) {
+    const document = this.getDocumentWithParams(params);
+    const result = await this.services.lsp.DocumentSemanticProvider.getDocumentSemanticTokens(
+      document,
+      (params as Lsp.SemanticTokensRangeParams).range
+    );
+    return result;
+  }
+
   private getDocumentWithUri(uri: string) {
     return this.services.documents.LangiumDocuments.getOrCreateDocument(
       this._monaco.Uri.parse(uri)
-    );
+    ) as LangiumDocument<Document>;
   }
-  private getDocumentWithParams(params: {
-    /**
-     * The document to rename.
-     */
-    textDocument: TextDocumentIdentifier;
-  }) {
+  private getDocumentWithParams(params: { textDocument: Lsp.TextDocumentIdentifier }) {
     return this.getDocumentWithUri(params.textDocument.uri);
   }
 
-  private findTextWithRange(document: LangiumDocument<AstNode>, result?: Range) {
+  private findTextWithRange(document: LangiumDocument<AstNode>, result?: Lsp.Range) {
     const rootNode = document.parseResult?.value?.$cstNode;
     if (rootNode) {
       const offset = document.textDocument.offsetAt(result.start);
@@ -265,7 +245,7 @@ export abstract class AdvScriptService {
   }
 
   getInitializeResult(services: LangiumServices, hasWorkspaceFolder?: boolean) {
-    const result: InitializeResult = {
+    const result: Lsp.InitializeResult = {
       capabilities: {
         textDocumentSync: TextDocumentSyncKind.Incremental,
         // Tell the client that this server supports code completion.
@@ -280,6 +260,9 @@ export abstract class AdvScriptService {
         renameProvider: {
           prepareProvider: true,
         },
+        semanticTokensProvider: {
+          legend: this.services.lsp.DocumentSemanticProvider.tokenLegend as any,
+        },
       },
     };
     if (hasWorkspaceFolder) {
@@ -293,7 +276,15 @@ export abstract class AdvScriptService {
     return result;
   }
 
-  abstract getScriptVersion(uri: string): Promise<number>;
+  async getScriptVersion(uri: string): Promise<number> {
+    return this._getScriptVersion(uri);
+  }
+
+  async getSerializedGastProductions() {
+    return this.services.parser.LangiumParser.getSerializedGastProductions() as ISerializedGast[];
+  }
+
+  protected abstract _getScriptVersion(uri: string): number;
 }
 
 export interface IAvsLanguageOptions {
@@ -303,17 +294,36 @@ export class AvsLanguageService extends AdvScriptService {
   constructor(public options: IAvsLanguageOptions) {
     const { monaco: _monaco } = options;
     super(_monaco, (context) => createLangiumServices(_monaco, context));
-    this._onDidChange = new _monaco.Emitter<void>();
+    this.connection.onDidOpenTextDocument((param) => {
+      this._preLoaded.push(param.textDocument.uri);
+      // console.log("preload document", param.textDocument.uri);
+      this._doDocumentLoaded();
+    });
+    this._loading = new _monaco.Emitter();
   }
+  _loading: monaco.Emitter<void>;
+  _preLoaded = [] as string[];
+  loading = false;
+  private _doDocumentLoaded = debounce(() => {
+    const documents = this._preLoaded
+      .splice(0, this._preLoaded.length)
+      .map((uri) => this._monaco.Uri.parse(uri));
+    console.log("loadDocuments", this._preLoaded);
+    this._loading.fire();
+    this.services.documents.DocumentBuilder.update(documents, []);
+  }, 20);
 
-  _onDidChange: Monaco.Emitter<void>;
-
-  get onDidChange() {
-    return this._onDidChange.event;
-  }
-
-  protected applyChangeEvent() {
-    this._onDidChange.fire();
+  async doProvideCodeActions(params: Lsp.CodeActionParams) {
+    // console.log("doProvideCodeActions", params);
+    if (this._preLoaded.length > 0) {
+      await new Promise<void>((resolve) => {
+        const dispose = this._loading.event(() => {
+          resolve();
+          dispose.dispose();
+        });
+      });
+    }
+    return super.doProvideCodeActions(params);
   }
 
   async getLibFiles() {
@@ -321,11 +331,11 @@ export class AvsLanguageService extends AdvScriptService {
     return (await (await monaco.languages.typescript.getTypeScriptWorker())()).getLibFiles();
   }
 
-  async getScriptVersion(uri: string): Promise<number> {
+  protected _getScriptVersion(uri: string) {
     return 1;
   }
 }
 
 export interface WorkerAccessor<T> {
-  (first: Uri, ...more: Uri[]): Promise<T>;
+  (first: Lsp.URI, ...more: Lsp.URI[]): Promise<T>;
 }

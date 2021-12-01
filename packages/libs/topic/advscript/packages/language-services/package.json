@@ -16,6 +16,7 @@
     "langium:watch": "rushx langium generate --watch"
   },
   "dependencies": {
+    "chevrotain": "^9.1.0",
     "vscode-languageserver-protocol": "3.16.0",
     "vscode-uri": "~3.0.2"
   },

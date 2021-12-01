@@ -175,7 +175,7 @@ export class ScriptVM {
         blockIndex++;
       }
     }
-    this.handleChildren(line.blocks[blockIndex], blockIndex);
+    line.blocks[blockIndex] && this.handleChildren(line.blocks[blockIndex], blockIndex);
     // this.variable.pushScope();
   }
 

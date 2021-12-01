@@ -144,8 +144,8 @@
     },
     "notes": {
       "name": "comment.block",
-      "begin": "\\[\\[",
-      "end": "\\]\\]"
+      "begin": "(?<!\\\\)\\[\\[(?=((?!\\]\\]).)*\\]\\])",
+      "end": "(?<!\\\\)\\]\\]"
     },
     "pagebreaks": {
       "name": "entity.other.pagebreak.fountain",

@@ -1,16 +1,17 @@
-import {
-  DocumentSelector,
-  TextDocumentIdentifier,
+import type {
   CancellationToken,
+  DocumentSelector,
+  Position,
+  Range,
+  TextDocumentIdentifier,
 } from "vscode-languageserver-protocol";
-import type { RenameProvider } from "./languageclient/services";
 import {
   MonacoToProtocolConverter,
   ProtocolToMonacoConverter,
 } from "./languageclient/monaco-converter";
 import { MonacoLanguages, MonacoModelIdentifier } from "./languageclient/monaco-languages";
-import { Monaco, TMonaco, TLanguages } from "./monaco.export";
-import { Position, Range } from "vscode-languageserver-types";
+import type { RenameProvider } from "./languageclient/services";
+import { Monaco, TLanguages, TMonaco } from "./monaco.export";
 
 declare module "./languageclient/services" {
   interface RenameProvider {
@@ -32,6 +33,8 @@ export class WrapperMonacoLanguages extends MonacoLanguages {
     selector: DocumentSelector,
     provider: RenameProvider
   ): monaco.languages.RenameProvider {
+    if (!provider.resolveRenameLocation)
+      return super.createRenameProvider(selector, provider as any);
     return {
       ...super.createRenameProvider(selector, provider as any),
       resolveRenameLocation: async (

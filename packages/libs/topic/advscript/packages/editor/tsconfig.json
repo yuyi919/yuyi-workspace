@@ -12,8 +12,8 @@
     "types": ["vite/client"],
     "tsBuildInfoFile": "./node_modules/@yuyi919/workspace-base-rig/.tsBuildInfo/topic-advscript-packages-editor.json",
     "paths": {
-      "langium": ["./src/service/langium-compatibility/index.ts"],
-      "langium/lib/*": ["./src/service/langium-compatibility/src/*"]
+      "langium": ["../langium/packages/langium/src/index.ts"],
+      "langium/lib/*": ["../langium/packages/langium/src/*"]
     }
   },
   "exclude": ["src/**/*.spec.ts", "src/**/*.test.ts", "**/__test__/**"],

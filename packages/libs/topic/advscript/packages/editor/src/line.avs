@@ -1,6 +1,6 @@
 Characters: 
- - Foo (bar, bar2, bar3) display=Foo index=1
- - foo2 (bar, bar2) display=Foo index=2
+ - Foo (bar, bar2, bar3) display=!Foo index=1
+ - foo2 (bar, bar2) display=我 index=2
 
 Macros: 
  - bar (Foo, foo2) foo
@@ -8,36 +8,42 @@ Macros:
  - pipe (foo2) foo=true
 
 Hello: Bar!
-
+---
 /**
   aaa
 */
 // 123
 aaa
-bbbb
+[@Foo]bbbbar
 
 |let foo = 1, bar = 2
 
-@Foo (bar)[foo|bar]
+@Foo (bar)[bar|bar]
 (foo:bar)
-foo[bar](foo bar)
+foo[bar](bar foo)
   
 // continue
-[foo foo=foo bar="bar]foo" foo]
+[bar foo=foo bar="bar]foo" foo]
 // end
 
 |if bar > 0
 
 barbarbar
 
-// |elseif value2 < 10
-// callelseif
+|elseif bar == 2
+// call elseif bar == 2
+
+|elseif bar == 3
+// call elseif bar == 3
+
+|else
+// call else
 
 |end
 
 // action
 
-   @aaa (name)[status]
+   @Foo (bar)[pipe foo=2]
    对话中的前导空格将被忽略
      
    测试
@@ -51,7 +57,7 @@ barbarbar
 > *centered* <
    *> centered <*
 
-@app
+@foo2
 > centered {{app}} <
 >* centered *<
 *> centered <*
@@ -75,7 +81,7 @@ test[[comment]]in*line**bo*ld{{"template" | pipe}}con>1 [[label]](pipe) <tentaft
 test[[comment]]in*line**bo*ld{{"template" | pipe}}con>2 \[[label]](pipe) <tentaft*|pipe
 test[[comment]]in*line**bo*ld{{"template" | pipe}}con>3 [\[label]](pipe) <tentaft*|pipe
 test[[comment]]in*line**bo*ld{{"template" | pipe}}con>32 [\[label\]]() <tentaft*|pipe
-test[[comment]]in*line**bo*ld{{"template" | pipe}}con>33[\[label](](pipe) <tentaft*|pipe
+test[[comment]]in*line**bo*ld{{"template" | pipe}}con>33[\[label](pipe foo=1) <tentaft*|pipe
 test[[comment]]in*line**bo*ld{{"template" | pipe}}con>4 [\[label\]](pipe) <tentaft*|pipe
 test[[comment]]in*line**bo*ld{{"tem}}plate" | pipe}}con>5 [\[label]]\(pipe) <tentaft*|pipe
 

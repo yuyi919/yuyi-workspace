@@ -276,6 +276,7 @@ export const Expr = defineActions<any>({
     text: AwesomeExpressionNode,
     expr_auto: Node<CallMacroExpression | CallExpression>
   ): LabelRaw {
+    text.parserContext.addInlayHint("=END", "post", toSource(text), 1);
     return createLabelTemplate(text.parse(), expr_auto.parse(), toSource(text, expr_auto));
   },
   template_native(expr_template: Node<TemplateExpression>) {

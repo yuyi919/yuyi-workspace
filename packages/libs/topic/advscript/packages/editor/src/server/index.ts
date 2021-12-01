@@ -1,30 +1,28 @@
 import * as rpc from "@codingame/monaco-jsonrpc";
 import {
   CodeActionParams,
+  Color,
+  ColorInformation,
+  ColorPresentation,
   ColorPresentationParams,
+  Command,
+  CompletionItem,
+  CompletionList,
+  Diagnostic,
   DidChangeTextDocumentParams,
   DocumentColorParams,
   DocumentRangeFormattingParams,
   DocumentSymbolParams,
   ExecuteCommandParams,
-  FoldingRangeParams,
-  TextDocumentPositionParams,
-  TextDocumentSyncKind,
-} from "vscode-languageserver-protocol";
-import { TextDocument } from "vscode-languageserver-textdocument";
-import {
-  Color,
-  ColorInformation,
-  ColorPresentation,
-  Command,
-  CompletionItem,
-  CompletionList,
-  Diagnostic,
   FoldingRange,
+  FoldingRangeParams,
   Hover,
   SymbolInformation,
+  TextDocumentPositionParams,
+  TextDocumentSyncKind,
   TextEdit,
-} from "vscode-languageserver-types";
+} from "vscode-languageserver-protocol";
+import { TextDocument } from "vscode-languageserver-textdocument";
 import {
   createConnection,
   DidOpenTextDocumentParams,

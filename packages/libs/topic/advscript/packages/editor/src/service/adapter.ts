@@ -186,7 +186,7 @@ export class OhmParser extends AbstractLangiumParser {
   prevTextDocument: TextDocument;
   parse<T extends AstNode = AstNode>(input: LangiumDocument<T>): ParseResult<T> {
     const text = input.textDocument.getText();
-    const changed = this.fireChange(input);
+    const changed = fireChange(input);
     console.log("OhmParser", input);
     const ranges = changed
       .map((changed) => {
@@ -217,22 +217,21 @@ export class OhmParser extends AbstractLangiumParser {
       lexerErrors: [],
     };
   }
-
-  fireChange(doc: LangiumDocument) {
-    if (!changedMap.has(doc.textDocument.uri)) {
-      const empty = [] as TextDocumentContentChangeEvent[];
-      changedMap.set(doc.textDocument.uri, empty);
-      return empty;
-    }
-    const changed = changedMap.get(doc.textDocument.uri);
-    return changed.splice(0, changed.length);
-  }
 }
 function bumpTextDocument(doc: TextDocument) {
   return TextDocument.create(doc.uri, doc.languageId, doc.version, doc.getText());
 }
 const changedMap = new Map<string, TextDocumentContentChangeEvent[]>();
 
+export function fireChange(doc: LangiumDocument) {
+  if (!changedMap.has(doc.textDocument.uri)) {
+    const empty = [] as TextDocumentContentChangeEvent[];
+    changedMap.set(doc.textDocument.uri, empty);
+    return empty;
+  }
+  const changed = changedMap.get(doc.textDocument.uri);
+  return changed.splice(0, changed.length);
+}
 export function appendChanged(uri: string, event: TextDocumentContentChangeEvent) {
   if (!changedMap.has(uri)) {
     changedMap.set(uri, [event]);

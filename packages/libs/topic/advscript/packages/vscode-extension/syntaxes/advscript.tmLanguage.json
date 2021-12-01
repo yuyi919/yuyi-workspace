@@ -25,12 +25,12 @@
         },
         {
           "comment": true,
-          "name": "constant.language.boolean.true.ts",
+          "name": "source.ts constant.language.boolean.true.ts",
           "match": "\\b(true)\\b"
         },
         {
           "comment": false,
-          "name": "constant.language.boolean.false.ts",
+          "name": "source.ts constant.language.boolean.false.ts",
           "match": "\\b(false)\\b"
         },
         {
@@ -50,7 +50,7 @@
         },
         {
           "match": "(\\.\\.\\.)",
-          "name": "support.type.adv"
+          "name": "source.ts keyword.operator.spread.ts"
         },
         {
           "match": "( (in) )",
@@ -59,7 +59,7 @@
         {
           "comment": "OPERATOR",
           "match": "(\\+|\\-|\\*|\\/|=|==|>|<|>=|<=)",
-          "name": "keyword.operator.adv"
+          "name": "source.ts keyword.operator.assignment.ts"
         },
         {
           "include": "source.ts#expression"
@@ -67,7 +67,7 @@
       ]
     },
     "CALL_EXPRESSION": {
-      "name": "meta.brace.round.ts",
+      "name": "markup.bold",
       "begin": "(([_$[:alpha:]][_$[:alnum:]]*))\\(",
       "beginCaptures": {
         "1": {
@@ -84,7 +84,7 @@
     "MACRO_CALL_PARAM": {
       "patterns": [
         {
-          "match": "( ([_$[:alpha:]][_$[:alnum:]]*))(=((?!( |\\||(\\n|\\]|\\|)(?=(?!\\()))).+?)|)(?=( |\\||(\\n|\\]|\\|)(?=(?!\\())))",
+          "match": "( ([_$[:alpha:]][_$[:alnum:]]*))(=((\"([^\"]|\\\\\\S)*?\"|'([^']|\\\\\\S)*?'))|(?!( |\\||\\)|(\\n|(?<!\\\\)\\]|\\|)(?!\\)))).+?|)(?=( |\\||\\)|(\\n|(?<!\\\\)\\]|\\|)(?!\\))))",
           "captures": {
             "1": {
               "name": "entity.name.tag.adv"
@@ -101,7 +101,7 @@
       ]
     },
     "MACRO_USE_EXPRESSION": {
-      "name": "meta.brace.round.ts",
+      "name": "markup.bold",
       "begin": "(\\|\\=)",
       "beginCaptures": {
         "1": {
@@ -121,8 +121,8 @@
       ]
     },
     "MACRO_TEMPLATE_EXPRESSION": {
-      "name": "meta.brace.round.ts",
-      "match": "((\\[)(.+)(\\]\\()(.+)(\\)))",
+      "name": "markup.bold",
+      "match": "(((?<!\\\\)\\[)((\\\\\\S|(?!\\]).)+?\\]*)(\\]\\()(.+)(\\)))",
       "captures": {
         "2": {
           "name": "entity.name.function.macro.adv"
@@ -130,36 +130,59 @@
         "3": {
           "name": "markup.raw"
         },
-        "4": {
+        "5": {
           "name": "entity.name.function.macro.adv"
         },
-        "5": {
+        "6": {
           "patterns": [
             {
               "include": "#MACRO_CALL_PARAM"
             },
             {
-              "include": "#MACRO_CALL_EXPRESSION"
+              "include": "#MACRO_TEMPLATE_CALL_EXPRESSION"
             }
           ]
         },
-        "6": {
+        "7": {
           "name": "entity.name.function.macro.adv"
         }
       }
     },
-    "MACRO_CALL_EXPRESSION": {
+    "MACRO_TEMPLATE_CALL_EXPRESSION": {
       "name": "meta.brace.round.ts",
-      "begin": "((\\[|\\|)[ \\t]*(([_$[:alpha:]][_$[:alnum:]]*)\\b|))",
+      "begin": "(?<=\\]\\()(([_$[:alpha:]][_$[:alnum:]]*)\\b|)",
       "beginCaptures": {
         "1": {
           "name": "entity.name.function.macro.adv"
         }
       },
-      "end": "(((\\])(?=(?! \\) )))|(?=\\n))",
+      "end": "(\\)|(?=\\n))",
       "endCaptures": {
         "1": {
           "name": "entity.name.function.macro.adv"
+        }
+      },
+      "patterns": [
+        {
+          "include": "#MACRO_CALL_PARAM"
+        }
+      ]
+    },
+    "MACRO_CALL_EXPRESSION": {
+      "name": "meta.brace.round.ts",
+      "begin": "((((?<!\\\\)\\[|\\|)[ \\t]*)(([_$[:alpha:]][_$[:alnum:]]*)\\b|))",
+      "beginCaptures": {
+        "1": {
+          "name": "entity.name.function.macro.adv"
+        },
+        "2": {
+          "name": "source.ts keyword.operator"
+        }
+      },
+      "end": "((((?<!\\\\)\\])(?!\\)))|(?=\\n))",
+      "endCaptures": {
+        "1": {
+          "name": "source.ts keyword.operator"
         }
       },
       "patterns": [
@@ -200,7 +223,7 @@
       ]
     },
     "TAG_COMMAND": {
-      "begin": "^ *?(\\[)(\\b([_$[:alpha:]][_$[:alnum:]]*))\\b",
+      "begin": "^ *?((?<!\\\\)\\[)(\\b([_$[:alpha:]][_$[:alnum:]]*))\\b",
       "beginCaptures": {
         "1": {
           "name": "entity.name.function.macro.adv"
@@ -209,21 +232,13 @@
           "name": "entity.name.function.macro.adv"
         }
       },
-      "end": "(\\]|\\n)|(?=\\[)",
+      "end": "((?<!\\\\)\\]|\\n)|(?=\\[)",
       "endCaptures": {
         "1": {
           "name": "entity.name.function.macro.adv"
         }
       },
       "patterns": [
-        {
-          "match": "( ([_$[:alpha:]][_$[:alnum:]]*))(?=( |=|(\\n|\\]|\\|)(?=(?!\\())))",
-          "captures": {
-            "2": {
-              "name": "entity.name.tag.adv"
-            }
-          }
-        },
         {
           "include": "#MACRO_CALL_EXPRESSION"
         },

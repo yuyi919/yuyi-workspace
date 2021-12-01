@@ -190,16 +190,36 @@ export const LogicBlock = defineActions<any>({
     };
   },
   logic_if(space, Expression: ExpressionNode) {
-    return Expression.parse();
+    return Expression;
   },
   logic_elseIf(space, Expression: ExpressionNode) {
-    return Expression.parse();
+    return Expression;
   },
-  logic_blockIf(IF, ifBlock, ELSEIFs, elseifBlock, ELSE, elseBlock, END): IfStatmentData {
+  logic_end(end) {
+    return end;
+  },
+  logic_else(_else) {
+    return _else;
+  },
+  logic_blockIf(
+    IF: Node<ExpressionNode>,
+    ifBlock,
+    ELSEIFS,
+    elseifBlock,
+    ELSE,
+    elseBlock,
+    END: Node<Node<any>>
+  ): IfStatmentData {
     // get conditions
-    const conditions = [IF.parse()];
-    for (const ELSEIF of ELSEIFs.children) {
-      conditions.push(ELSEIF.parse());
+    const ifNode = IF.parse();
+    const elseIfNodes: ExpressionNode[] = [];
+    const elseNode = ELSE.children[0]?.parse() as Node<any>;
+    const endNode = END.parse();
+    const conditions = [ifNode.parse()];
+    for (const ELSEIF of ELSEIFS.children) {
+      const elseIfNode: ExpressionNode = ELSEIF.parse();
+      elseIfNodes.push(elseIfNode);
+      conditions.push(elseIfNode.parse());
     }
     // get stroy block
     const blocks = [] as StatmentArray[];
@@ -207,14 +227,22 @@ export const LogicBlock = defineActions<any>({
     for (const LogicBlock of ifBlock.children) {
       blockIf.push(LogicBlock.parse());
     }
-    blocks.push(createLines(blockIf, toSource(IF, ifBlock, ELSEIFs)));
-    for (const block of elseifBlock.children) {
+    blocks.push(
+      createLines(blockIf, toSource(ifNode, ifBlock, elseIfNodes[0] || elseNode || endNode))
+    );
+    for (let index = 0; index < elseifBlock.children.length; index++) {
+      const block = elseifBlock.children[index];
       const blockIfElse = [];
-      console.log(block);
+      // console.log(block);
       for (const LogicBlock of block.children) {
         blockIfElse.push(LogicBlock.parse());
       }
-      blocks.push(createLines(blockIfElse, toSource(ELSEIFs, block, ELSE)));
+      blocks.push(
+        createLines(
+          blockIfElse,
+          toSource(elseIfNodes[index], block, elseIfNodes[index + 1] || elseNode || endNode)
+        )
+      );
     }
 
     if (elseBlock.child(0)) {
@@ -222,12 +250,12 @@ export const LogicBlock = defineActions<any>({
       for (const LogicBlock of elseBlock.child(0).children) {
         blockElse.push(LogicBlock.parse());
       }
-      blocks.push(createLines(blockElse, toSource(ELSE, elseBlock.child(0), END)));
+      blocks.push(createLines(blockElse, toSource(ELSE, elseBlock.child(0), END.parse())));
     }
     return createIfLogic(
       conditions,
       blocks,
-      toSource(IF, ifBlock, ELSEIFs, elseifBlock, ELSE, elseBlock, END)
+      toSource(IF, ifBlock, ELSEIFS, elseifBlock, ELSE, elseBlock, END.parse())
     );
   },
   logicSyntax_let(head, expression: ExpressionNode) {

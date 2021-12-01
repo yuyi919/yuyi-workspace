@@ -1,42 +1,29 @@
-/******************************************************************************
- * Copyright 2021 TypeFox GmbH
- * This program and the accompanying materials are made available under the
- * terms of the MIT License, which is available in the project root.
- ******************************************************************************/
-
 import {
   AstNode,
   AstNodeDescription,
   DefaultScopeComputation,
+  DefaultScopeProvider,
   interruptAndCheck,
   LangiumDocument,
-  LangiumServices,
   PrecomputedScopes,
 } from "langium";
 import { CancellationToken } from "vscode-languageserver-protocol";
-import { AdvscriptModelNameProvider } from "./advscript-provider";
-import {
-  CharactersDeclare,
-  Declare,
-  Document,
-  isCharacter,
-  isDialog,
-  isDocument,
-  isMacro,
-  MacroDeclare,
-} from "./generated/ast";
+import { AdvscriptServices } from "../advscript-module";
+import * as ast from "../ast";
+
+export class AdvscriptScopeProvider extends DefaultScopeProvider {}
 
 export class ScopeComputation extends DefaultScopeComputation {
-  constructor(services: LangiumServices) {
+  constructor(services: AdvscriptServices) {
     super(services);
   }
-  declare nameProvider: AdvscriptModelNameProvider;
+  declare nameProvider: AdvscriptServices["references"]["NameProvider"];
 
   async computeScope(
     document: LangiumDocument,
     cancelToken = CancellationToken.None
   ): Promise<PrecomputedScopes> {
-    const model = document.parseResult.value as Document;
+    const model = document.parseResult.value as ast.Document;
     const scopes = new Map<AstNode, AstNodeDescription[]>();
     await this.processContainer(model, scopes, document, cancelToken);
     const next = await super.computeScope(document, cancelToken);
@@ -45,18 +32,25 @@ export class ScopeComputation extends DefaultScopeComputation {
   }
 
   protected async processContainer(
-    container: Document | CharactersDeclare | MacroDeclare,
+    container: ast.Document | ast.CharactersDeclare | ast.MacroDeclare,
     scopes: PrecomputedScopes,
     document: LangiumDocument,
     cancelToken: CancellationToken
   ): Promise<AstNodeDescription[]> {
     const localDescriptions: AstNodeDescription[] = [];
-    for (const element of isDocument(container)
-      ? [...container.defines, ...container.contents]
+    for (const element of ast.isDocument(container)
+      ? [
+          // ...container.defines,
+          ...container.contents,
+        ]
       : container.elements) {
       interruptAndCheck(cancelToken);
-      if (isCharacter(element)) {
-        const description = this.descriptions.createDescription(element, element.name, document);
+      if (ast.isCharacter(element)) {
+        const description = this.descriptions.createDescription(
+          element,
+          element.name.text,
+          document
+        );
         localDescriptions.push(description);
         const children: AstNodeDescription[] = [];
         element.modifiers.forEach((el) => {
@@ -65,15 +59,19 @@ export class ScopeComputation extends DefaultScopeComputation {
           );
         });
         scopes.set(element, children);
-      } else if (isMacro(element)) {
-        const description = this.descriptions.createDescription(element, element.name, document);
+      } else if (ast.isMacro(element)) {
+        const description = this.descriptions.createDescription(
+          element,
+          element.name.text,
+          document
+        );
         localDescriptions.push(description);
         const children: AstNodeDescription[] = [];
         element.elements.forEach((el) => {
           children.push(this.descriptions.createDescription(element, "macro." + el.name, document));
         });
         scopes.set(element, children);
-      } else if (isDialog(element)) {
+      } else if (ast.isDialog(element)) {
         const description = this.descriptions.createDescription(
           element,
           element.ref?.$refText,
@@ -82,7 +80,7 @@ export class ScopeComputation extends DefaultScopeComputation {
         localDescriptions.push(description);
         const children: AstNodeDescription[] = [];
         element.elements.forEach((el) => {
-          children.push(this.descriptions.createDescription(element, el.$refText, document));
+          children.push(this.descriptions.createDescription(element, el.ref.$refText, document));
         });
         scopes.set(element, children);
         // console.log("Dialog", element, children);
@@ -106,7 +104,7 @@ export class ScopeComputation extends DefaultScopeComputation {
   }
 
   protected createQualifiedDescription(
-    pack: Declare,
+    pack: ast.Declare,
     description: AstNodeDescription,
     document: LangiumDocument
   ): AstNodeDescription {

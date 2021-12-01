@@ -8,21 +8,18 @@ import {
   Module,
   PartialLangiumServices,
 } from "langium";
-import {
-  AdvscriptModelNameProvider,
-  AdvscriptScopeProvider,
-  AstNodeDescriptionProvider,
-  HoverProvider,
-  Linker,
-} from "./advscript-provider";
+import { AstNodeLocator, AstNodeDescriptionProvider, HoverProvider } from "./advscript-provider";
 import {
   AdvscriptCodeActionProvider,
   AdvscriptValidationRegistry,
   AdvscriptValidator,
 } from "./advscript-validator";
-import { ScopeComputation } from "./domain-model-scope";
+import { createCustomParser, CustomParser } from "./CustomParser";
+import { CustomTokenBuilder } from "./customTokens";
+import { DocumentSemanticProvider } from "./DocumentSemanticProvider";
 // import { OhmParser } from "./custom";
 import { AdvscriptGeneratedModule } from "./generated/module";
+import * as References from "./references";
 
 /**
  * Declaration of custom services - add your own service classes here.
@@ -30,6 +27,16 @@ import { AdvscriptGeneratedModule } from "./generated/module";
 export type AdvscriptAddedServices = {
   validation: {
     AdvscriptValidator: AdvscriptValidator;
+  };
+  parser: {
+    TokenBuilder: CustomTokenBuilder;
+    LangiumParser: CustomParser;
+  };
+  references: References.Providers;
+  lsp: {
+    HoverProvider: HoverProvider;
+    CodeActionProvider: AdvscriptCodeActionProvider;
+    DocumentSemanticProvider: DocumentSemanticProvider;
   };
 };
 
@@ -39,7 +46,7 @@ export type AdvscriptAddedServices = {
  */
 export type AdvscriptServices = LangiumServices & AdvscriptAddedServices;
 
-class A extends DefaultJsonSerializer {
+class JsonSerializer extends DefaultJsonSerializer {
   serialize(node: AstNode, space?: string | number): string {
     try {
       return super.serialize(node, space);
@@ -62,28 +69,30 @@ export const AdvscriptModule: Module<
     AdvscriptValidator: (injector) => new AdvscriptValidator(injector),
   },
   references: {
-    Linker: (injector) => new Linker(injector),
-    ScopeComputation: (injector) => new ScopeComputation(injector),
-    NameProvider: (injector) => new AdvscriptModelNameProvider(injector),
-    ScopeProvider: (i) => new AdvscriptScopeProvider(i),
+    Linker: (injector) => new References.Linker(injector),
+    ScopeComputation: (injector) => new References.ScopeComputation(injector),
+    NameProvider: (injector) => new References.NameProvider(injector),
+    ScopeProvider: (i) => new References.AdvscriptScopeProvider(i),
+    References: (s) => new References.References(s),
   },
   index: {
+    AstNodeLocator: () => new AstNodeLocator(),
     AstNodeDescriptionProvider: (injector) => new AstNodeDescriptionProvider(injector),
   },
   serializer: {
-    JsonSerializer: (i) => new A(i),
+    JsonSerializer: (i) => new JsonSerializer(i),
   },
   // parser: {
   //     LangiumParser: (service) => new OhmParser(service) as any,
   // },
   parser: {
-    ParserConfig: () => ({
-      skipValidations: true,
-    }),
+    TokenBuilder: () => new CustomTokenBuilder(),
+    LangiumParser: (services) => createCustomParser(services),
   },
   lsp: {
     HoverProvider: (service) => new HoverProvider(service),
     CodeActionProvider: (service) => new AdvscriptCodeActionProvider(service),
+    DocumentSemanticProvider: (service) => new DocumentSemanticProvider(service),
   },
 };
 /**

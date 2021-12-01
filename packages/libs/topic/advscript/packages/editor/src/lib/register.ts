@@ -1,4 +1,4 @@
-import type { Monaco } from "./monaco.export";
+import type { TMonaco } from "./monaco.export";
 import { monaco } from "./monaco.export";
 
 /** String identifier like 'cpp' or 'java'. */
@@ -28,7 +28,7 @@ export type LanguageInfo = {
 export function registerLanguages(
   languages: monaco.languages.ILanguageExtensionPoint[],
   fetchLanguageInfo: (language: LanguageId) => Promise<LanguageInfo>,
-  monaco: Monaco
+  monaco: TMonaco
 ) {
   // We have to register all of the languages with Monaco synchronously before
   // we can configure them.

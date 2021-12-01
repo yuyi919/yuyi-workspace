@@ -1,6 +1,8 @@
+import { last } from "lodash";
 import { Color } from "monaco-editor/esm/vs/base/common/color.js";
 import { TokenizationRegistry } from "monaco-editor/esm/vs/editor/common/modes.js";
 import { generateTokensCSSForColorMap } from "monaco-editor/esm/vs/editor/common/modes/supports/tokenization.js";
+import { ThemeTrieElementRule, Theme } from "monaco-textmate/dist/typings/theme";
 import {
   IGrammar,
   INITIAL,
@@ -11,10 +13,11 @@ import {
   Registry,
   StackElement,
 } from "vscode-textmate";
-import { TMonaco } from "..";
+import { Monaco, TMonaco } from "..";
 import { waitMonaco } from "../hackMonaco";
 import { monaco } from "../monaco.export";
 import { LanguageId, LanguageInfo } from "../register";
+import { TMToMonacoToken, TokenizerState } from "./TokenizerState";
 
 /**
  * Basic provider to implement the fetchLanguageInfo() function needed to
@@ -88,16 +91,59 @@ export class TmgLanguageProvider {
    * Be sure this is done after Monaco injects its default styles so that the
    * injected CSS overrides the defaults.
    */
-  injectCSS() {
+  injectCSS(editor?: Monaco.editor.IStandaloneCodeEditor) {
+    _editor = editor;
     const cssColors = this.registry.getColorMap();
-    this.debug && console.debug(cssColors);
-    const colorMap = cssColors.map(Color.Format.CSS.parseHex);
-    // This is needed to ensure the minimap gets the right colors.
-    TokenizationRegistry.setColorMap(colorMap);
-    const css = generateTokensCSSForColorMap(colorMap);
-    const style = createStyleElementForColorsCSS();
-    style.innerHTML = css;
-    // monaco.languages.setColorMap(cssColors);
+    // this.debug && console.debug(cssColors);
+    // // This is needed to ensure the minimap gets the right colors.
+    // const colorMap = cssColors.map(Color.Format.CSS.parseHex); //.map((c) => c.toString());
+    // TokenizationRegistry.setColorMap(colorMap);
+    // const css = generateTokensCSSForColorMap(colorMap);
+    // const style = createStyleElementForColorsCSS();
+    // style.innerHTML = css;
+    // console.log(colorMap, TokenizationRegistry);
+    monaco.languages.setColorMap(cssColors);
+    const colorTheme = editor["_themeService"].getColorTheme();
+    const _theme = colorTheme._tokenTheme as Theme;
+    // @ts-expect-error
+    const { _match } = _theme;
+    // @ts-expect-error
+    _theme._cache.clear();
+    // @ts-expect-error
+    _theme._match = (scopeName: string) => {
+      const rule = _match.call(_theme, scopeName);
+      try {
+        let matched: ThemeTrieElementRule;
+        // @ts-expect-error
+        const rules = this.registry._syncRegistry?._theme.match(
+          scopeName
+        ) as ThemeTrieElementRule[];
+        const filterRules = rules.filter((o, index, list) => {
+          if (o.foreground > 1) {
+            if (!o.parentScopes) return true;
+            if (matched && !o.parentScopes) return false;
+            const last = o.parentScopes[o.parentScopes.length - 1];
+            const lastScope = scopeName.split(".").pop();
+            if (last && last.split(".").includes(lastScope)) {
+              matched = o;
+              return true;
+            }
+            return false;
+          }
+        });
+        // console.log(scopeName, rule, filterRules);
+        if (matched || filterRules.length > 0) {
+          const { background, fontStyle, foreground } = matched || last(filterRules);
+          rule.acceptOverwrite(fontStyle, foreground, background);
+          // @ts-expect-error
+          _theme._cache.set(scopeName, rule);
+        }
+      } catch (error) {
+        console.error(error);
+      }
+      return rule;
+    };
+    //   console.log(colorTheme, _theme, this.registry);
   }
 
   async fetchLanguageInfo(
@@ -119,9 +165,7 @@ export class TmgLanguageProvider {
     };
   }
 
-  private getTokensProviderForLanguage(
-    language: string
-  ): Promise<monaco.languages.EncodedTokensProvider | null> {
+  private getTokensProviderForLanguage(language: string) {
     const scopeName = this.getScopeNameForLanguage(language);
     if (scopeName == null) {
       return Promise.resolve(null);
@@ -130,7 +174,7 @@ export class TmgLanguageProvider {
     const encodedLanguageId = this.monaco.languages.getEncodedLanguageId(language);
     // Ensure the result of createEncodedTokensProvider() is resolved before
     // setting the language configuration.
-    return this.tokensProviderCache.createEncodedTokensProvider(scopeName, encodedLanguageId);
+    return this.tokensProviderCache.createTokensProvider(scopeName, encodedLanguageId);
   }
 
   private getScopeNameForLanguage(language: string): string | null {
@@ -142,31 +186,47 @@ export class TmgLanguageProvider {
     return null;
   }
 }
+let _editor: Monaco.editor.IStandaloneCodeEditor;
 class TokensProviderCache {
   private scopeNameToGrammar: Map<string, Promise<IGrammar>> = new Map();
 
   constructor(private registry: Registry) {}
 
-  async createEncodedTokensProvider(
+  async createTokensProvider(
     scopeName: string,
     encodedLanguageId: number
-  ): Promise<monaco.languages.EncodedTokensProvider> {
+  ): Promise<monaco.languages.TokensProvider | monaco.languages.EncodedTokensProvider> {
     const grammar = await this.getGrammar(scopeName, encodedLanguageId);
-    // console.log("createEncodedTokensProvider", grammar);
+    // console.log("createEncodedTokensProvider", scopeName, grammar);
     return {
-      getInitialState() {
-        return INITIAL;
+      getInitialState: () => new TokenizerState(INITIAL),
+      tokenizeEncoded: (line: string, state: TokenizerState) => {
+        const res = grammar.tokenizeLine2(line, state.ruleStack);
+        return {
+          endState: new TokenizerState(res.ruleStack),
+          tokens: res.tokens,
+        };
       },
-
-      tokenizeEncoded(
-        line: string,
-        state: monaco.languages.IState
-      ): monaco.languages.IEncodedLineTokens {
-        const tokenizeLineResult2 = grammar.tokenizeLine2(line, state as StackElement);
-        const { tokens, ruleStack: endState } = tokenizeLineResult2;
-        // console.log("createEncodedTokensProvider", tokens);
-        return { tokens, endState };
-      },
+      // tokenize: (line: string, state: TokenizerState) => {
+      //   const res2 = grammar.tokenizeLine(line, state.ruleStack);
+      //   if (!line.indexOf("@Foo (bar)[bar|bar]")) {
+      //     console.log(
+      //       line,
+      //       res2.tokens,
+      //       state
+      //     );
+      //   }
+      //   return {
+      //     endState: new TokenizerState(res2.ruleStack),
+      //     tokens: res2.tokens.map((token) => ({
+      //       ...token,
+      //       // TODO: At the moment, monaco-editor doesn't seem to accept array of scopes
+      //       scopes: _editor
+      //         ? TMToMonacoToken(_editor, token.scopes) || token.scopes[token.scopes.length - 1]
+      //         : token.scopes[token.scopes.length - 1],
+      //     })),
+      //   };
+      // },
       // tokenize(
       //   line: string,
       //   state: monaco.languages.IState

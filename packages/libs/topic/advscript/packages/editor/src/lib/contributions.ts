@@ -1,10 +1,10 @@
-import { monaco, Uri } from "./monaco.export";
-import { ScopeNameInfo } from "./provider";
 import languageConfigurationUrl from "vscode-advscript/language-configuration.json?url";
-import FountainPListUrl from "vscode-advscript/syntaxes/fountain.tmlanguage.json?url";
 import AdvScriptPListUrl from "vscode-advscript/syntaxes/advscript.tmLanguage.json?url";
+import FountainPListUrl from "vscode-advscript/syntaxes/fountain.tmlanguage.json?url";
 import InjectUrl from "vscode-advscript/syntaxes/injection-inline-expression.tmLanguage.json?url";
 import Inject2Url from "vscode-advscript/syntaxes/injection.json?url";
+import { monaco, Uri } from "./monaco.export";
+import { ScopeNameInfo } from "./provider";
 
 export const languages: monaco.languages.ILanguageExtensionPoint[] = [
   {
@@ -33,25 +33,26 @@ export interface DemoScopeNameInfo extends ScopeNameInfo {
 // import HTMLPListUrl from "/textmate-syntaxes/HTML.plist?url";
 // import TypeScriptPListUrl from "/textmate-syntaxes/TypeScript.plist?url";
 // import CssPListUrl from "/textmate-syntaxes/css.plist?url";
+
 export const grammerList = [
   {
     scopeName: "html",
-    path: "/textmate-syntaxes/html.plist",
+    path: "${BASE_URL}textmate-syntaxes/html.plist",
   },
   {
     scopeName: "source.ts",
-    path: "/textmate-syntaxes/typescript.plist",
+    path: "${BASE_URL}textmate-syntaxes/typescript.plist",
     language: "typescript",
   },
   {
     scopeName: "css",
-    path: "/textmate-syntaxes/css.plist",
+    path: "${BASE_URL}textmate-syntaxes/css.plist",
   },
   {
     language: "fountain-script",
     scopeName: "text.source.fountain.script",
     path: FountainPListUrl,
-    injections: ["inline-expression.injection", "todo-comment.injection"],
+    injections: ["inline-expression.injection", "todo-comment.injection", "text.source.advscript"],
     embeddedLanguages: {
       "text.source.advscript": "text.source.advscript",
       "source.ts": "typescript",
@@ -62,7 +63,7 @@ export const grammerList = [
     language: "advscript",
     scopeName: "text.source.advscript",
     path: AdvScriptPListUrl,
-    injections: ["inline-expression.injection", "todo-comment.injection"],
+    injections: ["inline-expression.injection", "todo-comment.injection", "text.source.fountain.script"],
     embeddedLanguages: {
       "source.fountain": "text.source.fountain.script",
       "source.ts": "typescript",

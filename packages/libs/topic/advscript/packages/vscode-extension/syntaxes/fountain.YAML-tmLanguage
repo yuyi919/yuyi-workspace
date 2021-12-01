@@ -81,8 +81,8 @@ repository:
       - include: "#nested_parens"
   notes:
     name: comment.block
-    begin: \[\[
-    end: \]\]
+    begin: (?<!\\)\[\[(?=((?!\]\]).)*\]\])
+    end: (?<!\\)\]\]
   pagebreaks:
     name: entity.other.pagebreak.fountain
     match: ===(=+)?

@@ -1,7 +1,11 @@
 export default {
   author: "akamud",
   name: "OneDark",
+  type: "dark" as const,
   colors: {
+    "activityBar.background": "#333842",
+    "activityBar.foreground": "#D7DAE0",
+    "activityBarBadge.background": "#528BFF",
     "activityBarBadge.foreground": "#D7DAE0",
     "button.background": "#4D78CC",
     "button.foreground": "#FFFFFF",
@@ -72,12 +76,6 @@ export default {
     "peekViewEditor.background": "#1B1D23",
   },
   tokenColors: [
-    {
-      settings: {
-        foreground: "#D4D4D4",
-        background: "#1E1E1E",
-      },
-    },
     {
       name: "Comment",
       scope: ["comment"],
@@ -275,7 +273,7 @@ export default {
     {
       name: "Invalid Illegal",
       scope: ["invalid.illegal"],
-      settings: { foreground: "#FFFFFF", background: "#E05252" },
+      settings: { foreground: "white", background: "#E05252" },
     },
     {
       name: "Markup Bold",
@@ -536,6 +534,11 @@ export default {
       name: "Ng Attribute With Value String Begin,ng Attribute With Value String End",
       scope: ["ng.attribute-with-value string.begin", "ng.attribute-with-value string.end"],
       settings: { foreground: "#ABB2BF" },
+    },
+    {
+      name: "Source Ruby Constant Other Symbol > Punctuation",
+      scope: ["source.ruby constant.other.symbol > punctuation"],
+      settings: { foreground: "inherit" },
     },
     {
       name: "Source Php Class Bracket",

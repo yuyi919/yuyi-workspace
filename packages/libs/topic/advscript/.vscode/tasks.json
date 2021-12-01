@@ -3,7 +3,9 @@
   "tasks": [
     {
       "type": "shell",
-      "command": ["cmd | pnpm dev"],
+      "command": [
+        "cmd | pnpm dev"
+      ],
       "label": "pnpm: run dev - editor",
       "options": {
         "cwd": "packages/editor/"
@@ -12,12 +14,32 @@
     },
     {
       "type": "shell",
-      "command": ["cmd | pnpm dev"],
+      "command": [
+        "cmd | pnpm dev"
+      ],
       "label": "pnpm: run dev - parser",
       "options": {
         "cwd": "packages/parser/"
       },
       "detail": "parser - pnpm dev"
+    },
+    {
+      "type": "npm",
+      "script": "build:watch",
+      "path": "packages/language-services/",
+      "group": "build",
+      "problemMatcher": [],
+      "label": "npm: build:watch - packages/language-services",
+      "detail": "tsc --build --watch"
+    },
+    {
+      "type": "npm",
+      "script": "langium:watch",
+      "path": "packages/language-services/",
+      "group": "build",
+      "problemMatcher": [],
+      "label": "npm: langium:watch - packages/language-services",
+      "detail": "rushx langium generate --watch"
     }
   ]
 }

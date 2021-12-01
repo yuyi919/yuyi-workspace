@@ -3,7 +3,7 @@
  * DO NOT EDIT MANUALLY!
  ******************************************************************************/
 
-import { LangiumGeneratedServices, LangiumServices, LanguageMetaData, Module } from 'langium';
+import { LangiumGeneratedServices, LangiumServices, LanguageMetaData, Module, IParserConfig } from 'langium';
 import { AdvscriptAstReflection } from './ast';
 import { grammar } from './grammar';
 
@@ -12,9 +12,18 @@ export const languageMetaData: LanguageMetaData = {
     fileExtensions: ['.avs', '.adv']
 };
 
+export const parserConfig: IParserConfig = {
+    recoveryEnabled: true,
+    nodeLocationTracking: 'full',
+    maxLookahead: 4,
+    skipValidations: true,
+};
+
 export const AdvscriptGeneratedModule: Module<LangiumServices, LangiumGeneratedServices> = {
     Grammar: () => grammar(),
     AstReflection: () => new AdvscriptAstReflection(),
     LanguageMetaData: () => languageMetaData,
-    parser: {}
+    parser: {
+        ParserConfig: () => parserConfig
+    }
 };

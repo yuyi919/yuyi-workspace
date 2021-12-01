@@ -5,5 +5,11 @@
     "out": "src/generated",
     "textMate": {
         "out": "syntaxes/advscript.tmLanguage.json"
+    },
+    "chevrotainParserConfig": {
+        "recoveryEnabled": true,
+        "nodeLocationTracking": "full",
+        "maxLookahead": 4,
+        "skipValidations": true
     }
 }

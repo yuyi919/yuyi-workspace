@@ -9,18 +9,29 @@
   <!--preload-links-->
   <title>Demo</title>
   <style>
-    .warningIcon{
-      display:block;
-      background:url("../assets/icons/warningicon.png");
+    .warningIcon {
+      display: block;
+      background: url("../assets/icons/warningicon.png");
       background-size: contain;
       background-repeat: no-repeat;
     }
 
     .errorIcon {
-      display:block;
-      background:url("../assets/icons/erroricon.png");
+      display: block;
+      background: url("../assets/icons/erroricon.png");
       background-size: contain;
       background-repeat: no-repeat;
+    }
+
+    #root {
+      display: flex;
+      flex-direction: row;
+      flex-wrap: nowrap;
+    }
+
+    #root>* {
+      width: 100%;
+      display: inline-flex;
     }
   </style>
 </head>
@@ -29,7 +40,7 @@
   <noscript>You need to enable JavaScript to run this app.</noscript>
   <div id="root">
     <!--ssr-outlet-->
-    <div style="height: 100vh; overflow: hidden;width:" id="editor"></div>
+    <div id="editor" style="height: 100vh; overflow: hidden;"></div>
   </div>
 
   <script src="/src/main.ts" type="module"></script>
