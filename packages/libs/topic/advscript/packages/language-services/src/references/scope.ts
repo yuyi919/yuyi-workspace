@@ -11,7 +11,7 @@ import { CancellationToken } from "vscode-languageserver-protocol";
 import { AdvscriptServices } from "../advscript-module";
 import * as ast from "../ast";
 
-export class AdvscriptScopeProvider extends DefaultScopeProvider {}
+export class ScopeProvider extends DefaultScopeProvider {}
 
 export class ScopeComputation extends DefaultScopeComputation {
   constructor(services: AdvscriptServices) {
@@ -28,7 +28,7 @@ export class ScopeComputation extends DefaultScopeComputation {
     await this.processContainer(model, scopes, document, cancelToken);
     const next = await super.computeScope(document, cancelToken);
     // console.log(scopes);
-    return scopes; //scopes;
+    return next; //scopes;
   }
 
   protected async processContainer(
@@ -41,7 +41,7 @@ export class ScopeComputation extends DefaultScopeComputation {
     for (const element of ast.isDocument(container)
       ? [
           // ...container.defines,
-          ...container.contents,
+          ...container.content.contents,
         ]
       : container.elements) {
       interruptAndCheck(cancelToken);
@@ -74,13 +74,17 @@ export class ScopeComputation extends DefaultScopeComputation {
       } else if (ast.isDialog(element)) {
         const description = this.descriptions.createDescription(
           element,
-          element.ref?.$refText,
+          element.name?.$refText +
+            ": " +
+            element.contents.map((line) => line.$cstNode.text).join("\n"),
           document
         );
         localDescriptions.push(description);
         const children: AstNodeDescription[] = [];
         element.elements.forEach((el) => {
-          children.push(this.descriptions.createDescription(element, el.ref.$refText, document));
+          if (ast.isCallMacro(el) || ast.isDialogModifier(el)) {
+            children.push(this.descriptions.createDescription(element, el.ref.$refText, document));
+          }
         });
         scopes.set(element, children);
         // console.log("Dialog", element, children);

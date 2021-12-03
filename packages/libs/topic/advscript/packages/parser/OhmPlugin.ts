@@ -1,7 +1,7 @@
 import glob from "glob";
 import { relative, resolve } from "path";
 import { Plugin, ResolvedConfig } from "vite";
-import MagicString from "magic-string"
+import MagicString from "magic-string";
 const defaultVirtualFileId = "@addLibs/";
 export const RawWorkspacePlugin = ({
   root = ".",
@@ -33,7 +33,7 @@ export const RawWorkspacePlugin = ({
           // console.log((await this.resolve(filePath)).id);
           if (dynamic) {
             groups.push(
-              `obj[${JSON.stringify(relative(root, filePath))}] = () => import("/${relative(
+              `workspace[${JSON.stringify(relative(root, filePath))}] = () => import("/${relative(
                 config.root,
                 filePath
               ).replace(/\\/g, "/")}?raw").then(m => m.default)`
@@ -41,13 +41,15 @@ export const RawWorkspacePlugin = ({
           } else {
             const aliasName = `module${i++}`;
             groups.push(
-              `import { default as ${aliasName} } from "${filePath}?raw"; obj[${JSON.stringify(
+              `import { default as ${aliasName} } from "${filePath}?raw"; workspace[${JSON.stringify(
                 relative(root, filePath)
               )}] = ${aliasName}`
             );
           }
         }
-        const result = new MagicString(`const obj = {};\n${groups.join("\n")}\nexport default obj;`)
+        const result = new MagicString(
+          `export const workspace = {};\n${groups.join("\n")}\nexport default workspace;`
+        );
 
         // const modulesDir = join(config.root, "/node_modules/");
         // const replaceFiles: string[] = files.map((f, i) => {
@@ -56,7 +58,10 @@ export const RawWorkspacePlugin = ({
         // });
         return {
           code: result.toString(),
-          map: result.generateMap()
+          map: result.generateMap({
+            includeContent: true,
+            hires: true,
+          }),
         };
       }
     },

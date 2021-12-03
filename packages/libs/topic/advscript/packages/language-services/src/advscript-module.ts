@@ -8,23 +8,21 @@ import {
   Module,
   PartialLangiumServices,
 } from "langium";
-import { AstNodeLocator, AstNodeDescriptionProvider, HoverProvider } from "./advscript-provider";
-import {
-  AdvscriptCodeActionProvider,
-  AdvscriptValidationRegistry,
-  AdvscriptValidator,
-} from "./advscript-validator";
+import { AstNodeDescriptionProvider, AstNodeLocator } from "./advscript-provider";
+import { AdvscriptValidationRegistry, AdvscriptValidator } from "./advscript-validator";
+import { AdvscriptAstReflection, reflection } from "./ast";
 import { createCustomParser, CustomParser } from "./CustomParser";
 import { CustomTokenBuilder } from "./customTokens";
-import { DocumentSemanticProvider } from "./DocumentSemanticProvider";
 // import { OhmParser } from "./custom";
 import { AdvscriptGeneratedModule } from "./generated/module";
+import * as Lsp from "./lsp";
 import * as References from "./references";
 
 /**
  * Declaration of custom services - add your own service classes here.
  */
 export type AdvscriptAddedServices = {
+  AstReflection: AdvscriptAstReflection;
   validation: {
     AdvscriptValidator: AdvscriptValidator;
   };
@@ -33,11 +31,7 @@ export type AdvscriptAddedServices = {
     LangiumParser: CustomParser;
   };
   references: References.Providers;
-  lsp: {
-    HoverProvider: HoverProvider;
-    CodeActionProvider: AdvscriptCodeActionProvider;
-    DocumentSemanticProvider: DocumentSemanticProvider;
-  };
+  lsp: Lsp.Providers;
 };
 
 /**
@@ -64,6 +58,7 @@ export const AdvscriptModule: Module<
   AdvscriptServices,
   PartialLangiumServices & AdvscriptAddedServices
 > = {
+  AstReflection: () => reflection,
   validation: {
     ValidationRegistry: (injector) => new AdvscriptValidationRegistry(injector),
     AdvscriptValidator: (injector) => new AdvscriptValidator(injector),
@@ -72,7 +67,7 @@ export const AdvscriptModule: Module<
     Linker: (injector) => new References.Linker(injector),
     ScopeComputation: (injector) => new References.ScopeComputation(injector),
     NameProvider: (injector) => new References.NameProvider(injector),
-    ScopeProvider: (i) => new References.AdvscriptScopeProvider(i),
+    ScopeProvider: (i) => new References.ScopeProvider(i),
     References: (s) => new References.References(s),
   },
   index: {
@@ -87,12 +82,18 @@ export const AdvscriptModule: Module<
   // },
   parser: {
     TokenBuilder: () => new CustomTokenBuilder(),
-    LangiumParser: (services) => createCustomParser(services),
+    LangiumParser: (services) => createCustomParser(services) as never,
   },
   lsp: {
-    HoverProvider: (service) => new HoverProvider(service),
-    CodeActionProvider: (service) => new AdvscriptCodeActionProvider(service),
-    DocumentSemanticProvider: (service) => new DocumentSemanticProvider(service),
+    HoverProvider: (service) => new Lsp.HoverProvider(service),
+    CodeActionProvider: (service) => new Lsp.CodeActionProvider(service),
+    DocumentSemanticProvider: (service) => new Lsp.DocumentSemanticProvider(service),
+    ReferenceFinder: (services) => new Lsp.ReferenceFinder(services),
+    RenameHandler: (services) => new Lsp.RenameHandler(services),
+    DocumentSymbolProvider: (services) => new Lsp.DocumentSymbolProvider(services),
+    completion: {
+      CompletionProvider: (services) => new Lsp.CompletionProvider(services),
+    },
   },
 };
 /**

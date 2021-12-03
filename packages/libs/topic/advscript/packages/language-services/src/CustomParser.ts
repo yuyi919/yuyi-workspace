@@ -41,9 +41,10 @@ import {
   stream,
   streamAllContents,
   UnorderedGroup,
+  LangiumParser
 } from "langium";
 import { AdvscriptServices } from ".";
-import { LangiumParser } from "./langium-parser";
+// import { LangiumParser } from "./langium-parser";
 import { cloneTokens } from "./_utils";
 
 type RuleResult = () => any;
@@ -76,15 +77,15 @@ export function createCustomParser(services: AdvscriptServices) {
   const rules = new Map<string, Method>();
 
   console.log(buildTokens);
-  console.log(
-    new Lexer([
-      tokens.get("NUMBER"),
-      tokens.get("ID"),
-      tokens.get("ESC"),
-      tokens.get("WS"),
-      tokens.get("OTHER"),
-    ]).tokenize("1 abs 我是谁 我是谁abs 1我是谁 1我是谁abs")
-  );
+  // console.log(
+  //   new Lexer([
+  //     tokens.get("NUMBER"),
+  //     tokens.get("ID"),
+  //     tokens.get("ESC"),
+  //     tokens.get("WS"),
+  //     tokens.get("OTHER"),
+  //   ]).tokenize("1 abs 我是谁 我是谁abs 1我是谁 1我是谁abs")
+  // );
   const parser = new CustomParser(
     services,
     buildTokens,
@@ -126,6 +127,7 @@ export class CustomParser extends LangiumParser {
     this.services.references.Linker.cleanCache();
     console.time("[Parser] parse");
     const text = typeof input === "string" ? input : input.textDocument.getText();
+    // @ts-expect-error
     this.nodeBuilder.buildRootNode(text);
     console.time("[Parser] tokenize");
     const { tokens: sourceTokens, groups, errors } = this._lexer.tokenize(text);

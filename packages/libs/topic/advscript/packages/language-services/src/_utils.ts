@@ -8,6 +8,9 @@ import {
   isParserRule,
   isRuleCall,
   LeafCstNode,
+  findLeafNodeAtOffset as _findLeafNodeAtOffset,
+  findLeafNodeAtOffset,
+  getContainerOfType,
 } from "langium";
 import { CompositeCstNodeImpl, LeafCstNodeImpl } from "langium/lib/parser/cst-node-builder";
 
@@ -104,31 +107,152 @@ export function toCacheMap<K extends string>(keys: K[]) {
   );
 }
 
-export function findLeafNodeAtOffset(
-  node: CstNode,
-  offset: number
-): LeafCstNode | CompositeCstNodeImpl | undefined {
-  if (node instanceof LeafCstNodeImpl) {
+export function findWordNodeAtOffset(node: CstNode, offset: number): CstNode | undefined {
+  if (node instanceof LeafCstNodeImpl && node.tokenType.name !== "WS") {
     return node;
   } else if (node instanceof CompositeCstNodeImpl) {
     if (isCrossReference(node.feature)) {
-      return node;
+      const children = node.children.filter((e) => e.offset <= offset).reverse();
+      for (const child of children) {
+        const result = findWordNodeAtOffset(child, offset);
+        if (result) {
+          return node; //.parent.children[node.parent.children.indexOf(node) - 1] as CstNode;
+        }
+      }
+      // return node
     } else if (
       node.children.length > 1 &&
       isRuleCall(node.feature) &&
       isParserRule(node.feature.rule.ref) &&
       node.feature.rule.ref.type === "string"
     ) {
-      return node;
-    } else if (node instanceof CompositeCstNodeImpl) {
       const children = node.children.filter((e) => e.offset <= offset).reverse();
       for (const child of children) {
-        const result = findLeafNodeAtOffset(child, offset);
+        const result = findWordNodeAtOffset(child, offset);
         if (result) {
-          return result;
+          return node; //.parent.children[node.parent.children.indexOf(node) - 1] as CstNode;
         }
+      }
+      // return node
+    }
+    const children = node.children.filter((e) => e.offset <= offset).reverse();
+    for (const child of children) {
+      const result = findWordNodeAtOffset(child, offset);
+      if (result) {
+        return result;
       }
     }
   }
+  return undefined;
+}
+
+export function findPrevTokenNode(node: CstNode, offset: number): CstNode | undefined {
+  node = findWordNodeAtOffset(node, offset);
+  console.log("findLeafNodeAtOffset", node);
+  if (isCrossReference(node.feature)) {
+    let match: CstNode,
+      current: CstNode,
+      parent: CompositeCstNode,
+      matched = true;
+    do {
+      current = parent || node;
+      parent = current.parent;
+      // if (!matched) {
+      //   matched = true
+      match = parent.children[parent.children.indexOf(current) - 1];
+      // } else {
+      //   match = parent
+      // }
+    } while (!match);
+    if (match instanceof CompositeCstNodeImpl) {
+      // @ts-expect-error
+      match = match.lastNonHiddenNode;
+    }
+    return match;
+  }
+  return node;
+}
+
+export function findNextTokenNode(node: CstNode, offset: number): CstNode | undefined {
+  node = findWordNodeAtOffset(node, offset);
+  console.log("findLeafNodeAtOffset", node);
+  if (isCrossReference(node.feature)) {
+    let match: CstNode,
+      current: CstNode,
+      parent: CompositeCstNode,
+      matched = true;
+    do {
+      current = parent || node;
+      parent = current.parent;
+      // if (!matched) {
+      //   matched = true
+      match = parent.children[parent.children.indexOf(current) + 1];
+      // } else {
+      //   match = parent
+      // }
+    } while (!match);
+    if (match instanceof CompositeCstNodeImpl) {
+      // @ts-expect-error
+      match = match.firstNonHiddenNode;
+    }
+    return match;
+  }
+  return node;
+}
+/**
+ * This `internal` declared method exists, as we want to find the first child with the specified feature.
+ * When the own feature is named the same by accident, we will instead return the input value.
+ * Therefore, we skip the first assignment check.
+ * @param node The node to traverse/check for the specified feature
+ * @param feature The specified feature to find
+ * @param element The element of the initial node. Do not process nodes of other elements.
+ * @param first Whether this is the first node of the whole check.
+ * @returns A list of all nodes within this node that belong to the specified feature.
+ */
+export function findNodesForFeature(
+  node: CstNode | undefined,
+  feature: string | undefined,
+  element = node.element,
+  first = true
+): CstNode[] {
+  if (!node || !feature || node.element !== element) {
+    return [];
+  }
+  const nodeFeature = isRuleCall(node.feature) && node.feature.rule.ref;
+  if (!first && nodeFeature && nodeFeature.name === feature) {
+    return [node];
+  } else if (node instanceof CompositeCstNodeImpl) {
+    return node.children.flatMap((e) => findNodesForFeature(e, feature, element, false));
+  }
+  return [];
+}
+
+export function findNodeForFeature(
+  node: CstNode | undefined,
+  feature: string | undefined,
+  index?: number
+): CstNode | undefined {
+  const nodes = findNodesForFeature(node, feature, node.element);
+  if (nodes.length === 0) {
+    return undefined;
+  }
+  if (index !== undefined) {
+    index = Math.max(0, Math.min(index, nodes.length - 1));
+  } else {
+    index = 0;
+  }
+  return nodes[index];
+}
+
+export function findNodeWithFeature(cstNode: CstNode, feature: string): CstNode | undefined {
+  let n: CstNode | undefined = cstNode;
+  do {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const element = findNodeForFeature(n, feature);
+    if (element) {
+      return element;
+    }
+    n = n.parent;
+  } while (n);
   return undefined;
 }

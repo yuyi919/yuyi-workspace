@@ -1,36 +1,47 @@
-import type {
-  CancellationToken,
-  DocumentSelector,
-  Position,
-  Range,
-  TextDocumentIdentifier,
-} from "vscode-languageserver-protocol";
+import type * as Lsp from "vscode-languageserver-protocol";
 import {
   MonacoToProtocolConverter,
   ProtocolToMonacoConverter,
 } from "./languageclient/monaco-converter";
 import { MonacoLanguages, MonacoModelIdentifier } from "./languageclient/monaco-languages";
-import type { RenameProvider } from "./languageclient/services";
+import type {
+  ProviderResult,
+  RenameProvider,
+  CompletionItemProvider,
+  Disposable,
+} from "./languageclient/services";
+import { DisposableCollection } from "./languageclient/disposable";
 import { Monaco, TLanguages, TMonaco } from "./monaco.export";
 
 declare module "./languageclient/services" {
   interface RenameProvider {
     resolveRenameLocation?: (
       params: {
-        textDocument: TextDocumentIdentifier;
-        position: Position;
+        textDocument: Lsp.TextDocumentIdentifier;
+        position: Lsp.Position;
       },
-      token: CancellationToken
+      token: Lsp.CancellationToken
     ) => Thenable<{
       text: string;
-      range: Range;
+      range: Lsp.Range;
     }>;
   }
 }
 
+export interface InlineCompletionItemProvider {
+  provideCompletionItems(
+    params: Lsp.CompletionParams,
+    token: Lsp.CancellationToken
+  ): ProviderResult<Lsp.CompletionItem[] | Lsp.CompletionList>;
+  resolveCompletionItem?(
+    item: Lsp.CompletionItem,
+    token: Lsp.CancellationToken
+  ): ProviderResult<Lsp.CompletionItem>;
+}
+
 export class WrapperMonacoLanguages extends MonacoLanguages {
   createRenameProvider(
-    selector: DocumentSelector,
+    selector: Lsp.DocumentSelector,
     provider: RenameProvider
   ): monaco.languages.RenameProvider {
     if (!provider.resolveRenameLocation)
@@ -62,6 +73,111 @@ export class WrapperMonacoLanguages extends MonacoLanguages {
         };
       },
     } as monaco.languages.RenameProvider;
+  }
+
+  _isCompleting = false;
+  protected createCompletionProvider(
+    selector: Lsp.DocumentSelector,
+    provider: CompletionItemProvider,
+    ...triggerCharacters: string[]
+  ): monaco.languages.CompletionItemProvider {
+    return super.createCompletionProvider(
+      selector,
+      {
+        ...provider,
+        provideCompletionItems: async (params, token) => {
+          this._isCompleting = true;
+          try {
+            console.log(
+              "provideCompletionItems",
+              params.position,
+              this._monaco.languages.CompletionTriggerKind[params.context.triggerKind],
+              params.context.triggerCharacter
+            );
+            const result = await provider.provideCompletionItems(params, token);
+            console.log("provideCompletionItems", result);
+            return result;
+          } catch (error) {
+          } finally {
+            this._isCompleting = false;
+          }
+        },
+      },
+      ...triggerCharacters
+    );
+  }
+  registerInlineCompletionItemProvider(
+    selector: Lsp.DocumentSelector,
+    provider: InlineCompletionItemProvider
+  ): Disposable {
+    const completionProvider = this.createInlineCompletionProvider(selector, provider);
+    const providers = new DisposableCollection();
+    for (const language of this.matchLanguage(selector)) {
+      providers.push(
+        this._monaco.languages.registerInlineCompletionsProvider(language, completionProvider)
+      );
+    }
+    return providers;
+  }
+
+  protected createInlineCompletionProvider(
+    selector: Lsp.DocumentSelector,
+    provider: CompletionItemProvider
+  ): monaco.languages.InlineCompletionsProvider {
+    return {
+      provideInlineCompletions: async (
+        model: Monaco.editor.ITextModel,
+        position: Monaco.Position,
+        context: Monaco.languages.InlineCompletionContext,
+        token: Lsp.CancellationToken
+      ) => {
+        await new Promise((r) => setTimeout(r, 0));
+        if (!this.matchModel(selector, MonacoModelIdentifier.fromModel(model))) {
+          return undefined;
+        }
+        console.log(
+          "provideInlineCompletions",
+          position,
+          this._monaco.languages.InlineCompletionTriggerKind[context.triggerKind],
+          context.selectedSuggestionInfo
+        );
+        const wordUntil = model.getWordUntilPosition(position);
+        const defaultRange = new this._monaco.Range(
+          position.lineNumber,
+          wordUntil.startColumn,
+          position.lineNumber,
+          wordUntil.endColumn
+        );
+        const items = [] as Monaco.languages.InlineCompletion[];
+        if (this._isCompleting) return { items };
+        const params = this.m2p.asCompletionParams(model, position, {
+          triggerCharacter: wordUntil.word,
+          triggerKind: this._monaco.languages.CompletionTriggerKind.TriggerForIncompleteCompletions,
+        });
+        if (context.selectedSuggestionInfo) {
+          items.push(context.selectedSuggestionInfo);
+        } else {
+          const result = await provider.provideCompletionItems(params, token);
+          const { suggestions } = this.p2m.asCompletionResult(result, defaultRange);
+          console.log("provideInlineCompletions", result);
+          context.selectedSuggestionInfo && items.push(context.selectedSuggestionInfo);
+          suggestions.forEach((suggest) => {
+            items.push({
+              text: suggest.insertText,
+              range: this._monaco.Range.isIRange(suggest.range)
+                ? suggest.range
+                : suggest.range?.insert || suggest.range?.replace,
+            });
+          });
+        }
+        return {
+          items: items as Monaco.languages.InlineCompletion[],
+        };
+      },
+      freeInlineCompletions(completions: {}) {
+        console.log("freeInlineCompletions", completions);
+      },
+    };
   }
 }
 

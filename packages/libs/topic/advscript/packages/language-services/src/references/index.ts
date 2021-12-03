@@ -1,12 +1,12 @@
 import { Linker } from "./linker";
 import { NameProvider } from "./nameing";
 import { References } from "./references";
-import { AdvscriptScopeProvider, ScopeComputation } from "./scope";
+import { ScopeProvider, ScopeComputation } from "./scope";
 
 export type Providers = {
   Linker: Linker;
   NameProvider: NameProvider;
-  ScopeProvider: AdvscriptScopeProvider;
+  ScopeProvider: ScopeProvider;
   ScopeComputation: ScopeComputation;
   References: References;
 };

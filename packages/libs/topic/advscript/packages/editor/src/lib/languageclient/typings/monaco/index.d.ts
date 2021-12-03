@@ -17,6 +17,7 @@ declare module "monaco-editor-core" {
     export function optional<T>(
       serviceIdentifier: ServiceIdentifier<T>
     ): (target: Function, key: string, index: number) => void;
+
   }
 }
 declare module "monaco-editor" {

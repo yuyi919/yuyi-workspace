@@ -113,8 +113,14 @@ export class MonacoServiceWrapper extends MonacoEditorRegisterAdapter {
   };
 
   addCompletionHandler() {
-    this.languages.registerCompletionItemProvider([this.languageId], {
-      ...this.initializeResult.capabilities.completionProvider,
+    this.languages.registerCompletionItemProvider(
+      [this.languageId],
+      {
+        provideCompletionItems: this.bind(this.service.doProvideCompletionItems),
+      },
+      ...(this.initializeResult.capabilities.completionProvider.triggerCharacters || [])
+    );
+    this.languages.registerInlineCompletionItemProvider([this.languageId], {
       provideCompletionItems: this.bind(this.service.doProvideCompletionItems),
     });
   }

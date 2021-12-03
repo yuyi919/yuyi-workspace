@@ -1,18 +1,17 @@
 /* eslint-disable prefer-const */
 import {
   CstNode,
-  flatten,
   isCrossReference,
   isLinkingError,
   isRuleCall,
   LangiumDocument,
-  LeafCstNode,
   MaybePromise,
+  RuleCall,
 } from "langium";
 import type * as Lsp from "vscode-languageserver-protocol";
-import { AdvscriptServices } from "./advscript-module";
-import * as ast from "./generated/ast";
-import { enum2Array, flattenCstGen, isCompositeCstNode } from "./_utils";
+import { AdvscriptServices } from "../advscript-module";
+import * as ast from "../ast";
+import { enum2Array, flattenCstGen, isCompositeCstNode } from "../_utils";
 
 enum TTokenTypes {
   "comment",
@@ -106,10 +105,11 @@ export class DocumentSemanticProvider {
       }
       if (!current) {
         const { element: astNode, parent } = cst;
-        if (isRuleCall(parent.feature) && /^Token_/.test(parent.feature.rule.$refText)) {
+        const name = isRuleCall(parent.feature) && parent.feature.rule.$refText
+        if (name && (/^Token_/.test(name) || /^Operator_/.test(name))) {
           // console.log("token", astNode, leafCst, leafCst.text);
           current = cst;
-          match = parent.feature.rule.ref.fragment
+          match = (parent.feature as RuleCall).rule.ref.fragment
             ? TTokenTypes["meta.brace.round"]
             : ast.isLogicStatment(astNode)
             ? TTokenTypes["keyword.control"]
@@ -144,8 +144,6 @@ export class DocumentSemanticProvider {
           match = this.kindLegend[astNode.$container.$type];
         } else if (
           ast.isDeclareKind(astNode) ||
-          ast.isMacrosDeclareKind(astNode) ||
-          ast.isCharacterDeclareKind(astNode) ||
           ast.isOtherDeclare(astNode) ||
           ast.isTextExpression(astNode) ||
           ast.isLiteralExpression(astNode) ||
@@ -221,9 +219,9 @@ export class DocumentSemanticProvider {
   }
 
   kindLegend = {
-    [ast.DeclareKind]: TTokenTypes["keyword.control"],
+    [ast.KeyedDeclareKind]: TTokenTypes["keyword.control"],
     [ast.MacrosDeclareKind]: TTokenTypes["keyword.control"],
-    [ast.CharacterDeclareKind]: TTokenTypes["keyword.control"],
+    [ast.CharactersDeclareKind]: TTokenTypes["keyword.control"],
     [ast.Param]: TTokenTypes["entity.name.tag"],
     [ast.Modifier]: TTokenTypes["entity.name.type"],
     [ast.BooleanLiteral]: TTokenTypes["constant.boolean"],

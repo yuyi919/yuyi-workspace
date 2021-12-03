@@ -1,31 +1,13 @@
-import { LangiumDocument, ValidationAcceptor, ValidationCheck, ValidationRegistry } from "langium";
-import { CodeActionProvider } from "langium/lib/lsp/code-action";
+import { ValidationAcceptor, ValidationCheck, ValidationRegistry } from "langium";
 import { template, camelCase } from "lodash";
-import {
-  CodeAction,
-  CodeActionKind,
-  CodeActionParams,
-  Command,
-  Diagnostic,
-  Range,
-} from "vscode-languageserver-protocol";
 import { AdvscriptServices } from "./advscript-module";
-import {
-  AdvscriptAstType,
-  Call,
-  Character,
-  CharactersDeclare,
-  Macro,
-  MacroDeclare,
-  Param,
-  MacroPipe,
-} from "./generated/ast";
+import * as ast from "./ast";
 
 /**
  * Map AST node types to validation checks.
  */
 type AdvscriptChecks = {
-  [type in AdvscriptAstType]?: ValidationCheck | ValidationCheck[];
+  [type in ast.AdvscriptAstType]?: ValidationCheck | ValidationCheck[];
 };
 
 /**
@@ -58,7 +40,7 @@ export namespace IssueCodes {
 export class AdvscriptValidator {
   constructor(private services: AdvscriptServices) {}
   checkUniqueElementName = (
-    grammar: CharactersDeclare | MacroPipe | MacroDeclare | Macro | Call,
+    grammar: ast.CharactersDeclare | ast.MacroPipe | ast.MacroDeclare | ast.Macro | ast.CallMacro,
     accept: ValidationAcceptor
   ) => {
     const ruleMap = new Map<string, true>();
@@ -75,7 +57,7 @@ export class AdvscriptValidator {
       }
     }
   };
-  checkNameStartsWithCapital(character: Macro | Param, accept: ValidationAcceptor): void {
+  checkNameStartsWithCapital(character: ast.Macro | ast.Param, accept: ValidationAcceptor): void {
     if (character.name) {
       const firstChar = character.name.text.substring(0, 1);
       if (firstChar?.toLowerCase() !== firstChar) {
@@ -87,7 +69,7 @@ export class AdvscriptValidator {
       }
     }
   }
-  checkNameStartsWithUpper(character: Character, accept: ValidationAcceptor): void {
+  checkNameStartsWithUpper(character: ast.Character, accept: ValidationAcceptor): void {
     if (character.name) {
       const firstChar = character.name.text.substring(0, 1);
       if (firstChar?.toUpperCase() !== firstChar) {
@@ -101,55 +83,4 @@ export class AdvscriptValidator {
   }
 }
 
-export class AdvscriptCodeActionProvider implements CodeActionProvider {
-  constructor(private services: AdvscriptServices) {}
-  async getCodeActions(document: LangiumDocument, params: CodeActionParams) {
-    const result: (Command | CodeAction)[] = [];
-    for (const diagnostic of params.context.diagnostics) {
-      const codeAction = await this.createCodeAction(diagnostic, document);
-      if (codeAction) {
-        result.push(codeAction);
-      }
-    }
-    return result;
-  }
-  private createCodeAction(diagnostic: Diagnostic, document: LangiumDocument) {
-    switch (diagnostic.code) {
-      case IssueCodes.identifierNameLowercase:
-        return this.makeLowerCase(diagnostic, document);
-      case IssueCodes.identifierNameUppercase:
-        return this.makeUpperCase(diagnostic, document);
-      default:
-        return undefined;
-    }
-  }
 
-  _makeUpperOrLowerCase(range: Range, document: LangiumDocument, type: "Upper" | "Lower") {
-    const name = document.textDocument.getText(range);
-    return this.services.lsp.RenameHandler.renameElement(document, {
-      textDocument: document.textDocument,
-      position: range.start,
-      newName: name[0][`to${type}Case`]() + name.slice(1, name.length),
-    });
-  }
-
-  private async makeLowerCase(diagnostic: Diagnostic, document: LangiumDocument) {
-    return {
-      title: "First letter to lower case",
-      kind: CodeActionKind.QuickFix,
-      diagnostics: [diagnostic],
-      isPreferred: true,
-      edit: await this._makeUpperOrLowerCase(diagnostic.range, document, "Lower"),
-    } as CodeAction;
-  }
-
-  private async makeUpperCase(diagnostic: Diagnostic, document: LangiumDocument) {
-    return {
-      title: "First letter to upper case",
-      kind: CodeActionKind.QuickFix,
-      diagnostics: [diagnostic],
-      isPreferred: true,
-      edit: await this._makeUpperOrLowerCase(diagnostic.range, document, "Upper"),
-    } as CodeAction;
-  }
-}

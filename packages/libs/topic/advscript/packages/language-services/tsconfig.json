@@ -6,6 +6,8 @@
       "langium": ["../langium/packages/langium"],
       "langium/lib/*": ["../langium/packages/langium/lib/*"]
     },
+    "target": "ESNEXT",
+    "removeComments": true,
     "esModuleInterop": true
   },
   "references": [

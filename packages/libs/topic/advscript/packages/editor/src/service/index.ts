@@ -1,22 +1,11 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import {
-  isCharacterDeclareKind,
-  isDeclareKind,
-  isMacroDeclare,
-  isMacrosDeclareKind,
-} from "@yuyi919/advscript-language-services";
-import { isCharactersDeclare } from "@yuyi919/advscript-language-services";
-import { isModifier } from "@yuyi919/advscript-language-services";
-import { isOtherDeclare } from "@yuyi919/advscript-language-services";
-import { Document, AdvscriptServices, ISerializedGast } from "@yuyi919/advscript-language-services";
+import { AdvscriptServices, Document, ISerializedGast } from "@yuyi919/advscript-language-services";
 import {
   AstNode,
   findLeafNodeAtOffset,
   LangiumDocument,
   LangiumServices,
   OperationCancelled,
-  streamAllContents,
-  streamContents,
 } from "langium";
 import { debounce } from "lodash";
 import type * as Lsp from "vscode-languageserver-protocol";
@@ -244,12 +233,12 @@ export abstract class AdvScriptService {
     return "";
   }
 
-  getInitializeResult(services: LangiumServices, hasWorkspaceFolder?: boolean) {
+  getInitializeResult(services: AdvscriptServices, hasWorkspaceFolder?: boolean) {
     const result: Lsp.InitializeResult = {
       capabilities: {
         textDocumentSync: TextDocumentSyncKind.Incremental,
         // Tell the client that this server supports code completion.
-        completionProvider: {},
+        completionProvider: services.lsp.completion.CompletionProvider?.options ?? {},
         referencesProvider: {},
         documentSymbolProvider: {},
         definitionProvider: {},

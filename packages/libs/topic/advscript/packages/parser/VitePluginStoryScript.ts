@@ -33,7 +33,10 @@ function toResult(code: string) {
   const str = new MagicString(code);
   return {
     code: str.toString(),
-    map: str.generateMap(),
+    map: str.generateMap({
+      includeContent: true,
+      hires: true,
+    }),
   };
 }
 export const BabelTransformer: Plugin["transform"] = async function (

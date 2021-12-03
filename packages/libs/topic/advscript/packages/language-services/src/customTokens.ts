@@ -44,7 +44,7 @@ export class CustomTokenBuilder extends DefaultTokenBuilder implements TokenBuil
           const PATTERN = token.PATTERN as RegExp;
           const pattern =
             // eslint-disable-next-line no-control-regex
-            /(([^\x00-\xff]|\w|\W)(([^\x00-\xff]|\w|(?!\[|\]|\\|\{|\}|\(|\)|\s|'|"|\|)\W))*)/;
+            /(([^\x00-\xff]|\w|\W)(([^\x00-\xff]|\w|(?!\[|\]|\\|\{|\}|\(|\)|\s|,|'|"|\|)\W))*)/;
           return Object.assign<TokenType, Partial<TokenType>>(token, {
             PATTERN(text, offset, tokens) {
               const last = tokens[tokens.length - 1];
@@ -123,10 +123,13 @@ export class CustomTokenBuilder extends DefaultTokenBuilder implements TokenBuil
               PUSH_MODE: "pipe",
               LONGER_ALT: [],
             }),
-            cloneToken("LABEL_START", {
+            cloneToken("](", {
               PUSH_MODE: "label",
             }),
-            cloneToken("CallStart", {
+            // cloneToken("[@", {
+            //   PUSH_MODE: "macro",
+            // }),
+            cloneToken("[", {
               PUSH_MODE: "macro",
             }),
             tokens.get("ESC"),
@@ -167,8 +170,9 @@ export class CustomTokenBuilder extends DefaultTokenBuilder implements TokenBuil
             tokens.get(","),
             tokens.get("("),
             tokens.get(")"),
-            cloneToken("CallStart", {
+            cloneToken("[", {
               PUSH_MODE: "macro",
+              LONGER_ALT: [],
             }),
             tokens.get("ID"),
             tokens.get("ESC"),
@@ -196,6 +200,9 @@ export class CustomTokenBuilder extends DefaultTokenBuilder implements TokenBuil
               if (token.name === "]") {
                 return cloneToken(token, { POP_MODE: true });
               }
+              if (token.name === "WS") {
+                return cloneToken(token, { GROUP: "hidden" });
+              }
               return token;
             })
           ),
@@ -206,6 +213,9 @@ export class CustomTokenBuilder extends DefaultTokenBuilder implements TokenBuil
               }
               if (token.name === ")") {
                 return cloneToken(token, { POP_MODE: true });
+              }
+              if (token.name === "WS") {
+                return cloneToken(token, { GROUP: "hidden" });
               }
               return token;
             })

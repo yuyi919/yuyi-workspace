@@ -31,7 +31,7 @@ import { memoize } from "lodash";
 import { CancellationToken, Hover, HoverParams } from "vscode-languageserver-protocol";
 import { AdvscriptServices } from "../advscript-module";
 import * as ast from "../ast";
-import { findLeafNodeAtOffset } from "../_utils";
+import { findWordNodeAtOffset } from "../_utils";
 import { NameProvider } from "./nameing";
 
 export class References extends DefaultReferences {

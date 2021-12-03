@@ -8,7 +8,7 @@ import builtins from "rollup-plugin-node-builtins";
 import MonacoEditorNlsPlugin, {
   esbuildPluginMonacoEditorNls,
   Languages,
-} from "vite-plugin-monaco-editor-nls";
+} from "./vitePluginMonacoEditorNls";
 
 const locale = Languages.zh_hans;
 export default defineConfig(async ({ mode }) => {
@@ -56,6 +56,7 @@ export default defineConfig(async ({ mode }) => {
       minify: isProd ? "terser" : false,
       commonjsOptions: {
         include: [/node_modules/, /vscode/],
+        exclude: ["loader.js"],
       },
       rollupOptions: {
         plugins: [
@@ -71,6 +72,10 @@ export default defineConfig(async ({ mode }) => {
             parser: ["chevrotain", "@yuyi919/advscript-parser"],
             lsp: ["@yuyi919/advscript-language-services"],
             vsc: ["./libs/vscode-languageclient/vscode-compatibility.js"],
+          },
+          chunkFileNames: (chunk) => {
+            // console.log(chunk.isDynamicEntry, chunk.name)
+            return `assets/${chunk.name === "_" ? "workspaces" : chunk.name}.[hash].js`;
           },
         },
         // external: ["os", "path"],

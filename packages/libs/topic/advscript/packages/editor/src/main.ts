@@ -1,3 +1,5 @@
+// import("monaco-editor/dev/vs/editor/editor.main.nls.zh-cn.js")
+
 // import { language as mysqlLanguage } from "monaco-editor/esm/vs/basic-languages/mysql/mysql.js";
 import {
   getParserContext,
@@ -6,52 +8,52 @@ import {
   NodeTypeKind,
   LogickStatmentKind,
 } from "@yuyi919/advscript-parser";
-import { bootstrap, LanguageInfo, monaco } from "./lib";
-import {  } from "./lib/monaco-textmate";
+import { bootstrap, LanguageInfo } from "./lib";
+import {} from "./lib/monaco-textmate";
 import { EmbeddedTypescriptWorker } from "./lib/provider/setupTsMode";
-import file from "./line.avs?raw";
+import file from "./completion.avs?raw";
 import { startClient, startClientService } from "./startClient";
-function run() {
+// import("@addLibs/*.avs").then((data) => console.log("workspaces", data.default));
+
+async function run() {
   const languageId = "advscript";
+  const module = await import("./lib/monaco.export");
+  const { monaco } = module;
   // const services = new EmbeddedTypescriptWorker();
   // services.init().then(() => services.registerCompletionItemProvider("advscript"));
   // services.addExtraLib(() => import("@addLibs/testLib/*").then((data) => data.default));
-  console.log(import("@addLibs/*.avs").then((data) => data.default))
   bootstrap(monaco, languageId, async () => {
     // return providers;
     return {};
   }).then(async (helper) => {
     // startClient();
     await startClientService(monaco);
-//     monaco.editor.createModel(
-//       `Characters: 
-//   - Yukari (无感情, 沉默, 感叹)
-//   - Akari (元气, 惊慌, 埋怨, 慌张)
-//   - ？？？ (无声)
+    //     monaco.editor.createModel(
+    //       `Characters:
+    //   - Yukari (无感情, 沉默, 感叹)
+    //   - Akari (元气, 惊慌, 埋怨, 慌张)
+    //   - ？？？ (无声)
 
-// `,
-//       languageId,
-//       monaco.Uri.file("./deps.avs")
-//     );
+    // `,
+    //       languageId,
+    //       monaco.Uri.file("./deps.avs")
+    //     );
     const model = monaco.editor.createModel(file, languageId, monaco.Uri.file("./main.avs"));
-    const editor = monaco.editor.create(document.querySelector("#editor"), {
-      peekWidgetDefaultFocus: "tree",
-      theme: "OneDark",
-      automaticLayout: true,
-      model: model,
-      codeActionsOnSaveTimeout: 1000,
-      "semanticHighlighting.enabled": true,
-      useShadowDOM: true,
-      glyphMargin: true,
-      lightbulb: {
-        enabled: true,
-      },
-    });
+    monaco.editor.colorizeModelLine;
+    const editor = createEditor(monaco, model);
+
     helper.injectCSS(editor);
     // services.setupEditor(editor);
     // console.log(editor.getModel().getLanguageId());
     // editor.revealRangeInCenter(range)
     globalThis.app = editor;
+    globalThis.refresh = async () => {
+      globalThis.app.dispose();
+      const { monaco } = await import("./lib/monaco.export");
+      globalThis.app = null;
+      globalThis.app = createEditor(monaco, model);
+      helper.injectCSS(globalThis.app);
+    };
     // editor.setSelections([
     //   {
     //     selectionStartLineNumber: 61,
@@ -293,6 +295,7 @@ import {
   createTokenInstance,
   Lexer,
 } from "chevrotain";
+import { createEditor } from "./editor";
 
 function returnTokens() {
   // State required for matching the indentations
