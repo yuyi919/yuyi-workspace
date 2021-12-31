@@ -7,18 +7,18 @@ import {
   isReference,
   Reference,
 } from "langium";
-import { AdvscriptServices } from "../advscript-module";
-import * as ast from "../ast";
+import { AdvScriptServices } from "../advscript-module";
+import * as ast from "../ast-utils";
 
 export class NameProvider extends DefaultNameProvider {
-  reflection: ast.AdvscriptAstReflection;
-  constructor(services: AdvscriptServices) {
+  reflection: ast.AdvScriptAstReflection;
+  constructor(services: AdvScriptServices) {
     super();
-    this.reflection = services.AstReflection;
+    this.reflection = services.shared.AstReflection;
   }
 
-  getReferenceName(refId: ast.AdvscriptAstReference | ({} & string), reference: Reference) {
-    const refType = this.reflection.getReferenceType(refId as ast.AdvscriptAstReference);
+  getReferenceName(refId: ast.AdvScriptAstReference | ({} & string), reference: Reference) {
+    const refType = this.reflection.getReferenceType(refId as ast.AdvScriptAstReference);
     // const  fr = (reference.$refNode as CompositeCstNode).feature.$container
     // if (isAssignment(fr)) {
     //   const referenceId = getReferenceId(reference.$container, fr.feature)
@@ -26,16 +26,16 @@ export class NameProvider extends DefaultNameProvider {
     return `(${refType})${reference.$refText}`;
   }
 
-  isIdentifierRef(refType: ast.AdvscriptAstReference | ({} & string)) {
-    return refType === ast.Identifier || refType === ast.NameIdentifier;
+  isIdentifierRef(refType: string) {
+    return ast.isIdentifierNode({ $type: refType });
   }
 
   getReferenceNodeName(
-    refId: ast.AdvscriptAstReference | ({} & string),
+    refId: ast.AdvScriptAstReference | ({} & string),
     reference: Reference,
     container: AstNode
   ) {
-    const refType = this.reflection.getReferenceType(refId as ast.AdvscriptAstReference);
+    const refType = this.reflection.getReferenceType(refId as ast.AdvScriptAstReference);
     const key: string = this.isIdentifierRef(refType)
       ? "name"
       : this.getReferenceName(refId, reference);
@@ -46,8 +46,8 @@ export class NameProvider extends DefaultNameProvider {
     if (ast.isMacro(container)) {
       containerKey = `(${ast.Character})` + reference.$refText;
     }
-    if (ast.isDialogModifier(container)) {
-      containerKey = `(${ast.Character})` + container.$container.name.$refText;
+    if (ast.isModifierRef(container)) {
+      containerKey = `(${ast.Character})` + container.$container.ref.$refText;
     }
     if (ast.isAtInline(container)) {
       containerKey = `(${ast.Character})` + container.ref.$refText;
@@ -61,10 +61,11 @@ export class NameProvider extends DefaultNameProvider {
         .map((name) => name.$refText)
         .join(".");
     }
-    // console.log("getReferenceNodeName: " + refType + "=>" + containerKey, reference);
-    return Array.from(new Set([containerKey, key]))
+    const name = Array.from(new Set([containerKey, key]))
       .filter(Boolean)
       .join(".");
+    // console.log("getReferenceNodeName: " + refType + "=>" + name, reference);
+    return name;
   }
 
   isNamedRefNode(node: unknown): node is AstNode & { ref: Reference<AstNode> } {
@@ -87,7 +88,7 @@ export class NameProvider extends DefaultNameProvider {
   }
 
   getDialogName(node: ast.Dialog): string {
-    return `@${node.name.$refText}: ${node.contents.map((line) => line.$cstNode.text).join("\n")}`;
+    return `@${node.ref.$refText}: ${node.contents.map((line) => line.$cstNode.text).join("\n")}`;
   }
   getAtName(node: ast.AtInline): string {
     return `@${node.ref.$refText}`;
@@ -111,7 +112,7 @@ export class NameProvider extends DefaultNameProvider {
       return this.getNameWith(node.ref, typed, node);
     }
     if (ast.isIdentifierNode(node)) {
-      return node.text;
+      return ast.getIdentifierNodeName(node);
     }
     if (ast.isQualifiedName(node)) {
       return node.name.map((name) => this.getNameWith(name, typed, node)).join(".");
@@ -162,7 +163,10 @@ export class NameProvider extends DefaultNameProvider {
   getIdentifierNameFeature(node: AstNode): CstNode {
     return (
       (this.isNamedWithIdentifier(node) && this.getIdentifierNameFeature(node.name)) ||
-      (ast.isIdentifierNode(node) && findNodeForFeature(node.$cstNode, "text"))
+      (ast.isIdentifierNode(node) &&
+        (ast.isVariableIdentifier(node)
+          ? node.$cstNode
+          : findNodeForFeature(node.$cstNode, "text")))
     );
   }
 

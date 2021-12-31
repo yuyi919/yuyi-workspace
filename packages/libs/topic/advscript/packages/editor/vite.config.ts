@@ -49,7 +49,7 @@ export default defineConfig(async ({ mode }) => {
     base: "/advscript-playground/",
     build: {
       assetsInlineLimit: 0,
-      target: "es2020",
+      target: "esnext",
       // polyfillDynamicImport: false,
 
       // polyfillDynamicImport: false,
@@ -58,6 +58,7 @@ export default defineConfig(async ({ mode }) => {
         include: [/node_modules/, /vscode/],
         exclude: ["loader.js"],
       },
+      outDir: "./dist/advscript-playground",
       rollupOptions: {
         plugins: [
           {
@@ -68,7 +69,7 @@ export default defineConfig(async ({ mode }) => {
         ],
         output: {
           manualChunks: {
-            editor: ["monaco-editor"],
+            // editor: ["monaco-editor"],
             parser: ["chevrotain", "@yuyi919/advscript-parser"],
             lsp: ["@yuyi919/advscript-language-services"],
             vsc: ["./libs/vscode-languageclient/vscode-compatibility.js"],

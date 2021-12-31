@@ -2,20 +2,20 @@ import { AstNode, LangiumDocument, MaybePromise, streamContents } from "langium"
 import { DefaultDocumentSymbolProvider } from "langium/lib/lsp/document-symbol-provider";
 import * as Lsp from "vscode-languageserver-protocol";
 import { SymbolKind } from "vscode-languageserver-protocol";
-import * as ast from "../ast";
+import * as ast from "../ast-utils";
 import * as Refenences from "../references";
 
 export class DocumentSymbolProvider extends DefaultDocumentSymbolProvider {
   declare nameProvider: Refenences.NameProvider;
   getSymbols(document: LangiumDocument): MaybePromise<Lsp.DocumentSymbol[]> {
     const symbols = this.getSymbol(document, document.parseResult.value);
-    console.log(symbols);
+    // console.log(symbols);
     return symbols;
   }
   protected getSymbol(document: LangiumDocument, astNode: AstNode): Lsp.DocumentSymbol[] {
     const node = astNode.$cstNode;
     const nameNode = this.nameProvider.getNameNode(astNode);
-    console.log(node.element, nameNode);
+    // console.log(node.element, nameNode);
     if (nameNode && node) {
       const name = this.nameProvider.getDisplayName(astNode);
       return [

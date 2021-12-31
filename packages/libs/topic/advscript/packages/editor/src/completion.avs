@@ -1,12 +1,10 @@
 Characters: 
  - Foo (bar, bar2)
  - Foo2 (bar3)
-
 Macros: 
  - bar (Foo) foo
  - bar2 (Foo2) foo2=true
- - pipe (Foo) foo
-
+ - 测试a (Foo) foo
 Hello: Bar!
 ---
 
@@ -17,7 +15,7 @@ inlineAt: [@Foo]
 @Foo (bar)[bar|bar]
 (foo:bar)
 foo[bar](bar foo)
-[bar foo=foo bar="bar]foo" foo]
+[bar foo=foo bar="bar]foo" foo ]
 
 |if bar > 0
 
@@ -25,5 +23,10 @@ barbarbar
 
 |end
 
-test[[comment]]in*line**bo*ld{{"template" | pipe}}con>33[\[label](pipe foo=1) <tentaft*|pipe
-test[[comment]]in*line**bo*ld{{"template" | pipe}}con>4 [\[label\]](pipe) <tentaft*|pipe
+test[[comment]]in*line**bo*ld{{"template" | 测试a}}con>33[\[label](测试a foo=1) <tentaft*|测试a
+test[[comment]]in*line**bo*ld{{"template" | 测试a}}con>4 [\[label\]](测试a) <tentaft*|测试a
+
+
+
+[a]
+

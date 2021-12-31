@@ -292,8 +292,13 @@
         {
           "comment": "COMMENT_LINE",
           "begin": "//",
-          "end": "(\\n)",
-          "name": "comment.line.double-slash"
+          "beginCaptures": {
+            "1": {
+              "name": "punctuation.whitespace.comment.leading.expression"
+            }
+          },
+          "end": "\\n",
+          "name": "comment.line.expression"
         },
         {
           "comment": "COMMENT_BLOCK",

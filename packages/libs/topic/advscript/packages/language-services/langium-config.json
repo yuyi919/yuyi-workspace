@@ -1,15 +1,28 @@
 {
-    "languageId": "advscript",
-    "grammar": "src/advscript.langium",
-    "fileExtensions": [".avs", ".adv"],
-    "out": "src/generated",
-    "textMate": {
+  "projectName": "AdvScript",
+  "languages": [
+    {
+      "id": "advscript",
+      "grammar": "src/advscript.langium",
+      "fileExtensions": [".avs", ".adv"],
+      "textMate": {
         "out": "syntaxes/advscript.tmLanguage.json"
+      }
     },
-    "chevrotainParserConfig": {
-        "recoveryEnabled": true,
-        "nodeLocationTracking": "full",
-        "maxLookahead": 4,
-        "skipValidations": true
+    {
+      "id": "expression",
+      "grammar": "src/expression.langium",
+      "fileExtensions": [".avs", ".adv"],
+      "textMate": {
+        "out": "syntaxes/expression.tmLanguage.json"
+      }
     }
+  ],
+  "out": "src/generated",
+  "chevrotainParserConfig": {
+    "recoveryEnabled": true,
+    "nodeLocationTracking": "full",
+    "maxLookahead": 4,
+    "skipValidations": true
+  }
 }

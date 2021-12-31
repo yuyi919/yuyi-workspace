@@ -1,6 +1,6 @@
 import { listen } from "@codingame/monaco-jsonrpc";
 import ReconnectingWebSocket from "reconnecting-websocket";
-import { monaco, Monaco } from "./lib";
+import { monaco, Monaco } from "./lib/monaco.export";
 import {
   CloseAction,
   createConnection,

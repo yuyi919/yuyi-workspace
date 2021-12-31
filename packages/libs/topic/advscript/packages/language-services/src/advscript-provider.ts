@@ -1,18 +1,23 @@
 import {
+  Action,
+  Assignment,
   AstNode,
   AstNodeDescription,
+  CstNode,
   DefaultAstNodeDescriptionProvider,
-  flatten,
+  findAssignment as findAssignment2,
+  getContainerOfType,
   interruptAndCheck,
+  isArray,
+  isArrayOperator,
+  isParserRule,
   LangiumDocument,
   LangiumServices,
   streamAllContents,
 } from "langium";
-import { DefaultAstNodeLocator } from "langium/lib/index/ast-node-locator";
-import {
-  CancellationToken,
-} from "vscode-languageserver-protocol";
-import * as ast from "./ast";
+import { DefaultAstNodeLocator } from "langium/lib/workspace/ast-node-locator";
+import { CancellationToken } from "vscode-languageserver-protocol";
+import * as ast from "./ast-utils";
 import * as Refenences from "./references";
 
 export class AstNodeDescriptionProvider extends DefaultAstNodeDescriptionProvider {
@@ -63,10 +68,31 @@ export class AstNodeDescriptionProvider extends DefaultAstNodeDescriptionProvide
 //     })
 //     .join(".");
 // }
+export function findAssignment(cstNode: CstNode): Assignment | Action | undefined {
+  const parser = getContainerOfType(cstNode.feature, isParserRule);
+  // console.log(cstNode.feature, parser, Array.from(findAllFeatures(parser)))
+  return undefined;
+}
 export class AstNodeLocator extends DefaultAstNodeLocator {
   getAstNodePath(node: AstNode) {
-    return super.getAstNodePath(ast.isNameIdentifier(node) ? node.$container : node);
+    return super.getAstNodePath(ast.isIdentifierNode(node) ? node.$container : node);
+  }
+  pathSegment(node: AstNode, container: AstNode): string {
+    if (node.$cstNode) {
+      const assignment = findAssignment2(node.$cstNode);
+      // if (isVariable(node)) {
+      //   console.log("findAssignment(node.$cstNode)", assignment, node);
+      // }
+      if (assignment) {
+        if (isArray(assignment.cardinality) || isArrayOperator(assignment.operator)) {
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          const value = (container as any)[assignment.feature] as AstNode[];
+          const idx = value.indexOf(node);
+          return assignment.feature + "@" + idx;
+        }
+        return assignment.feature;
+      }
+    }
+    return "<missing>";
   }
 }
-
-

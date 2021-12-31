@@ -3,13 +3,20 @@
  * DO NOT EDIT MANUALLY!
  ******************************************************************************/
 
-import { LangiumGeneratedServices, LangiumServices, LanguageMetaData, Module, IParserConfig } from 'langium';
-import { AdvscriptAstReflection } from './ast';
-import { grammar } from './grammar';
+import { LangiumGeneratedServices, LangiumGeneratedSharedServices, LangiumSharedServices, LangiumServices, LanguageMetaData, Module, IParserConfig } from 'langium';
+import { AdvScriptAstReflection } from './ast';
+import { AdvscriptGrammar, ExpressionGrammar } from './grammar';
 
-export const languageMetaData: LanguageMetaData = {
+export const AdvscriptLanguageMetaData: LanguageMetaData = {
     languageId: 'advscript',
-    fileExtensions: ['.avs', '.adv']
+    fileExtensions: ['.avs', '.adv'],
+    caseInsensitive: false
+};
+
+export const ExpressionLanguageMetaData: LanguageMetaData = {
+    languageId: 'expression',
+    fileExtensions: ['.avs', '.adv'],
+    caseInsensitive: false
 };
 
 export const parserConfig: IParserConfig = {
@@ -19,10 +26,21 @@ export const parserConfig: IParserConfig = {
     skipValidations: true,
 };
 
+export const AdvScriptGeneratedSharedModule: Module<LangiumSharedServices, LangiumGeneratedSharedServices> = {
+    AstReflection: () => new AdvScriptAstReflection()
+};
+
 export const AdvscriptGeneratedModule: Module<LangiumServices, LangiumGeneratedServices> = {
-    Grammar: () => grammar(),
-    AstReflection: () => new AdvscriptAstReflection(),
-    LanguageMetaData: () => languageMetaData,
+    Grammar: () => AdvscriptGrammar(),
+    LanguageMetaData: () => AdvscriptLanguageMetaData,
+    parser: {
+        ParserConfig: () => parserConfig
+    }
+};
+
+export const ExpressionGeneratedModule: Module<LangiumServices, LangiumGeneratedServices> = {
+    Grammar: () => ExpressionGrammar(),
+    LanguageMetaData: () => ExpressionLanguageMetaData,
     parser: {
         ParserConfig: () => parserConfig
     }

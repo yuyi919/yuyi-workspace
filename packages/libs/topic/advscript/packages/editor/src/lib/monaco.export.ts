@@ -1,27 +1,17 @@
 import "./setupLocale";
 
-import * as monaco from "./monaco.all";
+import * as monaco from "monaco-editor/esm/vs/editor/editor.api";
 
-import "monaco-editor/esm/vs/language/typescript/monaco.contribution";
-import "monaco-editor/esm/vs/language/html/monaco.contribution";
 import "monaco-editor/esm/vs/basic-languages/monaco.contribution";
+import "monaco-editor/esm/vs/language/html/monaco.contribution";
+import "monaco-editor/esm/vs/language/typescript/monaco.contribution";
 
-export type { worker } from "./monaco.all";
-
-export * from "./monaco.all";
-export type { editor as Editor, languages as Language } from "./monaco.all";
-// export type {
-//   IDisposable,
-//   IRange,
-//   IEvent,
-//   IKeyboardEvent,
-//   IMarkdownString,
-//   IMouseEvent,
-//   IPosition,
-//   IScrollEvent,
-//   ISelection,
-// } from "monaco-editor/esm/vs/editor/editor.api";
-
+export * from "monaco-editor/esm/vs/editor/editor.api";
+export type {
+  editor as Editor,
+  languages as Language,
+  worker,
+} from "monaco-editor/esm/vs/editor/editor.api";
 export { monaco };
 export type { monaco as Monaco };
 

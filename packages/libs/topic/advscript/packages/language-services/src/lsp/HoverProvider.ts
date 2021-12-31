@@ -1,11 +1,7 @@
-import {
-  AstNode, LangiumServices,
-  MaybePromise
-} from "langium";
+import { AstNode, LangiumServices, MaybePromise } from "langium";
 import { AstNodeHoverProvider } from "langium/lib/lsp/hover-provider";
 import { Hover } from "vscode-languageserver-protocol";
-import * as ast from "../ast";
-
+import * as ast from "../ast-utils";
 
 export class HoverProvider extends AstNodeHoverProvider {
   constructor(protected services: LangiumServices) {
@@ -13,7 +9,7 @@ export class HoverProvider extends AstNodeHoverProvider {
   }
 
   protected getAstNodeHoverContent(node: AstNode): MaybePromise<Hover | undefined> {
-    if (ast.isNameIdentifier(node)) {
+    if (ast.isIdentifierNode(node)) {
       return {
         contents: [
           {

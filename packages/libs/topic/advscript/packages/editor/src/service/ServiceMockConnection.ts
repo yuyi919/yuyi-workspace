@@ -99,7 +99,7 @@ import type { WindowProgress } from "vscode-languageserver/lib/common/progress";
 import type { SemanticTokensFeatureShape } from "vscode-languageserver/lib/common/semanticTokens";
 import type { ShowDocumentFeatureShape } from "vscode-languageserver/lib/common/showDocument";
 import type { WorkspaceFolders } from "vscode-languageserver/lib/common/workspaceFolders";
-import type { Monaco, TMonaco } from "../lib";
+import type { Monaco, TMonaco } from "../lib/monaco.export";
 
 class ServiceMockConnection implements _Connection {
   protected _connection = {} as {

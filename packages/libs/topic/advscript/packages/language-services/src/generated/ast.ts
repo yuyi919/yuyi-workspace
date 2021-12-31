@@ -7,6 +7,17 @@
 /* eslint-disable @typescript-eslint/no-empty-interface */
 import { AstNode, AstReflection, Reference, isAstNode } from 'langium';
 
+export interface Block extends AstNode {
+    readonly $container: DocumentContents;
+    defines: Array<Declare>
+}
+
+export const Block = 'Block';
+
+export function isBlock(item: unknown): item is Block {
+    return reflection.isInstance(item, Block);
+}
+
 export interface Call extends AstNode {
     readonly $container: Dialog | Content | Label;
 }
@@ -15,6 +26,26 @@ export const Call = 'Call';
 
 export function isCall(item: unknown): item is Call {
     return reflection.isInstance(item, Call);
+}
+
+export interface Call2 extends AstNode {
+    readonly $container: Dialog | Content | Label;
+}
+
+export const Call2 = 'Call2';
+
+export function isCall2(item: unknown): item is Call2 {
+    return reflection.isInstance(item, Call2);
+}
+
+export interface Call3 extends AstNode {
+    readonly $container: Dialog | Content | Label;
+}
+
+export const Call3 = 'Call3';
+
+export function isCall3(item: unknown): item is Call3 {
+    return reflection.isInstance(item, Call3);
 }
 
 export interface Character extends AstNode {
@@ -30,9 +61,31 @@ export function isCharacter(item: unknown): item is Character {
     return reflection.isInstance(item, Character);
 }
 
+export interface CharacterRef extends AstNode {
+    readonly $container: Macro;
+    ref: Reference<Character>
+}
+
+export const CharacterRef = 'CharacterRef';
+
+export function isCharacterRef(item: unknown): item is CharacterRef {
+    return reflection.isInstance(item, CharacterRef);
+}
+
+export interface ConditionBlock extends AstNode {
+    blocks: Array<LogicBlock_IF | LogicBlock_IFELSE | LogicBlock_ELSE>
+}
+
+export const ConditionBlock = 'ConditionBlock';
+
+export function isConditionBlock(item: unknown): item is ConditionBlock {
+    return reflection.isInstance(item, ConditionBlock);
+}
+
 export interface Content extends AstNode {
     readonly $container: StoryBlock;
-    content: Array<Template | Label | Call | ESCToken | Plain>
+    content: Array<Template | Call | ESCToken | Plain>
+    indent: CommonIndent
     pipe: Pipe
 }
 
@@ -43,7 +96,7 @@ export function isContent(item: unknown): item is Content {
 }
 
 export interface Declare extends AstNode {
-    readonly $container: TitlePage | YamlBlock;
+    readonly $container: TitlePage | Block;
 }
 
 export const Declare = 'Declare';
@@ -53,24 +106,13 @@ export function isDeclare(item: unknown): item is Declare {
 }
 
 export interface DeclareKind extends AstNode {
-    readonly $container: MacroDeclare | CharactersDeclare | OtherDeclare;
+    readonly $container: CharactersDeclare | MacroDeclare | OtherDeclare;
 }
 
 export const DeclareKind = 'DeclareKind';
 
 export function isDeclareKind(item: unknown): item is DeclareKind {
     return reflection.isInstance(item, DeclareKind);
-}
-
-export interface DialogModifier extends AstNode {
-    readonly $container: Dialog;
-    ref: Reference<Modifier>
-}
-
-export const DialogModifier = 'DialogModifier';
-
-export function isDialogModifier(item: unknown): item is DialogModifier {
-    return reflection.isInstance(item, DialogModifier);
 }
 
 export interface Document extends AstNode {
@@ -85,14 +127,37 @@ export function isDocument(item: unknown): item is Document {
 }
 
 export interface DocumentContents extends AstNode {
-    readonly $container: Document;
-    contents: Array<YamlBlock | LogicStatment | StoryBlock>
+    readonly $container: Document | LogicBlock_IF | LogicBlock_IFELSE | LogicBlock_ELSE;
+    contents: Array<Block | Statment>
 }
 
 export const DocumentContents = 'DocumentContents';
 
 export function isDocumentContents(item: unknown): item is DocumentContents {
     return reflection.isInstance(item, DocumentContents);
+}
+
+export interface ElseIfStatement extends AstNode {
+    readonly $container: LogicBlock_IFELSE;
+    expression: Expression
+    kind: '|elseif'
+}
+
+export const ElseIfStatement = 'ElseIfStatement';
+
+export function isElseIfStatement(item: unknown): item is ElseIfStatement {
+    return reflection.isInstance(item, ElseIfStatement);
+}
+
+export interface ElseStatement extends AstNode {
+    readonly $container: LogicBlock_ELSE;
+    kind: '|else'
+}
+
+export const ElseStatement = 'ElseStatement';
+
+export function isElseStatement(item: unknown): item is ElseStatement {
+    return reflection.isInstance(item, ElseStatement);
 }
 
 export interface ESCToken extends AstNode {
@@ -106,16 +171,6 @@ export function isESCToken(item: unknown): item is ESCToken {
     return reflection.isInstance(item, ESCToken);
 }
 
-export interface Expression extends AstNode {
-    readonly $container: Param | MacroParam | IfStatement | ElseIfStatement | Variable | Template | Comma | Assign | Relaction | Addition | Multiplication;
-}
-
-export const Expression = 'Expression';
-
-export function isExpression(item: unknown): item is Expression {
-    return reflection.isInstance(item, Expression);
-}
-
 export interface Identifier extends AstNode {
     readonly $container: Macro | Param;
     text: string
@@ -127,20 +182,78 @@ export function isIdentifier(item: unknown): item is Identifier {
     return reflection.isInstance(item, Identifier);
 }
 
-export interface Label extends AstNode {
-    readonly $container: Content;
-    pipe: string | CallMacro | LabelContent
-    text: string
+export interface IfStatement extends AstNode {
+    readonly $container: LogicBlock_IF;
+    expression: Expression
+    kind: '|if'
 }
 
-export const Label = 'Label';
+export const IfStatement = 'IfStatement';
 
-export function isLabel(item: unknown): item is Label {
-    return reflection.isInstance(item, Label);
+export function isIfStatement(item: unknown): item is IfStatement {
+    return reflection.isInstance(item, IfStatement);
+}
+
+export interface InitialExpression extends AstNode {
+    readonly $container: Param | MacroParam;
+}
+
+export const InitialExpression = 'InitialExpression';
+
+export function isInitialExpression(item: unknown): item is InitialExpression {
+    return reflection.isInstance(item, InitialExpression);
+}
+
+export interface List extends AstNode {
+    readonly $container: LogicStatment;
+    elements: Array<Variable>
+}
+
+export const List = 'List';
+
+export function isList(item: unknown): item is List {
+    return reflection.isInstance(item, List);
+}
+
+export interface LogicBlock_ELSE extends AstNode {
+    readonly $container: ConditionBlock;
+    block: DocumentContents
+    condition: ElseStatement
+}
+
+export const LogicBlock_ELSE = 'LogicBlock_ELSE';
+
+export function isLogicBlock_ELSE(item: unknown): item is LogicBlock_ELSE {
+    return reflection.isInstance(item, LogicBlock_ELSE);
+}
+
+export interface LogicBlock_IF extends AstNode {
+    readonly $container: ConditionBlock;
+    block: DocumentContents
+    condition: IfStatement
+}
+
+export const LogicBlock_IF = 'LogicBlock_IF';
+
+export function isLogicBlock_IF(item: unknown): item is LogicBlock_IF {
+    return reflection.isInstance(item, LogicBlock_IF);
+}
+
+export interface LogicBlock_IFELSE extends AstNode {
+    readonly $container: ConditionBlock;
+    block: DocumentContents
+    condition: ElseIfStatement
+}
+
+export const LogicBlock_IFELSE = 'LogicBlock_IFELSE';
+
+export function isLogicBlock_IFELSE(item: unknown): item is LogicBlock_IFELSE {
+    return reflection.isInstance(item, LogicBlock_IFELSE);
 }
 
 export interface LogicStatment extends AstNode {
-    readonly $container: DocumentContents;
+    datas: List
+    kind: '|let'
 }
 
 export const LogicStatment = 'LogicStatment';
@@ -152,7 +265,7 @@ export function isLogicStatment(item: unknown): item is LogicStatment {
 export interface Macro extends AstNode {
     readonly $container: MacroDeclare;
     elements: Array<Param>
-    modifiers: Array<Reference<NameIdentifier>>
+    modifiers: Array<CharacterRef>
     name: Identifier
 }
 
@@ -165,7 +278,7 @@ export function isMacro(item: unknown): item is Macro {
 export interface MacroParam extends AstNode {
     readonly $container: CallMacro | MacroPipe;
     ref: Reference<Param>
-    value: TextExpression | Expression
+    value: InitialExpression
 }
 
 export const MacroParam = 'MacroParam';
@@ -185,6 +298,17 @@ export function isModifier(item: unknown): item is Modifier {
     return reflection.isInstance(item, Modifier);
 }
 
+export interface ModifierRef extends AstNode {
+    readonly $container: Dialog;
+    ref: Reference<Modifier>
+}
+
+export const ModifierRef = 'ModifierRef';
+
+export function isModifierRef(item: unknown): item is ModifierRef {
+    return reflection.isInstance(item, ModifierRef);
+}
+
 export interface NameIdentifier extends AstNode {
     readonly $container: Character | Modifier;
     text: TextExpr
@@ -199,13 +323,24 @@ export function isNameIdentifier(item: unknown): item is NameIdentifier {
 export interface Param extends AstNode {
     readonly $container: Character | Macro;
     name: Identifier
-    value: TextExpression | Expression
+    value: ParamInitialExpression
 }
 
 export const Param = 'Param';
 
 export function isParam(item: unknown): item is Param {
     return reflection.isInstance(item, Param);
+}
+
+export interface ParamInitialExpression extends AstNode {
+    readonly $container: Param | MacroParam;
+    value: TextContnet
+}
+
+export const ParamInitialExpression = 'ParamInitialExpression';
+
+export function isParamInitialExpression(item: unknown): item is ParamInitialExpression {
+    return reflection.isInstance(item, ParamInitialExpression);
 }
 
 export interface Pipe extends AstNode {
@@ -250,8 +385,17 @@ export function isQualifiedName(item: unknown): item is QualifiedName {
     return reflection.isInstance(item, QualifiedName);
 }
 
-export interface StoryBlock extends AstNode {
+export interface Statment extends AstNode {
     readonly $container: DocumentContents;
+}
+
+export const Statment = 'Statment';
+
+export function isStatment(item: unknown): item is Statment {
+    return reflection.isInstance(item, Statment);
+}
+
+export interface StoryBlock extends AstNode {
     contents: Array<Content>
 }
 
@@ -273,22 +417,9 @@ export function isTemplate(item: unknown): item is Template {
     return reflection.isInstance(item, Template);
 }
 
-export interface TextExpression extends AstNode {
-    readonly $container: Param | MacroParam;
-    value: TextContnet
-}
-
-export const TextExpression = 'TextExpression';
-
-export function isTextExpression(item: unknown): item is TextExpression {
-    return reflection.isInstance(item, TextExpression);
-}
-
 export interface TitlePage extends AstNode {
     readonly $container: Document;
     defines: Array<Declare>
-    end: string
-    start: string
 }
 
 export const TitlePage = 'TitlePage';
@@ -297,10 +428,20 @@ export function isTitlePage(item: unknown): item is TitlePage {
     return reflection.isInstance(item, TitlePage);
 }
 
+export interface TopExpression extends AstNode {
+    readonly $container: IfStatement | ElseIfStatement | Template | Comma | Conditional | NullishCoalescing | Logical_Or | Logical_And | Relaction | Addition | Multiplication | Power | Assign | Variable;
+}
+
+export const TopExpression = 'TopExpression';
+
+export function isTopExpression(item: unknown): item is TopExpression {
+    return reflection.isInstance(item, TopExpression);
+}
+
 export interface Variable extends AstNode {
-    readonly $container: VarStatement;
-    initial: Expression
-    name: VariableName
+    readonly $container: List;
+    initial: TopExpression
+    name: VariableIdentifier
 }
 
 export const Variable = 'Variable';
@@ -309,11 +450,19 @@ export function isVariable(item: unknown): item is Variable {
     return reflection.isInstance(item, Variable);
 }
 
-export interface YamlBlock extends AstNode {
-    readonly $container: DocumentContents;
-    defines: Array<Declare>
-    end: string
-    start: string
+export interface VariableIdentifier extends AstNode {
+    readonly $container: Variable;
+    prefix: Operator_Variable_Prefix
+    text: string
+}
+
+export const VariableIdentifier = 'VariableIdentifier';
+
+export function isVariableIdentifier(item: unknown): item is VariableIdentifier {
+    return reflection.isInstance(item, VariableIdentifier);
+}
+
+export interface YamlBlock extends Block {
 }
 
 export const YamlBlock = 'YamlBlock';
@@ -323,7 +472,6 @@ export function isYamlBlock(item: unknown): item is YamlBlock {
 }
 
 export interface AtInline extends Call {
-    isAt: boolean
     ref: Reference<Character>
 }
 
@@ -333,7 +481,7 @@ export function isAtInline(item: unknown): item is AtInline {
     return reflection.isInstance(item, AtInline);
 }
 
-export interface CallMacro extends Call {
+export interface CallMacro extends Call, Call2, Call3 {
     elements: Array<MacroParam>
     pipe: Pipe
     ref: Reference<Macro>
@@ -345,6 +493,17 @@ export function isCallMacro(item: unknown): item is CallMacro {
     return reflection.isInstance(item, CallMacro);
 }
 
+export interface Label extends Call {
+    content: LabelContent
+    pipe: string | CallMacro | LabelContent
+}
+
+export const Label = 'Label';
+
+export function isLabel(item: unknown): item is Label {
+    return reflection.isInstance(item, Label);
+}
+
 export interface Mark extends Call {
     content: LabelContent
 }
@@ -353,6 +512,24 @@ export const Mark = 'Mark';
 
 export function isMark(item: unknown): item is Mark {
     return reflection.isInstance(item, Mark);
+}
+
+export interface AtInline2 extends Call2 {
+}
+
+export const AtInline2 = 'AtInline2';
+
+export function isAtInline2(item: unknown): item is AtInline2 {
+    return reflection.isInstance(item, AtInline2);
+}
+
+export interface AtInline3 extends Call3 {
+}
+
+export const AtInline3 = 'AtInline3';
+
+export function isAtInline3(item: unknown): item is AtInline3 {
+    return reflection.isInstance(item, AtInline3);
 }
 
 export interface CharactersDeclare extends Declare {
@@ -399,7 +576,7 @@ export function isCharactersDeclareKind(item: unknown): item is CharactersDeclar
 }
 
 export interface KeyedDeclareKind extends DeclareKind {
-    text: PlainTextContnet
+    text: string
 }
 
 export const KeyedDeclareKind = 'KeyedDeclareKind';
@@ -418,129 +595,16 @@ export function isMacrosDeclareKind(item: unknown): item is MacrosDeclareKind {
     return reflection.isInstance(item, MacrosDeclareKind);
 }
 
-export interface Addition extends Expression {
-    left: Expression
-    operator: Operator_Plus | Operator_Minus
-    right: Expression
+export interface TextExpression extends ParamInitialExpression, InitialExpression {
 }
 
-export const Addition = 'Addition';
+export const TextExpression = 'TextExpression';
 
-export function isAddition(item: unknown): item is Addition {
-    return reflection.isInstance(item, Addition);
-}
-
-export interface Assign extends Expression {
-    left: Expression
-    right: Expression
-}
-
-export const Assign = 'Assign';
-
-export function isAssign(item: unknown): item is Assign {
-    return reflection.isInstance(item, Assign);
-}
-
-export interface Comma extends Expression {
-    left: Expression
-    operator: Operator_QuestionQuestion
-    right: Expression
-}
-
-export const Comma = 'Comma';
-
-export function isComma(item: unknown): item is Comma {
-    return reflection.isInstance(item, Comma);
-}
-
-export interface LiteralExpression extends Expression {
-}
-
-export const LiteralExpression = 'LiteralExpression';
-
-export function isLiteralExpression(item: unknown): item is LiteralExpression {
-    return reflection.isInstance(item, LiteralExpression);
-}
-
-export interface Multiplication extends Expression {
-    left: Expression
-    operator: Operator_Multiplication | Operator_Division
-    right: Expression
-}
-
-export const Multiplication = 'Multiplication';
-
-export function isMultiplication(item: unknown): item is Multiplication {
-    return reflection.isInstance(item, Multiplication);
-}
-
-export interface RefExpression extends Expression {
-    ref: Reference<Variable>
-}
-
-export const RefExpression = 'RefExpression';
-
-export function isRefExpression(item: unknown): item is RefExpression {
-    return reflection.isInstance(item, RefExpression);
-}
-
-export interface Relaction extends Expression {
-    left: Expression
-    operator: Operator_And | Operator_Or | Operator_Relaction
-    right: Expression
-}
-
-export const Relaction = 'Relaction';
-
-export function isRelaction(item: unknown): item is Relaction {
-    return reflection.isInstance(item, Relaction);
-}
-
-export interface ElseIfStatement extends LogicStatment {
-    expression: Expression
-    kind: 'elseif'
-}
-
-export const ElseIfStatement = 'ElseIfStatement';
-
-export function isElseIfStatement(item: unknown): item is ElseIfStatement {
-    return reflection.isInstance(item, ElseIfStatement);
-}
-
-export interface ElseStatement extends LogicStatment {
-    kind: 'else'
-}
-
-export const ElseStatement = 'ElseStatement';
-
-export function isElseStatement(item: unknown): item is ElseStatement {
-    return reflection.isInstance(item, ElseStatement);
-}
-
-export interface EndStatement extends LogicStatment {
-    kind: 'end'
-}
-
-export const EndStatement = 'EndStatement';
-
-export function isEndStatement(item: unknown): item is EndStatement {
-    return reflection.isInstance(item, EndStatement);
-}
-
-export interface IfStatement extends LogicStatment {
-    expression: Expression
-    kind: 'if'
-}
-
-export const IfStatement = 'IfStatement';
-
-export function isIfStatement(item: unknown): item is IfStatement {
-    return reflection.isInstance(item, IfStatement);
+export function isTextExpression(item: unknown): item is TextExpression {
+    return reflection.isInstance(item, TextExpression);
 }
 
 export interface VarStatement extends LogicStatment {
-    expressions: Array<Variable>
-    kind: 'let'
 }
 
 export const VarStatement = 'VarStatement';
@@ -580,8 +644,9 @@ export function isAction(item: unknown): item is Action {
 }
 
 export interface Dialog extends StoryBlock {
-    elements: Array<DialogModifier | Call>
-    name: Reference<Character>
+    elements: Array<Call>
+    modifiers: Array<ModifierRef>
+    ref: Reference<Character>
 }
 
 export const Dialog = 'Dialog';
@@ -590,8 +655,154 @@ export function isDialog(item: unknown): item is Dialog {
     return reflection.isInstance(item, Dialog);
 }
 
+export interface Expression extends TopExpression {
+}
+
+export const Expression = 'Expression';
+
+export function isExpression(item: unknown): item is Expression {
+    return reflection.isInstance(item, Expression);
+}
+
+export interface Addition extends Expression {
+    left: Expression
+    operator: Operator_Addition
+    right: Expression
+}
+
+export const Addition = 'Addition';
+
+export function isAddition(item: unknown): item is Addition {
+    return reflection.isInstance(item, Addition);
+}
+
+export interface Assign extends Expression {
+    left: TopExpression
+    right: TopExpression
+}
+
+export const Assign = 'Assign';
+
+export function isAssign(item: unknown): item is Assign {
+    return reflection.isInstance(item, Assign);
+}
+
+export interface Comma extends Expression {
+    left: Expression
+    right: Expression
+}
+
+export const Comma = 'Comma';
+
+export function isComma(item: unknown): item is Comma {
+    return reflection.isInstance(item, Comma);
+}
+
+export interface Conditional extends Expression {
+    condition: Expression
+    else: Expression
+    when: Expression
+}
+
+export const Conditional = 'Conditional';
+
+export function isConditional(item: unknown): item is Conditional {
+    return reflection.isInstance(item, Conditional);
+}
+
+export interface LiteralExpression extends Expression {
+}
+
+export const LiteralExpression = 'LiteralExpression';
+
+export function isLiteralExpression(item: unknown): item is LiteralExpression {
+    return reflection.isInstance(item, LiteralExpression);
+}
+
+export interface Logical_And extends Expression {
+    left: Expression
+    operator: Operator_And
+    right: Expression
+}
+
+export const Logical_And = 'Logical_And';
+
+export function isLogical_And(item: unknown): item is Logical_And {
+    return reflection.isInstance(item, Logical_And);
+}
+
+export interface Logical_Or extends Expression {
+    left: Expression
+    operator: Operator_Or
+    right: Expression
+}
+
+export const Logical_Or = 'Logical_Or';
+
+export function isLogical_Or(item: unknown): item is Logical_Or {
+    return reflection.isInstance(item, Logical_Or);
+}
+
+export interface Multiplication extends Expression {
+    left: Expression
+    operator: Operator_Multi
+    right: Expression
+}
+
+export const Multiplication = 'Multiplication';
+
+export function isMultiplication(item: unknown): item is Multiplication {
+    return reflection.isInstance(item, Multiplication);
+}
+
+export interface NullishCoalescing extends Expression {
+    left: Expression
+    operator: Operator_NullishCoalescing
+    right: Expression
+}
+
+export const NullishCoalescing = 'NullishCoalescing';
+
+export function isNullishCoalescing(item: unknown): item is NullishCoalescing {
+    return reflection.isInstance(item, NullishCoalescing);
+}
+
+export interface Power extends Expression {
+    left: Expression
+    operator: Operator_Power
+    right: Expression
+}
+
+export const Power = 'Power';
+
+export function isPower(item: unknown): item is Power {
+    return reflection.isInstance(item, Power);
+}
+
+export interface RefExpression extends Expression {
+    ref: Reference<Variable>
+}
+
+export const RefExpression = 'RefExpression';
+
+export function isRefExpression(item: unknown): item is RefExpression {
+    return reflection.isInstance(item, RefExpression);
+}
+
+export interface Relaction extends Expression {
+    left: Expression
+    operator: Operator_Relaction
+    right: Expression
+}
+
+export const Relaction = 'Relaction';
+
+export function isRelaction(item: unknown): item is Relaction {
+    return reflection.isInstance(item, Relaction);
+}
+
 export interface BooleanLiteral extends LiteralExpression {
-    value: boolean
+    value: BOOLEAN
 }
 
 export const BooleanLiteral = 'BooleanLiteral';
@@ -601,6 +812,7 @@ export function isBooleanLiteral(item: unknown): item is BooleanLiteral {
 }
 
 export interface NumberLiteral extends LiteralExpression {
+    percent: boolean
     value: number
 }
 
@@ -608,6 +820,15 @@ export const NumberLiteral = 'NumberLiteral';
 
 export function isNumberLiteral(item: unknown): item is NumberLiteral {
     return reflection.isInstance(item, NumberLiteral);
+}
+
+export interface PercentLiteral extends LiteralExpression, NumberLiteral {
+}
+
+export const PercentLiteral = 'PercentLiteral';
+
+export function isPercentLiteral(item: unknown): item is PercentLiteral {
+    return reflection.isInstance(item, PercentLiteral);
 }
 
 export interface StringLiteral extends LiteralExpression {
@@ -620,11 +841,15 @@ export function isStringLiteral(item: unknown): item is StringLiteral {
     return reflection.isInstance(item, StringLiteral);
 }
 
+export type Token_YAML = string
+
 export type TextContnet = string
 
 export type PlainTextContnet = string
 
-export type VariableName = string
+export type CommonIndent = string
+
+export type EndStatement = string
 
 export type LabelContent = string
 
@@ -646,10 +871,6 @@ export type Token_Colon = string
 
 export type Token_ListItem = string
 
-export type Token_Paren_L = string
-
-export type Token_Paren_R = string
-
 export type Token_Bracket_L = string
 
 export type Token_Bracket_R = string
@@ -658,11 +879,31 @@ export type Token_Template_L = string
 
 export type Token_Template_R = string
 
+export type Token_LabelStart = string
+
+export type Escapse = string
+
+export type TextExpr = string
+
+export type Operator_Addition = string
+
+export type Operator_Multi = string
+
+export type VariableName = string
+
+export type Operator_Variable_Prefix = '$' | '%'
+
+export type BOOLEAN = 'true' | 'false'
+
+export type Token_Paren_L = string
+
+export type Token_Paren_R = string
+
 export type Token_Comma = string
 
 export type Operator_Equal = string
 
-export type Operator_QuestionQuestion = string
+export type Operator_NullishCoalescing = string
 
 export type Operator_And = string
 
@@ -678,6 +919,8 @@ export type Operator_LessThenEqual = string
 
 export type Operator_EqualEqual = string
 
+export type Operator_Power = string
+
 export type Operator_Division = string
 
 export type Operator_Multiplication = string
@@ -686,22 +929,20 @@ export type Operator_Minus = string
 
 export type Operator_Plus = string
 
+export type Operator_Question = string
+
+export type Operator_Colon = string
+
 export type Operator_Relaction = string
 
-export type StringContent = string
+export type AdvScriptAstType = 'Block' | 'Call' | 'Call2' | 'Call3' | 'Character' | 'CharacterRef' | 'ConditionBlock' | 'Content' | 'Declare' | 'DeclareKind' | 'Document' | 'DocumentContents' | 'ElseIfStatement' | 'ElseStatement' | 'ESCToken' | 'Identifier' | 'IfStatement' | 'InitialExpression' | 'List' | 'LogicBlock_ELSE' | 'LogicBlock_IF' | 'LogicBlock_IFELSE' | 'LogicStatment' | 'Macro' | 'MacroParam' | 'Modifier' | 'ModifierRef' | 'NameIdentifier' | 'Param' | 'ParamInitialExpression' | 'Pipe' | 'Plain' | 'PlainTextExpression' | 'QualifiedName' | 'Statment' | 'StoryBlock' | 'Template' | 'TitlePage' | 'TopExpression' | 'Variable' | 'VariableIdentifier' | 'YamlBlock' | 'AtInline' | 'CallMacro' | 'Label' | 'Mark' | 'AtInline2' | 'AtInline3' | 'CharactersDeclare' | 'MacroDeclare' | 'OtherDeclare' | 'CharactersDeclareKind' | 'KeyedDeclareKind' | 'MacrosDeclareKind' | 'TextExpression' | 'VarStatement' | 'MacroPipe' | 'TextPipe' | 'Action' | 'Dialog' | 'Expression' | 'Addition' | 'Assign' | 'Comma' | 'Conditional' | 'LiteralExpression' | 'Logical_And' | 'Logical_Or' | 'Multiplication' | 'NullishCoalescing' | 'Power' | 'RefExpression' | 'Relaction' | 'BooleanLiteral' | 'NumberLiteral' | 'PercentLiteral' | 'StringLiteral';
 
-export type Escapse = string
+export type AdvScriptAstReference = 'CharacterRef:ref' | 'MacroParam:ref' | 'ModifierRef:ref' | 'QualifiedName:name' | 'AtInline:ref' | 'CallMacro:ref' | 'MacroPipe:ref' | 'Dialog:ref' | 'RefExpression:ref';
 
-export type TextExpr = string
-
-export type AdvscriptAstType = 'Call' | 'Character' | 'Content' | 'Declare' | 'DeclareKind' | 'DialogModifier' | 'Document' | 'DocumentContents' | 'ESCToken' | 'Expression' | 'Identifier' | 'Label' | 'LogicStatment' | 'Macro' | 'MacroParam' | 'Modifier' | 'NameIdentifier' | 'Param' | 'Pipe' | 'Plain' | 'PlainTextExpression' | 'QualifiedName' | 'StoryBlock' | 'Template' | 'TextExpression' | 'TitlePage' | 'Variable' | 'YamlBlock' | 'AtInline' | 'CallMacro' | 'Mark' | 'CharactersDeclare' | 'MacroDeclare' | 'OtherDeclare' | 'CharactersDeclareKind' | 'KeyedDeclareKind' | 'MacrosDeclareKind' | 'Addition' | 'Assign' | 'Comma' | 'LiteralExpression' | 'Multiplication' | 'RefExpression' | 'Relaction' | 'ElseIfStatement' | 'ElseStatement' | 'EndStatement' | 'IfStatement' | 'VarStatement' | 'MacroPipe' | 'TextPipe' | 'Action' | 'Dialog' | 'BooleanLiteral' | 'NumberLiteral' | 'StringLiteral';
-
-export type AdvscriptAstReference = 'DialogModifier:ref' | 'Macro:modifiers' | 'MacroParam:ref' | 'QualifiedName:name' | 'AtInline:ref' | 'CallMacro:ref' | 'RefExpression:ref' | 'MacroPipe:ref' | 'Dialog:name';
-
-export class AdvscriptAstReflection implements AstReflection {
+export class AdvScriptAstReflection implements AstReflection {
 
     getAllTypes(): string[] {
-        return ['Call', 'Character', 'Content', 'Declare', 'DeclareKind', 'DialogModifier', 'Document', 'DocumentContents', 'ESCToken', 'Expression', 'Identifier', 'Label', 'LogicStatment', 'Macro', 'MacroParam', 'Modifier', 'NameIdentifier', 'Param', 'Pipe', 'Plain', 'PlainTextExpression', 'QualifiedName', 'StoryBlock', 'Template', 'TextExpression', 'TitlePage', 'Variable', 'YamlBlock', 'AtInline', 'CallMacro', 'Mark', 'CharactersDeclare', 'MacroDeclare', 'OtherDeclare', 'CharactersDeclareKind', 'KeyedDeclareKind', 'MacrosDeclareKind', 'Addition', 'Assign', 'Comma', 'LiteralExpression', 'Multiplication', 'RefExpression', 'Relaction', 'ElseIfStatement', 'ElseStatement', 'EndStatement', 'IfStatement', 'VarStatement', 'MacroPipe', 'TextPipe', 'Action', 'Dialog', 'BooleanLiteral', 'NumberLiteral', 'StringLiteral'];
+        return ['Block', 'Call', 'Call2', 'Call3', 'Character', 'CharacterRef', 'ConditionBlock', 'Content', 'Declare', 'DeclareKind', 'Document', 'DocumentContents', 'ElseIfStatement', 'ElseStatement', 'ESCToken', 'Identifier', 'IfStatement', 'InitialExpression', 'List', 'LogicBlock_ELSE', 'LogicBlock_IF', 'LogicBlock_IFELSE', 'LogicStatment', 'Macro', 'MacroParam', 'Modifier', 'ModifierRef', 'NameIdentifier', 'Param', 'ParamInitialExpression', 'Pipe', 'Plain', 'PlainTextExpression', 'QualifiedName', 'Statment', 'StoryBlock', 'Template', 'TitlePage', 'TopExpression', 'Variable', 'VariableIdentifier', 'YamlBlock', 'AtInline', 'CallMacro', 'Label', 'Mark', 'AtInline2', 'AtInline3', 'CharactersDeclare', 'MacroDeclare', 'OtherDeclare', 'CharactersDeclareKind', 'KeyedDeclareKind', 'MacrosDeclareKind', 'TextExpression', 'VarStatement', 'MacroPipe', 'TextPipe', 'Action', 'Dialog', 'Expression', 'Addition', 'Assign', 'Comma', 'Conditional', 'LiteralExpression', 'Logical_And', 'Logical_Or', 'Multiplication', 'NullishCoalescing', 'Power', 'RefExpression', 'Relaction', 'BooleanLiteral', 'NumberLiteral', 'PercentLiteral', 'StringLiteral'];
     }
 
     isInstance(node: unknown, type: string): boolean {
@@ -713,10 +954,22 @@ export class AdvscriptAstReflection implements AstReflection {
             return true;
         }
         switch (subtype) {
+            case YamlBlock: {
+                return this.isSubtype(Block, supertype);
+            }
             case AtInline:
-            case CallMacro:
+            case Label:
             case Mark: {
                 return this.isSubtype(Call, supertype);
+            }
+            case CallMacro: {
+                return this.isSubtype(Call, supertype) || this.isSubtype(Call2, supertype) || this.isSubtype(Call3, supertype);
+            }
+            case AtInline2: {
+                return this.isSubtype(Call2, supertype);
+            }
+            case AtInline3: {
+                return this.isSubtype(Call3, supertype);
             }
             case CharactersDeclare:
             case MacroDeclare:
@@ -728,19 +981,9 @@ export class AdvscriptAstReflection implements AstReflection {
             case MacrosDeclareKind: {
                 return this.isSubtype(DeclareKind, supertype);
             }
-            case Addition:
-            case Assign:
-            case Comma:
-            case LiteralExpression:
-            case Multiplication:
-            case RefExpression:
-            case Relaction: {
-                return this.isSubtype(Expression, supertype);
+            case TextExpression: {
+                return this.isSubtype(ParamInitialExpression, supertype) || this.isSubtype(InitialExpression, supertype);
             }
-            case ElseIfStatement:
-            case ElseStatement:
-            case EndStatement:
-            case IfStatement:
             case VarStatement: {
                 return this.isSubtype(LogicStatment, supertype);
             }
@@ -752,10 +995,30 @@ export class AdvscriptAstReflection implements AstReflection {
             case Dialog: {
                 return this.isSubtype(StoryBlock, supertype);
             }
+            case Expression: {
+                return this.isSubtype(TopExpression, supertype);
+            }
+            case Addition:
+            case Assign:
+            case Comma:
+            case Conditional:
+            case LiteralExpression:
+            case Logical_And:
+            case Logical_Or:
+            case Multiplication:
+            case NullishCoalescing:
+            case Power:
+            case RefExpression:
+            case Relaction: {
+                return this.isSubtype(Expression, supertype);
+            }
             case BooleanLiteral:
             case NumberLiteral:
             case StringLiteral: {
                 return this.isSubtype(LiteralExpression, supertype);
+            }
+            case PercentLiteral: {
+                return this.isSubtype(LiteralExpression, supertype) || this.isSubtype(NumberLiteral, supertype);
             }
             default: {
                 return false;
@@ -763,16 +1026,16 @@ export class AdvscriptAstReflection implements AstReflection {
         }
     }
 
-    getReferenceType(referenceId: AdvscriptAstReference): string {
+    getReferenceType(referenceId: AdvScriptAstReference): string {
         switch (referenceId) {
-            case 'DialogModifier:ref': {
-                return Modifier;
-            }
-            case 'Macro:modifiers': {
-                return NameIdentifier;
+            case 'CharacterRef:ref': {
+                return Character;
             }
             case 'MacroParam:ref': {
                 return Param;
+            }
+            case 'ModifierRef:ref': {
+                return Modifier;
             }
             case 'QualifiedName:name': {
                 return Identifier;
@@ -783,14 +1046,14 @@ export class AdvscriptAstReflection implements AstReflection {
             case 'CallMacro:ref': {
                 return Macro;
             }
-            case 'RefExpression:ref': {
-                return Variable;
-            }
             case 'MacroPipe:ref': {
                 return Macro;
             }
-            case 'Dialog:name': {
+            case 'Dialog:ref': {
                 return Character;
+            }
+            case 'RefExpression:ref': {
+                return Variable;
             }
             default: {
                 throw new Error(`${referenceId} is not a valid reference id.`);
@@ -799,4 +1062,4 @@ export class AdvscriptAstReflection implements AstReflection {
     }
 }
 
-export const reflection = new AdvscriptAstReflection();
+export const reflection = new AdvScriptAstReflection();

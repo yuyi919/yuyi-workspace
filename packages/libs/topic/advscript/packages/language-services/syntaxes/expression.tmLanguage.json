@@ -1,6 +1,6 @@
 {
-  "name": "advscript",
-  "scopeName": "source.advscript",
+  "name": "expression",
+  "scopeName": "source.expression",
   "fileTypes": [
     ".avs",
     ".adv"
@@ -10,16 +10,16 @@
       "include": "#comments"
     },
     {
-      "name": "keyword.control.advscript",
-      "match": "\\b(a|Characters|false|Macros|s|true)\\b|\\B(\\|else|\\|elseif|\\|end|\\|if|\\|let)\\b"
+      "name": "keyword.control.expression",
+      "match": "\\b(false|true)\\b"
     },
     {
-      "name": "string.quoted.double.advscript",
+      "name": "string.quoted.double.expression",
       "begin": "\"",
       "end": "\\\\.[^\"]\""
     },
     {
-      "name": "string.quoted.single.advscript",
+      "name": "string.quoted.single.expression",
       "begin": "'",
       "end": "\\\\.[^']'"
     }
@@ -28,17 +28,17 @@
     "comments": {
       "patterns": [
         {
-          "name": "comment.block.advscript",
+          "name": "comment.block.expression",
           "begin": "/",
           "beginCaptures": {
             "0": {
-              "name": "punctuation.definition.comment.advscript"
+              "name": "punctuation.definition.comment.expression"
             }
           },
           "end": "\\*/",
           "endCaptures": {
             "0": {
-              "name": "punctuation.definition.comment.advscript"
+              "name": "punctuation.definition.comment.expression"
             }
           }
         },
@@ -46,11 +46,11 @@
           "begin": "//",
           "beginCaptures": {
             "1": {
-              "name": "punctuation.whitespace.comment.leading.advscript"
+              "name": "punctuation.whitespace.comment.leading.expression"
             }
           },
           "end": "(?=$)",
-          "name": "comment.line.advscript"
+          "name": "comment.line.expression"
         }
       ]
     }

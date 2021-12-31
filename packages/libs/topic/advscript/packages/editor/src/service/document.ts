@@ -21,19 +21,26 @@ class OhmDcocument implements TextDocument {
   }
 
   private parsedDocument(id: string, file: string, range?: IIncrementRange[]) {
-    this.runtime.load(id, file, range);
-    console.time("[Story] run");
-    // const lines = [...story];
-    for (const line of this.runtime) {
-      // console.log(line)
-      if (line.kind === ContentKind.Line) {
-        console.debug("call %s", line.command, ...(line.argumentList || []));
-      } else {
-        console.debug(line);
+    try {
+      console.groupCollapsed("[Story] parsedDocument");
+      this.runtime.load(id, file, range);
+      console.time("[Story] run");
+      // const lines = [...story];
+      for (const line of this.runtime) {
+        // console.log(line)
+        if (line.kind === ContentKind.Line) {
+          console.debug("call %s", line.command, ...(line.argumentList || []));
+        } else {
+          console.debug(line);
+        }
       }
+      console.timeEnd("[Story] run");
+      // console.log(lines);
+    } catch (e) {
+      console.error(e);
+    } finally {
+      console.groupEnd();
     }
-    console.timeEnd("[Story] run");
-    // console.log(lines);
   }
 
   public get uri(): string {
@@ -117,7 +124,7 @@ class OhmDcocument implements TextDocument {
   fireChanges = debounce(function () {
     const changes = this.changes.splice(0, this.changes.length);
     console.log("fireChanges", changes);
-    this.parsedDocument(this._uri, this._content, changes);
+    // this.parsedDocument(this._uri, this._content, changes);
   }, 200);
   changes: IIncrementRange[] = [];
 

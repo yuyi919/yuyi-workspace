@@ -16,7 +16,7 @@ Super {
   centerOf<L, C, R> = L C R
 
 
-  lineBreak = "\n"
+  lineBreak = startWith<"\r"?, "\n">
   linePad = lineSpace*
   lineSpace(space) = ~lineBreak space
   lineEnd($LineEnd$) = linePad (lineBreak | end)
@@ -292,7 +292,7 @@ AdvFountain <: AdvScript {
   dialogue_content = dialogue_action | inlineSyntax | leftPadWith<textSyntax_dialogue> | textSyntax_space
   character_name
     = join<upper, (upper|digit|"_")+> -- plain
-    | startWith<"@", stringify<(~(character_modifier | "\n") any)+>> -- esc
+    | startWith<"@", stringify<(~(character_modifier | lineBreak) any)+>> -- esc
   dialogue_end = blockEndOf<&contentBlockEnd>
   
   block_command($CommandBlock$) = groupUntil<command, &(comment)>

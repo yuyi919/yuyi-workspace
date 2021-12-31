@@ -1,10 +1,7 @@
 import {
-  createToken,
-  EmbeddedActionsParser,
-  IOrAlt,
+  IMultiModeLexerDefinition,
   IParserConfig,
   ISerializedGast,
-  IToken,
   Lexer,
   TokenType,
 } from "chevrotain";
@@ -14,7 +11,6 @@ import {
   Alternatives,
   AstNode,
   Cardinality,
-  CompositeCstNode,
   CrossReference,
   DatatypeSymbol,
   getTypeName,
@@ -41,13 +37,18 @@ import {
   stream,
   streamAllContents,
   UnorderedGroup,
-  LangiumParser
 } from "langium";
-import { AdvscriptServices } from ".";
-// import { LangiumParser } from "./langium-parser";
-import { cloneTokens } from "./_utils";
+import type { AdvScriptServices } from ".";
+import { LangiumParser } from "./langium-parser";
+import { createCstGenerator } from "./_utils";
 
-type RuleResult = () => any;
+declare module "langium" {
+  interface CstNode {
+    indexInParent?: number;
+    indexInRoot?: number;
+  }
+}
+
 type RuleContext = {
   optional: number;
   consume: number;
@@ -64,7 +65,8 @@ type ParserContext = {
 
 type Method = () => void;
 
-export function createCustomParser(services: AdvscriptServices) {
+export function createCustomParser(services: AdvScriptServices) {
+  console.groupCollapsed("createCustomParser");
   const grammar = services.Grammar;
   const tokens = new Map<string, TokenType>();
   const tokensRecords = {} as Record<string, TokenType>;
@@ -90,7 +92,7 @@ export function createCustomParser(services: AdvscriptServices) {
     services,
     buildTokens,
     tokensRecords,
-    TokenBuilder.createCustomLexer(tokens, buildTokens)
+    TokenBuilder.createMultiModeLexerDefinition(tokens, buildTokens)
   );
   const parserContext: ParserContext = {
     parser,
@@ -99,39 +101,33 @@ export function createCustomParser(services: AdvscriptServices) {
   };
   buildParserRules(parserContext, grammar);
   parser.finalize();
+  console.groupEnd();
   return parser;
 }
 
 export class CustomParser extends LangiumParser {
-  readonly _lexer: Lexer;
-  readonly _wrapper: EmbeddedActionsParser;
   constructor(
-    protected readonly services: AdvscriptServices,
+    protected readonly services: AdvScriptServices,
     tokens: TokenType[],
     protected readonly tokenMap?: Record<string, TokenType>,
-    overwrietLexer?: Lexer
+    overwrietLexer?: IMultiModeLexerDefinition
   ) {
-    super(services, tokens);
-    // console.log("CustomParser", tokens, this);
-    //@ts-ignore
-    this.lexer = overwrietLexer;
-    //@ts-ignore
-    this.wrapper = new ChevrotainWrapper(tokens, tokenMap, services.parser.ParserConfig);
-    //@ts-ignore
-    this._lexer = this.lexer;
-    //@ts-ignore
-    this._wrapper = this.wrapper;
+    super(services, tokens, new Lexer(overwrietLexer || tokens, { skipValidations: true }));
   }
 
+  map = new WeakSet()
   parse<T extends AstNode = AstNode>(input: string | LangiumDocument<T>): ParseResult<T> {
-    this.services.references.Linker.cleanCache();
-    console.time("[Parser] parse");
+    console.groupCollapsed("[Parser] parse");
+    // this.services.references.Linker.cleanCache();
     const text = typeof input === "string" ? input : input.textDocument.getText();
     // @ts-expect-error
     this.nodeBuilder.buildRootNode(text);
     console.time("[Parser] tokenize");
-    const { tokens: sourceTokens, groups, errors } = this._lexer.tokenize(text);
-    console.timeEnd("[Parser] tokenize");
+    const {
+      tokens: sourceTokens,
+      groups,
+      errors,
+    } = this.services.parser.TokenBuilder.wrapTokenize(this._lexer, text);
     const tokens = sourceTokens;
     if (this.tokenMap) {
       const length = sourceTokens.length;
@@ -144,17 +140,25 @@ export class CustomParser extends LangiumParser {
         });
       }
     }
+    console.timeEnd("[Parser] tokenize");
     console.log({ tokens, groups, errors });
-    //@ts-ignore
-    this.wrapper.input = tokens;
+    console.time("[Parser] parse");
+    this._wrapper.input = tokens;
     //@ts-ignore
     const result = this.mainRule.call(this.wrapper);
     //@ts-ignore
     this.addHiddenTokens(result.$cstNode, groups.hidden);
-    if (typeof input !== "string") {
-      result.$document = input;
-    }
+    // if (typeof input !== "string") {
+    //   result.$document = input;
+    // }
     console.timeEnd("[Parser] parse");
+    console.groupEnd();
+    for (const node of createCstGenerator((result as AstNode).$cstNode)) {
+      const { node: child, ...other } = node;
+      Object.assign(child, other);
+    }
+    this.map.add(result)
+    // console.log(this.map)
     return {
       value: result,
       lexerErrors: errors,
@@ -321,7 +325,17 @@ function buildKeyword(ctx: RuleContext, keyword: Keyword): Method {
   return () => ctx.parser.consume(idx, token, keyword);
 }
 
+function wrapError(method: Method) {
+  return function (...args: any[]) {
+    try {
+      method.apply(this, args);
+    } catch (error) {
+      console.error(error.message);
+    }
+  };
+}
 function wrap(ctx: RuleContext, method: Method, cardinality: Cardinality): Method {
+  method = wrapError(method);
   if (!cardinality) {
     return method;
   } else if (cardinality === "*") {
@@ -343,68 +357,3 @@ const defaultConfig: IParserConfig = {
   nodeLocationTracking: "full",
   skipValidations: true,
 };
-
-/**
- * This class wraps the embedded actions parser of chevrotain and exposes protected methods.
- * This way, we can build the `LangiumParser` as a composition.
- */
-class ChevrotainWrapper extends EmbeddedActionsParser {
-  constructor(
-    tokens: TokenType[],
-    protected tokenMap: Map<string, TokenType>,
-    config?: IParserConfig
-  ) {
-    super(tokens, {
-      ...defaultConfig,
-      ...config,
-      maxLookahead: 2,
-    });
-  }
-
-  get IS_RECORDING(): boolean {
-    return this.RECORDING_PHASE;
-  }
-
-  DEFINE_RULE(name: string, impl: () => unknown): () => unknown {
-    return this.RULE(name, impl);
-  }
-
-  wrapSelfAnalysis(): void {
-    this.performSelfAnalysis();
-  }
-
-  wrapConsume(idx: number, tokenType: TokenType): IToken {
-    try {
-      return this.consume(idx, tokenType);
-    } catch (error) {
-      if (this.canTokenTypeBeInsertedInRecovery(tokenType)) {
-        // console.error(tokenType, this.getTokenToInsert(tokenType));
-        return this.getTokenToInsert(tokenType);
-      }
-      throw error;
-    }
-  }
-
-  wrapSubrule(idx: number, rule: RuleResult): unknown {
-    return this.subrule(idx, rule);
-  }
-
-  wrapOr(idx: number, choices: Array<() => void>): void {
-    this.or(
-      idx,
-      choices.map((e) => <IOrAlt<any>>{ ALT: e })
-    );
-  }
-
-  wrapOption(idx: number, callback: () => void): void {
-    this.option(idx, callback);
-  }
-
-  wrapMany(idx: number, callback: () => void): void {
-    this.many(idx, callback);
-  }
-
-  wrapAtLeastOne(idx: number, callback: () => void): void {
-    this.atLeastOne(idx, callback);
-  }
-}

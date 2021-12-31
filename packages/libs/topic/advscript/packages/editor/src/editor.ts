@@ -1,4 +1,4 @@
-import { TMonaco, Monaco } from "./lib";
+import type { TMonaco, Monaco } from "./lib/monaco.export";
 
 export function createEditor(monaco: TMonaco, model: Monaco.editor.ITextModel) {
   return monaco.editor.create(document.querySelector("#editor"), {
@@ -13,13 +13,24 @@ export function createEditor(monaco: TMonaco, model: Monaco.editor.ITextModel) {
     lightbulb: {
       enabled: true,
     },
+    linkedEditing: true,
+    autoClosingDelete: "always",
+    autoClosingOvertype: "always",
+    parameterHints: {},
     suggest: {
+      shareSuggestSelections: true,
+      preview: true,
+      localityBonus: true,
+      previewMode: "prefix",
+      showInlineDetails: true,
+      showStatusBar: false,
+      snippetsPreventQuickSuggestions: true,
+      filterGraceful: true,
+
       showWords: true,
-      showStatusBar: true,
       showClasses: true,
       showColors: true,
       showConstants: true,
-      shareSuggestSelections: true,
       showConstructors: true,
       showDeprecated: true,
       showEnums: true,
@@ -27,12 +38,34 @@ export function createEditor(monaco: TMonaco, model: Monaco.editor.ITextModel) {
       showEvents: true,
       showFields: true,
       showSnippets: true,
+      showFiles: true,
+      showFolders: true,
+      showFunctions: true,
+      showIcons: true,
+      showInterfaces: true,
+      showIssues: true,
+      showKeywords: true,
+      showMethods: true,
+      showModules: true,
+      showOperators: true,
+      showProperties: true,
+      showReferences: true,
+      showStructs: true,
+      showTypeParameters: true,
+      showUnits: true,
+      showUsers: true,
+      showValues: true,
+      showVariables: true,
     },
     inlineSuggest: {
       enabled: true,
-      mode: "prefix"
+      mode: "prefix",
     },
+    comments: {},
+    showDeprecated: true,
+    showUnused: true,
     wordBasedSuggestions: false,
+    quickSuggestions: {},
     // tabCompletion: "on",
   });
 }

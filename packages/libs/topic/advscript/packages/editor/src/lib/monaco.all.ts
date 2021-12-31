@@ -9,5 +9,3 @@ import "monaco-editor/esm/vs/editor/standalone/browser/quickAccess/standaloneGot
 import "monaco-editor/esm/vs/editor/standalone/browser/quickAccess/standaloneCommandsQuickAccess.js";
 import "monaco-editor/esm/vs/editor/standalone/browser/referenceSearch/standaloneReferenceSearch.js";
 import "monaco-editor/esm/vs/editor/standalone/browser/toggleHighContrast/toggleHighContrast.js";
-
-export * from "monaco-editor/esm/vs/editor/editor.api";

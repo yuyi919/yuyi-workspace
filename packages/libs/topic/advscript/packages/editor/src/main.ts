@@ -1,5 +1,3 @@
-// import("monaco-editor/dev/vs/editor/editor.main.nls.zh-cn.js")
-
 // import { language as mysqlLanguage } from "monaco-editor/esm/vs/basic-languages/mysql/mysql.js";
 import {
   getParserContext,
@@ -11,13 +9,14 @@ import {
 import { bootstrap, LanguageInfo } from "./lib";
 import {} from "./lib/monaco-textmate";
 import { EmbeddedTypescriptWorker } from "./lib/provider/setupTsMode";
-import file from "./completion.avs?raw";
-import { startClient, startClientService } from "./startClient";
+import file from "./logic.avs?raw";
+import { getMonaco } from "./lib/monaco.bootstrap";
+
 // import("@addLibs/*.avs").then((data) => console.log("workspaces", data.default));
 
 async function run() {
   const languageId = "advscript";
-  const module = await import("./lib/monaco.export");
+  const module = await getMonaco();
   const { monaco } = module;
   // const services = new EmbeddedTypescriptWorker();
   // services.init().then(() => services.registerCompletionItemProvider("advscript"));
@@ -26,18 +25,20 @@ async function run() {
     // return providers;
     return {};
   }).then(async (helper) => {
+    const { startClient, startClientService } = await import("./startClient");
     // startClient();
     await startClientService(monaco);
-    //     monaco.editor.createModel(
-    //       `Characters:
-    //   - Yukari (无感情, 沉默, 感叹)
-    //   - Akari (元气, 惊慌, 埋怨, 慌张)
-    //   - ？？？ (无声)
+        monaco.editor.createModel(
+          `Characters:
+      - Yukari (无感情, 沉默, 感叹)
+      - Akari (元气, 惊慌, 埋怨, 慌张)
+      - ？？？ (无声)
+---
 
-    // `,
-    //       languageId,
-    //       monaco.Uri.file("./deps.avs")
-    //     );
+`,
+          languageId,
+          monaco.Uri.file("./deps.avs")
+        );
     const model = monaco.editor.createModel(file, languageId, monaco.Uri.file("./main.avs"));
     monaco.editor.colorizeModelLine;
     const editor = createEditor(monaco, model);
@@ -49,7 +50,7 @@ async function run() {
     globalThis.app = editor;
     globalThis.refresh = async () => {
       globalThis.app.dispose();
-      const { monaco } = await import("./lib/monaco.export");
+      const { monaco } = await getMonaco();
       globalThis.app = null;
       globalThis.app = createEditor(monaco, model);
       helper.injectCSS(globalThis.app);
@@ -415,7 +416,6 @@ function returnTokens() {
     pattern: /\r?\n/,
     group: "nl",
   });
-  console.log(Newline);
 
   // define the indentation tokens using custom token patterns
   const Indent = createToken({
@@ -587,18 +587,18 @@ function multiple() {
 }
 function test2() {
   const input =
-    "if 1\n" +
-    "  if 2\n" +
+    "  if 1\n" +
+    "if 2\n" +
     "    if 3\n" +
     "    print 666\n" +
-    "    print 777\n" +
-    "  else\n" +
-    "    print 999\n";
+    "      print 777\n" +
+    "    else\n" +
+    "      print 999\n";
 
   const lexResult = returnTokens().tokenize(input);
   console.log(lexResult);
 }
 if (process.env.NODE_ENV !== "production") {
   test2();
-  multiple();
+  // multiple();
 }

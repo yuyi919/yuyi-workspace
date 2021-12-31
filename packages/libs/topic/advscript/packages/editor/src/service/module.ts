@@ -1,47 +1,68 @@
 import {
   AdvscriptGeneratedModule,
+  AdvScriptGeneratedSharedModule,
   AdvscriptModule,
-  AdvscriptServices,
 } from "@yuyi919/advscript-language-services";
 import {
+  inject,
+  createDefaultModule,
+  DeepPartial,
   DefaultDocumentBuilder,
-  DefaultModuleContext,
   DefaultTextDocumentFactory,
   DocumentState,
-  inject,
   LangiumDocument,
   LangiumServices,
+  LangiumSharedServices,
   Module,
-  PartialLangiumServices,
+  createDefaultSharedModule,
+  DefaultSharedModuleContext as SharedModuleContext,
 } from "langium";
-import { merge } from "lodash";
 import { CancellationToken, Diagnostic, TextDocuments } from "vscode-languageserver";
 import { TextDocument } from "vscode-languageserver-textdocument";
 import { URI } from "vscode-uri";
-import { Monaco } from "../lib";
-import { createDefaultModule } from "./adapter";
+import type { Monaco } from "../lib/monaco.export";
+import { IncrementLangiumDocumentFactory } from "./adapter";
 import * as OhmDcocument from "./document";
 
-function createBrowerServices<T extends PartialLangiumServices>(
-  module?: Module<LangiumServices, T>,
-  context?: DefaultModuleContext
+function createBrowerServices<T extends DeepPartial<LangiumSharedServices>>(
+  module?: Module<LangiumSharedServices, T>,
+  context?: SharedModuleContext
 ) {
-  const defaultModule = createDefaultModule(context);
-  return inject(
-    defaultModule,
+  const shared = inject(createDefaultSharedModule(context), {
+    ...AdvScriptGeneratedSharedModule,
+    ...module,
+  });
+  const advscript = inject(
+    createDefaultModule({ shared }),
     AdvscriptGeneratedModule,
-    merge(AdvscriptModule, module)
-  ) as unknown as AdvscriptServices & T;
+    AdvscriptModule
+  );
+  shared.ServiceRegistry.register(advscript);
+  return { shared, advscript };
+  // const defaultModule = createDefaultModule(context);
+  // return injectService(
+  //   createDefaultSharedModule(context),
+  //   { ...AdvScriptGeneratedSharedModule, ...module },
+  //   {
+  //     generated: AdvscriptGeneratedModule,
+  //     module: AdvscriptModule,
+  //   }
+  // );
+  // return inject(
+  //   defaultModule,
+  //   AdvscriptGeneratedModule,
+  //   merge(AdvscriptModule, module)
+  // ) as unknown as AdvScriptServices & T;
 }
 
-export interface ILSPModuleContext extends DefaultModuleContext {}
+export interface ILSPModuleContext extends SharedModuleContext {}
 
 export function createLangiumServices(_monaco: typeof Monaco, context?: ILSPModuleContext) {
   class TextDocumentFactory extends DefaultTextDocumentFactory {
     TextDocuments: TextDocuments<OhmDcocument.OhmDcocument>;
-    constructor(service: LangiumServices) {
+    constructor(service: LangiumServices["shared"]) {
       super(service);
-      this.TextDocuments = service.documents
+      this.TextDocuments = service.workspace
         .TextDocuments as TextDocuments<OhmDcocument.OhmDcocument>;
     }
     fromUri(uri: URI): TextDocument {
@@ -55,30 +76,48 @@ export function createLangiumServices(_monaco: typeof Monaco, context?: ILSPModu
       cancelToken = CancellationToken.None
     ): Promise<Diagnostic[]> {
       let diagnostics: Diagnostic[] = [];
-      const validator = this.documentValidator;
+      const validator = this.serviceRegistry.getServices(document.uri).validation.DocumentValidator;
       diagnostics = await validator.validateDocument(document, cancelToken);
       // console.log(this.connection);
       if (this.connection) {
-        console.log("diagnostics", document, diagnostics);
+        // console.log("diagnostics", document, diagnostics);
         // Send the computed diagnostics to VS Code.
         this.connection.sendDiagnostics({ uri: document.textDocument.uri, diagnostics });
       }
       document.state = DocumentState.Validated;
       return diagnostics;
     }
+
+    protected async buildDocuments(
+      documents: LangiumDocument[],
+      cancelToken: CancellationToken
+    ): Promise<void> {
+      await this.indexManager.update(
+        documents.filter((e) => e.state < DocumentState.Indexed),
+        cancelToken
+      );
+      await this.runCancelable(documents, DocumentState.Processed, cancelToken, (doc) =>
+        this.process(doc, cancelToken)
+      );
+      await this.runCancelable(documents, DocumentState.Linked, cancelToken, (doc) => {
+        const linker = this.serviceRegistry.getServices(doc.uri).references.Linker;
+        return linker.link(doc, cancelToken);
+      });
+      await this.runCancelable(documents, DocumentState.Validated, cancelToken, (doc) =>
+        this.validate(doc, cancelToken)
+      );
+    }
   }
   const services = createBrowerServices(
     {
-      documents: {
+      workspace: {
         TextDocumentFactory: (injector) => new TextDocumentFactory(injector),
         DocumentBuilder: (injector) => new DocumentBuilder(injector),
         TextDocuments: () => new TextDocuments(OhmDcocument),
-      },
-      parser: {
-        // LangiumParser: (inj) => new OhmParser(inj),
+        LangiumDocumentFactory: (injector) => new IncrementLangiumDocumentFactory(injector),
       },
     },
     context
-  ) as AdvscriptServices;
-  return services;
+  );
+  return services.shared;
 }

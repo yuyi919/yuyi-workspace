@@ -44,10 +44,25 @@ export class WrapperMonacoLanguages extends MonacoLanguages {
     selector: Lsp.DocumentSelector,
     provider: RenameProvider
   ): monaco.languages.RenameProvider {
-    if (!provider.resolveRenameLocation)
-      return super.createRenameProvider(selector, provider as any);
-    return {
-      ...super.createRenameProvider(selector, provider as any),
+    const Provider: monaco.languages.RenameProvider = {
+      provideRenameEdits: async (
+        model: Monaco.editor.ITextModel,
+        position: Monaco.Position,
+        newName: string,
+        token: Monaco.CancellationToken
+      ) => {
+        if (!this.matchModel(selector, MonacoModelIdentifier.fromModel(model))) {
+          return undefined;
+        }
+        const word = model.getWordAtPosition(position);
+        if (!word) return;
+        const params = this.m2p.asRenameParams(model, this.usePosition(position, word), newName);
+        const result = await provider.provideRenameEdits(params, token);
+        return result && this.p2m.asWorkspaceEdit(result);
+      },
+    };
+    if (!provider.resolveRenameLocation) return Provider;
+    return Object.assign(Provider, {
       resolveRenameLocation: async (
         model: Monaco.editor.ITextModel,
         position: Monaco.Position,
@@ -56,26 +71,56 @@ export class WrapperMonacoLanguages extends MonacoLanguages {
         if (!this.matchModel(selector, MonacoModelIdentifier.fromModel(model))) {
           return void 0;
         }
-        const range = model.getWordUntilPosition(position);
-        const result = await provider.resolveRenameLocation(
-          {
-            textDocument: this.m2p.asTextDocumentIdentifier(model),
-            position: this.m2p.asPosition(position.lineNumber, range.startColumn),
-          },
-          token
-        );
-        if (result) {
-          console.log("resolveRenameLocation", result, this.p2m.asRange(result.range));
-          return { range: this.p2m.asRange(result.range), text: result.text };
+        const word = model.getWordAtPosition(position);
+        if (word) {
+          const result = await provider.resolveRenameLocation(
+            this.asTextDocumentPositionParams(model, position, word),
+            token
+          );
+          if (result) {
+            console.log("resolveRenameLocation", result, this.p2m.asRange(result.range));
+            return { range: this.p2m.asRange(result.range), text: result.text };
+          }
         }
         return {
           rejectReason: "此元素无法重命名",
-        };
+        } as Monaco.languages.RenameLocation & Monaco.languages.Rejection;
       },
-    } as monaco.languages.RenameProvider;
+    });
+  }
+
+  asTextDocumentPositionParams(
+    model: Monaco.editor.ITextModel,
+    position: Monaco.IPosition,
+    wordPosition?: Monaco.editor.IWordAtPosition
+  ): Lsp.TextDocumentPositionParams {
+    return {
+      textDocument: this.m2p.asTextDocumentIdentifier(model),
+      position: this.asPosition(position, wordPosition),
+    };
   }
 
   _isCompleting = false;
+
+  private asPosition(
+    position: Monaco.IPosition,
+    wordPosition?: Monaco.editor.IWordAtPosition
+  ): Lsp.Position {
+    return this.m2p.asPosition(
+      position.lineNumber,
+      wordPosition ? wordPosition.startColumn ?? position.column : position.column
+    );
+  }
+  private usePosition(
+    position: Monaco.IPosition,
+    wordPosition?: Monaco.editor.IWordAtPosition
+  ): Monaco.IPosition {
+    return {
+      lineNumber: position.lineNumber,
+      column: wordPosition ? wordPosition?.startColumn ?? position.column : position.column,
+    };
+  }
+
   protected createCompletionProvider(
     selector: Lsp.DocumentSelector,
     provider: CompletionItemProvider,
@@ -95,8 +140,20 @@ export class WrapperMonacoLanguages extends MonacoLanguages {
               params.context.triggerCharacter
             );
             const result = await provider.provideCompletionItems(params, token);
-            console.log("provideCompletionItems", result);
-            return result;
+            if (result) {
+              console.log("provideCompletionItems", result);
+              if (!(result instanceof Array)) {
+                // result.items.unshift({
+                //   label: "foo",
+                //   command: {
+                //     title: "test",
+                //     command: 'ssss',
+                //     arguments: ['s']
+                //   }
+                // });
+              }
+              return result;
+            }
           } catch (error) {
           } finally {
             this._isCompleting = false;
@@ -120,6 +177,56 @@ export class WrapperMonacoLanguages extends MonacoLanguages {
     return providers;
   }
 
+  registerLinkedEditingRangeProvider(
+    selector: Lsp.DocumentSelector,
+    provider: LinkedEditingRangeProvider
+  ): Disposable {
+    const linkedEditingRangeProvider = this.createLinkedEditingRangeProvider(selector, provider);
+    const providers = new DisposableCollection();
+    for (const language of this.matchLanguage(selector)) {
+      providers.push(
+        this._monaco.languages.registerLinkedEditingRangeProvider(
+          language,
+          linkedEditingRangeProvider
+        )
+      );
+    }
+    return providers;
+  }
+
+  createLinkedEditingRangeProvider(
+    selector: Lsp.DocumentSelector,
+    provider: LinkedEditingRangeProvider
+  ): Monaco.languages.LinkedEditingRangeProvider {
+    return {
+      provideLinkedEditingRanges: async (model, position, token) => {
+        if (!this.matchModel(selector, MonacoModelIdentifier.fromModel(model))) {
+          return undefined;
+        }
+        const word = model.getWordAtPosition(position);
+        // console.log("provideLinkedEditingRanges", cursorPosition, position);
+        const result = await provider.provideLinkedEditingRanges({
+          ...this.asTextDocumentPositionParams(model, position, word),
+        });
+        if (result && !token.isCancellationRequested) {
+          const ranges = this.asLinkedEditingRanges(result);
+          return ranges;
+        }
+      },
+    };
+  }
+
+  asLinkedEditingRanges(linkedRanges: Lsp.LinkedEditingRanges) {
+    const { ranges, wordPattern } = linkedRanges;
+    const result = {
+      ranges: ranges.map((range) => this.p2m.asRange(range)),
+    } as Monaco.languages.LinkedEditingRanges;
+    if (wordPattern != null) {
+      result.wordPattern = new RegExp(wordPattern);
+    }
+    return result;
+  }
+
   protected createInlineCompletionProvider(
     selector: Lsp.DocumentSelector,
     provider: CompletionItemProvider
@@ -131,35 +238,44 @@ export class WrapperMonacoLanguages extends MonacoLanguages {
         context: Monaco.languages.InlineCompletionContext,
         token: Lsp.CancellationToken
       ) => {
-        await new Promise((r) => setTimeout(r, 0));
-        if (!this.matchModel(selector, MonacoModelIdentifier.fromModel(model))) {
+        if (
+          context.selectedSuggestionInfo ||
+          !this.matchModel(selector, MonacoModelIdentifier.fromModel(model))
+        ) {
           return undefined;
         }
-        console.log(
-          "provideInlineCompletions",
-          position,
-          this._monaco.languages.InlineCompletionTriggerKind[context.triggerKind],
-          context.selectedSuggestionInfo
-        );
+        await new Promise((r) => setTimeout(r, 0));
         const wordUntil = model.getWordUntilPosition(position);
-        const defaultRange = new this._monaco.Range(
-          position.lineNumber,
-          wordUntil.startColumn,
-          position.lineNumber,
-          wordUntil.endColumn
-        );
+        // console.log("onprovideInlineCompletions", wordUntil, position)
         const items = [] as Monaco.languages.InlineCompletion[];
-        if (this._isCompleting) return { items };
-        const params = this.m2p.asCompletionParams(model, position, {
-          triggerCharacter: wordUntil.word,
-          triggerKind: this._monaco.languages.CompletionTriggerKind.TriggerForIncompleteCompletions,
-        });
-        if (context.selectedSuggestionInfo) {
-          items.push(context.selectedSuggestionInfo);
-        } else {
+        if (this._isCompleting) return;
+        if (wordUntil.word.trim() !== "") {
+          // if (context.selectedSuggestionInfo) {
+          //   items.push(context.selectedSuggestionInfo);
+          //   return { items }
+          // }
+          // 可能
+          console.log(
+            "provideInlineCompletions",
+            wordUntil,
+            this._monaco.languages.InlineCompletionTriggerKind[context.triggerKind],
+            context.selectedSuggestionInfo,
+            position
+          );
+          const defaultRange = new this._monaco.Range(
+            position.lineNumber,
+            wordUntil.startColumn,
+            position.lineNumber,
+            wordUntil.endColumn
+          );
+          const params = this.m2p.asCompletionParams(model, position, {
+            triggerCharacter: wordUntil.word,
+            triggerKind: this._monaco.languages.CompletionTriggerKind.Invoke,
+          });
           const result = await provider.provideCompletionItems(params, token);
-          const { suggestions } = this.p2m.asCompletionResult(result, defaultRange);
-          console.log("provideInlineCompletions", result);
+          if (!result) return;
+          const { suggestions, incomplete } = this.p2m.asCompletionResult(result, defaultRange);
+          console.log("provideInlineCompletions", { suggestions, incomplete });
           context.selectedSuggestionInfo && items.push(context.selectedSuggestionInfo);
           suggestions.forEach((suggest) => {
             items.push({
@@ -171,14 +287,19 @@ export class WrapperMonacoLanguages extends MonacoLanguages {
           });
         }
         return {
-          items: items as Monaco.languages.InlineCompletion[],
+          items,
         };
       },
       freeInlineCompletions(completions: {}) {
-        console.log("freeInlineCompletions", completions);
+        // console.log("freeInlineCompletions", completions);
       },
     };
   }
+}
+interface LinkedEditingRangeProvider {
+  provideLinkedEditingRanges(
+    params: Lsp.LinkedEditingRangeParams
+  ): ProviderResult<Lsp.LinkedEditingRanges>;
 }
 
 export class MonacoEditorRegisterAdapter implements Monaco.IDisposable {

@@ -122,6 +122,7 @@ export class MonacoLanguages implements Languages {
         );
         const params = this.m2p.asCompletionParams(model, position, context);
         const result = await provider.provideCompletionItems(params, token);
+        result && console.log(this.p2m.asCompletionResult(result, defaultRange))
         return result && this.p2m.asCompletionResult(result, defaultRange);
       },
       resolveCompletionItem: provider.resolveCompletionItem

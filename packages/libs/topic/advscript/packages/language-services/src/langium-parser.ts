@@ -20,7 +20,6 @@ import {
   isCrossReference,
   LangiumDocument,
   LeafCstNode,
-  Linker,
   tokenToRange,
   DatatypeSymbol,
 } from "langium";
@@ -31,7 +30,8 @@ import {
   RootCstNodeImpl,
 } from "langium/lib/parser/cst-node-builder";
 import { ValueConverter } from "langium/lib/parser/value-converter";
-import { AdvscriptServices } from "./advscript-module";
+import { Linker } from "langium/lib/references/linker";
+import { AdvScriptServices } from "./advscript-module";
 
 export type ParseResult<T = AstNode> = {
   value: T;
@@ -47,25 +47,27 @@ interface AssignmentElement {
 }
 
 export class LangiumParser {
-  protected readonly linker: Linker;
-  protected readonly converter: ValueConverter;
-  protected readonly lexer: Lexer;
-  protected readonly nodeBuilder = new CstNodeBuilder();
-  protected readonly wrapper: ChevrotainWrapper;
-  protected stack: any[] = [];
-  protected mainRule!: RuleResult;
-  protected assignmentMap = new Map<AbstractElement, AssignmentElement | undefined>();
+  private readonly linker: Linker;
+  private readonly converter: ValueConverter;
+  private readonly lexer: Lexer;
+  private readonly nodeBuilder = new CstNodeBuilder();
+  private readonly wrapper: ChevrotainWrapper;
+  private stack: any[] = [];
+  private mainRule!: RuleResult;
+  private assignmentMap = new Map<AbstractElement, AssignmentElement | undefined>();
 
-  protected get current(): any {
+  private get current(): any {
     return this.stack[this.stack.length - 1];
   }
 
-  constructor(services: AdvscriptServices, tokens: TokenType[]) {
+  constructor(services: AdvScriptServices, tokens: TokenType[], public _lexer: Lexer) {
     this.wrapper = new ChevrotainWrapper(tokens, services.parser.ParserConfig);
     this.linker = services.references.Linker;
     this.converter = services.parser.ValueConverter;
-    this.lexer = new Lexer(tokens);
+    this.lexer = _lexer;
+    this._wrapper = this.wrapper;
   }
+  readonly _wrapper: ChevrotainWrapper;
 
   MAIN_RULE(
     name: string,
@@ -103,7 +105,7 @@ export class LangiumParser {
     };
   }
 
-  protected addHiddenTokens(node: RootCstNodeImpl, tokens: IToken[]): void {
+  private addHiddenTokens(node: RootCstNodeImpl, tokens: IToken[]): void {
     for (const token of tokens) {
       const hiddenNode = new LeafCstNodeImpl(
         token.startOffset,
@@ -117,7 +119,7 @@ export class LangiumParser {
     }
   }
 
-  protected addHiddenToken(node: CompositeCstNode, token: LeafCstNode): void {
+  private addHiddenToken(node: CompositeCstNode, token: LeafCstNode): void {
     const { offset, end } = node;
     const { offset: tokenStart, end: tokenEnd } = token;
     if (offset >= tokenEnd) {
@@ -139,7 +141,7 @@ export class LangiumParser {
     }
   }
 
-  protected startImplementation(
+  private startImplementation(
     $type: string | symbol | undefined,
     implementation: () => unknown
   ): () => unknown {
@@ -288,7 +290,7 @@ export class LangiumParser {
     return obj;
   }
 
-  protected getAssignment(feature: AbstractElement): AssignmentElement {
+  private getAssignment(feature: AbstractElement): AssignmentElement {
     if (!this.assignmentMap.has(feature)) {
       const assignment = getContainerOfType(feature, isAssignment);
       this.assignmentMap.set(feature, {
@@ -299,7 +301,7 @@ export class LangiumParser {
     return this.assignmentMap.get(feature)!;
   }
 
-  protected assign(
+  private assign(
     assignment: { operator: string; feature: string },
     value: unknown,
     cstNode: CstNode,
@@ -333,7 +335,7 @@ export class LangiumParser {
     }
   }
 
-  protected assignWithoutOverride(target: any, source: any): any {
+  private assignWithoutOverride(target: any, source: any): any {
     for (const [name, value] of Object.entries(source)) {
       if (target[name] === undefined) {
         target[name] = value;
@@ -357,11 +359,12 @@ const defaultConfig: IParserConfig = {
  * This class wraps the embedded actions parser of chevrotain and exposes protected methods.
  * This way, we can build the `LangiumParser` as a composition.
  */
-class ChevrotainWrapper extends EmbeddedActionsParser {
+export class ChevrotainWrapper extends EmbeddedActionsParser {
   constructor(tokens: TokenType[], config?: IParserConfig) {
     super(tokens, {
       ...defaultConfig,
       ...config,
+      maxLookahead: 5
     });
   }
 
@@ -378,7 +381,15 @@ class ChevrotainWrapper extends EmbeddedActionsParser {
   }
 
   wrapConsume(idx: number, tokenType: TokenType): IToken {
-    return this.consume(idx, tokenType);
+    try {
+      return this.consume(idx, tokenType);
+    } catch (error) {
+      console.error(tokenType, error);
+      if (this.canTokenTypeBeInsertedInRecovery(tokenType)) {
+        return this.getTokenToInsert(tokenType);
+      }
+      throw error;
+    }
   }
 
   wrapSubrule(idx: number, rule: RuleResult): unknown {

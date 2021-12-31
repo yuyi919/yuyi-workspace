@@ -1,21 +1,22 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { AdvscriptServices, Document, ISerializedGast } from "@yuyi919/advscript-language-services";
+import {
+  AdvScriptServices,
+  CompletionItemType,
+  Document,
+  ISerializedGast,
+} from "@yuyi919/advscript-language-services";
 import {
   AstNode,
   findLeafNodeAtOffset,
   LangiumDocument,
-  LangiumServices,
+  LangiumSharedServices,
   OperationCancelled,
 } from "langium";
 import { debounce } from "lodash";
 import type * as Lsp from "vscode-languageserver-protocol";
-import {
-  TextDocumentItem,
-  TextDocumentSyncKind,
-  VersionedTextDocumentIdentifier,
-} from "vscode-languageserver-protocol";
-import type { Monaco, TMonaco } from "../lib";
+import * as vscodeLanguageserverProtocol from "vscode-languageserver-protocol";
 import { MonacoToProtocolConverter } from "../lib/languageclient/monaco-converter";
+import type { Monaco, TMonaco } from "../lib/monaco.export";
 import { createLangiumServices, ILSPModuleContext } from "./module";
 import { ServiceMockConnectionWrapper } from "./ServiceMockConnection";
 import { createRequest } from "./_utils";
@@ -25,24 +26,27 @@ export abstract class AdvScriptService {
   protected m2p: MonacoToProtocolConverter;
   public id?: string;
   protected languageId?: string;
-  protected services: AdvscriptServices;
+  protected services: AdvScriptServices;
+  protected sharedServices: LangiumSharedServices;
   protected connection: ServiceMockConnectionWrapper;
 
   protected initialized: Lsp.InitializeResult;
 
   constructor(
     protected _monaco: TMonaco,
-    factory: (context: ILSPModuleContext) => AdvscriptServices
+    factory: (context: ILSPModuleContext) => LangiumSharedServices
   ) {
     this.m2p = new MonacoToProtocolConverter(_monaco);
     const connection = ServiceMockConnectionWrapper.create(_monaco);
-    const services = factory({ connection });
+    const sharedServices = factory({ connection });
+    this.sharedServices = sharedServices;
+    const services = this.getServiceWithUri(".adv") as AdvScriptServices;
+    this.services = services;
     this.languageId = services.LanguageMetaData.languageId;
     this.id = this.languageId + ":" + AdvScriptService.serviceId++;
-    console.log(this.id, services);
-    this.services = services;
+    console.log(this.languageId, services);
     this.connection = connection;
-    const documents = services.documents.TextDocuments;
+    const documents = sharedServices.workspace.TextDocuments;
     // Make the text document manager listen on the connection for open, change and close text document events.
     documents.listen(connection);
   }
@@ -64,7 +68,10 @@ export abstract class AdvScriptService {
     }));
     // console.log("doDidChangeContent", contentChanges);
     ServiceMockConnectionWrapper.didChangeTextDocument(this.connection, {
-      textDocument: VersionedTextDocumentIdentifier.create(uri, version),
+      textDocument: vscodeLanguageserverProtocol.VersionedTextDocumentIdentifier.create(
+        uri,
+        version
+      ),
       contentChanges,
     });
     this.doDiagnostics(uri);
@@ -75,7 +82,6 @@ export abstract class AdvScriptService {
     return new Promise<Lsp.PublishDiagnosticsParams>((resolve) => {
       const dispose = ServiceMockConnectionWrapper.onDidDiagnostics(this.connection, (params) => {
         if (params.uri === uri) {
-          // console.log("onDid getDiagnostics", params);
           resolve(params);
           dispose.dispose();
         }
@@ -86,7 +92,12 @@ export abstract class AdvScriptService {
   async doDocumentLoaded(uri: string, content: string) {
     const version = this._getScriptVersion(uri);
     ServiceMockConnectionWrapper.didOpenTextDocument(this.connection, {
-      textDocument: TextDocumentItem.create(uri, this.languageId, version, content),
+      textDocument: vscodeLanguageserverProtocol.TextDocumentItem.create(
+        uri,
+        this.languageId,
+        version,
+        content
+      ),
     });
     return this.getDiagnostics(uri);
   }
@@ -108,14 +119,14 @@ export abstract class AdvScriptService {
       return;
     }
     try {
-      await this.services.documents.DocumentBuilder.update([this._monaco.Uri.parse(uri)], []);
+      await this.sharedServices.workspace.DocumentBuilder.update([this._monaco.Uri.parse(uri)], []);
     } catch (err) {
       if (err !== OperationCancelled) {
         console.error("Error: ", err);
         throw err;
       }
     }
-  }, 200);
+  }, 80);
 
   protected doDiagnostics(uri: string) {
     this.diagnosticsRequest.do(uri);
@@ -126,6 +137,23 @@ export abstract class AdvScriptService {
     const result = await this.services.lsp.completion.CompletionProvider.getCompletion(
       document,
       params
+    );
+    return result;
+  }
+  async doProvideInlineCompletionItems(params: Lsp.CompletionParams): Promise<Lsp.CompletionList> {
+    const document = this.getDocumentWithParams(params);
+    const result = await this.services.lsp.completion.CompletionProvider.getCompletionInline(
+      document,
+      params
+    );
+    return result;
+  }
+  async doResolveCompletionItem(params: Lsp.CompletionItem): Promise<Lsp.CompletionItem> {
+    console.log("doResolveCompletionItem", params);
+    const document = this.getDocumentWithParams(params.data);
+    const result = await this.services.lsp.completion.CompletionProvider.resolveCompletionItem(
+      document,
+      params as CompletionItemType
     );
     return result;
   }
@@ -148,7 +176,7 @@ export abstract class AdvScriptService {
   }
 
   private isDocumentLoaded(params: Lsp.CodeActionParams): boolean {
-    return !!this.services.documents.TextDocuments.get(params.textDocument.uri);
+    return !!this.services.shared.workspace.TextDocuments.get(params.textDocument.uri);
   }
 
   async doProvideDocumentSymbols(params: Lsp.DocumentSymbolParams): Promise<Lsp.DocumentSymbol[]> {
@@ -213,14 +241,28 @@ export abstract class AdvScriptService {
     );
     return result;
   }
+  async doLinkedEditing(params: Lsp.LinkedEditingRangeParams) {
+    const document = this.getDocumentWithParams(params);
+    const result: Lsp.Location[] = await this.services.lsp.RenameHandler.linkedEditingLocation(
+      document,
+      params
+    );
+    return result?.map((loc) => loc.range);
+  }
 
   private getDocumentWithUri(uri: string) {
-    return this.services.documents.LangiumDocuments.getOrCreateDocument(
+    return this.sharedServices.workspace.LangiumDocuments.getOrCreateDocument(
       this._monaco.Uri.parse(uri)
     ) as LangiumDocument<Document>;
   }
   private getDocumentWithParams(params: { textDocument: Lsp.TextDocumentIdentifier }) {
     return this.getDocumentWithUri(params.textDocument.uri);
+  }
+  private getService(params: { textDocument: Lsp.TextDocumentIdentifier }) {
+    return this.getServiceWithUri(params.textDocument.uri);
+  }
+  private getServiceWithUri(uri: string) {
+    return this.sharedServices.ServiceRegistry.getServices(this._monaco.Uri.parse(uri));
   }
 
   private findTextWithRange(document: LangiumDocument<AstNode>, result?: Lsp.Range) {
@@ -233,10 +275,10 @@ export abstract class AdvScriptService {
     return "";
   }
 
-  getInitializeResult(services: AdvscriptServices, hasWorkspaceFolder?: boolean) {
+  getInitializeResult(services: AdvScriptServices, hasWorkspaceFolder?: boolean) {
     const result: Lsp.InitializeResult = {
       capabilities: {
-        textDocumentSync: TextDocumentSyncKind.Incremental,
+        textDocumentSync: vscodeLanguageserverProtocol.TextDocumentSyncKind.Incremental,
         // Tell the client that this server supports code completion.
         completionProvider: services.lsp.completion.CompletionProvider?.options ?? {},
         referencesProvider: {},
@@ -250,7 +292,7 @@ export abstract class AdvScriptService {
           prepareProvider: true,
         },
         semanticTokensProvider: {
-          legend: this.services.lsp.DocumentSemanticProvider.tokenLegend as any,
+          legend: this.services.lsp.DocumentSemanticProvider?.tokenLegend as any,
         },
       },
     };
@@ -281,8 +323,8 @@ export interface IAvsLanguageOptions {
 }
 export class AvsLanguageService extends AdvScriptService {
   constructor(public options: IAvsLanguageOptions) {
+    super(options.monaco, (context) => createLangiumServices(options.monaco, context));
     const { monaco: _monaco } = options;
-    super(_monaco, (context) => createLangiumServices(_monaco, context));
     this.connection.onDidOpenTextDocument((param) => {
       this._preLoaded.push(param.textDocument.uri);
       // console.log("preload document", param.textDocument.uri);
@@ -297,9 +339,9 @@ export class AvsLanguageService extends AdvScriptService {
     const documents = this._preLoaded
       .splice(0, this._preLoaded.length)
       .map((uri) => this._monaco.Uri.parse(uri));
-    console.log("loadDocuments", this._preLoaded);
+    console.debug("loadDocuments", this._preLoaded);
     this._loading.fire();
-    this.services.documents.DocumentBuilder.update(documents, []);
+    this.sharedServices.workspace.DocumentBuilder.update(documents, []);
   }, 20);
 
   async doProvideCodeActions(params: Lsp.CodeActionParams) {

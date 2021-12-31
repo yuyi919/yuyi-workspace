@@ -9,8 +9,8 @@ import {
   RuleCall,
 } from "langium";
 import type * as Lsp from "vscode-languageserver-protocol";
-import { AdvscriptServices } from "../advscript-module";
-import * as ast from "../ast";
+import { AdvScriptServices } from "../advscript-module";
+import * as ast from "../ast-utils";
 import { enum2Array, flattenCstGen, isCompositeCstNode } from "../_utils";
 
 enum TTokenTypes {
@@ -57,21 +57,22 @@ export class DocumentSemanticProvider {
     return TTokenModifiers[key];
   }
 
-  constructor(protected readonly services: AdvscriptServices) {}
+  constructor(protected readonly services: AdvScriptServices) {}
 
   getDocumentSemanticTokens(
     document: LangiumDocument<ast.Document>,
     range?: Lsp.Range
   ): MaybePromise<Lsp.SemanticTokens> {
     // console.log("doDocumentSemanticTokens", document.uri, range);
-    console.time("doDocumentSemanticTokens");
+    // console.groupCollapsed("[Parser] doDocumentSemanticTokens");
+    console.time("[Parser] doDocumentSemanticTokens");
     const data = [] as number[]; //new Int32Array(10000)
     const { value } = document.parseResult || {};
     let prevPos: Lsp.Position,
       current: CstNode,
       match: number | { type: number; modifier: number },
       dataIndex = -1;
-    const chunks: [number, number, number, any, any][] = [];
+    // const chunks: [number, number, number, any, any][] = [];
     // const list = value.defines,
     //   length = list.length;
     // let $cstNode: CstNode,
@@ -84,7 +85,8 @@ export class DocumentSemanticProvider {
     // ]);
     const { $cstNode } = value.header;
     for (const cst of flattenCstGen($cstNode)) {
-      if (range && $cstNode.range.end.line > range.end.line) break;
+      if (cst.offset !== cst.offset || cst.end !== cst.end) break;
+      if (range && cst.range.end.line > range.end.line) break;
       if (isCompositeCstNode(cst)) {
         if (isCrossReference(cst.feature)) {
           current = cst;
@@ -105,7 +107,7 @@ export class DocumentSemanticProvider {
       }
       if (!current) {
         const { element: astNode, parent } = cst;
-        const name = isRuleCall(parent.feature) && parent.feature.rule.$refText
+        const name = isRuleCall(parent.feature) && parent.feature.rule.$refText;
         if (name && (/^Token_/.test(name) || /^Operator_/.test(name))) {
           // console.log("token", astNode, leafCst, leafCst.text);
           current = cst;
@@ -133,7 +135,7 @@ export class DocumentSemanticProvider {
         //   console.log("ref", astNode, cst, cst.text);
         // }
         else if (
-          (ast.isIdentifier(astNode) || ast.isNameIdentifier(astNode)) &&
+          ast.isIdentifierNode(astNode) &&
           (ast.isMacro(astNode.$container) ||
             ast.isParam(astNode.$container) ||
             ast.isModifier(astNode.$container) ||
@@ -149,8 +151,7 @@ export class DocumentSemanticProvider {
           ast.isLiteralExpression(astNode) ||
           ast.isPlainTextExpression(astNode) ||
           ast.isMacroParam(astNode) ||
-          ast.isIdentifier(astNode) ||
-          ast.isNameIdentifier(astNode)
+          ast.isIdentifierNode(astNode)
         ) {
           current = cst;
           match = this.kindLegend[astNode.$type];
@@ -200,7 +201,8 @@ export class DocumentSemanticProvider {
     //   defines,
     //   data
     // );
-    console.timeEnd("doDocumentSemanticTokens");
+    console.timeEnd("[Parser] doDocumentSemanticTokens");
+    // console.groupEnd();
     // console.log(
     //   // chunks,
     //   // data,

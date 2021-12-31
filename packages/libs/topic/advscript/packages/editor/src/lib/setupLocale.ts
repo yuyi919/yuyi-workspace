@@ -2,7 +2,7 @@ import metadata from "monaco-editor/dev/nls.metadata.json";
 // @ts-ignore
 import zhCn from "./zh-cn.json";
 
-function setupLocale() {
+export function setupLocale() {
   const target = Object.create(null);
   for (const module of metadata.bundles["vs/editor/editor.main"]) {
     const keys = metadata.keys[module];
@@ -23,18 +23,16 @@ function setupLocale() {
     // Object.assign(target, targetStrings)
     target[module] = targetStrings;
   }
-  window.MonacoEnvironment.locale = target;
-  console.debug(zhCn, target);
+  console.debug("setupLocale");
+  return target;
 }
-setupLocale();
-
+window.MonacoEnvironment.locale = setupLocale();
 
 declare global {
   namespace monaco {
     // 追加
     interface Environment {
-      locale?: Record<string, Record<string, string>>
+      locale?: Record<string, Record<string, string>>;
     }
   }
 }
-

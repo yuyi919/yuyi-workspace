@@ -37,12 +37,12 @@ export function registerLanguages(
     const { id: languageId } = extensionPoint;
     if (!monaco.languages.getLanguages().find((o) => o.id === languageId)) {
       monaco.languages.register(extensionPoint);
-      console.log("Register language:", languageId, extensionPoint);
+      console.debug("Register language:", languageId, extensionPoint);
     }
 
     // Lazy-load the tokens provider and configuration data.
     monaco.languages.onLanguage(languageId, async () => {
-      console.log("load", languageId);
+      console.debug("load", languageId);
       const {
         tokensProvider,
         configuration,

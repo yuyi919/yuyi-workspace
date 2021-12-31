@@ -1,6 +1,7 @@
 import type * as Lsp from "vscode-languageserver-protocol";
 import { TextDocumentIdentifier } from "vscode-languageserver-protocol";
-import { Monaco, MonacoEditorRegisterAdapter, TMonaco } from "./lib";
+import { MonacoEditorRegisterAdapter } from "./lib";
+import { Monaco, TMonaco } from "./lib/monaco.export";
 import type { AvsLanguageService } from "./service";
 
 class Waiter<T> {
@@ -54,7 +55,7 @@ export class MonacoServiceWrapper extends MonacoEditorRegisterAdapter {
       this.addCodeActionHandler();
       this.addRenameHandler();
       this.addHoverHandler();
-      console.log("Adapter init", this);
+      // console.log("Adapter init", this);
     }
   }
 
@@ -64,11 +65,11 @@ export class MonacoServiceWrapper extends MonacoEditorRegisterAdapter {
         const MONACO_URI: Monaco.Uri = model.uri;
         const MONACO_URI_STRING = MONACO_URI.toString();
         const { next } = this.DiagnosticsTick.createNext();
-        this.service.doDocumentLoaded(MONACO_URI_STRING, model.getValue()).then((param) => {
+        this.service.doDocumentLoaded(MONACO_URI_STRING, model.getValue()).then((params) => {
           if (this.attached.has(MONACO_URI_STRING)) {
-            this.updateModelMarkers(model, param);
+            this.updateModelMarkers(model, params);
           }
-          next();
+          next(params);
         });
         this.addDispose(
           model.onDidChangeAttached(() => {
@@ -89,7 +90,7 @@ export class MonacoServiceWrapper extends MonacoEditorRegisterAdapter {
                   if (id === requestId) {
                     this.updateModelMarkers(model, params);
                     requestId = -1;
-                    next();
+                    next(params);
                   }
                 });
             }
@@ -98,13 +99,13 @@ export class MonacoServiceWrapper extends MonacoEditorRegisterAdapter {
       })
     );
   }
-  DiagnosticsTick = new Waiter<void>();
+  DiagnosticsTick = new Waiter<Lsp.PublishDiagnosticsParams>();
 
   protected updateModelMarkers = (
     model: Monaco.editor.ITextModel,
     params: Lsp.PublishDiagnosticsParams
   ) => {
-    console.log("updateModelMarkers", params);
+    // console.log("updateModelMarkers", params);
     this._monaco.editor.setModelMarkers(
       model,
       this.languageId,
@@ -117,11 +118,15 @@ export class MonacoServiceWrapper extends MonacoEditorRegisterAdapter {
       [this.languageId],
       {
         provideCompletionItems: this.bind(this.service.doProvideCompletionItems),
+        resolveCompletionItem: async (item, token) => {
+          const resultItem = await this.service.doResolveCompletionItem(item);
+          if (!token.isCancellationRequested) return resultItem;
+        },
       },
       ...(this.initializeResult.capabilities.completionProvider.triggerCharacters || [])
     );
     this.languages.registerInlineCompletionItemProvider([this.languageId], {
-      provideCompletionItems: this.bind(this.service.doProvideCompletionItems),
+      provideCompletionItems: this.bind(this.service.doProvideInlineCompletionItems),
     });
   }
 
@@ -152,6 +157,14 @@ export class MonacoServiceWrapper extends MonacoEditorRegisterAdapter {
         },
         semanticTokensProvider.legend
       );
+      this.languages.registerLinkedEditingRangeProvider([this.languageId], {
+        provideLinkedEditingRanges: async (params) => {
+          // console.log('provideLinkedEditingRanges', params)
+          const data = await this.service.doLinkedEditing(params);
+          // console.log('provideLinkedEditingRanges data', data)
+          return data && { ranges: data };
+        },
+      });
       this.languages.registerDocumentRangeSemanticTokensProvider(
         [this.languageId],
         {
@@ -195,8 +208,25 @@ export class MonacoServiceWrapper extends MonacoEditorRegisterAdapter {
     });
   }
 
-  bind<T extends (params: any) => any, Args extends Parameters<T>>(target: T) {
-    return (async (params, token) => {
+  cancelToken = Symbol.for("lspCancelToken");
+  async wrapAsync<T>(loader: T, cancelToken: Lsp.CancellationToken): Promise<void | T> {
+    let dispose: Lsp.Disposable;
+    try {
+      const result = await Promise.race([
+        loader,
+        new Promise<Symbol>((resolve) => {
+          dispose = cancelToken.onCancellationRequested(() => resolve(this.cancelToken));
+        }),
+      ]);
+      if (result === this.cancelToken || cancelToken.isCancellationRequested) return;
+      return result as T;
+    } catch (error) {
+      dispose.dispose();
+    }
+  }
+
+  bind<Param extends IRequestParams, T extends (params: Param) => any>(target: T) {
+    return (async (params: IRequestParams, cancelToken: Lsp.CancellationToken) => {
       if (
         !TextDocumentIdentifier.is(params.textDocument) ||
         !this.attached.has(params.textDocument.uri)
@@ -204,21 +234,27 @@ export class MonacoServiceWrapper extends MonacoEditorRegisterAdapter {
         console.debug("Stop Event", params);
         return;
       }
-
       try {
-        await this.DiagnosticsTick.wait();
-        const result = (await target.apply(this.service, [params])) as any;
-        // console.log("bind", target.name, params, token, result);
-        // if (result) {
-        return result;
-        // }
+        const diagnosticsParams = await this.wrapAsync(this.DiagnosticsTick.wait(), cancelToken);
+        if (diagnosticsParams) {
+          const result = (await this.wrapAsync(
+            target.call(this.service, params),
+            cancelToken
+          )) as any;
+          return result;
+        }
       } catch (error) {
         console.error(error);
-        token.cancel?.();
         throw error;
       }
-    }) as unknown as Args extends (model: Monaco.editor.ITextModel, ...args: infer P) => infer R
-      ? (model: string, ...args: P) => R
-      : never;
+    }) as unknown as T extends (param: Param) => infer R
+      ? (param: Param, token: Lsp.CancellationToken) => R
+      : unknown;
   }
+}
+interface IRequestParams extends Lsp.WorkDoneProgressParams, Lsp.PartialResultParams {
+  /**
+   * The text document.
+   */
+  textDocument: Lsp.TextDocumentIdentifier;
 }
