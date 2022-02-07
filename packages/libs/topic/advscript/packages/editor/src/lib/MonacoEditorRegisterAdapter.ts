@@ -1,4 +1,5 @@
 import type * as Lsp from "vscode-languageserver-protocol";
+import { CompletionTriggerKind } from "vscode-languageserver-protocol";
 import {
   MonacoToProtocolConverter,
   ProtocolToMonacoConverter,
@@ -136,22 +137,17 @@ export class WrapperMonacoLanguages extends MonacoLanguages {
             console.log(
               "provideCompletionItems",
               params.position,
-              this._monaco.languages.CompletionTriggerKind[params.context.triggerKind],
+              Object.entries(CompletionTriggerKind).find(
+                (o) => o[1] === params.context.triggerKind
+              )?.[0],
               params.context.triggerCharacter
             );
-            const result = await provider.provideCompletionItems(params, token);
+            let result = await provider.provideCompletionItems(params, token);
             if (result) {
+              if (result instanceof Array) {
+                if (result.length === 0) result = void 0;
+              } else if (result.items.length === 0) result = void 0;
               console.log("provideCompletionItems", result);
-              if (!(result instanceof Array)) {
-                // result.items.unshift({
-                //   label: "foo",
-                //   command: {
-                //     title: "test",
-                //     command: 'ssss',
-                //     arguments: ['s']
-                //   }
-                // });
-              }
               return result;
             }
           } catch (error) {
@@ -203,10 +199,10 @@ export class WrapperMonacoLanguages extends MonacoLanguages {
         if (!this.matchModel(selector, MonacoModelIdentifier.fromModel(model))) {
           return undefined;
         }
-        const word = model.getWordAtPosition(position);
+        // const word = model.getWordAtPosition(position);
         // console.log("provideLinkedEditingRanges", cursorPosition, position);
         const result = await provider.provideLinkedEditingRanges({
-          ...this.asTextDocumentPositionParams(model, position, word),
+          ...this.asTextDocumentPositionParams(model, position),
         });
         if (result && !token.isCancellationRequested) {
           const ranges = this.asLinkedEditingRanges(result);
@@ -270,7 +266,8 @@ export class WrapperMonacoLanguages extends MonacoLanguages {
           );
           const params = this.m2p.asCompletionParams(model, position, {
             triggerCharacter: wordUntil.word,
-            triggerKind: this._monaco.languages.CompletionTriggerKind.Invoke,
+            triggerKind:
+              this._monaco.languages.CompletionTriggerKind.TriggerForIncompleteCompletions,
           });
           const result = await provider.provideCompletionItems(params, token);
           if (!result) return;
@@ -283,6 +280,10 @@ export class WrapperMonacoLanguages extends MonacoLanguages {
               range: this._monaco.Range.isIRange(suggest.range)
                 ? suggest.range
                 : suggest.range?.insert || suggest.range?.replace,
+              // command: {
+              //   id: "editor.action.triggerSuggest",
+              //   title: "自动补全",
+              // },
             });
           });
         }

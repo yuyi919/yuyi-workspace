@@ -44,8 +44,8 @@ export class ScopeProvider extends DefaultScopeProvider {
     return result;
   }
 
-  protected getGlobalScope(referenceType: string) {
-    return new SimpleScope(this.indexManager.allElements(referenceType));
+  protected getGlobalScope(nodeType: string) {
+    return new SimpleScope(this.indexManager.allElements(nodeType));
   }
 }
 
@@ -128,7 +128,7 @@ export class ScopeComputation extends DefaultScopeComputation {
         );
         localDescriptions.push(description);
         const children: AstNodeDescription[] = [];
-        element.modifiers.forEach((el) => {
+        element.modifiers.elements.forEach((el) => {
           children.push(
             this.descriptions.createDescription(element, "modifiers." + el.name, document)
           );
@@ -161,20 +161,21 @@ export class ScopeComputation extends DefaultScopeComputation {
         });
         scopes.addAll(element, children);
         // console.log("Dialog", element, children);
-      } else if (this.nameProvider.isDeepPathedNode(element)) {
-        const nestedDescriptions = await this.processContainer(
-          element,
-          scopes,
-          document,
-          cancelToken
-        );
-        for (const description of nestedDescriptions) {
-          // Add qualified names to the container
-          const qualified = this.createQualifiedDescription(element, description, document);
-          localDescriptions.push(qualified);
-        }
-        // console.log("isCharactersDeclare", element.$type, nestedDescriptions, localDescriptions);
-      }
+      } 
+      // else if (this.nameProvider.isContainerNode(element)) {
+      //   const nestedDescriptions = await this.processContainer(
+      //     element,
+      //     scopes,
+      //     document,
+      //     cancelToken
+      //   );
+      //   for (const description of nestedDescriptions) {
+      //     // Add qualified names to the container
+      //     const qualified = this.createQualifiedDescription(element, description, document);
+      //     localDescriptions.push(qualified);
+      //   }
+      //   // console.log("isCharactersDeclare", element.$type, nestedDescriptions, localDescriptions);
+      // }
     }
     scopes.addAll(container, localDescriptions);
     return localDescriptions;

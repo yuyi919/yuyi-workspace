@@ -114,6 +114,7 @@ export class LangiumParser {
         token.tokenType,
         true
       );
+      hiddenNode.payload = token.payload;
       hiddenNode.root = node;
       this.addHiddenToken(node, hiddenNode);
     }
@@ -364,7 +365,7 @@ export class ChevrotainWrapper extends EmbeddedActionsParser {
     super(tokens, {
       ...defaultConfig,
       ...config,
-      maxLookahead: 5
+      maxLookahead: 5,
     });
   }
 
@@ -373,7 +374,15 @@ export class ChevrotainWrapper extends EmbeddedActionsParser {
   }
 
   DEFINE_RULE(name: string, impl: () => unknown): () => unknown {
-    return this.RULE(name, impl);
+    const data = this.RULE(name, impl, {
+      recoveryValueFunc() {
+        console.log(name, "recoveryValueFunc")
+        return {
+          recoveryValueFunc: name
+        };
+      },
+    });
+    return data
   }
 
   wrapSelfAnalysis(): void {
@@ -384,7 +393,7 @@ export class ChevrotainWrapper extends EmbeddedActionsParser {
     try {
       return this.consume(idx, tokenType);
     } catch (error) {
-      console.error(tokenType, error);
+      // console.error(tokenType, error);
       if (this.canTokenTypeBeInsertedInRecovery(tokenType)) {
         return this.getTokenToInsert(tokenType);
       }

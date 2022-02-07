@@ -1,8 +1,4 @@
-import {
-  AdvscriptGeneratedModule,
-  AdvScriptGeneratedSharedModule,
-  AdvscriptModule,
-} from "@yuyi919/advscript-language-services";
+import { createBrowerServices } from "@yuyi919/advscript-language-services";
 import {
   inject,
   createDefaultModule,
@@ -24,36 +20,36 @@ import type { Monaco } from "../lib/monaco.export";
 import { IncrementLangiumDocumentFactory } from "./adapter";
 import * as OhmDcocument from "./document";
 
-function createBrowerServices<T extends DeepPartial<LangiumSharedServices>>(
-  module?: Module<LangiumSharedServices, T>,
-  context?: SharedModuleContext
-) {
-  const shared = inject(createDefaultSharedModule(context), {
-    ...AdvScriptGeneratedSharedModule,
-    ...module,
-  });
-  const advscript = inject(
-    createDefaultModule({ shared }),
-    AdvscriptGeneratedModule,
-    AdvscriptModule
-  );
-  shared.ServiceRegistry.register(advscript);
-  return { shared, advscript };
-  // const defaultModule = createDefaultModule(context);
-  // return injectService(
-  //   createDefaultSharedModule(context),
-  //   { ...AdvScriptGeneratedSharedModule, ...module },
-  //   {
-  //     generated: AdvscriptGeneratedModule,
-  //     module: AdvscriptModule,
-  //   }
-  // );
-  // return inject(
-  //   defaultModule,
-  //   AdvscriptGeneratedModule,
-  //   merge(AdvscriptModule, module)
-  // ) as unknown as AdvScriptServices & T;
-}
+// function createBrowerServices<T extends DeepPartial<LangiumSharedServices>>(
+//   module?: Module<LangiumSharedServices, T>,
+//   context?: SharedModuleContext
+// ) {
+//   const shared = inject(createDefaultSharedModule(context), {
+//     ...AdvScriptGeneratedSharedModule,
+//     ...module,
+//   });
+//   const advscript = inject(
+//     createDefaultModule({ shared }),
+//     AdvscriptGeneratedModule,
+//     AdvscriptModule
+//   );
+//   shared.ServiceRegistry.register(advscript);
+//   return { shared, advscript };
+//   // const defaultModule = createDefaultModule(context);
+//   // return injectService(
+//   //   createDefaultSharedModule(context),
+//   //   { ...AdvScriptGeneratedSharedModule, ...module },
+//   //   {
+//   //     generated: AdvscriptGeneratedModule,
+//   //     module: AdvscriptModule,
+//   //   }
+//   // );
+//   // return inject(
+//   //   defaultModule,
+//   //   AdvscriptGeneratedModule,
+//   //   merge(AdvscriptModule, module)
+//   // ) as unknown as AdvScriptServices & T;
+// }
 
 export interface ILSPModuleContext extends SharedModuleContext {}
 
@@ -80,7 +76,7 @@ export function createLangiumServices(_monaco: typeof Monaco, context?: ILSPModu
       diagnostics = await validator.validateDocument(document, cancelToken);
       // console.log(this.connection);
       if (this.connection) {
-        // console.log("diagnostics", document, diagnostics);
+        console.log("diagnostics", document, diagnostics);
         // Send the computed diagnostics to VS Code.
         this.connection.sendDiagnostics({ uri: document.textDocument.uri, diagnostics });
       }

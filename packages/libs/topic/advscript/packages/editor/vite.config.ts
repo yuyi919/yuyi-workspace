@@ -1,16 +1,27 @@
+import path, { join } from "path";
+import { escapeRegExp } from "lodash";
+import builtins from "rollup-plugin-node-builtins";
+import { defineConfig, UserConfigFn } from "vite";
+import { defineMacroPlugin, vitePluginMacro } from "vite-plugin-macro";
+import monacoEditorPlugin from "vite-plugin-monaco-editor";
 import { RawWorkspacePlugin } from "../parser/OhmPlugin";
 import { VitePluginStoryScript } from "../parser/VitePluginStoryScript";
-import path from "path";
-import { defineConfig, UserConfigFn } from "vite";
-import monacoEditorPlugin from "vite-plugin-monaco-editor";
-import { VitePluginLanguageServer } from "./VitePluginLanguageServer";
-import builtins from "rollup-plugin-node-builtins";
+import Provider from "./logger";
 import MonacoEditorNlsPlugin, {
   esbuildPluginMonacoEditorNls,
   Languages,
 } from "./vitePluginMonacoEditorNls";
 
 const locale = Languages.zh_hans;
+const macroPlugin = vitePluginMacro({
+  typesPath: join(__dirname, "./macros.d.ts"),
+  name: "macros",
+  include: [new RegExp(escapeRegExp(join(__dirname, "src").replace(/\\/g, "/")) + "/.+\\.ts")],
+  exclude: [/langium/, /languageclient/],
+})
+  .use(Provider)
+  .toPlugin();
+
 export default defineConfig(async ({ mode }) => {
   const isProd = mode === "production";
   const local = true;
@@ -42,6 +53,7 @@ export default defineConfig(async ({ mode }) => {
         ...builtins({ crypto: true }),
       },
       MonacoEditorNlsPlugin({ locale }),
+      macroPlugin,
     ],
     // esbuild: {
     //   loader: "ts",
@@ -99,6 +111,7 @@ export default defineConfig(async ({ mode }) => {
     optimizeDeps: {
       esbuildOptions: {
         plugins: [
+          // macroPlugin as any,
           esbuildPluginMonacoEditorNls({
             locale,
           }),

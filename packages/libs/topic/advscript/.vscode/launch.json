@@ -4,129 +4,143 @@
     // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
     "version": "0.2.0",
     "configurations": [
-		{
-			"name": "Bootstrap",
-			"request": "launch",
-			"runtimeArgs": [
-				"../langium-cli/lib/langium",
-				"generate"
-			],
-			"runtimeExecutable": "node",
-			"cwd": "${workspaceFolder}/packages/langium/packages/langium",
-			"skipFiles": [
-				"<node_internals>/**"
-			],
-			"sourceMaps": true,
-			"outFiles": [
-				"${workspaceFolder}/packages/langium/packages/langium-cli/lib/**/*.js",
-				"${workspaceFolder}/packages/langium/packages/langium/lib/**/*.js"
-			],
-			"type": "pwa-node"
-		},
-		{
-			"name": "Attach",
-			"port": 6009,
-			"request": "attach",
-			"skipFiles": [
-				"<node_internals>/**"
-			],
-			"sourceMaps": true,
-			"outFiles": [
-				"${workspaceFolder}/packages/langium/packages/langium/lib/**/*.js",
-				"${workspaceFolder}/packages/langium/packages/langium/examples/arithmetics/out/**/*.js",
-				"${workspaceFolder}/packages/langium/packages/langium/examples/domainmodel/out/**/*.js",
-				"${workspaceFolder}/packages/langium/packages/langium/examples/statemachine/out/**/*.js"
-			],
-			"type": "pwa-node"
-		},
-        {
-			"name": "Run Grammar Extension",
-			"type": "extensionHost",
-			"request": "launch",
-            "runtimeExecutable": "${execPath}",
-			"args": [
-				"${workspaceFolder}/",
-				"--extensionDevelopmentPath=${workspaceFolder}/packages/langium/packages/langium-vscode"
-			]
-		},
-		{
-			"name": "Run Arithmetics Extension",
-			"type": "extensionHost",
-			"request": "launch",
-            "runtimeExecutable": "${execPath}",
-			"args": [
-				"${workspaceFolder}/packages/langium/packages/langium/examples/arithmetics/example",
-				"--extensionDevelopmentPath=${workspaceFolder}/packages/langium/packages/langium/examples/arithmetics"
-			]
-		},
-		{
-			"name": "Run Advscript Extension",
-			"type": "extensionHost",
-			"request": "launch",
-            "runtimeExecutable": "${execPath}",
-			"args": [
-				"${workspaceFolder}/packages",
-				"--extensionDevelopmentPath=${workspaceFolder}/packages/vscode-extension"
-			]
-		},
-		{
-			"name": "Run Domainmodel Extension",
-			"type": "extensionHost",
-			"request": "launch",
-            "runtimeExecutable": "${execPath}",
-			"args": [
-				"${workspaceFolder}/packages/langium/packages/langium/examples/domainmodel/example",
-				"--extensionDevelopmentPath=${workspaceFolder}/packages/langium/packages/langium/examples/domainmodel"
-			]
-		},
-		{
-			"name": "Run Statemachine Extension",
-			"type": "extensionHost",
-			"request": "launch",
-            "runtimeExecutable": "${execPath}",
-			"args": [
-				"${workspaceFolder}/packages/langium/packages/langium/examples/statemachine/example",
-				"--extensionDevelopmentPath=${workspaceFolder}/packages/langium/packages/langium/examples/statemachine"
-			]
-		},
-		{
-			"name": "Extension Tests",
-			"type": "extensionHost",
-			"request": "launch",
-            "runtimeExecutable": "${execPath}",
-			"args": [
-				"--extensionDevelopmentPath=${workspaceFolder}/packages/langium/packages/langium-vscode",
-				"--extensionTestsPath=${workspaceFolder}/out/test/suite/index"
-			]
-		},
-		{
-			"type": "node",
-			"request": "launch",
-			"name": "Jest Langium: Run All",
-			"program": "${workspaceFolder}/node_modules/jest/bin/jest.js",
-			"args": [
-				"--config=${workspaceFolder}/jest.config.json",
-				"--verbose",
-				"-i",
-				"--no-cache",
-			],
-			"console": "integratedTerminal",
-			"internalConsoleOptions": "neverOpen"
-		},
-		{
-			"type": "node",
-			"request": "launch",
-			"name": "Jest Langium: Run Selected File",
-			"program": "${workspaceFolder}/node_modules/jest/bin/jest.js",
-			"args": [
-				"${fileBasename}",
-				"--config=${workspaceFolder}/jest.config.json",
-				"--verbose",
-				"-i",
-				"--no-cache",
-			],
-			"console": "integratedTerminal",
-			"internalConsoleOptions": "neverOpen"
-		}
+      {
+        "type": "java",
+        "name": "Launch a",
+        "request": "launch",
+        "mainClass": "a",
+        "projectName": "advscript_5f0b9d92"
+      },
+      {
+        "type": "java",
+        "name": "Launch SuffixAutomaton",
+        "request": "launch",
+        "mainClass": "SuffixAutomaton",
+        "projectName": "advscript_5f0b9d92"
+      },
+      {
+        "name": "Bootstrap",
+        "request": "launch",
+        "runtimeArgs": [
+          "../langium-cli/lib/langium",
+          "generate"
+        ],
+        "runtimeExecutable": "node",
+        "cwd": "${workspaceFolder}/packages/langium/packages/langium",
+        "skipFiles": [
+          "<node_internals>/**"
+        ],
+        "sourceMaps": true,
+        "outFiles": [
+          "${workspaceFolder}/packages/langium/packages/langium-cli/lib/**/*.js",
+          "${workspaceFolder}/packages/langium/packages/langium/lib/**/*.js"
+        ],
+        "type": "pwa-node"
+      },
+      {
+        "name": "Attach",
+        "port": 6009,
+        "request": "attach",
+        "skipFiles": [
+          "<node_internals>/**"
+        ],
+        "sourceMaps": true,
+        "outFiles": [
+          "${workspaceFolder}/packages/langium/packages/langium/lib/**/*.js",
+          "${workspaceFolder}/packages/langium/packages/langium/examples/arithmetics/out/**/*.js",
+          "${workspaceFolder}/packages/langium/packages/langium/examples/domainmodel/out/**/*.js",
+          "${workspaceFolder}/packages/langium/packages/langium/examples/statemachine/out/**/*.js"
+        ],
+        "type": "pwa-node"
+      },
+      {
+        "name": "Run Grammar Extension",
+        "type": "extensionHost",
+        "request": "launch",
+        "runtimeExecutable": "${execPath}",
+        "args": [
+          "${workspaceFolder}/",
+          "--extensionDevelopmentPath=${workspaceFolder}/packages/langium/packages/langium-vscode"
+        ]
+      },
+      {
+        "name": "Run Arithmetics Extension",
+        "type": "extensionHost",
+        "request": "launch",
+        "runtimeExecutable": "${execPath}",
+        "args": [
+          "${workspaceFolder}/packages/langium/packages/langium/examples/arithmetics/example",
+          "--extensionDevelopmentPath=${workspaceFolder}/packages/langium/packages/langium/examples/arithmetics"
+        ]
+      },
+      {
+        "name": "Run Advscript Extension",
+        "type": "extensionHost",
+        "request": "launch",
+        "runtimeExecutable": "${execPath}",
+        "args": [
+          "${workspaceFolder}/packages",
+          "--extensionDevelopmentPath=${workspaceFolder}/packages/vscode-extension"
+        ]
+      },
+      {
+        "name": "Run Domainmodel Extension",
+        "type": "extensionHost",
+        "request": "launch",
+        "runtimeExecutable": "${execPath}",
+        "args": [
+          "${workspaceFolder}/packages/langium/packages/langium/examples/domainmodel/example",
+          "--extensionDevelopmentPath=${workspaceFolder}/packages/langium/packages/langium/examples/domainmodel"
+        ]
+      },
+      {
+        "name": "Run Statemachine Extension",
+        "type": "extensionHost",
+        "request": "launch",
+        "runtimeExecutable": "${execPath}",
+        "args": [
+          "${workspaceFolder}/packages/langium/packages/langium/examples/statemachine/example",
+          "--extensionDevelopmentPath=${workspaceFolder}/packages/langium/packages/langium/examples/statemachine"
+        ]
+      },
+      {
+        "name": "Extension Tests",
+        "type": "extensionHost",
+        "request": "launch",
+        "runtimeExecutable": "${execPath}",
+        "args": [
+          "--extensionDevelopmentPath=${workspaceFolder}/packages/langium/packages/langium-vscode",
+          "--extensionTestsPath=${workspaceFolder}/out/test/suite/index"
+        ]
+      },
+      {
+        "type": "node",
+        "request": "launch",
+        "name": "Jest Langium: Run All",
+        "program": "${workspaceFolder}/node_modules/jest/bin/jest.js",
+        "args": [
+          "--config=${workspaceFolder}/jest.config.json",
+          "--verbose",
+          "-i",
+          "--no-cache"
+        ],
+        "console": "integratedTerminal",
+        "internalConsoleOptions": "neverOpen"
+      },
+      {
+        "type": "node",
+        "request": "launch",
+        "name": "Jest Langium: Run Selected File",
+        "program": "${workspaceFolder}/node_modules/jest/bin/jest.js",
+        "args": [
+          "${fileBasename}",
+          "--config=${workspaceFolder}/jest.config.json",
+          "--verbose",
+          "-i",
+          "--no-cache"
+        ],
+        "console": "integratedTerminal",
+        "internalConsoleOptions": "neverOpen"
+      }
     ]
 }

@@ -22,20 +22,29 @@ import {
   ReferenceDescription,
   ReferenceInfo,
   Stream,
+  LangiumDocuments,
   streamAllContents,
+  isAstNodeDescription,
 } from "langium";
 import { DefaultAstNodeLocator } from "langium/lib/workspace/ast-node-locator";
 import { AstNodeHoverProvider } from "langium/lib/lsp/hover-provider";
 import { DefaultReferences } from "langium/lib/references/references";
-import { memoize } from "lodash";
+import { memoize, last } from "lodash";
 import { CancellationToken, Hover, HoverParams } from "vscode-languageserver-protocol";
 import { AdvScriptServices } from "../advscript-module";
 import * as ast from "../ast-utils";
-import { findWordNodeAtOffset } from "../_utils";
+import { toConstMap } from "../_utils";
 import { NameProvider } from "./nameing";
+import { Trie } from "../libs";
 
 export class References extends DefaultReferences {
   declare nameProvider: NameProvider;
+  protected readonly langiumDocuments: () => LangiumDocuments;
+  constructor(services: LangiumServices) {
+    super(services);
+    this.langiumDocuments = () => services.shared.workspace.LangiumDocuments;
+  }
+
   findDeclaration(sourceCstNode: CstNode): CstNode | undefined {
     if (sourceCstNode) {
       const assignment = findAssignment(sourceCstNode);
@@ -93,4 +102,36 @@ export class References extends DefaultReferences {
   //     ? this.index.findAllReferences(targetNode, path.replace(/\/name$/, ""))
   //     : this.index.findAllReferences(targetNode, path); //"/header/defines@0/elements@2/name");
   // }
+
+  isNestedDeclaration(nodeOrescription: AstNode | AstNodeDescription, context: AstNode) {
+    const targetNode = isAstNodeDescription(nodeOrescription)
+      ? this.nodeLocator.getAstNode(
+          this.langiumDocuments().getOrCreateDocument(nodeOrescription.documentUri),
+          nodeOrescription.path
+        )
+      : nodeOrescription;
+
+    const stack = this.nameProvider.getQualifiedNameStack(targetNode.$container, targetNode);
+    if (!stack.length) return false;
+    if (stack.length > 1) {
+      const length = stack.length - 1;
+      const parentStack = this.nameProvider.getQualifiedNameStack(context.$container, context);
+      // console.log("stack", stack, parentStack);
+      if (parentStack.length !== stack.length) {
+        return false;
+      }
+      for (let i = length; i > 0; i--) {
+        const parent = parentStack[i - 1];
+        const target = stack[i - 1];
+        if (
+          !target.type?.some(({ source }) =>
+            parent.type?.some((o) => o.source === source && target.name === parent.name)
+          )
+        ) {
+          return false;
+        }
+      }
+    }
+    return true;
+  }
 }

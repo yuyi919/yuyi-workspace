@@ -21,9 +21,9 @@ export function createEditor(monaco: TMonaco, model: Monaco.editor.ITextModel) {
       shareSuggestSelections: true,
       preview: true,
       localityBonus: true,
-      previewMode: "prefix",
+      previewMode: "subwordSmart",
       showInlineDetails: true,
-      showStatusBar: false,
+      showStatusBar: true,
       snippetsPreventQuickSuggestions: true,
       filterGraceful: true,
 
@@ -59,13 +59,19 @@ export function createEditor(monaco: TMonaco, model: Monaco.editor.ITextModel) {
     },
     inlineSuggest: {
       enabled: true,
-      mode: "prefix",
+      mode: "subword",
     },
     comments: {},
     showDeprecated: true,
     showUnused: true,
+
+    // snippetSuggestions: "inline",
+    quickSuggestions: {
+      comments: true,
+      strings: true,
+      other: true
+    },
     wordBasedSuggestions: false,
-    quickSuggestions: {},
     // tabCompletion: "on",
   });
 }

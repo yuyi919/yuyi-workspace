@@ -46,7 +46,7 @@ PrimaryExpression returns Expression:
   {LiteralExpression} LiteralExpression;
 
 VariableList returns List: 
-  elements+=Variable (WS? Token_Comma WS? elements+=Variable)*;
+  elements+=Variable (WS? Token_Comma Space? elements+=Variable)*;
 Variable returns Variable: {Variable} name=VariableIdentifier WS? (Operator_Equal WS? initial=TopExpression)?;
 VariableIdentifier: prefix=Operator_Variable_Prefix? text=ID;
 VariableName returns string: Operator_Variable_Prefix? ID;
@@ -55,7 +55,7 @@ Operator_Variable_Prefix returns string: '$' | '%';
 LiteralExpression: 
   {BooleanLiteral} value=BOOLEAN |
   {StringLiteral} value=STRING |
-  {NumberLiteral} value=NUMBER ({PercentLiteral} percent?='%')?;
+  {NumberLiteral} (Operator_Plus|Operator_Minus)? value=NUMBER ({PercentLiteral} percent?='%')?;
 
 BOOLEAN returns boolean: 'true' | 'false';
 
@@ -90,6 +90,7 @@ Operator_Relaction returns string: (
   Operator_LessThenEqual
 );
 
+Space returns string: WS; // 将容易引起混淆的token放到后续匹配
 
 terminal WS returns string: / +/;
 terminal ID returns string: /[_a-zA-Z][\w_]*/;

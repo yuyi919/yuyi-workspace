@@ -10,10 +10,12 @@ import { DefaultReferenceFinder } from "langium/lib/lsp/reference-finder";
 import * as Lsp from "vscode-languageserver-protocol";
 import { Location } from "vscode-languageserver-protocol";
 import { URI } from "vscode-uri";
-import { findIdentifierNode, findInputNode, findWordNodeAtOffset } from "..";
+import { findIdentifierNode, findInputNode } from "..";
 import * as ast from "../ast-utils";
+import { NameProvider } from "../references";
 
 export class ReferenceFinder extends DefaultReferenceFinder {
+  declare nameProvider: NameProvider;
   findReferences(
     document: LangiumDocument,
     params: Lsp.ReferenceParams
@@ -102,19 +104,33 @@ export class ReferenceFinder extends DefaultReferenceFinder {
 
   findNameReferences2(
     document: LangiumDocument,
-    params: Lsp.ReferenceParams
+    params: Lsp.ReferenceParams,
+    debug?: boolean
   ): MaybePromise<Lsp.Location[]> {
     const locations: Lsp.Location[] = [];
     const rootNode = document.parseResult.value.$cstNode;
     if (!rootNode) {
       return locations;
     }
-    const node = findIdentifierNode(rootNode, document.textDocument.offsetAt(params.position));
+    const offset = document.textDocument.offsetAt(params.position);
+    const node = findIdentifierNode(rootNode, offset);
     const { node: selectedNode, isMismatchToken } = node;
+    if (debug && selectedNode) {
+      console.log("findIdentifierNode", offset, node);
+      console.log(
+        "findInputNode",
+        findInputNode(rootNode, offset)
+        // this.nameProvider.getQualifiedNameStack(
+        //   selectedNode.element.$container,
+        //   selectedNode.element
+        // ),
+        // this.nameProvider.getQualifiedName(selectedNode.element.$container, selectedNode.element)
+      );
+    }
     if (!selectedNode || !ast.isIdentifierNode(selectedNode.element)) {
       return locations;
     }
-    
+
     if (isMismatchToken && this.posReferencesMap.has(document.uri.path)) {
       const {
         locations,
@@ -134,6 +150,7 @@ export class ReferenceFinder extends DefaultReferenceFinder {
           return location;
         });
       }
+      this.posReferencesMap.delete(document.uri.path);
       return;
     }
     const targetAstNode = this.references.findDeclaration(selectedNode)?.element;
@@ -161,7 +178,7 @@ export class ReferenceFinder extends DefaultReferenceFinder {
 
   private findReferenceWithAstNode(el: AstNode): Lsp.Range {
     if (ast.isModifierRef(el)) {
-      return el.$container.$cstNode.range;
+      return el.$container.$container.$cstNode.range;
     }
     return el?.$cstNode?.range;
   }

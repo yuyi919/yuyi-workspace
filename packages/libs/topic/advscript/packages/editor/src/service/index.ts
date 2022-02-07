@@ -148,8 +148,16 @@ export abstract class AdvScriptService {
     );
     return result;
   }
+
+  async doProvideSignatureHelp(params: Lsp.SignatureHelpParams): Promise<Lsp.SignatureHelp> {
+    const document = this.getDocumentWithParams(params);
+    return this.services.lsp.completion.CompletionProvider.getProvideSignatureHelp(
+      document,
+      params
+    );
+  }
+
   async doResolveCompletionItem(params: Lsp.CompletionItem): Promise<Lsp.CompletionItem> {
-    console.log("doResolveCompletionItem", params);
     const document = this.getDocumentWithParams(params.data);
     const result = await this.services.lsp.completion.CompletionProvider.resolveCompletionItem(
       document,
@@ -250,6 +258,18 @@ export abstract class AdvScriptService {
     return result?.map((loc) => loc.range);
   }
 
+  async doProvideDocumentFormattingEdits(params: Lsp.DocumentFormattingParams) {
+    const document = this.getDocumentWithParams(params);
+    return this.services.lsp.DocumentFormattingEdits.formattingTextEdits(document, params)
+  }
+  async doProvideOnTypeFormattingEdits(params: Lsp.DocumentOnTypeFormattingParams) {
+    const document = this.getDocumentWithParams(params);
+    return this.services.lsp.DocumentFormattingEdits.formattingTextEdits(document, params)
+  }
+  async doProvideDocumentRangeFormattingEdits(params: Lsp.DocumentRangeFormattingParams) {
+    const document = this.getDocumentWithParams(params);
+    return this.services.lsp.DocumentFormattingEdits.formattingTextEdits(document, params)
+  }
   private getDocumentWithUri(uri: string) {
     return this.sharedServices.workspace.LangiumDocuments.getOrCreateDocument(
       this._monaco.Uri.parse(uri)

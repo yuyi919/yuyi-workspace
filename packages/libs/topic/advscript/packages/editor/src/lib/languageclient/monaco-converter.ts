@@ -735,20 +735,20 @@ export class ProtocolToMonacoConverter {
     if (item.documentChanges) {
       item.documentChanges.forEach((change) => {
         if (ls.CreateFile.is(change)) {
-          edits.push(<monaco.languages.WorkspaceFileEdit>{
+          edits.push({
             newUri: this._monaco.Uri.parse(change.uri),
             options: change.options,
             metadata: asMetadata(change.annotationId),
           });
         } else if (ls.RenameFile.is(change)) {
-          edits.push(<monaco.languages.WorkspaceFileEdit>{
+          edits.push({
             oldUri: this._monaco.Uri.parse(change.oldUri),
             newUri: this._monaco.Uri.parse(change.newUri),
             options: change.options,
             metadata: asMetadata(change.annotationId),
           });
         } else if (ls.DeleteFile.is(change)) {
-          edits.push(<monaco.languages.WorkspaceFileEdit>{
+          edits.push({
             oldUri: this._monaco.Uri.parse(change.uri),
             options: change.options,
             metadata: asMetadata(change.annotationId),
@@ -809,7 +809,7 @@ export class ProtocolToMonacoConverter {
       return undefined;
     }
     const range = this.asRange(item.range);
-    const result = <ProtocolCodeLens>{ range };
+    const result = { range } as ProtocolCodeLens;
     if (item.command) {
       result.command = this.asCommand(item.command);
     }
@@ -1055,7 +1055,7 @@ export class ProtocolToMonacoConverter {
     if (!item) {
       return undefined;
     }
-    const result = <monaco.languages.SignatureHelp>{};
+    const result = {} as monaco.languages.SignatureHelp;
     if (Is.number(item.activeSignature)) {
       result.activeSignature = item.activeSignature;
     } else {
@@ -1084,7 +1084,7 @@ export class ProtocolToMonacoConverter {
   }
 
   asSignatureInformation(item: SignatureInformation): monaco.languages.SignatureInformation {
-    const result = <monaco.languages.SignatureInformation>{ label: item.label };
+    const result = { label: item.label } as monaco.languages.SignatureInformation;
     if (item.documentation) {
       result.documentation = this.asDocumentation(item.documentation);
     }
@@ -1104,7 +1104,7 @@ export class ProtocolToMonacoConverter {
   }
 
   asParameterInformation(item: ParameterInformation): monaco.languages.ParameterInformation {
-    const result = <monaco.languages.ParameterInformation>{ label: item.label };
+    const result = { label: item.label } as monaco.languages.ParameterInformation;
     if (item.documentation) {
       result.documentation = this.asDocumentation(item.documentation);
     }
@@ -1244,7 +1244,7 @@ export class ProtocolToMonacoConverter {
     item: CompletionItem,
     defaultRange: monaco.IRange | RangeReplace
   ): ProtocolCompletionItem {
-    const result = <ProtocolCompletionItem>{ label: item.label };
+    const result = { label: item.label } as ProtocolCompletionItem;
     if (item.detail) {
       result.detail = item.detail;
     }

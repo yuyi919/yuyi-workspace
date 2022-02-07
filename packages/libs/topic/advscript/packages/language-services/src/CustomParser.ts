@@ -37,6 +37,7 @@ import {
   stream,
   streamAllContents,
   UnorderedGroup,
+  CstNode,
 } from "langium";
 import type { AdvScriptServices } from ".";
 import { LangiumParser } from "./langium-parser";
@@ -46,7 +47,11 @@ declare module "langium" {
   interface CstNode {
     indexInParent?: number;
     indexInRoot?: number;
+    payload?: any;
   }
+}
+declare module "langium/lib/parser/cst-node-builder" {
+  interface AbstractCstNode extends CstNode {}
 }
 
 type RuleContext = {
@@ -115,7 +120,7 @@ export class CustomParser extends LangiumParser {
     super(services, tokens, new Lexer(overwrietLexer || tokens, { skipValidations: true }));
   }
 
-  map = new WeakSet()
+  map = new WeakSet();
   parse<T extends AstNode = AstNode>(input: string | LangiumDocument<T>): ParseResult<T> {
     console.groupCollapsed("[Parser] parse");
     // this.services.references.Linker.cleanCache();
@@ -157,7 +162,7 @@ export class CustomParser extends LangiumParser {
       const { node: child, ...other } = node;
       Object.assign(child, other);
     }
-    this.map.add(result)
+    this.map.add(result);
     // console.log(this.map)
     return {
       value: result,
@@ -330,7 +335,7 @@ function wrapError(method: Method) {
     try {
       method.apply(this, args);
     } catch (error) {
-      console.error(error.message);
+      // console.error(error.message);
     }
   };
 }

@@ -26,7 +26,7 @@ export function setupLocale() {
   console.debug("setupLocale");
   return target;
 }
-window.MonacoEnvironment.locale = setupLocale();
+globalThis.MonacoEnvironment.locale = setupLocale();
 
 declare global {
   namespace monaco {

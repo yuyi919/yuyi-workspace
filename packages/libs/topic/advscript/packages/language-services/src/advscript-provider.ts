@@ -43,6 +43,7 @@ export class AstNodeDescriptionProvider extends DefaultAstNodeDescriptionProvide
       if (name) {
         const desc = this.createDescription(modelNode, name, document);
         // console.log("createDescriptions", modelNode.$type, name, desc);
+        Object.assign(desc, { plainName: this.nameProvider.getPlainName(modelNode) });
         descr.push(desc);
       }
     }

@@ -86,10 +86,10 @@ export class AdvscriptValidator {
   ) => {
     const ruleMap = new Map<string, true>();
     const elements = [
-      ...(grammar.elements ?? []),
-      ...(ast.isMacro(grammar) || ast.isDialog(grammar) ? grammar.modifiers : []),
+      ...(grammar.elements || []),
+      ...(ast.isMacro(grammar) || ast.isDialog(grammar) ? grammar.modifiers?.elements || [] : []),
     ];
-    if (!elements.length) return;
+    if (!elements?.length) return;
     const tmpl = template("A ${$type}'s name has to be unique.");
     const relatedInformation: DiagnosticRelatedInformation[] = [];
     const messages = [] as {

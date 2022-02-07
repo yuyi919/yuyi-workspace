@@ -17,5 +17,5 @@
     }
   },
   "exclude": ["src/**/*.spec.ts", "src/**/*.test.ts", "**/__test__/**"],
-  "include": ["./node_modules/**/*.d.ts", "src/**/*.ts"]
+  "include": ["./node_modules/**/*.d.ts", "src/**/*.ts", "./macros.d.ts"]
 }

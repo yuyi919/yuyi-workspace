@@ -3,6 +3,7 @@ import { TextDocumentIdentifier } from "vscode-languageserver-protocol";
 import { MonacoEditorRegisterAdapter } from "./lib";
 import { Monaco, TMonaco } from "./lib/monaco.export";
 import type { AvsLanguageService } from "./service";
+import { triggerCommand, COMMAND_ID } from "./utils";
 
 class Waiter<T> {
   protected _wait: Promise<T>;
@@ -28,6 +29,7 @@ class Waiter<T> {
 
 export class MonacoServiceWrapper extends MonacoEditorRegisterAdapter {
   private initializeResult: Lsp.InitializeResult<any>;
+  private selector = [this.languageId];
   constructor(
     public _monaco: TMonaco,
     public service: AvsLanguageService,
@@ -115,7 +117,7 @@ export class MonacoServiceWrapper extends MonacoEditorRegisterAdapter {
 
   addCompletionHandler() {
     this.languages.registerCompletionItemProvider(
-      [this.languageId],
+      this.selector,
       {
         provideCompletionItems: this.bind(this.service.doProvideCompletionItems),
         resolveCompletionItem: async (item, token) => {
@@ -125,39 +127,66 @@ export class MonacoServiceWrapper extends MonacoEditorRegisterAdapter {
       },
       ...(this.initializeResult.capabilities.completionProvider.triggerCharacters || [])
     );
-    this.languages.registerInlineCompletionItemProvider([this.languageId], {
-      provideCompletionItems: this.bind(this.service.doProvideInlineCompletionItems),
+    this.languages.registerInlineCompletionItemProvider(this.selector, {
+      provideCompletionItems: this.bind(this.service.doProvideInlineCompletionItems, (result) => {
+        if (!result) return;
+        console.log("resolveInlineCompletions", result);
+        const { isIncomplete, items } = result;
+        if ((isIncomplete && items.length > 0) || items.length > 1) {
+          triggerCommand(COMMAND_ID.TriggerSuggest, { auto: true });
+          return;
+        }
+        return result;
+      }),
+    });
+    this.languages.registerSignatureHelpProvider(this.selector, {
+      provideSignatureHelp: this.bind(this.service.doProvideSignatureHelp),
     });
   }
 
   addFindReferencesHandler() {
-    this.languages.registerReferenceProvider([this.languageId], {
+    this.languages.registerReferenceProvider(this.selector, {
       provideReferences: this.bind(this.service.doFindReferences),
     });
   }
 
   addCodeActionHandler() {
     const providerOptions = this.initializeResult.capabilities.codeActionProvider;
-    this.languages.registerCodeActionsProvider([this.languageId], {
+    this.languages.registerCodeActionsProvider(this.selector, {
       ...(providerOptions instanceof Object ? providerOptions : {}),
       provideCodeActions: this.bind(this.service.doProvideCodeActions),
+    });
+    this.languages.registerOnTypeFormattingEditProvider(
+      this.selector,
+      {
+        provideOnTypeFormattingEdits: this.bind(this.service.doProvideOnTypeFormattingEdits),
+      },
+      "@"
+    );
+    this.languages.registerDocumentFormattingEditProvider(this.selector, {
+      provideDocumentFormattingEdits: this.bind(this.service.doProvideDocumentFormattingEdits),
+    });
+    this.languages.registerDocumentRangeFormattingEditProvider(this.selector, {
+      provideDocumentRangeFormattingEdits: this.bind(
+        this.service.doProvideDocumentRangeFormattingEdits
+      ),
     });
   }
 
   addDocumentSymbolHandler() {
-    this.languages.registerDocumentSymbolProvider([this.languageId], {
+    this.languages.registerDocumentSymbolProvider(this.selector, {
       provideDocumentSymbols: this.bind(this.service.doProvideDocumentSymbols),
     });
     const { semanticTokensProvider } = this.initializeResult.capabilities;
     if (semanticTokensProvider) {
       this.languages.registerDocumentSemanticTokensProvider(
-        [this.languageId],
+        this.selector,
         {
           provideDocumentSemanticTokens: this.bind(this.service.doDocumentSemanticTokens),
         },
         semanticTokensProvider.legend
       );
-      this.languages.registerLinkedEditingRangeProvider([this.languageId], {
+      this.languages.registerLinkedEditingRangeProvider(this.selector, {
         provideLinkedEditingRanges: async (params) => {
           // console.log('provideLinkedEditingRanges', params)
           const data = await this.service.doLinkedEditing(params);
@@ -166,7 +195,7 @@ export class MonacoServiceWrapper extends MonacoEditorRegisterAdapter {
         },
       });
       this.languages.registerDocumentRangeSemanticTokensProvider(
-        [this.languageId],
+        this.selector,
         {
           provideDocumentRangeSemanticTokens: this.bind(this.service.doDocumentSemanticTokens),
         },
@@ -175,34 +204,34 @@ export class MonacoServiceWrapper extends MonacoEditorRegisterAdapter {
     }
   }
   addGotoDefinitionHandler() {
-    this.languages.registerDefinitionProvider([this.languageId], {
+    this.languages.registerDefinitionProvider(this.selector, {
       provideDefinition: this.bind(this.service.doProvideDefinition),
     });
-    this.languages.registerTypeDefinitionProvider([this.languageId], {
+    this.languages.registerTypeDefinitionProvider(this.selector, {
       provideTypeDefinition: this.bind(this.service.doProvideDefinition),
     });
   }
 
   addDocumentHighlightsHandler() {
-    this.languages.registerDocumentHighlightProvider([this.languageId], {
+    this.languages.registerDocumentHighlightProvider(this.selector, {
       provideDocumentHighlights: this.bind(this.service.doProvideDocumentHighlights),
     });
   }
 
   addHoverHandler() {
-    this.languages.registerHoverProvider([this.languageId], {
+    this.languages.registerHoverProvider(this.selector, {
       provideHover: this.bind(this.service.doProvideHover),
     });
   }
 
   addFoldingRangeHandler() {
-    this.languages.registerFoldingRangeProvider([this.languageId], {
+    this.languages.registerFoldingRangeProvider(this.selector, {
       provideFoldingRanges: this.bind(this.service.doProvideFoldingRanges),
     });
   }
 
   addRenameHandler() {
-    this.languages.registerRenameProvider([this.languageId], {
+    this.languages.registerRenameProvider(this.selector, {
       provideRenameEdits: this.bind(this.service.doProvideRenameEdits),
       resolveRenameLocation: this.bind(this.service.doResolveRenameLocation),
     });
@@ -225,7 +254,15 @@ export class MonacoServiceWrapper extends MonacoEditorRegisterAdapter {
     }
   }
 
-  bind<Param extends IRequestParams, T extends (params: Param) => any>(target: T) {
+  bind<
+    Param extends IRequestParams,
+    T extends (params: Param) => any,
+    Result extends T extends (param: Param) => infer R
+      ? R extends Promise<infer Re>
+        ? Re
+        : R
+      : any
+  >(target: T, wrapResult?: (result: Result) => Result | void | undefined) {
     return (async (params: IRequestParams, cancelToken: Lsp.CancellationToken) => {
       if (
         !TextDocumentIdentifier.is(params.textDocument) ||
@@ -241,7 +278,7 @@ export class MonacoServiceWrapper extends MonacoEditorRegisterAdapter {
             target.call(this.service, params),
             cancelToken
           )) as any;
-          return result;
+          return wrapResult ? wrapResult(result) : result;
         }
       } catch (error) {
         console.error(error);

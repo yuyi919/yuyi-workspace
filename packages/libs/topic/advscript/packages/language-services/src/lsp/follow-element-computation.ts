@@ -182,6 +182,10 @@ export type FeatureRullCallValue = {
   feature: ast.RuleCall;
   kind: "RuleCall";
 };
+export type FeatureTerminalRuleCallValue = {
+  feature: ast.TerminalRuleCall;
+  kind: "TerminalRuleCall";
+};
 export type FeatureAssignmentValue = {
   feature: ast.Assignment;
   kind: "Assignment";
@@ -219,6 +223,7 @@ export type FeatureParserRule = {
 export type FeatureKeywordTypedValue =
   | FeatureKeywordValue
   | FeatureRullCallValue
+  | FeatureTerminalRuleCallValue
   | FeatureAssignmentValue
   | FeatureCrossReference
   | FeatureTerminalRule
@@ -226,7 +231,7 @@ export type FeatureKeywordTypedValue =
   | FeatureGroup
   | FeatureAlternatives
   | FeatureUnorderedGroup
-  | FeatureParserRule;
+  | FeatureParserRule
 export type FeatureValue = {
   name: string;
   stack: FeatureValue[];

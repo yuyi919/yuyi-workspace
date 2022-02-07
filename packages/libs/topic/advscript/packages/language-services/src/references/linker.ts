@@ -100,6 +100,7 @@ export class Linker extends DefaultLinker {
   getDescription(container: AstNode, refId: string, reference: Reference) {
     const scope = this.scopeProvider.getScope(container, refId);
     const queryName = this.nameProvider.getReferenceNodeName(refId, reference, container);
+    // console.log("getDescription", queryName, container, refId, reference.$refText);
     const docUri = getDocument(container).uri.toString();
     const currentOffset = container.$cstNode?.offset;
     if (docUri && isNotNaN(currentOffset)) {

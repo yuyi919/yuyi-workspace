@@ -11,7 +11,7 @@
     },
     {
       "name": "keyword.control.advscript",
-      "match": "\\b(a|Characters|false|Macros|s|true)\\b|\\B(\\|else|\\|elseif|\\|end|\\|if|\\|let)\\b"
+      "match": "\\b(Characters|false|Macros|true)\\b|\\B(\\|else|\\|elseif|\\|end|\\|if|\\|let)\\b"
     },
     {
       "name": "string.quoted.double.advscript",

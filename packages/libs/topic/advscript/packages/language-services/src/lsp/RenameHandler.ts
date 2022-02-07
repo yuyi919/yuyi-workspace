@@ -7,7 +7,7 @@ import { ReferenceFinder } from "./ReferenceFinder";
 export class RenameHandler extends DefaultRenameHandler {
   declare referenceFinder: ReferenceFinder;
 
-  async linkedEditingLocation(
+  async linkedEditingLocationDebug(
     document: LangiumDocument,
     params: Lsp.LinkedEditingRangeParams
   ): Promise<Lsp.Location[] | undefined> {
@@ -20,13 +20,26 @@ export class RenameHandler extends DefaultRenameHandler {
     }
     return references;
   }
+  async linkedEditingLocation(
+    document: LangiumDocument,
+    params: Lsp.LinkedEditingRangeParams
+  ): Promise<Lsp.Location[] | undefined> {
+    const references = await this.referenceFinder.findNameReferences2(document, {
+      ...params,
+      context: { includeDeclaration: true },
+    }, true);
+    if (!Array.isArray(references) || !references.length) {
+      return undefined;
+    }
+    return references;
+  }
 
   async renameElement(
     document: LangiumDocument,
     params: Lsp.RenameParams
   ): Promise<Lsp.WorkspaceEdit | undefined> {
     const changes: Record<string, TextEdit[]> = {};
-    const references = await this.linkedEditingLocation(document, params);
+    const references = await this.linkedEditingLocationDebug(document, params);
     if (references) {
       references.forEach((location) => {
         const change = TextEdit.replace(location.range, params.newName);

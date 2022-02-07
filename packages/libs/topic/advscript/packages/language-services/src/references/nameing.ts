@@ -1,20 +1,30 @@
+import { timeStamp } from "console";
 import {
   AstNode,
   CrossReference,
   CstNode,
   DefaultNameProvider,
   findNodeForFeature,
+  isAstNode,
   isReference,
   Reference,
 } from "langium";
 import { AdvScriptServices } from "../advscript-module";
 import * as ast from "../ast-utils";
+import { Trie } from "../libs";
+import { toConstMap } from "../_utils";
 
 export class NameProvider extends DefaultNameProvider {
   reflection: ast.AdvScriptAstReflection;
+  nestRefs: Trie.Trie;
   constructor(services: AdvScriptServices) {
     super();
     this.reflection = services.shared.AstReflection;
+    this.nestRefs = Trie.fromKeysList([
+      [ast.Param, ast.Macro],
+      [ast.Param, ast.Character],
+      [ast.Modifier, ast.Character],
+    ]);
   }
 
   getReferenceName(refId: ast.AdvScriptAstReference | ({} & string), reference: Reference) {
@@ -36,36 +46,18 @@ export class NameProvider extends DefaultNameProvider {
     container: AstNode
   ) {
     const refType = this.reflection.getReferenceType(refId as ast.AdvScriptAstReference);
-    const key: string = this.isIdentifierRef(refType)
-      ? "name"
-      : this.getReferenceName(refId, reference);
-    let containerKey: string = "";
-    if (ast.isDialog(container)) {
-      containerKey = `(${ast.Character})` + reference.$refText;
+    const astNodes =
+      this.isNamedRefNode(container) || this.isIdentifierRef(refType)
+        ? this.getQualifiedNameStack(container.$container, container)
+        : this.getQualifiedNameStack(container, this.getReferenceName(refId, reference));
+    if (astNodes.length) {
+      let index = 0,
+        result = this.getNameStackItemName(astNodes[0], false);
+      while (++index < astNodes.length) {
+        result += "." + this.getNameStackItemName(astNodes[index], false);
+      }
+      return result;
     }
-    if (ast.isMacro(container)) {
-      containerKey = `(${ast.Character})` + reference.$refText;
-    }
-    if (ast.isModifierRef(container)) {
-      containerKey = `(${ast.Character})` + container.$container.ref.$refText;
-    }
-    if (ast.isAtInline(container)) {
-      containerKey = `(${ast.Character})` + container.ref.$refText;
-    }
-    if (ast.isMacroParam(container) && refType === ast.Param) {
-      containerKey = `(${ast.Macro})` + container.$container.ref.$refText;
-    }
-    if (ast.isQualifiedName(container)) {
-      containerKey = container.name
-        .slice(0, container.name.indexOf(reference as Reference<ast.Identifier>))
-        .map((name) => name.$refText)
-        .join(".");
-    }
-    const name = Array.from(new Set([containerKey, key]))
-      .filter(Boolean)
-      .join(".");
-    // console.log("getReferenceNodeName: " + refType + "=>" + name, reference);
-    return name;
   }
 
   isNamedRefNode(node: unknown): node is AstNode & { ref: Reference<AstNode> } {
@@ -73,18 +65,22 @@ export class NameProvider extends DefaultNameProvider {
   }
 
   getName(node: AstNode | Reference | string): string | undefined {
-    return this.getNameWith(node, true);
+    const name = this.getNameWith(node, true);
+    return name;
+  }
+  getNameID(node: AstNode | Reference | string): string | undefined {
+    return this.getNameWith(node);
+  }
+  getPlainName(node: AstNode | Reference | string): string | undefined {
+    // console.log("getName: ", this.getNameWith(node, true));
+    return this.getNameID(node);
   }
   getDisplayName(node: AstNode | Reference | string): string | undefined {
     if (ast.isDialog(node)) return this.getDialogName(node);
     if (ast.isAction(node)) return this.getActionName(node);
     if (ast.isAtInline(node)) return this.getAtName(node);
     if (ast.isLogicStatment(node)) return node.$cstNode.text;
-    return this.getNameWith(node);
-  }
-
-  getInputText(node: AstNode | Reference | string): string | undefined {
-    return this.getNameWith(node);
+    return this.getNameID(node);
   }
 
   getDialogName(node: ast.Dialog): string {
@@ -96,68 +92,156 @@ export class NameProvider extends DefaultNameProvider {
   getActionName(node: ast.Action): string {
     return `@: ${node.$cstNode.text}`;
   }
+
   protected getNameWith(
     node: AstNode | Reference | string,
     typed = false,
     container?: AstNode
   ): string | undefined {
     if (!node) return;
-    if (typeof node === "string") {
-      return node;
-    }
-    if (isReference(node)) {
-      return this._getTypeName(node, typed, container) + node.$refText;
-    }
-    if (this.isNamedRefNode(node)) {
-      return this.getNameWith(node.ref, typed, node);
-    }
-    if (ast.isIdentifierNode(node)) {
-      return ast.getIdentifierNodeName(node);
-    }
-    if (ast.isQualifiedName(node)) {
-      return node.name.map((name) => this.getNameWith(name, typed, node)).join(".");
-    }
-    if (this.isNamed(node)) {
-      return this._getTypeName(node.$type, typed) + this.getNameWith(node.name, typed, node);
-    }
-    return super.getName(node);
+    return this.getNamesWith(
+      node,
+      (node, container) => {
+        if (typeof node === "string") {
+          return node;
+        }
+        if (isReference(node)) {
+          return (
+            (typed ? this.getNameWithStackItemType(node, container, false) : "") + node.$refText
+          );
+        }
+        if (this.isNamedRefNode(node)) {
+          return this.getNameWith(node.ref, typed, node);
+        }
+        if (ast.isIdentifierNode(node)) {
+          return ast.getIdentifierNodeName(node);
+        }
+        if (this.isNamed(node)) {
+          return (
+            (typed ? this.getNameWithStackItemType(node.$type, container) : "") +
+            this.getNameWith(node.name, typed, node)
+          );
+        }
+        return super.getName(node);
+      },
+      container
+    )?.join(".");
   }
 
-  private _getTypeName(
+  getNameStackItemName(search: NameStackItem, refPrefix: boolean) {
+    let r = search.name;
+    if (search.type) {
+      for (const type of search.type) {
+        r = this.getNameWithStackItemType(type, refPrefix) + r;
+      }
+    }
+    return r;
+  }
+
+  getNameStack(node: AstNode | Reference | string, container?: AstNode): NameStackItem[] {
+    if (!node) return;
+    return this.getNamesWith(
+      node,
+      (node, container) => {
+        if (typeof node === "string") {
+          return { name: node, type: [] };
+        }
+        if (this.isGroupType(node)) return;
+        if (isReference(node)) {
+          const type = this.getNameStackItemType(node, container);
+          return {
+            name: node.$refText,
+            type: [type],
+          };
+        }
+        if (this.isNamedRefNode(node)) {
+          return this.getNameStack(node.ref, node);
+        }
+        if (ast.isIdentifierNode(node)) {
+          return this.getNameStack(ast.getIdentifierNodeName(node));
+        }
+        if (this.isNamed(node)) {
+          const type = this.getNameStackItemType(node, container);
+          const stack = this.getNameStack(node.name, node);
+          if (stack) {
+            const [last, ...prev] = stack;
+            return [{ ...last, type: last.type ? [type, ...last.type] : [type] }, ...prev];
+          }
+          return [];
+        }
+        return this.getNameStack(super.getName(node));
+      },
+      container
+    );
+  }
+
+  protected getNamesWith<T>(
+    node: AstNode | Reference | string,
+    warp: (name: AstNode | Reference | string, container?: AstNode) => T | T[],
+    container?: AstNode
+  ): T[] | undefined {
+    if (!node) return [];
+    let name: T | T[];
+    if (isReference(node)) {
+      name = warp(node, container);
+    } else if (ast.isQualifiedName(node)) {
+      return node.name.flatMap((name) => this.getNamesWith(name, warp, node) || []);
+    } else {
+      name = warp(node, isReference(node) && container);
+    }
+    return name ? (name instanceof Array ? name : [name]) : void 0;
+  }
+
+  private getNameWithStackItemType(type: NameStackItemType, refPrefix?: boolean): string;
+  private getNameWithStackItemType(
     node: string | AstNode | Reference,
-    typed?: boolean,
-    container?: string | AstNode
+    container?: string | AstNode,
+    refPrefix?: boolean
+  ): string;
+  private getNameWithStackItemType(
+    node: NameStackItemType | string | AstNode | Reference,
+    container?: string | AstNode | boolean,
+    refPrefix?: boolean
   ) {
+    const { source, target } = isNameStackItemType(node)
+      ? node
+      : this.getNameStackItemType(node, container as string | AstNode);
+    return `(${
+      (refPrefix || container) === true && source !== target ? target + "::" + source : source
+    })`;
+  }
+
+  private getNameStackItemType(
+    node: string | AstNode | Reference,
+    container?: string | AstNode
+  ): NameStackItemType {
     if (isReference(node)) node = (node.$refNode.feature as CrossReference).type.$refText;
     if (typeof node !== "string") node = node.$type;
     if (container && typeof container !== "string") container = container.$type;
-    return typed ? `(${[container, node].filter(Boolean).join("::")})` : "";
+    return { target: (container as string) || node, source: node };
+  }
+
+  /**
+   * 是否为虚拟分组类型的节点
+   * @param node
+   */
+  protected isGroupType(node: AstNode | Reference<AstNode>) {
+    const type = isReference(node)
+      ? (node.$refNode.feature as CrossReference).type.$refText
+      : typeof node !== "string"
+      ? node.$type
+      : node;
+    return this.reflection.isSubtype(type, ast.Declare);
   }
 
   isNamed(node: AstNode): node is ast.NamedNode {
     const { name } = node as any;
     return isReference(name) || ast.isIdentifierNode(name) || typeof name === "string";
   }
-  isNamedSourceNode(node: AstNode): node is ast.NamedSourceNode {
-    const { name } = node as any;
-    return ast.isIdentifierNode(name) || typeof name === "string";
-  }
 
   isNamedWithIdentifier(node: AstNode): node is ast.IdentifierNamedNode {
     const { name } = node as any;
     return ast.isIdentifierNode(name);
-  }
-
-  getNameNode(node: AstNode) {
-    if (ast.isAction(node)) {
-      return node.$cstNode;
-    }
-    return (
-      this.getIdentifierNameFeature(node) ||
-      findNodeForFeature(node.$cstNode, "kind") ||
-      findNodeForFeature(node.$cstNode, "name") ||
-      findNodeForFeature(node.$cstNode, "ref")
-    );
   }
 
   getIdentifierNameFeature(node: AstNode): CstNode {
@@ -176,26 +260,100 @@ export class NameProvider extends DefaultNameProvider {
    * @param name simple name
    * @returns qualified name separated by `.`
    */
-  getQualifiedName(
-    qualifier: ast.Character | ast.Modifier | ast.Macro | AstNode | string,
-    name: string | AstNode
-  ): string {
-    let prefix = qualifier;
-    if (this.isDeepElementNode(qualifier)) {
-      prefix = this.isDeepPathedNode(qualifier.$container)
-        ? this.getQualifiedName(qualifier.$container, this.getName(qualifier)!)
-        : this.getName(qualifier)!;
+  getQualifiedName(qualifier: AstNode | string, name: AstNode | string): string {
+    const astNodes = this.getQualifiedNameStack(qualifier, name);
+    if (astNodes.length) {
+      let index = 0,
+        result = this.getNameStackItemName(astNodes[0], true);
+      while (++index < astNodes.length) {
+        result += "." + this.getNameStackItemName(astNodes[index], true);
+      }
+      return result;
     }
-    const container = typeof prefix === "string" ? prefix : "";
-    return [container, ast.isIdentifierNode(name) ? "name" : this.getName(name)]
-      .filter(Boolean)
-      .join(".");
   }
 
-  isDeepPathedNode(target: AstNode): target is ast.CharactersDeclare | ast.MacroDeclare {
-    return ast.isCharactersDeclare(target) || ast.isMacroDeclare(target);
+  /**
+   * @param qualifier if the qualifier is a `string`, simple string concatenation is done: `qualifier.name`.
+   *      if the qualifier is a `PackageDeclaration` fully qualified name is created: `package1.package2.name`.
+   * @param name simple name
+   * @returns qualified name separated by `.`
+   */
+  getQualifiedNameStack(qualifier: AstNode | string, name: AstNode | string) {
+    // console.log(
+    //   "getQualifiedNameStack",
+    //   this._getQualifiedName(qualifier, name, (node) => node)
+    // );
+    let tree: Trie.Trie = this.nestRefs;
+    const list = this._getQualifiedNamedNodeStack(qualifier, name, (node) => node);
+    const result = [] as NameStackItem[];
+    for (let i = list.length - 1; i > -1; i--) {
+      const node = list[i];
+      const types = node && this.getNameStack(node);
+      if (types?.length > 0) {
+        const searched = types[0];
+        if (searched) {
+          tree =
+            tree && searched?.type?.map((o) => Trie.findNext(tree, o.source)).filter(Boolean)[0];
+          if (result.length > 0 && !tree) {
+            return result;
+          }
+          result.unshift(searched);
+        }
+      }
+    }
+    return result;
   }
-  isDeepElementNode(target: AstNode | string): target is ast.Character | ast.Modifier | ast.Macro {
-    return ast.isCharacter(target) || ast.isModifier(target) || ast.isMacro(target);
+
+  _getQualifiedNamedNodeStack<T>(
+    qualifier: T | AstNode,
+    name: T | AstNode,
+    wrap: (node: T | AstNode) => T | AstNode
+  ): (false | T | AstNode)[] {
+    const result = [] as (false | T | AstNode)[];
+    if (isAstNode(qualifier)) {
+      do {
+        while (this.isGroupType(qualifier)) {
+          qualifier = qualifier.$container;
+        }
+        if (qualifier) {
+          result.unshift(wrap(qualifier));
+        }
+      } while (qualifier && (qualifier = qualifier.$container));
+    } else {
+      result.unshift(wrap(qualifier));
+    }
+    if (!ast.isIdentifierNode(name)) {
+      const next = wrap(name);
+      result.push(next);
+    }
+    return result;
   }
+
+  namedReferenceFeatures = toConstMap(["ref"]);
+  getNameNode(node: AstNode) {
+    if (ast.isAction(node)) {
+      return node.$cstNode;
+    }
+    return (
+      this.getIdentifierNameFeature(node) ||
+      findNodeForFeature(node.$cstNode, "kind") ||
+      findNodeForFeature(node.$cstNode, "name") ||
+      Object.keys(this.namedReferenceFeatures)
+        .map((key) => findNodeForFeature(node.$cstNode, key))
+        .filter(Boolean)[0]
+    );
+  }
+}
+
+export type NameStackItem = {
+  name: string;
+  type?: NameStackItemType[];
+};
+
+export type NameStackItemType = {
+  target: string;
+  source: string;
+};
+function isNameStackItemType(o: unknown): o is NameStackItemType {
+  return typeof o["target"] === "string" && typeof o["source"] === "string";
 }

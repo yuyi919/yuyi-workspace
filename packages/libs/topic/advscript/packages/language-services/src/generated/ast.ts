@@ -19,7 +19,7 @@ export function isBlock(item: unknown): item is Block {
 }
 
 export interface Call extends AstNode {
-    readonly $container: Dialog | Content | Label;
+    readonly $container: Dialog | DialogContent | Label;
 }
 
 export const Call = 'Call';
@@ -28,41 +28,8 @@ export function isCall(item: unknown): item is Call {
     return reflection.isInstance(item, Call);
 }
 
-export interface Call2 extends AstNode {
-    readonly $container: Dialog | Content | Label;
-}
-
-export const Call2 = 'Call2';
-
-export function isCall2(item: unknown): item is Call2 {
-    return reflection.isInstance(item, Call2);
-}
-
-export interface Call3 extends AstNode {
-    readonly $container: Dialog | Content | Label;
-}
-
-export const Call3 = 'Call3';
-
-export function isCall3(item: unknown): item is Call3 {
-    return reflection.isInstance(item, Call3);
-}
-
-export interface Character extends AstNode {
-    readonly $container: CharactersDeclare;
-    elements: Array<Param>
-    modifiers: Array<Modifier>
-    name: NameIdentifier
-}
-
-export const Character = 'Character';
-
-export function isCharacter(item: unknown): item is Character {
-    return reflection.isInstance(item, Character);
-}
-
 export interface CharacterRef extends AstNode {
-    readonly $container: Macro;
+    readonly $container: ModifierList_Macro;
     ref: Reference<Character>
 }
 
@@ -82,19 +49,6 @@ export function isConditionBlock(item: unknown): item is ConditionBlock {
     return reflection.isInstance(item, ConditionBlock);
 }
 
-export interface Content extends AstNode {
-    readonly $container: StoryBlock;
-    content: Array<Template | Call | ESCToken | Plain>
-    indent: CommonIndent
-    pipe: Pipe
-}
-
-export const Content = 'Content';
-
-export function isContent(item: unknown): item is Content {
-    return reflection.isInstance(item, Content);
-}
-
 export interface Declare extends AstNode {
     readonly $container: TitlePage | Block;
 }
@@ -105,6 +59,32 @@ export function isDeclare(item: unknown): item is Declare {
     return reflection.isInstance(item, Declare);
 }
 
+export interface DeclareItem_Character extends AstNode {
+    readonly $container: CharactersDeclare;
+    elements: Array<Param>
+    modifiers: ModifierList_Character
+    name: NameIdentifier
+}
+
+export const DeclareItem_Character = 'DeclareItem_Character';
+
+export function isDeclareItem_Character(item: unknown): item is DeclareItem_Character {
+    return reflection.isInstance(item, DeclareItem_Character);
+}
+
+export interface DeclareItem_Macro extends AstNode {
+    readonly $container: MacroDeclare;
+    elements: Array<Param>
+    modifiers: ModifierList_Macro
+    name: Identifier
+}
+
+export const DeclareItem_Macro = 'DeclareItem_Macro';
+
+export function isDeclareItem_Macro(item: unknown): item is DeclareItem_Macro {
+    return reflection.isInstance(item, DeclareItem_Macro);
+}
+
 export interface DeclareKind extends AstNode {
     readonly $container: CharactersDeclare | MacroDeclare | OtherDeclare;
 }
@@ -113,6 +93,19 @@ export const DeclareKind = 'DeclareKind';
 
 export function isDeclareKind(item: unknown): item is DeclareKind {
     return reflection.isInstance(item, DeclareKind);
+}
+
+export interface DialogContent extends AstNode {
+    readonly $container: Action | Dialog;
+    content: Array<Template | Call | ESCToken | Plain>
+    indent: CommonIndent
+    pipe: Pipe
+}
+
+export const DialogContent = 'DialogContent';
+
+export function isDialogContent(item: unknown): item is DialogContent {
+    return reflection.isInstance(item, DialogContent);
 }
 
 export interface Document extends AstNode {
@@ -160,9 +153,19 @@ export function isElseStatement(item: unknown): item is ElseStatement {
     return reflection.isInstance(item, ElseStatement);
 }
 
+export interface EndStatement extends AstNode {
+    kind: '|end'
+}
+
+export const EndStatement = 'EndStatement';
+
+export function isEndStatement(item: unknown): item is EndStatement {
+    return reflection.isInstance(item, EndStatement);
+}
+
 export interface ESCToken extends AstNode {
-    readonly $container: Content;
-    content: Token_Bracket_L
+    readonly $container: DialogContent;
+    content: Token_Bracket_L | Token_Bracket_R | Token_Template_L | Token_Template_R
 }
 
 export const ESCToken = 'ESCToken';
@@ -172,7 +175,7 @@ export function isESCToken(item: unknown): item is ESCToken {
 }
 
 export interface Identifier extends AstNode {
-    readonly $container: Macro | Param;
+    readonly $container: Param | DeclareItem_Macro;
     text: string
 }
 
@@ -262,19 +265,6 @@ export function isLogicStatment(item: unknown): item is LogicStatment {
     return reflection.isInstance(item, LogicStatment);
 }
 
-export interface Macro extends AstNode {
-    readonly $container: MacroDeclare;
-    elements: Array<Param>
-    modifiers: Array<CharacterRef>
-    name: Identifier
-}
-
-export const Macro = 'Macro';
-
-export function isMacro(item: unknown): item is Macro {
-    return reflection.isInstance(item, Macro);
-}
-
 export interface MacroParam extends AstNode {
     readonly $container: CallMacro | MacroPipe;
     ref: Reference<Param>
@@ -288,7 +278,7 @@ export function isMacroParam(item: unknown): item is MacroParam {
 }
 
 export interface Modifier extends AstNode {
-    readonly $container: Character;
+    readonly $container: ModifierList_Character;
     name: NameIdentifier
 }
 
@@ -298,8 +288,41 @@ export function isModifier(item: unknown): item is Modifier {
     return reflection.isInstance(item, Modifier);
 }
 
-export interface ModifierRef extends AstNode {
+export interface ModifierList_Character extends AstNode {
+    readonly $container: DeclareItem_Character;
+    elements: Array<Modifier>
+}
+
+export const ModifierList_Character = 'ModifierList_Character';
+
+export function isModifierList_Character(item: unknown): item is ModifierList_Character {
+    return reflection.isInstance(item, ModifierList_Character);
+}
+
+export interface ModifierList_Dialog extends AstNode {
     readonly $container: Dialog;
+    elements: Array<ModifierRef>
+}
+
+export const ModifierList_Dialog = 'ModifierList_Dialog';
+
+export function isModifierList_Dialog(item: unknown): item is ModifierList_Dialog {
+    return reflection.isInstance(item, ModifierList_Dialog);
+}
+
+export interface ModifierList_Macro extends AstNode {
+    readonly $container: DeclareItem_Macro;
+    elements: Array<CharacterRef>
+}
+
+export const ModifierList_Macro = 'ModifierList_Macro';
+
+export function isModifierList_Macro(item: unknown): item is ModifierList_Macro {
+    return reflection.isInstance(item, ModifierList_Macro);
+}
+
+export interface ModifierRef extends AstNode {
+    readonly $container: ModifierList_Dialog;
     ref: Reference<Modifier>
 }
 
@@ -310,8 +333,8 @@ export function isModifierRef(item: unknown): item is ModifierRef {
 }
 
 export interface NameIdentifier extends AstNode {
-    readonly $container: Character | Modifier;
-    text: TextExpr
+    readonly $container: Modifier | DeclareItem_Character;
+    text: string
 }
 
 export const NameIdentifier = 'NameIdentifier';
@@ -321,7 +344,7 @@ export function isNameIdentifier(item: unknown): item is NameIdentifier {
 }
 
 export interface Param extends AstNode {
-    readonly $container: Character | Macro;
+    readonly $container: DeclareItem_Character | DeclareItem_Macro;
     name: Identifier
     value: ParamInitialExpression
 }
@@ -344,7 +367,7 @@ export function isParamInitialExpression(item: unknown): item is ParamInitialExp
 }
 
 export interface Pipe extends AstNode {
-    readonly $container: Content | CallMacro | Template;
+    readonly $container: CallMacro | Template | DialogContent;
 }
 
 export const Pipe = 'Pipe';
@@ -354,7 +377,7 @@ export function isPipe(item: unknown): item is Pipe {
 }
 
 export interface Plain extends AstNode {
-    readonly $container: Content;
+    readonly $container: DialogContent;
     content: PlainText
 }
 
@@ -396,7 +419,6 @@ export function isStatment(item: unknown): item is Statment {
 }
 
 export interface StoryBlock extends AstNode {
-    contents: Array<Content>
 }
 
 export const StoryBlock = 'StoryBlock';
@@ -406,7 +428,7 @@ export function isStoryBlock(item: unknown): item is StoryBlock {
 }
 
 export interface Template extends AstNode {
-    readonly $container: Content;
+    readonly $container: DialogContent;
     expression: Expression
     pipe: Pipe
 }
@@ -481,7 +503,7 @@ export function isAtInline(item: unknown): item is AtInline {
     return reflection.isInstance(item, AtInline);
 }
 
-export interface CallMacro extends Call, Call2, Call3 {
+export interface CallMacro extends Call {
     elements: Array<MacroParam>
     pipe: Pipe
     ref: Reference<Macro>
@@ -514,26 +536,8 @@ export function isMark(item: unknown): item is Mark {
     return reflection.isInstance(item, Mark);
 }
 
-export interface AtInline2 extends Call2 {
-}
-
-export const AtInline2 = 'AtInline2';
-
-export function isAtInline2(item: unknown): item is AtInline2 {
-    return reflection.isInstance(item, AtInline2);
-}
-
-export interface AtInline3 extends Call3 {
-}
-
-export const AtInline3 = 'AtInline3';
-
-export function isAtInline3(item: unknown): item is AtInline3 {
-    return reflection.isInstance(item, AtInline3);
-}
-
 export interface CharactersDeclare extends Declare {
-    elements: Array<Character>
+    elements: Array<DeclareItem_Character>
     name: CharactersDeclareKind
 }
 
@@ -544,7 +548,7 @@ export function isCharactersDeclare(item: unknown): item is CharactersDeclare {
 }
 
 export interface MacroDeclare extends Declare {
-    elements: Array<Macro>
+    elements: Array<DeclareItem_Macro>
     name: MacrosDeclareKind
 }
 
@@ -563,6 +567,24 @@ export const OtherDeclare = 'OtherDeclare';
 
 export function isOtherDeclare(item: unknown): item is OtherDeclare {
     return reflection.isInstance(item, OtherDeclare);
+}
+
+export interface Character extends DeclareItem_Character {
+}
+
+export const Character = 'Character';
+
+export function isCharacter(item: unknown): item is Character {
+    return reflection.isInstance(item, Character);
+}
+
+export interface Macro extends DeclareItem_Macro {
+}
+
+export const Macro = 'Macro';
+
+export function isMacro(item: unknown): item is Macro {
+    return reflection.isInstance(item, Macro);
 }
 
 export interface CharactersDeclareKind extends DeclareKind {
@@ -593,6 +615,15 @@ export const MacrosDeclareKind = 'MacrosDeclareKind';
 
 export function isMacrosDeclareKind(item: unknown): item is MacrosDeclareKind {
     return reflection.isInstance(item, MacrosDeclareKind);
+}
+
+export interface Content extends DialogContent {
+}
+
+export const Content = 'Content';
+
+export function isContent(item: unknown): item is Content {
+    return reflection.isInstance(item, Content);
 }
 
 export interface TextExpression extends ParamInitialExpression, InitialExpression {
@@ -635,6 +666,7 @@ export function isTextPipe(item: unknown): item is TextPipe {
 }
 
 export interface Action extends StoryBlock {
+    contents: Array<Content>
 }
 
 export const Action = 'Action';
@@ -644,8 +676,9 @@ export function isAction(item: unknown): item is Action {
 }
 
 export interface Dialog extends StoryBlock {
+    contents: Array<DialogContent>
     elements: Array<Call>
-    modifiers: Array<ModifierRef>
+    modifiers: ModifierList_Dialog
     ref: Reference<Character>
 }
 
@@ -849,13 +882,9 @@ export type PlainTextContnet = string
 
 export type CommonIndent = string
 
-export type EndStatement = string
-
 export type LabelContent = string
 
 export type PlainText = string
-
-export type Space = string
 
 export type RawText = string
 
@@ -863,7 +892,7 @@ export type RawTextPiece = string
 
 export type TOKEN_AT = string
 
-export type Token_P = string
+export type Token_Dot = string
 
 export type Token_Logic = string
 
@@ -882,8 +911,6 @@ export type Token_Template_R = string
 export type Token_LabelStart = string
 
 export type Escapse = string
-
-export type TextExpr = string
 
 export type Operator_Addition = string
 
@@ -935,14 +962,16 @@ export type Operator_Colon = string
 
 export type Operator_Relaction = string
 
-export type AdvScriptAstType = 'Block' | 'Call' | 'Call2' | 'Call3' | 'Character' | 'CharacterRef' | 'ConditionBlock' | 'Content' | 'Declare' | 'DeclareKind' | 'Document' | 'DocumentContents' | 'ElseIfStatement' | 'ElseStatement' | 'ESCToken' | 'Identifier' | 'IfStatement' | 'InitialExpression' | 'List' | 'LogicBlock_ELSE' | 'LogicBlock_IF' | 'LogicBlock_IFELSE' | 'LogicStatment' | 'Macro' | 'MacroParam' | 'Modifier' | 'ModifierRef' | 'NameIdentifier' | 'Param' | 'ParamInitialExpression' | 'Pipe' | 'Plain' | 'PlainTextExpression' | 'QualifiedName' | 'Statment' | 'StoryBlock' | 'Template' | 'TitlePage' | 'TopExpression' | 'Variable' | 'VariableIdentifier' | 'YamlBlock' | 'AtInline' | 'CallMacro' | 'Label' | 'Mark' | 'AtInline2' | 'AtInline3' | 'CharactersDeclare' | 'MacroDeclare' | 'OtherDeclare' | 'CharactersDeclareKind' | 'KeyedDeclareKind' | 'MacrosDeclareKind' | 'TextExpression' | 'VarStatement' | 'MacroPipe' | 'TextPipe' | 'Action' | 'Dialog' | 'Expression' | 'Addition' | 'Assign' | 'Comma' | 'Conditional' | 'LiteralExpression' | 'Logical_And' | 'Logical_Or' | 'Multiplication' | 'NullishCoalescing' | 'Power' | 'RefExpression' | 'Relaction' | 'BooleanLiteral' | 'NumberLiteral' | 'PercentLiteral' | 'StringLiteral';
+export type Space = string
+
+export type AdvScriptAstType = 'Block' | 'Call' | 'CharacterRef' | 'ConditionBlock' | 'Declare' | 'DeclareItem_Character' | 'DeclareItem_Macro' | 'DeclareKind' | 'DialogContent' | 'Document' | 'DocumentContents' | 'ElseIfStatement' | 'ElseStatement' | 'EndStatement' | 'ESCToken' | 'Identifier' | 'IfStatement' | 'InitialExpression' | 'List' | 'LogicBlock_ELSE' | 'LogicBlock_IF' | 'LogicBlock_IFELSE' | 'LogicStatment' | 'MacroParam' | 'Modifier' | 'ModifierList_Character' | 'ModifierList_Dialog' | 'ModifierList_Macro' | 'ModifierRef' | 'NameIdentifier' | 'Param' | 'ParamInitialExpression' | 'Pipe' | 'Plain' | 'PlainTextExpression' | 'QualifiedName' | 'Statment' | 'StoryBlock' | 'Template' | 'TitlePage' | 'TopExpression' | 'Variable' | 'VariableIdentifier' | 'YamlBlock' | 'AtInline' | 'CallMacro' | 'Label' | 'Mark' | 'CharactersDeclare' | 'MacroDeclare' | 'OtherDeclare' | 'Character' | 'Macro' | 'CharactersDeclareKind' | 'KeyedDeclareKind' | 'MacrosDeclareKind' | 'Content' | 'TextExpression' | 'VarStatement' | 'MacroPipe' | 'TextPipe' | 'Action' | 'Dialog' | 'Expression' | 'Addition' | 'Assign' | 'Comma' | 'Conditional' | 'LiteralExpression' | 'Logical_And' | 'Logical_Or' | 'Multiplication' | 'NullishCoalescing' | 'Power' | 'RefExpression' | 'Relaction' | 'BooleanLiteral' | 'NumberLiteral' | 'PercentLiteral' | 'StringLiteral';
 
 export type AdvScriptAstReference = 'CharacterRef:ref' | 'MacroParam:ref' | 'ModifierRef:ref' | 'QualifiedName:name' | 'AtInline:ref' | 'CallMacro:ref' | 'MacroPipe:ref' | 'Dialog:ref' | 'RefExpression:ref';
 
 export class AdvScriptAstReflection implements AstReflection {
 
     getAllTypes(): string[] {
-        return ['Block', 'Call', 'Call2', 'Call3', 'Character', 'CharacterRef', 'ConditionBlock', 'Content', 'Declare', 'DeclareKind', 'Document', 'DocumentContents', 'ElseIfStatement', 'ElseStatement', 'ESCToken', 'Identifier', 'IfStatement', 'InitialExpression', 'List', 'LogicBlock_ELSE', 'LogicBlock_IF', 'LogicBlock_IFELSE', 'LogicStatment', 'Macro', 'MacroParam', 'Modifier', 'ModifierRef', 'NameIdentifier', 'Param', 'ParamInitialExpression', 'Pipe', 'Plain', 'PlainTextExpression', 'QualifiedName', 'Statment', 'StoryBlock', 'Template', 'TitlePage', 'TopExpression', 'Variable', 'VariableIdentifier', 'YamlBlock', 'AtInline', 'CallMacro', 'Label', 'Mark', 'AtInline2', 'AtInline3', 'CharactersDeclare', 'MacroDeclare', 'OtherDeclare', 'CharactersDeclareKind', 'KeyedDeclareKind', 'MacrosDeclareKind', 'TextExpression', 'VarStatement', 'MacroPipe', 'TextPipe', 'Action', 'Dialog', 'Expression', 'Addition', 'Assign', 'Comma', 'Conditional', 'LiteralExpression', 'Logical_And', 'Logical_Or', 'Multiplication', 'NullishCoalescing', 'Power', 'RefExpression', 'Relaction', 'BooleanLiteral', 'NumberLiteral', 'PercentLiteral', 'StringLiteral'];
+        return ['Block', 'Call', 'CharacterRef', 'ConditionBlock', 'Declare', 'DeclareItem_Character', 'DeclareItem_Macro', 'DeclareKind', 'DialogContent', 'Document', 'DocumentContents', 'ElseIfStatement', 'ElseStatement', 'EndStatement', 'ESCToken', 'Identifier', 'IfStatement', 'InitialExpression', 'List', 'LogicBlock_ELSE', 'LogicBlock_IF', 'LogicBlock_IFELSE', 'LogicStatment', 'MacroParam', 'Modifier', 'ModifierList_Character', 'ModifierList_Dialog', 'ModifierList_Macro', 'ModifierRef', 'NameIdentifier', 'Param', 'ParamInitialExpression', 'Pipe', 'Plain', 'PlainTextExpression', 'QualifiedName', 'Statment', 'StoryBlock', 'Template', 'TitlePage', 'TopExpression', 'Variable', 'VariableIdentifier', 'YamlBlock', 'AtInline', 'CallMacro', 'Label', 'Mark', 'CharactersDeclare', 'MacroDeclare', 'OtherDeclare', 'Character', 'Macro', 'CharactersDeclareKind', 'KeyedDeclareKind', 'MacrosDeclareKind', 'Content', 'TextExpression', 'VarStatement', 'MacroPipe', 'TextPipe', 'Action', 'Dialog', 'Expression', 'Addition', 'Assign', 'Comma', 'Conditional', 'LiteralExpression', 'Logical_And', 'Logical_Or', 'Multiplication', 'NullishCoalescing', 'Power', 'RefExpression', 'Relaction', 'BooleanLiteral', 'NumberLiteral', 'PercentLiteral', 'StringLiteral'];
     }
 
     isInstance(node: unknown, type: string): boolean {
@@ -958,28 +987,29 @@ export class AdvScriptAstReflection implements AstReflection {
                 return this.isSubtype(Block, supertype);
             }
             case AtInline:
+            case CallMacro:
             case Label:
             case Mark: {
                 return this.isSubtype(Call, supertype);
-            }
-            case CallMacro: {
-                return this.isSubtype(Call, supertype) || this.isSubtype(Call2, supertype) || this.isSubtype(Call3, supertype);
-            }
-            case AtInline2: {
-                return this.isSubtype(Call2, supertype);
-            }
-            case AtInline3: {
-                return this.isSubtype(Call3, supertype);
             }
             case CharactersDeclare:
             case MacroDeclare:
             case OtherDeclare: {
                 return this.isSubtype(Declare, supertype);
             }
+            case Character: {
+                return this.isSubtype(DeclareItem_Character, supertype);
+            }
+            case Macro: {
+                return this.isSubtype(DeclareItem_Macro, supertype);
+            }
             case CharactersDeclareKind:
             case KeyedDeclareKind:
             case MacrosDeclareKind: {
                 return this.isSubtype(DeclareKind, supertype);
+            }
+            case Content: {
+                return this.isSubtype(DialogContent, supertype);
             }
             case TextExpression: {
                 return this.isSubtype(ParamInitialExpression, supertype) || this.isSubtype(InitialExpression, supertype);

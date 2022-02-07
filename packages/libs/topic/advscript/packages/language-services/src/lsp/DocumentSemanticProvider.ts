@@ -11,7 +11,7 @@ import {
 import type * as Lsp from "vscode-languageserver-protocol";
 import { AdvScriptServices } from "../advscript-module";
 import * as ast from "../ast-utils";
-import { enum2Array, flattenCstGen, isCompositeCstNode } from "../_utils";
+import * as _utils from "../_utils";
 
 enum TTokenTypes {
   "comment",
@@ -37,7 +37,7 @@ enum TTokenModifiers {
 // const a = true
 const TOKEN_LEGEND = Object.freeze({
   tokenTypes: TTokenTypes,
-  tokenModifiers: enum2Array(TTokenModifiers),
+  tokenModifiers: _utils.enum2Array(TTokenModifiers),
 });
 
 export type TokenTypes = keyof typeof TTokenTypes;
@@ -84,10 +84,10 @@ export class DocumentSemanticProvider {
     //   ...streamCst(node.$cstNode).map((o) => [o.text, findRelevantNode(o), o]),
     // ]);
     const { $cstNode } = value.header;
-    for (const cst of flattenCstGen($cstNode)) {
+    for (const cst of _utils.flattenCstGen($cstNode)) {
       if (cst.offset !== cst.offset || cst.end !== cst.end) break;
       if (range && cst.range.end.line > range.end.line) break;
-      if (isCompositeCstNode(cst)) {
+      if (_utils.isCompositeCstNode(cst)) {
         if (isCrossReference(cst.feature)) {
           current = cst;
           if (isLinkingError(this.services.references.Linker.getCandidateWithCache(cst))) {
@@ -98,8 +98,12 @@ export class DocumentSemanticProvider {
           // console.log("ref", cst.element, cst, cst.text);
         }
       } else {
-        if (cst.tokenType.name === "WS" || cst.tokenType.name === "EOL") continue;
-        if (ast.isTitlePage(cst.element) && /^Token_/.test(cst.tokenType.name)) {
+        if (_utils.isWhiteSpaceNode(cst) || _utils.isEOLNode(cst)) continue;
+        if (
+          ast.isTitlePage(cst.element) &&
+          _utils.isLeafCstNode(cst) &&
+          /^Token_/.test(cst.tokenType.name)
+        ) {
           // console.log("term token", astNode, leafCst, leafCst.text);
           current = cst;
           match = TTokenTypes["keyword.operator"];

@@ -111,6 +111,10 @@
       "allowedCategories": [ "production" ]
     },
     {
+      "name": "@typed-macro/core",
+      "allowedCategories": [ "production" ]
+    },
+    {
       "name": "@typescript-eslint/eslint-plugin",
       "allowedCategories": [ "tools" ]
     },
@@ -355,6 +359,10 @@
       "allowedCategories": [ "production" ]
     },
     {
+      "name": "commander",
+      "allowedCategories": [ "production" ]
+    },
+    {
       "name": "comment-json",
       "allowedCategories": [ "production" ]
     },
@@ -476,6 +484,14 @@
     },
     {
       "name": "jss-preset-default",
+      "allowedCategories": [ "production" ]
+    },
+    {
+      "name": "jssm",
+      "allowedCategories": [ "production" ]
+    },
+    {
+      "name": "jssm-viz",
       "allowedCategories": [ "production" ]
     },
     {
@@ -724,6 +740,10 @@
     },
     {
       "name": "vite-plugin-imp",
+      "allowedCategories": [ "production" ]
+    },
+    {
+      "name": "vite-plugin-macro",
       "allowedCategories": [ "production" ]
     },
     {

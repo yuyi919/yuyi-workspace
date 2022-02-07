@@ -7,3 +7,7 @@ export * from "./customTokens";
 export * from "./ast-utils";
 export * from "./lsp";
 export * from "./_utils";
+export { COMMAND_ID } from "./_lsp";
+export { generateNode } from "./cli/generateNode";
+import * as O from "./libs";
+Object.assign(globalThis, O);

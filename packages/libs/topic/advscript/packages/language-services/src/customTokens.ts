@@ -12,17 +12,18 @@ import { Grammar } from "langium";
 import { DefaultTokenBuilder, TokenBuilder } from "langium/lib/parser/token-builder";
 import { TokenTypeWrapper, cloneTokens } from "./_utils";
 import { partialRight, last, isEmpty, findLastIndex } from "lodash";
+import * as ast from "./ast";
 
 export class CustomTokenBuilder extends DefaultTokenBuilder implements TokenBuilder {
   buildTokens(grammar: Grammar): TokenType[] {
     const tokens = super.buildTokens(grammar);
-    console.log("CustomTokenBuilder", grammar)
+    console.log("CustomTokenBuilder", grammar);
     return tokens
       .map((token) => {
-        if (token.name === "EOL") {
+        if (token.name === ast.EOL) {
           return this.wrapEOL(token);
         }
-        if (token.name === "OTHER") {
+        if (token.name === ast.OTHER) {
           console.log(token);
           const PATTERN = token.PATTERN as RegExp;
           const pattern =
@@ -32,7 +33,7 @@ export class CustomTokenBuilder extends DefaultTokenBuilder implements TokenBuil
             PATTERN(text, offset, tokens) {
               const last = tokens[tokens.length - 1];
               const result = new RegExp(pattern.source, "y").exec(text.slice(offset));
-              // if (result && last.tokenType.name === "OTHER") {
+              // if (result && last.tokenType.name === ast.OTHER) {
               //   last.endColumn += result[0].length;
               //   last.endColumn += result[0].length;
               //   last.endOffset += result[0].length;
@@ -48,16 +49,16 @@ export class CustomTokenBuilder extends DefaultTokenBuilder implements TokenBuil
           });
         } else {
           if (token.LONGER_ALT instanceof Array) {
-            token.LONGER_ALT = token.LONGER_ALT.filter((token) => token.name !== "OTHER");
+            token.LONGER_ALT = token.LONGER_ALT.filter((token) => token.name !== ast.OTHER);
           }
         }
         return token;
       })
       .sort((o, b) => {
-        if (o.name === "OTHER") {
+        if (o.name === ast.OTHER) {
           return 1;
         }
-        if (b.name === "OTHER") {
+        if (b.name === ast.OTHER) {
           return -1;
         }
         if (o.name === "Escapse") {
@@ -90,6 +91,7 @@ export class CustomTokenBuilder extends DefaultTokenBuilder implements TokenBuil
     }
     return !!reg.exec(text, offset, tokens, groups);
   }
+  
   execAt(
     reg: TokenPattern,
     text: string,
@@ -126,7 +128,7 @@ export class CustomTokenBuilder extends DefaultTokenBuilder implements TokenBuil
     offset,
     tokens,
     groups,
-    type?: "indent" | "outdent"
+    type?: typeof ast.Indent | typeof ast.Outdent
   ) => {
     const { currIndentLevel, match, prevIndentLevel, lastToken } = this.getIndentLevel(
       tokens,
@@ -137,7 +139,7 @@ export class CustomTokenBuilder extends DefaultTokenBuilder implements TokenBuil
       // deeper indentation
       if (
         currIndentLevel > prevIndentLevel &&
-        type === "indent" &&
+        type === ast.Indent &&
         this.matchLastLogic(tokens, lastToken) &&
         !this.testAt(/^\r?\n/, text, offset + currIndentLevel, tokens, groups)
       ) {
@@ -145,7 +147,7 @@ export class CustomTokenBuilder extends DefaultTokenBuilder implements TokenBuil
         return match;
       }
       // shallower indentation
-      else if (currIndentLevel < prevIndentLevel && type === "outdent") {
+      else if (currIndentLevel < prevIndentLevel && type === ast.Outdent) {
         const matchIndentIndex = findLastIndex(
           this.indentStack,
           (stackIndentDepth) => stackIndentDepth === currIndentLevel
@@ -189,16 +191,16 @@ export class CustomTokenBuilder extends DefaultTokenBuilder implements TokenBuil
 
   // customize matchIndentBase to create separate functions of Indent and Outdent.
   Indent = createToken({
-    name: "Indent",
-    pattern: partialRight(this.matchIndentBase, "indent"),
+    name: ast.Indent,
+    pattern: partialRight(this.matchIndentBase, ast.Indent),
     // custom token patterns should explicitly specify the line_breaks option
     line_breaks: false,
     start_chars_hint: ["|", " "],
   });
   // customize matchIndentBase to create separate functions of Indent and Outdent.
   Outdent = createToken({
-    name: "Outdent",
-    pattern: partialRight(this.matchIndentBase, "outdent"),
+    name: ast.Outdent,
+    pattern: partialRight(this.matchIndentBase, ast.Outdent),
     // custom token patterns should explicitly specify the line_breaks option
     line_breaks: false,
     start_chars_hint: ["|", " "],
@@ -235,11 +237,11 @@ export class CustomTokenBuilder extends DefaultTokenBuilder implements TokenBuil
   returnTokens({ cloneToken }: TokenTypeWrapper) {
     // State required for matching the indentations
 
-    const WS = cloneToken("WS");
+    const WS = cloneToken(ast.WS);
     const hiddenIndent = this.createHiddenIndent(cloneToken, WS);
     // newlines are not skipped, by setting their group to "nl" they are saved in the lexer result
     // and thus we can check before creating an indentation token that the last token matched was a newline.
-    this.EOL = cloneToken("EOL");
+    this.EOL = cloneToken(ast.EOL);
     // define the indentation tokens using custom token patterns
     return [this.EOL, this.Outdent, this.Indent, hiddenIndent, WS];
   }
@@ -252,118 +254,151 @@ export class CustomTokenBuilder extends DefaultTokenBuilder implements TokenBuil
     WS: TokenType
   ) {
     return cloneToken(WS, (token) => ({
-      name: "HIDDEN_INDENT",
+      name: ast.HIDDEN_INDENT,
       PATTERN: (text, offset, tokens, groups) => {
-        const { match, currIndentLevel, prevIndentLevel, lastToken } = this.getIndentLevel(
-          tokens,
-          text,
-          offset
-        );
-        if (currIndentLevel > -1) {
-          if (currIndentLevel === prevIndentLevel) {
-            // if (match) {
-            //   const nextIndent = Math.min(prevIndentLevel + 2, currIndentLevel);
-            //   const [matched] = match;
-            //   matchedTokens.push(
-            //     createTokenWithPrev(
-            //       this.Indent,
-            //       matched.slice(0, nextIndent),
-            //       offset,
-            //       last(matchedTokens)
-            //     )
-            //   );
-            //   this.indentStack.push(nextIndent);
-            // }
-            return match;
-          }
-          if (match) {
-            const [matched] = match;
-            if (currIndentLevel > prevIndentLevel) {
-              if (
-                this.matchLastLogic(tokens, lastToken) &&
-                !this.testAt(/^\|let/, text, offset + currIndentLevel, tokens, groups)
-              ) {
-                const nextIndent = currIndentLevel;
-                const sliceIndent = nextIndent; //currIndentLevel < nextIndent ? prevIndentLevel : nextIndent;
-                // if (
-                //   prevIndentLevel > 0
-                //   // ||
-                //   // this.testAt(/^\|/, text, offset + currIndentLevel, matchedTokens, groups)
-                // ) {
-                // if (!this.testAt(/^\|/, text, offset + currIndentLevel, matchedTokens, groups)) {
-                // if (sliceIndent > 0 && sliceIndent !== nextIndent) {
-                if (!this.testAt(/^\r?\n/, text, offset + currIndentLevel, tokens, groups)) {
-                  tokens.push(
-                    createTokenWithPrev(
-                      this.Indent,
-                      matched.slice(0, sliceIndent),
-                      offset,
-                      lastToken
-                    )
-                  );
-                  this.indentStack.push(sliceIndent);
-                }
-                // }
-                // } else {
-                //   matchedTokens.push(
-                //     createTokenWithPrev(WS, matched.slice(0, nextIndent), offset, last(matchedTokens))
-                //   );
-                // }
-                match[0] = matched.slice(0, sliceIndent);
-                // console.log("create", match);
-                // const { match } = this.getIndentLevel(
-                //   matchedTokens,
-                //   text,
-                //   offset + (currIndentLevel - prevIndentLevel)
-                // );
-                return match;
-                // }
-              } else if (prevIndentLevel > 0) {
-                match[0] = matched.slice(0, prevIndentLevel);
-                return match;
-              }
-            } else if (currIndentLevel < prevIndentLevel) {
-              // if (!this.testAt(/^(\r?\n|\|)/, text, offset + currIndentLevel, tokens, groups)) {
-              //   if (currIndentLevel > 0) {
-              //     tokens.push(this.createOutdent(last(tokens)));
-              //     this.indentStack.pop();
-              //     tokens.push(
-              //       createTokenWithPrev(
-              //         this.Indent,
-              //         matched.slice(0, currIndentLevel),
-              //         offset,
-              //         last(tokens)
-              //       )
-              //     );
-              //     this.indentStack.push(currIndentLevel);
-              //   } else {
-              //     tokens.push(
-              //       createTokenWithPrev(
-              //         this.Outdent,
-              //         matched.slice(0, currIndentLevel),
-              //         offset,
-              //         last(tokens)
-              //       )
-              //     );
-              //     this.indentStack.pop();
-              //   }
-              // }
-              return match;
-            }
-          }
-        }
-        return null;
+        const { matched, ...payload } = this.matchHiddenIndent(text, offset, tokens, groups);
+        matched &&
+          console.log("HiddenToken", matched, text.split(/\r?\n/)[payload.lastToken?.endLine]);
+        return matched
+          ? Object.assign(matched, {
+              payload,
+            })
+          : matched;
       },
-      GROUP: "indent",
+      GROUP: "hidden",
       START_CHARS_HINT: ["|", " "],
     }));
+  }
+  matchHiddenIndent(
+    /**
+     * The full input string.
+     */
+    text: string,
+    /**
+     * The offset at which to attempt a match
+     */
+    offset: number,
+    /**
+     * Previously scanned Tokens
+     */
+    tokens: IToken[],
+    /**
+     * Token Groups
+     */
+    groups: {
+      [groupName: string]: IToken[];
+    }
+  ) {
+    const { match, currIndentLevel, prevIndentLevel, lastToken, matchIndentLevel } =
+      this.getIndentLevel(tokens, text, offset, true);
+    if (currIndentLevel > -1) {
+      if (currIndentLevel === prevIndentLevel) {
+        // if (match) {
+        //   const nextIndent = Math.min(prevIndentLevel + 2, currIndentLevel);
+        //   const [matched] = match;
+        //   matchedTokens.push(
+        //     createTokenWithPrev(
+        //       this.Indent,
+        //       matched.slice(0, nextIndent),
+        //       offset,
+        //       last(matchedTokens)
+        //     )
+        //   );
+        //   this.indentStack.push(nextIndent);
+        // }
+        return { matched: match, currIndentLevel, prevIndentLevel, lastToken, matchIndentLevel };
+      }
+      if (match) {
+        const [matched] = match;
+        if (currIndentLevel > prevIndentLevel) {
+          if (
+            this.matchLastLogic(tokens, lastToken) &&
+            !this.testAt(/^\|let/, text, offset + currIndentLevel, tokens, groups)
+          ) {
+            const nextIndent = currIndentLevel;
+            const sliceIndent = nextIndent; //currIndentLevel < nextIndent ? prevIndentLevel : nextIndent;
+            // if (
+            //   prevIndentLevel > 0
+            //   // ||
+            //   // this.testAt(/^\|/, text, offset + currIndentLevel, matchedTokens, groups)
+            // ) {
+            // if (!this.testAt(/^\|/, text, offset + currIndentLevel, matchedTokens, groups)) {
+            // if (sliceIndent > 0 && sliceIndent !== nextIndent) {
+            if (!this.testAt(/^\r?\n/, text, offset + currIndentLevel, tokens, groups)) {
+              tokens.push(
+                createTokenWithPrev(this.Indent, matched.slice(0, sliceIndent), offset, lastToken)
+              );
+              this.indentStack.push(sliceIndent);
+            }
+            // }
+            // } else {
+            //   matchedTokens.push(
+            //     createTokenWithPrev(WS, matched.slice(0, nextIndent), offset, last(matchedTokens))
+            //   );
+            // }
+            match[0] = matched.slice(0, sliceIndent);
+            // console.log("create", match);
+            // const { match } = this.getIndentLevel(
+            //   matchedTokens,
+            //   text,
+            //   offset + (currIndentLevel - prevIndentLevel)
+            // );
+            return {
+              matched: match,
+              currIndentLevel,
+              prevIndentLevel,
+              lastToken,
+              matchIndentLevel,
+            };
+            // }
+          } else if (prevIndentLevel > 0) {
+            match[0] = matched.slice(0, prevIndentLevel);
+            return {
+              matched: match,
+              currIndentLevel,
+              prevIndentLevel,
+              lastToken,
+              matchIndentLevel,
+            };
+          }
+        } else if (currIndentLevel < prevIndentLevel) {
+          // if (!this.testAt(/^(\r?\n|\|)/, text, offset + currIndentLevel, tokens, groups)) {
+          //   if (currIndentLevel > 0) {
+          //     tokens.push(this.createOutdent(last(tokens)));
+          //     this.indentStack.pop();
+          //     tokens.push(
+          //       createTokenWithPrev(
+          //         this.Indent,
+          //         matched.slice(0, currIndentLevel),
+          //         offset,
+          //         last(tokens)
+          //       )
+          //     );
+          //     this.indentStack.push(currIndentLevel);
+          //   } else {
+          //     tokens.push(
+          //       createTokenWithPrev(
+          //         this.Outdent,
+          //         matched.slice(0, currIndentLevel),
+          //         offset,
+          //         last(tokens)
+          //       )
+          //     );
+          //     this.indentStack.pop();
+          //   }
+          // }
+          return { matched: match, currIndentLevel, prevIndentLevel, lastToken, matchIndentLevel };
+        }
+      }
+    }
+    return { matched: null, currIndentLevel, prevIndentLevel, lastToken, matchIndentLevel };
   }
 
   private matchLastLogic(tokens: IToken[], lastToken = tokens[tokens.length - 1]) {
     let matchedLogic: IToken;
     for (let i = tokens.length - 1; i >= 0; i--) {
       matchedLogic = tokens[i];
-      if (matchedLogic.tokenType.name === "WS" || matchedLogic.tokenType.name === "EOL") {
+      if (matchedLogic.tokenType.name === ast.WS || matchedLogic.tokenType.name === ast.EOL) {
         lastToken = matchedLogic;
         continue;
       }
@@ -377,14 +412,14 @@ export class CustomTokenBuilder extends DefaultTokenBuilder implements TokenBuil
         return matchedLogic;
       } else if (
         matchedLogic.startLine < lastToken.startLine ||
-        matchedLogic.tokenType.name === "OTHER" ||
-        matchedLogic.tokenType.name === "ESC"
+        matchedLogic.tokenType.name === ast.OTHER ||
+        matchedLogic.tokenType.name === ast.ESC
       ) {
         return;
       }
     }
   }
-  private getIndentLevel(tokens: IToken[], text: string, offset: number) {
+  private getIndentLevel(tokens: IToken[], text: string, offset: number, matchHidden = false) {
     const noTokensMatchedYet = isEmpty(tokens);
     // const newLines = groups.nl;
     // console.log([...matchedTokens])
@@ -403,10 +438,12 @@ export class CustomTokenBuilder extends DefaultTokenBuilder implements TokenBuil
     const lastToken = tokens[tokens.length - 1];
     let currIndentLevel: number,
       match: RegExpExecArray = null,
-      prevIndentLevel: number;
+      prevIndentLevel: number,
+      matchIndentLevel: number;
     if (isIdentation) {
       match = this.execAt(/( {2})+/y, text, offset);
       prevIndentLevel = last(this.indentStack);
+      matchIndentLevel = prevIndentLevel + (matchHidden ? 0 : 2);
       // possible non-empty indentation
       if (match !== null) {
         currIndentLevel = Math.min(match[0].length, prevIndentLevel + 2);
@@ -423,6 +460,7 @@ export class CustomTokenBuilder extends DefaultTokenBuilder implements TokenBuil
     return {
       currIndentLevel,
       prevIndentLevel,
+      matchIndentLevel,
       match,
       lastToken,
     };
@@ -499,9 +537,9 @@ export class CustomTokenBuilder extends DefaultTokenBuilder implements TokenBuil
           cloneToken("---", {
             PUSH_MODE: "yaml",
           }),
-          cloneToken("INLINE_COMMENT"),
-          cloneToken("ML_COMMENT"),
-          cloneToken("SL_COMMENT"),
+          cloneToken(ast.INLINE_COMMENT),
+          cloneToken(ast.ML_COMMENT),
+          cloneToken(ast.SL_COMMENT),
           cloneToken("@", {
             PUSH_MODE: "character",
           }),
@@ -530,14 +568,14 @@ export class CustomTokenBuilder extends DefaultTokenBuilder implements TokenBuil
           cloneToken("[", {
             PUSH_MODE: "macro",
           }),
-          cloneToken("ESC"),
-          cloneToken("OTHER"),
+          cloneToken(ast.ESC),
+          cloneToken(ast.OTHER),
         ]),
         yaml: cloneTokens(tokens, ({ cloneToken }) => [
-          cloneToken("EOL"),
-          cloneToken("WS"),
-          cloneToken("ML_COMMENT"),
-          cloneToken("SL_COMMENT"),
+          cloneToken(ast.EOL),
+          cloneToken(ast.WS),
+          cloneToken(ast.ML_COMMENT),
+          cloneToken(ast.SL_COMMENT),
           cloneToken("Characters"),
           cloneToken("Macros"),
           cloneToken("true"),
@@ -556,16 +594,16 @@ export class CustomTokenBuilder extends DefaultTokenBuilder implements TokenBuil
             PUSH_MODE: "inlineExpr",
             LONGER_ALT: [],
           }),
-          cloneToken("ESC"),
-          cloneToken("OTHER", { name: "ID" }),
+          cloneToken(ast.ESC),
+          cloneToken(ast.OTHER, { name: ast.ID }),
         ]),
         character: cloneTokens(tokens, ({ cloneToken }) => [
-          cloneToken("EOL", {
+          cloneToken(ast.EOL, {
             POP_MODE: true,
           }),
-          cloneToken("WS"),
-          cloneToken("ML_COMMENT"),
-          cloneToken("SL_COMMENT"),
+          cloneToken(ast.WS),
+          cloneToken(ast.ML_COMMENT),
+          cloneToken(ast.SL_COMMENT),
           cloneToken(","),
           cloneToken("("),
           cloneToken(")"),
@@ -573,9 +611,9 @@ export class CustomTokenBuilder extends DefaultTokenBuilder implements TokenBuil
             PUSH_MODE: "macro",
             LONGER_ALT: [],
           }),
-          cloneToken("ID"),
-          cloneToken("ESC"),
-          cloneToken("OTHER"),
+          cloneToken(ast.ID),
+          cloneToken(ast.ESC),
+          cloneToken(ast.OTHER),
         ]),
         template: cloneTokens(tokens, ({ cloneToken }) =>
           buildTokens.map((token) => {
@@ -585,14 +623,14 @@ export class CustomTokenBuilder extends DefaultTokenBuilder implements TokenBuil
             if (token.name === "}}") {
               return cloneToken(token, { POP_MODE: true });
             }
-            if (token.name === "WS") {
+            if (token.name === ast.WS) {
               return cloneToken(token, { GROUP: "hidden" });
             }
-            if (token.name === "ID") {
+            if (token.name === ast.ID) {
               return;
             }
-            if (token.name === "OTHER") {
-              return cloneToken("OTHER", { name: "ID" });
+            if (token.name === ast.OTHER) {
+              return cloneToken(ast.OTHER, { name: ast.ID });
             }
             return cloneToken(token);
           })
@@ -622,7 +660,7 @@ export class CustomTokenBuilder extends DefaultTokenBuilder implements TokenBuil
                       }
                     }
                     if (current) {
-                      const token = cloneToken("OTHER");
+                      const token = cloneToken(ast.OTHER);
                       for (let i = index + 1; i <= start; i++) {
                         list[i].tokenType = token;
                         list[i].tokenTypeIdx = token.tokenTypeIdx;
@@ -636,14 +674,14 @@ export class CustomTokenBuilder extends DefaultTokenBuilder implements TokenBuil
             if (token.name === ")") {
               return cloneToken(token, { POP_MODE: true });
             }
-            if (token.name === "WS") {
+            if (token.name === ast.WS) {
               return cloneToken(token, { GROUP: "hidden" });
             }
-            if (token.name === "ID") {
+            if (token.name === ast.ID) {
               return;
             }
-            if (token.name === "OTHER") {
-              return cloneToken("OTHER", { name: "ID" });
+            if (token.name === ast.OTHER) {
+              return cloneToken(ast.OTHER, { name: ast.ID });
             }
             return cloneToken(token);
           })
@@ -653,17 +691,17 @@ export class CustomTokenBuilder extends DefaultTokenBuilder implements TokenBuil
             if (token.name === "(") {
               return cloneToken(token, { PUSH_MODE: "expression" });
             }
-            if (token.name === "EOL") {
+            if (token.name === ast.EOL) {
               return cloneToken(token, { POP_MODE: true });
             }
-            if (token.name === "WS") {
+            if (token.name === ast.WS) {
               return cloneToken(token, { GROUP: "hidden" });
             }
-            if (token.name === "ID") {
+            if (token.name === ast.ID) {
               return;
             }
-            if (token.name === "OTHER") {
-              return cloneToken("OTHER", { name: "ID" });
+            if (token.name === ast.OTHER) {
+              return cloneToken(ast.OTHER, { name: ast.ID });
             }
             return cloneToken(token);
           })
@@ -673,14 +711,14 @@ export class CustomTokenBuilder extends DefaultTokenBuilder implements TokenBuil
             if (token.name === "(") {
               return cloneToken(token, { PUSH_MODE: "expression" });
             }
-            if (token.name === "WS" || token.name === "EOL") {
+            if (token.name === ast.WS || token.name === ast.EOL) {
               return cloneToken(token, { POP_MODE: true });
             }
-            if (token.name === "ID") {
+            if (token.name === ast.ID) {
               return;
             }
-            if (token.name === "OTHER") {
-              return cloneToken("OTHER", { name: "ID" });
+            if (token.name === ast.OTHER) {
+              return cloneToken(ast.OTHER, { name: ast.ID });
             }
             return cloneToken(token);
           })
@@ -693,14 +731,14 @@ export class CustomTokenBuilder extends DefaultTokenBuilder implements TokenBuil
             if (token.name === ")") {
               return cloneToken(token, { POP_MODE: true });
             }
-            if (token.name === "WS") {
+            if (token.name === ast.WS) {
               return cloneToken(token, { GROUP: "hidden" });
             }
-            if (token.name === "ID") {
+            if (token.name === ast.ID) {
               return;
             }
-            if (token.name === "OTHER") {
-              return cloneToken("OTHER", { name: "ID" });
+            if (token.name === ast.OTHER) {
+              return cloneToken(ast.OTHER, { name: ast.ID });
             }
             return cloneToken(token);
           })
@@ -721,7 +759,7 @@ export class CustomTokenBuilder extends DefaultTokenBuilder implements TokenBuil
         if (matched?.length > 0) {
           const matchedToken = createTokenWithPrev(EOL, matched, offset, lastToken);
           this.newLines.push(matchedToken);
-          if (lastToken?.tokenType.name !== "EOL" && offset + matched.length === text.length) {
+          if (lastToken?.tokenType.name !== ast.EOL && offset + matched.length === text.length) {
             tokens.push(matchedToken);
           }
         }

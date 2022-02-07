@@ -1,10 +1,10 @@
 import { loadWASM } from "onigasm";
-import { LanguageInfo, TMonaco } from ".";
+import { TMonaco } from "./monaco.export";
 import { DemoScopeNameInfo, grammerList, languages } from "./contributions";
 import { convertTheme } from "./convertTheme";
 import { monaco } from "./monaco.export";
 import { ScopeName, SimpleLanguageInfoProvider, TextMateGrammar } from "./provider/monaco-textmate";
-import { LanguageId, registerLanguages } from "./register";
+import { LanguageId, LanguageInfo, registerLanguages } from "./register";
 import { rehydrateRegexps } from "./util";
 
 export * from "./provider";
@@ -48,7 +48,7 @@ export async function bootstrap(
     const rawConfiguration = await response.text();
     return rehydrateRegexps(rawConfiguration);
   };
-  
+
   const provider = new SimpleLanguageInfoProvider({
     grammars,
     fetchGrammar,

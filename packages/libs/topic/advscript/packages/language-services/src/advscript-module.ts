@@ -9,11 +9,12 @@ import {
   PartialLangiumServices,
   DefaultSharedModuleContext,
   createDefaultModule,
+  DeepPartial,
   LangiumSharedServices,
 } from "langium";
 import { AstNodeDescriptionProvider, AstNodeLocator } from "./advscript-provider";
 import { AdvscriptValidationRegistry, AdvscriptValidator } from "./advscript-validator";
-import { AdvScriptAstReflection, reflection } from "./ast-utils";
+import { AvsAstReflection, astReflection } from "./ast-utils";
 import { createCustomParser, CustomParser } from "./CustomParser";
 import { CustomTokenBuilder } from "./customTokens";
 import { AdvscriptGeneratedModule, AdvScriptGeneratedSharedModule } from "./generated/module";
@@ -27,7 +28,7 @@ type WrapperLangiumParser<T> = LangiumParser & Omit<T, "">;
  */
 export type AdvscriptAddedServices = {
   shared?: {
-    AstReflection: AdvScriptAstReflection;
+    AstReflection: AvsAstReflection;
   };
   validation: {
     AdvscriptValidator: AdvscriptValidator;
@@ -97,8 +98,11 @@ export const AdvscriptModule: Module<
     ReferenceFinder: (services) => new Lsp.ReferenceFinder(services),
     RenameHandler: (services) => new Lsp.RenameHandler(services),
     DocumentSymbolProvider: (services) => new Lsp.DocumentSymbolProvider(services),
+    DocumentHighlighter: (services) => new Lsp.DocumentHighlighter(services),
+    DocumentFormattingEdits: (services) => new Lsp.DocumentFormattingEdits(services),
     completion: {
       CompletionProvider: (services) => new Lsp.CompletionProvider(services),
+      RuleInterpreter: (services) => new Lsp.RuleInterpreter(services),
     },
   },
 };
@@ -114,9 +118,27 @@ export function createAdvscriptServices(context?: DefaultSharedModuleContext): {
 } {
   const shared = inject(createDefaultSharedModule(context), {
     ...AdvScriptGeneratedSharedModule,
-    AstReflection: () => reflection,
+    AstReflection: () => astReflection,
   });
   const advscript = inject(
+    createDefaultModule({ shared }),
+    AdvscriptGeneratedModule,
+    AdvscriptModule
+  );
+  shared.ServiceRegistry.register(advscript);
+  return { shared, advscript };
+}
+
+export function createBrowerServices<T extends DeepPartial<LangiumSharedServices>>(
+  module?: Module<LangiumSharedServices, T>,
+  context?: DefaultSharedModuleContext
+) {
+  const shared = inject(createDefaultSharedModule(context), {
+    ...AdvScriptGeneratedSharedModule,
+    AstReflection: () => astReflection,
+    ...module,
+  });
+  const advscript: AdvScriptServices = inject(
     createDefaultModule({ shared }),
     AdvscriptGeneratedModule,
     AdvscriptModule

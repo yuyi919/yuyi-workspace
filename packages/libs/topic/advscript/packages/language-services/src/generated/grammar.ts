@@ -83,25 +83,13 @@ export const AdvscriptGrammar = (): Grammar => loadedAdvscriptGrammar ||(loadedA
             "$type": "Group",
             "elements": [
               {
-                "$type": "Group",
-                "elements": [
-                  {
-                    "$type": "RuleCall",
-                    "arguments": [],
-                    "rule": {
-                      "$refText": "Token_YAML"
-                    },
-                    "elements": []
-                  },
-                  {
-                    "$type": "RuleCall",
-                    "arguments": [],
-                    "rule": {
-                      "$refText": "EOL"
-                    }
-                  }
-                ],
-                "cardinality": "?"
+                "$type": "RuleCall",
+                "arguments": [],
+                "rule": {
+                  "$refText": "Token_YAML"
+                },
+                "cardinality": "?",
+                "elements": []
               },
               {
                 "$type": "Alternatives",
@@ -136,13 +124,6 @@ export const AdvscriptGrammar = (): Grammar => loadedAdvscriptGrammar ||(loadedA
                 "arguments": [],
                 "rule": {
                   "$refText": "Token_YAML"
-                }
-              },
-              {
-                "$type": "RuleCall",
-                "arguments": [],
-                "rule": {
-                  "$refText": "EOL"
                 }
               }
             ],
@@ -254,9 +235,21 @@ export const AdvscriptGrammar = (): Grammar => loadedAdvscriptGrammar ||(loadedA
       "hiddenTokens": [],
       "type": "string",
       "alternatives": {
-        "$type": "Keyword",
-        "value": "---",
-        "elements": []
+        "$type": "Group",
+        "elements": [
+          {
+            "$type": "Keyword",
+            "value": "---",
+            "elements": []
+          },
+          {
+            "$type": "RuleCall",
+            "arguments": [],
+            "rule": {
+              "$refText": "EOL"
+            }
+          }
+        ]
       }
     },
     {
@@ -280,10 +273,11 @@ export const AdvscriptGrammar = (): Grammar => loadedAdvscriptGrammar ||(loadedA
             "arguments": [],
             "rule": {
               "$refText": "EOL"
-            }
+            },
+            "cardinality": "*"
           },
           {
-            "$type": "Alternatives",
+            "$type": "Group",
             "elements": [
               {
                 "$type": "Assignment",
@@ -304,8 +298,7 @@ export const AdvscriptGrammar = (): Grammar => loadedAdvscriptGrammar ||(loadedA
                 "arguments": [],
                 "rule": {
                   "$refText": "EOL"
-                },
-                "elements": []
+                }
               }
             ],
             "cardinality": "*"
@@ -315,13 +308,6 @@ export const AdvscriptGrammar = (): Grammar => loadedAdvscriptGrammar ||(loadedA
             "arguments": [],
             "rule": {
               "$refText": "Token_YAML"
-            }
-          },
-          {
-            "$type": "RuleCall",
-            "arguments": [],
-            "rule": {
-              "$refText": "EOL"
             }
           }
         ]
@@ -355,7 +341,7 @@ export const AdvscriptGrammar = (): Grammar => loadedAdvscriptGrammar ||(loadedA
                 "$type": "RuleCall",
                 "arguments": [],
                 "rule": {
-                  "$refText": "Token_P"
+                  "$refText": "Token_Dot"
                 },
                 "elements": []
               },
@@ -409,7 +395,7 @@ export const AdvscriptGrammar = (): Grammar => loadedAdvscriptGrammar ||(loadedA
           "$type": "RuleCall",
           "arguments": [],
           "rule": {
-            "$refText": "TextExpr"
+            "$refText": "ID"
           }
         },
         "elements": []
@@ -531,7 +517,68 @@ export const AdvscriptGrammar = (): Grammar => loadedAdvscriptGrammar ||(loadedA
             "$type": "RuleCall",
             "arguments": [],
             "rule": {
-              "$refText": "WS"
+              "$refText": "EOL"
+            }
+          },
+          {
+            "$type": "Alternatives",
+            "elements": [
+              {
+                "$type": "Assignment",
+                "feature": "elements",
+                "operator": "+=",
+                "terminal": {
+                  "$type": "RuleCall",
+                  "arguments": [],
+                  "rule": {
+                    "$refText": "DeclareItem_Character"
+                  }
+                },
+                "elements": []
+              },
+              {
+                "$type": "RuleCall",
+                "arguments": [],
+                "rule": {
+                  "$refText": "EOL"
+                },
+                "elements": []
+              }
+            ],
+            "cardinality": "*"
+          }
+        ]
+      }
+    },
+    {
+      "$type": "ParserRule",
+      "parameters": [],
+      "name": "DeclareItem_Character",
+      "hiddenTokens": [],
+      "alternatives": {
+        "$type": "Group",
+        "elements": [
+          {
+            "$type": "RuleCall",
+            "arguments": [],
+            "rule": {
+              "$refText": "Space"
+            },
+            "cardinality": "?",
+            "elements": []
+          },
+          {
+            "$type": "RuleCall",
+            "arguments": [],
+            "rule": {
+              "$refText": "Token_ListItem"
+            }
+          },
+          {
+            "$type": "RuleCall",
+            "arguments": [],
+            "rule": {
+              "$refText": "Space"
             },
             "cardinality": "?"
           },
@@ -539,69 +586,8 @@ export const AdvscriptGrammar = (): Grammar => loadedAdvscriptGrammar ||(loadedA
             "$type": "RuleCall",
             "arguments": [],
             "rule": {
-              "$refText": "EOL"
+              "$refText": "Character"
             }
-          },
-          {
-            "$type": "Group",
-            "elements": [
-              {
-                "$type": "RuleCall",
-                "arguments": [],
-                "rule": {
-                  "$refText": "WS"
-                },
-                "cardinality": "?",
-                "elements": []
-              },
-              {
-                "$type": "Alternatives",
-                "elements": [
-                  {
-                    "$type": "Group",
-                    "elements": [
-                      {
-                        "$type": "RuleCall",
-                        "arguments": [],
-                        "rule": {
-                          "$refText": "Token_ListItem"
-                        },
-                        "elements": []
-                      },
-                      {
-                        "$type": "RuleCall",
-                        "arguments": [],
-                        "rule": {
-                          "$refText": "WS"
-                        },
-                        "cardinality": "?"
-                      },
-                      {
-                        "$type": "Assignment",
-                        "feature": "elements",
-                        "operator": "+=",
-                        "terminal": {
-                          "$type": "RuleCall",
-                          "arguments": [],
-                          "rule": {
-                            "$refText": "Character"
-                          }
-                        }
-                      }
-                    ]
-                  },
-                  {
-                    "$type": "RuleCall",
-                    "arguments": [],
-                    "rule": {
-                      "$refText": "EOL"
-                    },
-                    "elements": []
-                  }
-                ]
-              }
-            ],
-            "cardinality": "*"
           }
         ]
       }
@@ -650,7 +636,7 @@ export const AdvscriptGrammar = (): Grammar => loadedAdvscriptGrammar ||(loadedA
                 "$type": "RuleCall",
                 "arguments": [],
                 "rule": {
-                  "$refText": "WS"
+                  "$refText": "Space"
                 },
                 "cardinality": "?",
                 "elements": []
@@ -673,57 +659,14 @@ export const AdvscriptGrammar = (): Grammar => loadedAdvscriptGrammar ||(loadedA
               {
                 "$type": "Assignment",
                 "feature": "modifiers",
-                "operator": "+=",
+                "operator": "=",
                 "terminal": {
                   "$type": "RuleCall",
                   "arguments": [],
                   "rule": {
-                    "$refText": "Modifier"
+                    "$refText": "ModifierList_Character"
                   }
                 }
-              },
-              {
-                "$type": "Group",
-                "elements": [
-                  {
-                    "$type": "RuleCall",
-                    "arguments": [],
-                    "rule": {
-                      "$refText": "WS"
-                    },
-                    "cardinality": "?",
-                    "elements": []
-                  },
-                  {
-                    "$type": "RuleCall",
-                    "arguments": [],
-                    "rule": {
-                      "$refText": "Token_Comma"
-                    }
-                  },
-                  {
-                    "$type": "RuleCall",
-                    "arguments": [],
-                    "rule": {
-                      "$refText": "WS"
-                    },
-                    "cardinality": "?"
-                  },
-                  {
-                    "$type": "Assignment",
-                    "feature": "modifiers",
-                    "operator": "+=",
-                    "terminal": {
-                      "$type": "RuleCall",
-                      "arguments": [],
-                      "rule": {
-                        "$refText": "Modifier"
-                      }
-                    },
-                    "cardinality": "+"
-                  }
-                ],
-                "cardinality": "*"
               },
               {
                 "$type": "RuleCall",
@@ -742,8 +685,9 @@ export const AdvscriptGrammar = (): Grammar => loadedAdvscriptGrammar ||(loadedA
                 "$type": "RuleCall",
                 "arguments": [],
                 "rule": {
-                  "$refText": "WS"
+                  "$refText": "Space"
                 },
+                "cardinality": "?",
                 "elements": []
               },
               {
@@ -775,6 +719,72 @@ export const AdvscriptGrammar = (): Grammar => loadedAdvscriptGrammar ||(loadedA
             "rule": {
               "$refText": "EOL"
             }
+          }
+        ]
+      }
+    },
+    {
+      "$type": "ParserRule",
+      "parameters": [],
+      "name": "ModifierList_Character",
+      "hiddenTokens": [],
+      "alternatives": {
+        "$type": "Group",
+        "elements": [
+          {
+            "$type": "Assignment",
+            "feature": "elements",
+            "operator": "+=",
+            "terminal": {
+              "$type": "RuleCall",
+              "arguments": [],
+              "rule": {
+                "$refText": "Modifier"
+              }
+            },
+            "elements": []
+          },
+          {
+            "$type": "Group",
+            "elements": [
+              {
+                "$type": "RuleCall",
+                "arguments": [],
+                "rule": {
+                  "$refText": "WS"
+                },
+                "cardinality": "?",
+                "elements": []
+              },
+              {
+                "$type": "RuleCall",
+                "arguments": [],
+                "rule": {
+                  "$refText": "Token_Comma"
+                }
+              },
+              {
+                "$type": "RuleCall",
+                "arguments": [],
+                "rule": {
+                  "$refText": "Space"
+                },
+                "cardinality": "?"
+              },
+              {
+                "$type": "Assignment",
+                "feature": "elements",
+                "operator": "+=",
+                "terminal": {
+                  "$type": "RuleCall",
+                  "arguments": [],
+                  "rule": {
+                    "$refText": "Modifier"
+                  }
+                }
+              }
+            ],
+            "cardinality": "*"
           }
         ]
       }
@@ -859,7 +869,68 @@ export const AdvscriptGrammar = (): Grammar => loadedAdvscriptGrammar ||(loadedA
             "$type": "RuleCall",
             "arguments": [],
             "rule": {
-              "$refText": "WS"
+              "$refText": "EOL"
+            }
+          },
+          {
+            "$type": "Alternatives",
+            "elements": [
+              {
+                "$type": "Assignment",
+                "feature": "elements",
+                "operator": "+=",
+                "terminal": {
+                  "$type": "RuleCall",
+                  "arguments": [],
+                  "rule": {
+                    "$refText": "DeclareItem_Macro"
+                  }
+                },
+                "elements": []
+              },
+              {
+                "$type": "RuleCall",
+                "arguments": [],
+                "rule": {
+                  "$refText": "EOL"
+                },
+                "elements": []
+              }
+            ],
+            "cardinality": "*"
+          }
+        ]
+      }
+    },
+    {
+      "$type": "ParserRule",
+      "parameters": [],
+      "name": "DeclareItem_Macro",
+      "hiddenTokens": [],
+      "alternatives": {
+        "$type": "Group",
+        "elements": [
+          {
+            "$type": "RuleCall",
+            "arguments": [],
+            "rule": {
+              "$refText": "Space"
+            },
+            "cardinality": "?",
+            "elements": []
+          },
+          {
+            "$type": "RuleCall",
+            "arguments": [],
+            "rule": {
+              "$refText": "Token_ListItem"
+            }
+          },
+          {
+            "$type": "RuleCall",
+            "arguments": [],
+            "rule": {
+              "$refText": "Space"
             },
             "cardinality": "?"
           },
@@ -867,69 +938,8 @@ export const AdvscriptGrammar = (): Grammar => loadedAdvscriptGrammar ||(loadedA
             "$type": "RuleCall",
             "arguments": [],
             "rule": {
-              "$refText": "EOL"
+              "$refText": "Macro"
             }
-          },
-          {
-            "$type": "Group",
-            "elements": [
-              {
-                "$type": "RuleCall",
-                "arguments": [],
-                "rule": {
-                  "$refText": "WS"
-                },
-                "cardinality": "?",
-                "elements": []
-              },
-              {
-                "$type": "Alternatives",
-                "elements": [
-                  {
-                    "$type": "Group",
-                    "elements": [
-                      {
-                        "$type": "RuleCall",
-                        "arguments": [],
-                        "rule": {
-                          "$refText": "Token_ListItem"
-                        },
-                        "elements": []
-                      },
-                      {
-                        "$type": "RuleCall",
-                        "arguments": [],
-                        "rule": {
-                          "$refText": "WS"
-                        },
-                        "cardinality": "?"
-                      },
-                      {
-                        "$type": "Assignment",
-                        "feature": "elements",
-                        "operator": "+=",
-                        "terminal": {
-                          "$type": "RuleCall",
-                          "arguments": [],
-                          "rule": {
-                            "$refText": "Macro"
-                          }
-                        }
-                      }
-                    ]
-                  },
-                  {
-                    "$type": "RuleCall",
-                    "arguments": [],
-                    "rule": {
-                      "$refText": "EOL"
-                    },
-                    "elements": []
-                  }
-                ]
-              }
-            ],
-            "cardinality": "*"
           }
         ]
       }
@@ -962,7 +972,7 @@ export const AdvscriptGrammar = (): Grammar => loadedAdvscriptGrammar ||(loadedA
                 "$type": "RuleCall",
                 "arguments": [],
                 "rule": {
-                  "$refText": "WS"
+                  "$refText": "Space"
                 },
                 "cardinality": "?",
                 "elements": []
@@ -985,57 +995,14 @@ export const AdvscriptGrammar = (): Grammar => loadedAdvscriptGrammar ||(loadedA
               {
                 "$type": "Assignment",
                 "feature": "modifiers",
-                "operator": "+=",
+                "operator": "=",
                 "terminal": {
                   "$type": "RuleCall",
                   "arguments": [],
                   "rule": {
-                    "$refText": "CharacterRef"
+                    "$refText": "ModifierList_Macro"
                   }
                 }
-              },
-              {
-                "$type": "Group",
-                "elements": [
-                  {
-                    "$type": "RuleCall",
-                    "arguments": [],
-                    "rule": {
-                      "$refText": "WS"
-                    },
-                    "cardinality": "?",
-                    "elements": []
-                  },
-                  {
-                    "$type": "RuleCall",
-                    "arguments": [],
-                    "rule": {
-                      "$refText": "Token_Comma"
-                    }
-                  },
-                  {
-                    "$type": "RuleCall",
-                    "arguments": [],
-                    "rule": {
-                      "$refText": "WS"
-                    },
-                    "cardinality": "?"
-                  },
-                  {
-                    "$type": "Assignment",
-                    "feature": "modifiers",
-                    "operator": "+=",
-                    "terminal": {
-                      "$type": "RuleCall",
-                      "arguments": [],
-                      "rule": {
-                        "$refText": "CharacterRef"
-                      }
-                    },
-                    "cardinality": "+"
-                  }
-                ],
-                "cardinality": "*"
               },
               {
                 "$type": "RuleCall",
@@ -1062,8 +1029,9 @@ export const AdvscriptGrammar = (): Grammar => loadedAdvscriptGrammar ||(loadedA
                 "$type": "RuleCall",
                 "arguments": [],
                 "rule": {
-                  "$refText": "WS"
+                  "$refText": "Space"
                 },
+                "cardinality": "?",
                 "elements": []
               },
               {
@@ -1102,6 +1070,72 @@ export const AdvscriptGrammar = (): Grammar => loadedAdvscriptGrammar ||(loadedA
     {
       "$type": "ParserRule",
       "parameters": [],
+      "name": "ModifierList_Macro",
+      "hiddenTokens": [],
+      "alternatives": {
+        "$type": "Group",
+        "elements": [
+          {
+            "$type": "Assignment",
+            "feature": "elements",
+            "operator": "+=",
+            "terminal": {
+              "$type": "RuleCall",
+              "arguments": [],
+              "rule": {
+                "$refText": "CharacterRef"
+              }
+            },
+            "elements": []
+          },
+          {
+            "$type": "Group",
+            "elements": [
+              {
+                "$type": "RuleCall",
+                "arguments": [],
+                "rule": {
+                  "$refText": "WS"
+                },
+                "cardinality": "?",
+                "elements": []
+              },
+              {
+                "$type": "RuleCall",
+                "arguments": [],
+                "rule": {
+                  "$refText": "Token_Comma"
+                }
+              },
+              {
+                "$type": "RuleCall",
+                "arguments": [],
+                "rule": {
+                  "$refText": "Space"
+                },
+                "cardinality": "?"
+              },
+              {
+                "$type": "Assignment",
+                "feature": "elements",
+                "operator": "+=",
+                "terminal": {
+                  "$type": "RuleCall",
+                  "arguments": [],
+                  "rule": {
+                    "$refText": "CharacterRef"
+                  }
+                }
+              }
+            ],
+            "cardinality": "*"
+          }
+        ]
+      }
+    },
+    {
+      "$type": "ParserRule",
+      "parameters": [],
       "name": "CharacterRef",
       "hiddenTokens": [],
       "alternatives": {
@@ -1117,7 +1151,7 @@ export const AdvscriptGrammar = (): Grammar => loadedAdvscriptGrammar ||(loadedA
             "$type": "RuleCall",
             "arguments": [],
             "rule": {
-              "$refText": "TextExpr"
+              "$refText": "ID"
             }
           }
         },
@@ -1143,7 +1177,7 @@ export const AdvscriptGrammar = (): Grammar => loadedAdvscriptGrammar ||(loadedA
             "$type": "RuleCall",
             "arguments": [],
             "rule": {
-              "$refText": "TextExpr"
+              "$refText": "ID"
             }
           }
         },
@@ -1567,7 +1601,7 @@ export const AdvscriptGrammar = (): Grammar => loadedAdvscriptGrammar ||(loadedA
                 "$type": "RuleCall",
                 "arguments": [],
                 "rule": {
-                  "$refText": "WS"
+                  "$refText": "Space"
                 },
                 "cardinality": "?",
                 "elements": []
@@ -1585,14 +1619,6 @@ export const AdvscriptGrammar = (): Grammar => loadedAdvscriptGrammar ||(loadedA
                 }
               }
             ],
-            "cardinality": "?"
-          },
-          {
-            "$type": "RuleCall",
-            "arguments": [],
-            "rule": {
-              "$refText": "WS"
-            },
             "cardinality": "?"
           },
           {
@@ -1889,14 +1915,6 @@ export const AdvscriptGrammar = (): Grammar => loadedAdvscriptGrammar ||(loadedA
             "$type": "RuleCall",
             "arguments": [],
             "rule": {
-              "$refText": "WS"
-            },
-            "cardinality": "?"
-          },
-          {
-            "$type": "RuleCall",
-            "arguments": [],
-            "rule": {
               "$refText": "EOL"
             }
           }
@@ -1933,7 +1951,7 @@ export const AdvscriptGrammar = (): Grammar => loadedAdvscriptGrammar ||(loadedA
             "$type": "RuleCall",
             "arguments": [],
             "rule": {
-              "$refText": "WS"
+              "$refText": "Space"
             },
             "cardinality": "?"
           },
@@ -1982,7 +2000,7 @@ export const AdvscriptGrammar = (): Grammar => loadedAdvscriptGrammar ||(loadedA
             "$type": "RuleCall",
             "arguments": [],
             "rule": {
-              "$refText": "WS"
+              "$refText": "Space"
             },
             "cardinality": "?"
           },
@@ -1997,14 +2015,6 @@ export const AdvscriptGrammar = (): Grammar => loadedAdvscriptGrammar ||(loadedA
                 "$refText": "Expression"
               }
             }
-          },
-          {
-            "$type": "RuleCall",
-            "arguments": [],
-            "rule": {
-              "$refText": "WS"
-            },
-            "cardinality": "?"
           },
           {
             "$type": "RuleCall",
@@ -2047,7 +2057,7 @@ export const AdvscriptGrammar = (): Grammar => loadedAdvscriptGrammar ||(loadedA
             "$type": "RuleCall",
             "arguments": [],
             "rule": {
-              "$refText": "WS"
+              "$refText": "Space"
             },
             "cardinality": "?"
           },
@@ -2062,14 +2072,6 @@ export const AdvscriptGrammar = (): Grammar => loadedAdvscriptGrammar ||(loadedA
                 "$refText": "Expression"
               }
             }
-          },
-          {
-            "$type": "RuleCall",
-            "arguments": [],
-            "rule": {
-              "$refText": "WS"
-            },
-            "cardinality": "?"
           },
           {
             "$type": "RuleCall",
@@ -2112,7 +2114,7 @@ export const AdvscriptGrammar = (): Grammar => loadedAdvscriptGrammar ||(loadedA
             "$type": "RuleCall",
             "arguments": [],
             "rule": {
-              "$refText": "WS"
+              "$refText": "Space"
             },
             "cardinality": "?"
           },
@@ -2132,7 +2134,6 @@ export const AdvscriptGrammar = (): Grammar => loadedAdvscriptGrammar ||(loadedA
       "parameters": [],
       "name": "EndStatement",
       "hiddenTokens": [],
-      "type": "string",
       "alternatives": {
         "$type": "Group",
         "elements": [
@@ -2146,16 +2147,13 @@ export const AdvscriptGrammar = (): Grammar => loadedAdvscriptGrammar ||(loadedA
             "elements": []
           },
           {
-            "$type": "Keyword",
-            "value": "|end"
-          },
-          {
-            "$type": "RuleCall",
-            "arguments": [],
-            "rule": {
-              "$refText": "WS"
-            },
-            "cardinality": "?"
+            "$type": "Assignment",
+            "feature": "kind",
+            "operator": "=",
+            "terminal": {
+              "$type": "Keyword",
+              "value": "|end"
+            }
           },
           {
             "$type": "RuleCall",
@@ -2245,8 +2243,121 @@ export const AdvscriptGrammar = (): Grammar => loadedAdvscriptGrammar ||(loadedA
                 "$type": "RuleCall",
                 "arguments": [],
                 "rule": {
-                  "$refText": "TextExpr"
+                  "$refText": "ID"
                 }
+              }
+            }
+          },
+          {
+            "$type": "Group",
+            "elements": [
+              {
+                "$type": "RuleCall",
+                "arguments": [],
+                "rule": {
+                  "$refText": "Space"
+                },
+                "cardinality": "?",
+                "elements": []
+              },
+              {
+                "$type": "Assignment",
+                "feature": "modifiers",
+                "operator": "=",
+                "terminal": {
+                  "$type": "RuleCall",
+                  "arguments": [],
+                  "rule": {
+                    "$refText": "ModifierList_Dialog"
+                  }
+                }
+              },
+              {
+                "$type": "Group",
+                "elements": [
+                  {
+                    "$type": "RuleCall",
+                    "arguments": [],
+                    "rule": {
+                      "$refText": "WS"
+                    },
+                    "cardinality": "?",
+                    "elements": []
+                  },
+                  {
+                    "$type": "Assignment",
+                    "feature": "elements",
+                    "operator": "+=",
+                    "terminal": {
+                      "$type": "RuleCall",
+                      "arguments": [],
+                      "rule": {
+                        "$refText": "DialogCall"
+                      }
+                    }
+                  }
+                ],
+                "cardinality": "*"
+              }
+            ],
+            "cardinality": "?"
+          },
+          {
+            "$type": "RuleCall",
+            "arguments": [],
+            "rule": {
+              "$refText": "EOL"
+            }
+          },
+          {
+            "$type": "Assignment",
+            "feature": "contents",
+            "operator": "+=",
+            "terminal": {
+              "$type": "RuleCall",
+              "arguments": [],
+              "rule": {
+                "$refText": "DialogContent"
+              }
+            },
+            "cardinality": "*"
+          }
+        ]
+      }
+    },
+    {
+      "$type": "ParserRule",
+      "parameters": [],
+      "name": "ModifierList_Dialog",
+      "hiddenTokens": [],
+      "alternatives": {
+        "$type": "Group",
+        "elements": [
+          {
+            "$type": "RuleCall",
+            "arguments": [],
+            "rule": {
+              "$refText": "Token_Paren_L"
+            },
+            "elements": []
+          },
+          {
+            "$type": "RuleCall",
+            "arguments": [],
+            "rule": {
+              "$refText": "WS"
+            },
+            "cardinality": "?"
+          },
+          {
+            "$type": "Assignment",
+            "feature": "elements",
+            "operator": "+=",
+            "terminal": {
+              "$type": "RuleCall",
+              "arguments": [],
+              "rule": {
+                "$refText": "ModifierRef"
               }
             }
           },
@@ -2265,74 +2376,18 @@ export const AdvscriptGrammar = (): Grammar => loadedAdvscriptGrammar ||(loadedA
                 "$type": "RuleCall",
                 "arguments": [],
                 "rule": {
-                  "$refText": "Token_Paren_L"
+                  "$refText": "Token_Comma"
                 },
                 "elements": []
               },
               {
-                "$type": "Group",
-                "elements": [
-                  {
-                    "$type": "RuleCall",
-                    "arguments": [],
-                    "rule": {
-                      "$refText": "WS"
-                    },
-                    "cardinality": "?",
-                    "elements": []
-                  },
-                  {
-                    "$type": "Assignment",
-                    "feature": "modifiers",
-                    "operator": "+=",
-                    "terminal": {
-                      "$type": "RuleCall",
-                      "arguments": [],
-                      "rule": {
-                        "$refText": "ModifierRef"
-                      }
-                    }
-                  },
-                  {
-                    "$type": "RuleCall",
-                    "arguments": [],
-                    "rule": {
-                      "$refText": "Token_Comma"
-                    },
-                    "cardinality": "?"
-                  }
-                ],
-                "cardinality": "+"
-              },
-              {
                 "$type": "RuleCall",
                 "arguments": [],
                 "rule": {
-                  "$refText": "WS"
+                  "$refText": "Space"
                 },
                 "cardinality": "?"
               },
-              {
-                "$type": "RuleCall",
-                "arguments": [],
-                "rule": {
-                  "$refText": "Token_Paren_R"
-                }
-              },
-              {
-                "$type": "RuleCall",
-                "arguments": [],
-                "rule": {
-                  "$refText": "WS"
-                },
-                "cardinality": "?"
-              }
-            ],
-            "cardinality": "?"
-          },
-          {
-            "$type": "Group",
-            "elements": [
               {
                 "$type": "Assignment",
                 "feature": "elements",
@@ -2341,10 +2396,9 @@ export const AdvscriptGrammar = (): Grammar => loadedAdvscriptGrammar ||(loadedA
                   "$type": "RuleCall",
                   "arguments": [],
                   "rule": {
-                    "$refText": "Call"
+                    "$refText": "ModifierRef"
                   }
-                },
-                "elements": []
+                }
               },
               {
                 "$type": "RuleCall",
@@ -2355,48 +2409,91 @@ export const AdvscriptGrammar = (): Grammar => loadedAdvscriptGrammar ||(loadedA
                 "cardinality": "?"
               }
             ],
+            "cardinality": "*"
+          },
+          {
+            "$type": "RuleCall",
+            "arguments": [],
+            "rule": {
+              "$refText": "Token_Paren_R"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "$type": "ParserRule",
+      "parameters": [],
+      "name": "DialogContent",
+      "hiddenTokens": [],
+      "alternatives": {
+        "$type": "Group",
+        "elements": [
+          {
+            "$type": "RuleCall",
+            "arguments": [],
+            "rule": {
+              "$refText": "WS"
+            },
+            "cardinality": "?",
+            "elements": []
+          },
+          {
+            "$type": "RuleCall",
+            "arguments": [],
+            "rule": {
+              "$refText": "Content"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "$type": "ParserRule",
+      "parameters": [],
+      "name": "DialogCall",
+      "hiddenTokens": [],
+      "type": "Call",
+      "alternatives": {
+        "$type": "Group",
+        "elements": [
+          {
+            "$type": "RuleCall",
+            "arguments": [],
+            "rule": {
+              "$refText": "Token_Bracket_L"
+            },
+            "elements": []
+          },
+          {
+            "$type": "RuleCall",
+            "arguments": [],
+            "rule": {
+              "$refText": "WS"
+            },
             "cardinality": "?"
           },
           {
             "$type": "RuleCall",
             "arguments": [],
             "rule": {
-              "$refText": "EOL"
+              "$refText": "CallMacro"
             }
           },
           {
-            "$type": "Group",
-            "elements": [
-              {
-                "$type": "RuleCall",
-                "arguments": [],
-                "rule": {
-                  "$refText": "WS"
-                },
-                "cardinality": "?",
-                "elements": []
-              },
-              {
-                "$type": "Assignment",
-                "feature": "contents",
-                "operator": "+=",
-                "terminal": {
-                  "$type": "RuleCall",
-                  "arguments": [],
-                  "rule": {
-                    "$refText": "Content"
-                  }
-                }
-              },
-              {
-                "$type": "RuleCall",
-                "arguments": [],
-                "rule": {
-                  "$refText": "EOL"
-                }
-              }
-            ],
-            "cardinality": "*"
+            "$type": "RuleCall",
+            "arguments": [],
+            "rule": {
+              "$refText": "WS"
+            },
+            "cardinality": "?"
+          },
+          {
+            "$type": "RuleCall",
+            "arguments": [],
+            "rule": {
+              "$refText": "Token_Bracket_R"
+            }
           }
         ]
       }
@@ -2407,31 +2504,18 @@ export const AdvscriptGrammar = (): Grammar => loadedAdvscriptGrammar ||(loadedA
       "name": "Action",
       "hiddenTokens": [],
       "alternatives": {
-        "$type": "Group",
-        "elements": [
-          {
-            "$type": "Assignment",
-            "feature": "contents",
-            "operator": "+=",
-            "terminal": {
-              "$type": "RuleCall",
-              "arguments": [],
-              "rule": {
-                "$refText": "Content"
-              }
-            },
-            "cardinality": "+",
-            "elements": []
-          },
-          {
-            "$type": "RuleCall",
-            "arguments": [],
-            "rule": {
-              "$refText": "EOL"
-            }
+        "$type": "Assignment",
+        "feature": "contents",
+        "operator": "+=",
+        "terminal": {
+          "$type": "RuleCall",
+          "arguments": [],
+          "rule": {
+            "$refText": "Content"
           }
-        ],
-        "cardinality": "+"
+        },
+        "cardinality": "+",
+        "elements": []
       }
     },
     {
@@ -2508,6 +2592,13 @@ export const AdvscriptGrammar = (): Grammar => loadedAdvscriptGrammar ||(loadedA
               }
             },
             "cardinality": "?"
+          },
+          {
+            "$type": "RuleCall",
+            "arguments": [],
+            "rule": {
+              "$refText": "EOL"
+            }
           }
         ]
       }
@@ -2686,7 +2777,7 @@ export const AdvscriptGrammar = (): Grammar => loadedAdvscriptGrammar ||(loadedA
                                 "$type": "RuleCall",
                                 "arguments": [],
                                 "rule": {
-                                  "$refText": "TextExpr"
+                                  "$refText": "ID"
                                 }
                               }
                             }
@@ -2699,7 +2790,6 @@ export const AdvscriptGrammar = (): Grammar => loadedAdvscriptGrammar ||(loadedA
                         "rule": {
                           "$refText": "CallMacro"
                         },
-                        "cardinality": "?",
                         "elements": []
                       }
                     ]
@@ -2722,130 +2812,6 @@ export const AdvscriptGrammar = (): Grammar => loadedAdvscriptGrammar ||(loadedA
                 ]
               }
             ]
-          }
-        ]
-      }
-    },
-    {
-      "$type": "ParserRule",
-      "parameters": [],
-      "name": "Call2",
-      "hiddenTokens": [],
-      "alternatives": {
-        "$type": "Group",
-        "elements": [
-          {
-            "$type": "RuleCall",
-            "arguments": [],
-            "rule": {
-              "$refText": "Token_Bracket_L"
-            },
-            "elements": []
-          },
-          {
-            "$type": "Alternatives",
-            "elements": [
-              {
-                "$type": "Group",
-                "elements": [
-                  {
-                    "$type": "Action",
-                    "type": "AtInline2",
-                    "elements": []
-                  },
-                  {
-                    "$type": "Keyword",
-                    "value": "s"
-                  }
-                ]
-              },
-              {
-                "$type": "RuleCall",
-                "arguments": [],
-                "rule": {
-                  "$refText": "CallMacro"
-                },
-                "cardinality": "?",
-                "elements": []
-              }
-            ]
-          },
-          {
-            "$type": "RuleCall",
-            "arguments": [],
-            "rule": {
-              "$refText": "WS"
-            },
-            "cardinality": "?"
-          },
-          {
-            "$type": "RuleCall",
-            "arguments": [],
-            "rule": {
-              "$refText": "Token_Bracket_R"
-            }
-          }
-        ]
-      }
-    },
-    {
-      "$type": "ParserRule",
-      "parameters": [],
-      "name": "Call3",
-      "hiddenTokens": [],
-      "alternatives": {
-        "$type": "Group",
-        "elements": [
-          {
-            "$type": "RuleCall",
-            "arguments": [],
-            "rule": {
-              "$refText": "Token_Bracket_L"
-            },
-            "elements": []
-          },
-          {
-            "$type": "Alternatives",
-            "elements": [
-              {
-                "$type": "Group",
-                "elements": [
-                  {
-                    "$type": "Action",
-                    "type": "AtInline3",
-                    "elements": []
-                  },
-                  {
-                    "$type": "Keyword",
-                    "value": "a"
-                  }
-                ]
-              },
-              {
-                "$type": "RuleCall",
-                "arguments": [],
-                "rule": {
-                  "$refText": "CallMacro"
-                },
-                "cardinality": "?",
-                "elements": []
-              }
-            ]
-          },
-          {
-            "$type": "RuleCall",
-            "arguments": [],
-            "rule": {
-              "$refText": "WS"
-            },
-            "cardinality": "?"
-          },
-          {
-            "$type": "RuleCall",
-            "arguments": [],
-            "rule": {
-              "$refText": "Token_Bracket_R"
-            }
           }
         ]
       }
@@ -2881,7 +2847,7 @@ export const AdvscriptGrammar = (): Grammar => loadedAdvscriptGrammar ||(loadedA
             "$type": "RuleCall",
             "arguments": [],
             "rule": {
-              "$refText": "WS"
+              "$refText": "Space"
             },
             "cardinality": "?"
           },
@@ -2899,6 +2865,14 @@ export const AdvscriptGrammar = (): Grammar => loadedAdvscriptGrammar ||(loadedA
             "cardinality": "*"
           },
           {
+            "$type": "RuleCall",
+            "arguments": [],
+            "rule": {
+              "$refText": "WS"
+            },
+            "cardinality": "?"
+          },
+          {
             "$type": "Assignment",
             "feature": "pipe",
             "operator": "=",
@@ -2910,38 +2884,6 @@ export const AdvscriptGrammar = (): Grammar => loadedAdvscriptGrammar ||(loadedA
               }
             },
             "cardinality": "?"
-          }
-        ]
-      }
-    },
-    {
-      "$type": "ParserRule",
-      "parameters": [],
-      "name": "ESCToken",
-      "hiddenTokens": [],
-      "alternatives": {
-        "$type": "Alternatives",
-        "elements": [
-          {
-            "$type": "Assignment",
-            "feature": "content",
-            "operator": "=",
-            "terminal": {
-              "$type": "RuleCall",
-              "arguments": [],
-              "rule": {
-                "$refText": "Token_Bracket_L"
-              }
-            },
-            "elements": []
-          },
-          {
-            "$type": "RuleCall",
-            "arguments": [],
-            "rule": {
-              "$refText": "Token_Bracket_R"
-            },
-            "elements": []
           }
         ]
       }
@@ -3070,6 +3012,14 @@ export const AdvscriptGrammar = (): Grammar => loadedAdvscriptGrammar ||(loadedA
                         }
                       }
                     }
+                  },
+                  {
+                    "$type": "RuleCall",
+                    "arguments": [],
+                    "rule": {
+                      "$refText": "Space"
+                    },
+                    "cardinality": "?"
                   },
                   {
                     "$type": "Assignment",
@@ -3225,14 +3175,45 @@ export const AdvscriptGrammar = (): Grammar => loadedAdvscriptGrammar ||(loadedA
     {
       "$type": "ParserRule",
       "parameters": [],
-      "name": "Space",
+      "name": "ESCToken",
       "hiddenTokens": [],
-      "type": "string",
       "alternatives": {
-        "$type": "RuleCall",
-        "arguments": [],
-        "rule": {
-          "$refText": "WS"
+        "$type": "Assignment",
+        "feature": "content",
+        "operator": "=",
+        "terminal": {
+          "$type": "Alternatives",
+          "elements": [
+            {
+              "$type": "RuleCall",
+              "arguments": [],
+              "rule": {
+                "$refText": "Token_Bracket_L"
+              },
+              "elements": []
+            },
+            {
+              "$type": "RuleCall",
+              "arguments": [],
+              "rule": {
+                "$refText": "Token_Bracket_R"
+              }
+            },
+            {
+              "$type": "RuleCall",
+              "arguments": [],
+              "rule": {
+                "$refText": "Token_Template_L"
+              }
+            },
+            {
+              "$type": "RuleCall",
+              "arguments": [],
+              "rule": {
+                "$refText": "Token_Template_R"
+              }
+            }
+          ]
         },
         "elements": []
       }
@@ -3330,7 +3311,7 @@ export const AdvscriptGrammar = (): Grammar => loadedAdvscriptGrammar ||(loadedA
     {
       "$type": "ParserRule",
       "parameters": [],
-      "name": "Token_P",
+      "name": "Token_Dot",
       "hiddenTokens": [],
       "type": "string",
       "alternatives": {
@@ -3470,35 +3451,6 @@ export const AdvscriptGrammar = (): Grammar => loadedAdvscriptGrammar ||(loadedA
             "elements": []
           }
         ]
-      }
-    },
-    {
-      "$type": "ParserRule",
-      "parameters": [],
-      "name": "TextExpr",
-      "hiddenTokens": [],
-      "type": "string",
-      "alternatives": {
-        "$type": "Alternatives",
-        "elements": [
-          {
-            "$type": "RuleCall",
-            "arguments": [],
-            "rule": {
-              "$refText": "ID"
-            },
-            "elements": []
-          },
-          {
-            "$type": "RuleCall",
-            "arguments": [],
-            "rule": {
-              "$refText": "Escapse"
-            },
-            "elements": []
-          }
-        ],
-        "cardinality": "+"
       }
     },
     {
@@ -4373,7 +4325,7 @@ export const AdvscriptGrammar = (): Grammar => loadedAdvscriptGrammar ||(loadedA
                 "$type": "RuleCall",
                 "arguments": [],
                 "rule": {
-                  "$refText": "WS"
+                  "$refText": "Space"
                 },
                 "cardinality": "?"
               },
@@ -4617,6 +4569,28 @@ export const AdvscriptGrammar = (): Grammar => loadedAdvscriptGrammar ||(loadedA
                 "$type": "Action",
                 "type": "NumberLiteral",
                 "elements": []
+              },
+              {
+                "$type": "Alternatives",
+                "elements": [
+                  {
+                    "$type": "RuleCall",
+                    "arguments": [],
+                    "rule": {
+                      "$refText": "Operator_Plus"
+                    },
+                    "elements": []
+                  },
+                  {
+                    "$type": "RuleCall",
+                    "arguments": [],
+                    "rule": {
+                      "$refText": "Operator_Minus"
+                    },
+                    "elements": []
+                  }
+                ],
+                "cardinality": "?"
               },
               {
                 "$type": "Assignment",
@@ -4979,6 +4953,22 @@ export const AdvscriptGrammar = (): Grammar => loadedAdvscriptGrammar ||(loadedA
             "elements": []
           }
         ]
+      },
+      "entry": false
+    },
+    {
+      "$type": "ParserRule",
+      "parameters": [],
+      "name": "Space",
+      "hiddenTokens": [],
+      "type": "string",
+      "alternatives": {
+        "$type": "RuleCall",
+        "arguments": [],
+        "rule": {
+          "$refText": "WS"
+        },
+        "elements": []
       },
       "entry": false
     },
@@ -5843,7 +5833,7 @@ export const ExpressionGrammar = (): Grammar => loadedExpressionGrammar ||(loade
                 "$type": "RuleCall",
                 "arguments": [],
                 "rule": {
-                  "$refText": "WS"
+                  "$refText": "Space"
                 },
                 "cardinality": "?"
               },
@@ -6082,6 +6072,28 @@ export const ExpressionGrammar = (): Grammar => loadedExpressionGrammar ||(loade
                 "$type": "Action",
                 "type": "NumberLiteral",
                 "elements": []
+              },
+              {
+                "$type": "Alternatives",
+                "elements": [
+                  {
+                    "$type": "RuleCall",
+                    "arguments": [],
+                    "rule": {
+                      "$refText": "Operator_Plus"
+                    },
+                    "elements": []
+                  },
+                  {
+                    "$type": "RuleCall",
+                    "arguments": [],
+                    "rule": {
+                      "$refText": "Operator_Minus"
+                    },
+                    "elements": []
+                  }
+                ],
+                "cardinality": "?"
               },
               {
                 "$type": "Assignment",
@@ -6423,6 +6435,21 @@ export const ExpressionGrammar = (): Grammar => loadedExpressionGrammar ||(loade
             "elements": []
           }
         ]
+      }
+    },
+    {
+      "$type": "ParserRule",
+      "parameters": [],
+      "name": "Space",
+      "hiddenTokens": [],
+      "type": "string",
+      "alternatives": {
+        "$type": "RuleCall",
+        "arguments": [],
+        "rule": {
+          "$refText": "WS"
+        },
+        "elements": []
       }
     },
     {
