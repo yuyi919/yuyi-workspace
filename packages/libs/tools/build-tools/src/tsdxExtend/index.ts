@@ -4,12 +4,13 @@ import resolve from "@rollup/plugin-node-resolve";
 import fs from "fs-extra";
 import path from "path";
 import { RollupOptions, RollupWarning, OutputOptions } from "rollup";
-import commonjs from "rollup-plugin-commonjs";
+import commonjs, { RollupCommonJSOptions } from "@rollup/plugin-commonjs";
 import replacer from "rollup-plugin-replace";
 import type { RollupBabelInputPluginOptions } from "@rollup/plugin-babel";
 import RollupPluginTypescript2 from "rollup-plugin-typescript2";
 import * as Logger from "tsdx/dist/output";
 import { external } from "tsdx/dist/utils";
+import alias, { RollupAliasOptions } from "@rollup/plugin-alias";
 import { castArray } from "lodash";
 import { createExtractErrorsPlugins } from "./extractErrors";
 import * as BabelConfigPreset from "./preset-babel";
@@ -64,6 +65,7 @@ export type TsdxOptions = {
   name: string;
   errorMapFilePath?: string;
   input: string;
+  minify?: boolean
 };
 export type ExtendConfig = RollupOptions & {
   preset?: "ts" | "vue3" | "babel-ts" | "ts-only";
@@ -76,6 +78,8 @@ export type ExtendConfig = RollupOptions & {
   extractErrors?: boolean | string;
   overwriteTsConfig?: any;
   output?: OutputOptions;
+  alias?: RollupAliasOptions;
+  commonjs?: RollupCommonJSOptions;
 };
 /**
  * 继承默认的配置tsdx构建
@@ -92,6 +96,8 @@ export function extendTsdxConfig(extendConfig: ExtendConfig = {}) {
     transpiler = "all",
     extractErrors,
     overwriteTsConfig,
+    commonjs: commonjsOptions,
+    alias: aliasOptions,
     ...next
   } = extendConfig;
   if (preset && !["ts", "vue3", "babel-ts", "ts-only"].includes(preset)) {
@@ -115,6 +121,8 @@ export function extendTsdxConfig(extendConfig: ExtendConfig = {}) {
     rollup(config: RollupOptions, options: TsdxOptions, outputNum: number = num++) {
       // Logger.info(outputNum);
       process.env.NODE_TSDX_FORMAT = options.format;
+      const NODE_ENV = JSON.stringify(options.minify ? "production" : "development")
+      console.log("process.env.NODE_ENV", NODE_ENV)
       const { plugins = [] } = config;
       if (preset === "vue3") {
         plugins.unshift(createPluginVue());
@@ -208,15 +216,24 @@ export function extendTsdxConfig(extendConfig: ExtendConfig = {}) {
         }
         if (plugin.name === "commonjs") {
           return list.concat([
-            commonjs({
-              // t
-            }),
+            commonjs(
+              commonjsOptions ||
+                {
+                  // t
+                }
+            ),
           ]);
         }
         return list.concat([plugin]);
       }, []);
       prePlugins && config.plugins.unshift(...prePlugins);
       config.plugins.unshift(
+        replacer({
+          delimiters: ["", ""],
+          values: {
+            "process.env.NODE_ENV": NODE_ENV
+          },
+        }),
         replacer({
           delimiters: ["", ""],
           values: {
@@ -229,6 +246,9 @@ export function extendTsdxConfig(extendConfig: ExtendConfig = {}) {
           },
         })
       );
+      if (aliasOptions) {
+        config.plugins.unshift(alias(aliasOptions));
+      }
       if (output) {
         castArray(config.output).forEach((source) => {
           const { globals, ...other } = output;

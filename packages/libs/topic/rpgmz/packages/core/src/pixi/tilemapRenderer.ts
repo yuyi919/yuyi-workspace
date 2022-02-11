@@ -98,8 +98,8 @@ export class TilemapRenderer extends PIXI.ObjectRenderer {
 
     return new PIXI.Shader(PIXI.Program.from(vertexSrc, fragmentSrc), {
       uSampler0: 0,
-      uSampler1: 1,
-      uSampler2: 2,
+      uSampler1: 0,
+      uSampler2: 0,
       uProjectionMatrix: new PIXI.Matrix(),
     });
   }

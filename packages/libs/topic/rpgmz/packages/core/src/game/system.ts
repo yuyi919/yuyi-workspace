@@ -272,4 +272,12 @@ export class Game_System {
   windowPadding(): number {
     return 12;
   }
+  
+  windowOpacity() {
+    if ("windowOpacity" in $dataSystem.advanced) {
+      return $dataSystem.advanced.windowOpacity;
+    } else {
+      return 192;
+    }
+  }
 }

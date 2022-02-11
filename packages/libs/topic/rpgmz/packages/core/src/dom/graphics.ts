@@ -1,5 +1,4 @@
-import * as PIXI from "pixi.js";
-import { run } from "../App";
+// import { run } from "../App";
 import { Utils } from "./utils";
 import { Video } from "./video";
 import { FPSCounter } from "./fpsCounter";
@@ -282,6 +281,7 @@ export class Graphics {
   static resize(width: number, height: number): void {
     this._width = width;
     this._height = height;
+    this._app.renderer.resize(width, height);
     this._updateAllElements();
   }
 
@@ -567,17 +567,16 @@ export class Graphics {
   static _createPixiApp(): void {
     try {
       this._setupPixi();
-      const Application = run(this._canvas!, { 
-        autoStart: false,
-      })
-      this._app = Application.appliaction
-      this._canvas = Application.$el as HTMLCanvasElement
-      // this._updateAllElements()
-      // new PIXI.Application({
-      //   view: this._canvas!,
+      // const Application = run(this._canvas!, {
       //   autoStart: false,
       // });
-      console.log(this._app)
+      // this._app = Application.appliaction;
+      // this._canvas = Application.$el as HTMLCanvasElement;
+      // this._updateAllElements()
+      this._app = new PIXI.Application({
+        view: this._canvas,
+        autoStart: false,
+      });
       this._app.ticker.remove(this._app.render, this._app);
       this._app.ticker.add(this._onTick, this);
     } catch (e) {
@@ -596,6 +595,7 @@ export class Graphics {
         this._effekseer = window.effekseer.createContext();
         if (this._effekseer) {
           this._effekseer.init(this._app.renderer.gl);
+          this._effekseer.setRestorationOfStatesFlag(false);
         }
       } catch (e) {
         this._app = null;

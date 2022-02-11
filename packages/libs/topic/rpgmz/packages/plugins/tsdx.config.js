@@ -11,6 +11,28 @@ module.exports = extendTsdxConfig({
   //   "path",
   //   /babel/,
   // ],
+  commonjs: {
+    exclude: ["@inlet/react-pixi/animated", "@lazarv/wasm-yoga"],
+  },
+  alias: {
+    entries: [
+      { find: "@lazarv/wasm-yoga", replacement: require.resolve("./fix/yoga") },
+      {
+        find: /^@inlet\/react-pixi\/animated$/,
+        replacement: require.resolve("@inlet/react-pixi/animated"),
+      },
+      // {
+      //   find: /^react$/,
+      //   replacement: require.resolve("react/cjs/react.production.min.js"),
+      // },
+      // {
+      //   find: /^react-dom$/,
+      //   replacement: require.resolve("react-dom/cjs/react-dom.production.min.js"),
+      // },
+      //   replacement: require.resolve("@inlet/react-pixi/animated"),
+      // },
+    ],
+  },
   preset: "ts-only",
   bundleDeps: [
     /babel/,
@@ -19,6 +41,11 @@ module.exports = extendTsdxConfig({
     // "@yuyi919/rpgmz-plugin-transformer",
     // // "class-transformer",
     // "reflect-metadata",
+    "react",
+    "object-assign",
+    "scheduler",
+    "@lazarv/wasm-yoga",
+    "pixi-flex-layout",
     "lodash-es",
   ],
   excludeDundleDeps: [],
@@ -33,15 +60,18 @@ module.exports = extendTsdxConfig({
     hoistTransitiveImports: false,
     esModule: false,
     // compact: true,
+    // strict: false,
     freeze: false,
     sourcemap: true,
     globals: {
+      react: "React",
+      "pixi.js": "PIXI",
       // "@yuyi919/rpgmz-core": "RPGMZ",
       // Core: "globalThis",
     },
   },
   treeshake: true,
-  shimMissingExports: true,
+  // shimMissingExports: true,
   experimentalOptimizeChunks: true,
   manualChunks: false,
   // manualChunks(id) {

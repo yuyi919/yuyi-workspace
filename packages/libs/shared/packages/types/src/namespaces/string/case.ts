@@ -1,41 +1,44 @@
 import { Types } from "../..";
 
-type KeyWords = {
-  [K in
-    | "A"
-    | "B"
-    | "C"
-    | "D"
-    | "E"
-    | "F"
-    | "G"
-    | "H"
-    | "I"
-    | "J"
-    | "K"
-    | "L"
-    | "M"
-    | "N"
-    | "O"
-    | "P"
-    | "Q"
-    | "R"
-    | "S"
-    | "T"
-    | "U"
-    | "V"
-    | "W"
-    | "X"
-    | "Y"
-    | "Z"]: Lowercase<K>;
-};
-type UpperKey = Uppercase<keyof KeyWords>;
-type LowerKey = Lowercase<KeyWords[keyof KeyWords]>;
+// type KeyWords = {
+//   [K in
+//     | "A"
+//     | "B"
+//     | "C"
+//     | "D"
+//     | "E"
+//     | "F"
+//     | "G"
+//     | "H"
+//     | "I"
+//     | "J"
+//     | "K"
+//     | "L"
+//     | "M"
+//     | "N"
+//     | "O"
+//     | "P"
+//     | "Q"
+//     | "R"
+//     | "S"
+//     | "T"
+//     | "U"
+//     | "V"
+//     | "W"
+//     | "X"
+//     | "Y"
+//     | "Z"]: Lowercase<K>;
+// };
+// type UpperKey = Uppercase<keyof KeyWords>;
+// type LowerKey = Lowercase<KeyWords[keyof KeyWords]>;
 
-export type ToUpperCase<S extends string> = S extends LowerKey ? Uppercase<S> : S;
-export type ToLowerCase<S extends string> = S extends UpperKey ? Lowercase<S> : S;
-type ToUpperCaseFirst<T extends string> = T extends `${infer A}${infer B}`
-  ? `${Uppercase<A>}${B}`
+export type ToUpperCase<S extends string> = Uppercase<S>;
+export type ToLowerCase<S extends string> = Lowercase<S>;
+export type ToUpperCaseFirst<T extends string> = T extends `${infer A}${infer B}`
+  ? `${ToUpperCase<A>}${B}`
+  : T;
+export type ToLowerCaseFirst<T extends string> = T extends `${infer A}${infer B}`
+  ? `${ToLowerCase<A>}${B}`
   : T;
 
 // type ToUpperCaseFirstA = ToUpperCaseFirst<"abc">

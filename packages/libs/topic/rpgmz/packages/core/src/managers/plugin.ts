@@ -25,10 +25,11 @@ export class PluginManager {
 
   static setup(plugins: Array<Plugin>): void {
     for (const plugin of plugins) {
-      if (plugin.status && !this._scripts.includes(plugin.name)) {
-        this.setParameters(plugin.name, plugin.parameters);
+      const pluginName = Utils.extractFileName(plugin.name);
+      if (plugin.status && !this._scripts.includes(pluginName)) {
+        this.setParameters(pluginName, plugin.parameters);
         this.loadScript(plugin.name);
-        this._scripts.push(plugin.name);
+        this._scripts.push(pluginName);
       }
     }
   }

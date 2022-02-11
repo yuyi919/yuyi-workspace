@@ -9,7 +9,7 @@
 import "./hack";
 import * as Yuyi919 from "./core";
 
-window.Yuyi919 = Yuyi919;
+window.Yuyi919 = { ...Yuyi919 };
 
 /**
  * yuyi919插件核心

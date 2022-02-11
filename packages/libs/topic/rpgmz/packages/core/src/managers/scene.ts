@@ -32,7 +32,7 @@ export class SceneManager {
 
   /**
    * 引导场景
-   * @param sceneClass 
+   * @param sceneClass
    */
   static run(sceneClass: Constructable<Scene_Base>): void {
     try {
@@ -239,7 +239,7 @@ export class SceneManager {
   }
 
   static updateEffekseer(): void {
-    if (Graphics.effekseer) {
+    if (Graphics.effekseer && this.isGameActive()) {
       Graphics.effekseer.update();
     }
   }
@@ -329,18 +329,18 @@ export class SceneManager {
 
   static goto(SceneClass: Constructable<Scene_Base> | null): void {
     if (SceneClass) {
-      console.debug("start:", SceneClass.name)
+      console.debug("start:", SceneClass.name);
       this._nextScene = new SceneClass();
     }
     if (this._scene) {
-      console.debug("end:", this._scene.constructor.name)
+      console.debug("end:", this._scene.constructor.name);
       this._scene.stop();
     }
   }
 
   /**
    * 在当前Scene上叠加场景，内部通过维护一个场景栈来实现
-   * @param sceneClass 
+   * @param sceneClass
    */
   static push(sceneClass: Constructable<Scene_Base>): void {
     this._stack.push(this._scene!.constructor);

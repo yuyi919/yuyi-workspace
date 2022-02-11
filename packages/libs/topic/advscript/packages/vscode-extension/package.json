@@ -3,7 +3,7 @@
   "displayName": "Vscode-Advscript",
   "description": "AdvScript support for VSCode",
 	"aiKey": "0c2689ab-4ce9-416d-a585-c9765b7f4c88.local",
-  "version": "0.1.2",
+  "version": "0.0.1",
   "publisher": "yuyi919",
   "capabilities": {
     "untrustedWorkspaces": {

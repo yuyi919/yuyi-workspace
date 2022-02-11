@@ -49,6 +49,10 @@ export class Game_Timer {
     return Math.floor(this._frames / 60);
   }
 
+  frames(): number {
+    return this._frames;
+  }
+
   onExpire(): void {
     BattleManager.abort();
   }

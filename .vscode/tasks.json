@@ -20,6 +20,14 @@
     {
       "type": "shell",
       "command": [
+        "rush version --bump --version-policy rpgmz"
+      ],
+      "label": "rush: bump rpgmz packages",
+      "detail": "rush version --bump --version-policy shared --ensure-version-policy"
+    },
+    {
+      "type": "shell",
+      "command": [
         "rush change --bulk --bump-type patch --overwrite --message auto-bump"
       ],
       "label": "rush: change with \"auto\"",

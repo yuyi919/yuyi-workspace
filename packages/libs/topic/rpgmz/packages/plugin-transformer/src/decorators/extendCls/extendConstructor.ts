@@ -35,18 +35,6 @@ export function autoExtendConstructor<Args extends any[], T extends new (...args
   if (extend instanceof Function) {
     const newTargeName =
       (rename && (rename instanceof Function ? rename(Target.name) : rename)) || Target.name;
-
-    let newClsFactory = function trick() {
-      // @ts-ignore
-      // eslint-disable-next-line prefer-const
-      return class extends Target {
-        constructor(...args: Args) {
-          super(...(args as Args));
-          extend(this as InstanceType<T>, args);
-        }
-      };
-    };
-    console.log(Target.name || "awesome", newClsFactory);
     return eval(
       `(${function trick() {
         // @ts-ignore

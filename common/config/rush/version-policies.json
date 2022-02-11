@@ -109,5 +109,17 @@
     "definitionName": "lockStepVersion",
     "version": "0.1.0",
     "nextBump": "patch"
+  },
+  {
+    "policyName": "advscript",
+    "definitionName": "lockStepVersion",
+    "version": "0.0.1",
+    "nextBump": "patch"
+  },
+  {
+    "policyName": "rpgmz",
+    "definitionName": "lockStepVersion",
+    "version": "0.0.2",
+    "nextBump": "patch"
   }
 ]

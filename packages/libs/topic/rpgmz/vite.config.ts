@@ -5,6 +5,8 @@ import { defineViteConfig } from "@yuyi919/build-tools";
 import { resolve } from "path";
 import type { ConfigEnv, UserConfig } from "vite";
 import html from "vite-plugin-html";
+import builtins from "rollup-plugin-node-builtins";
+import VitePluginReact from "@vitejs/plugin-react";
 // import PurgeIcons from "vite-plugin-purge-icons";
 // import { modifyVars } from "./src/config/lessModifyVars";
 // import VitePluginFileSystem from "./vite-plugins/filesystem";
@@ -53,20 +55,25 @@ export default defineViteConfig({
           "/@/": `${pathResolve("./src/App")}/`,
           "/src/": `${pathResolve("./src")}/`,
           "@yuyi919/rpgmz-core": `${pathResolve("./packages/core/src")}/`,
-          "@yuyi919/rpgmz-plugin-transformer": `${pathResolve("./packages/plugin-transformer/src")}/`,
+          "@yuyi919/rpgmz-plugin-transformer": `${pathResolve(
+            "./packages/plugin-transformer/src"
+          )}/`,
           lodash: "lodash-es",
           "@advscript": pathResolve("../advscript/src/index.ts"),
           "lodash/": "lodash-es/",
+          "pixi.js": pathResolve("./packages/core/node_modules/pixi.js"),
+          "@plugins/": `${pathResolve("./packages/plugins/src")}/`,
+          "@lazarv/wasm-yoga": pathResolve("./packages/plugins/fix/yoga.js"),
         },
       },
       define: {
         "process.env.NODE_ENV": JSON.stringify(mode),
       },
       esbuild: {
-        jsx: "transform",
-        jsxFactory: "jsx_runtime.jsxEsbuild",
-        jsxFragment: "jsx_runtime.Fragment",
-        jsxInject: "import * as jsx_runtime from '@yuyi919/vue-jsx-factory'",
+        // jsx: "transform",
+        // jsxFactory: "jsx_runtime.jsxEsbuild",
+        // jsxFragment: "jsx_runtime.Fragment",
+        // jsxInject: "import * as jsx_runtime from '@yuyi919/vue-jsx-factory'",
       },
       root: pathResolve("."),
       publicDir: command === "build" ? false : "project",
@@ -108,6 +115,12 @@ export default defineViteConfig({
         // PurgeIcons(),
         // vueJsx({}),
         // vue({}),
+        {
+          name: "builtins",
+          enforce: "pre",
+          ...builtins({ crypto: true }),
+        },
+        VitePluginReact(),
         html({
           minify: isBuild,
           inject: {
@@ -127,10 +140,12 @@ export default defineViteConfig({
           // "resize-observer-polyfill",
           // "ant-design-vue",
           // "ant-design-vue/es/locale/zh_CN",
-          "vue-types",
+          // "vue-types",
           // "source-map",
           // "@ant-design/icons-vue",
           "vue",
+          "pixi.js",
+          "@lazarv/wasm-yoga",
         ],
         exclude: ["fs"],
       },

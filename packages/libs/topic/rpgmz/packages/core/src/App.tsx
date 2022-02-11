@@ -23,29 +23,27 @@ export const App = defineComponent({
     return () => {
       return (
         <PScene name={"test"} parent={SceneManager._scene}>
-          <div>
-            <PWindow name="test" help="test">
-              <PText
-                text="text"
-                textStyle={{
-                  fontFamily: "Arial",
-                  fontSize: 36,
-                  fontStyle: "italic",
-                  fontWeight: "bold",
-                  fill: ["#ffffff", "#00ff99"], // gradient
-                  stroke: "#4a1850",
-                  strokeThickness: 5,
-                  dropShadow: true,
-                  dropShadowColor: "#000000",
-                  dropShadowBlur: 4,
-                  dropShadowAngle: Math.PI / 6,
-                  dropShadowDistance: 6,
-                  wordWrap: true,
-                  wordWrapWidth: 440,
-                }}
-              />
-            </PWindow>
-          </div>
+          <PWindow name="test" help="test">
+            <PText
+              text="text"
+              textStyle={{
+                fontFamily: "Arial",
+                fontSize: 36,
+                fontStyle: "italic",
+                fontWeight: "bold",
+                fill: ["#ffffff", "#00ff99"], // gradient
+                stroke: "#4a1850",
+                strokeThickness: 5,
+                dropShadow: true,
+                dropShadowColor: "#000000",
+                dropShadowBlur: 4,
+                dropShadowAngle: Math.PI / 6,
+                dropShadowDistance: 6,
+                wordWrap: true,
+                wordWrapWidth: 440,
+              }}
+            />
+          </PWindow>
         </PScene>
       );
     };
@@ -56,18 +54,15 @@ export const run = (el: HTMLCanvasElement, props: PApplicationProps = {}) => {
   const vue = createApp(
     {
       setup() {
-        const text = shallowRef(null);
+        const text = shallowRef<JSX.Element>(null);
         setTimeout(() => {
           text.value = <App />;
         }, 1000);
         return () => {
-          console.log($gameSystem);
           return (
-            <>
-              <PApplication canvasId={el.id} mergeJsxProps={[{ props }]}>
-                {text.value}
-              </PApplication>
-            </>
+            <PApplication canvasId={el.id} mergeJsxProps={[{ props }]}>
+              {text.value}
+            </PApplication>
           );
         };
       },

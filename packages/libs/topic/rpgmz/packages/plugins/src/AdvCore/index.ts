@@ -10,13 +10,7 @@ import RMMZ, {
   Window_Message,
   Window_NameBox,
 } from "@yuyi919/rpgmz-core";
-import {
-  createConstructor,
-  createStaticConstructor,
-  logger,
-  x,
-} from "@yuyi919/rpgmz-plugin-transformer";
-import { memoize } from "lodash";
+import { createConstructor, logger, x } from "@yuyi919/rpgmz-plugin-transformer";
 import { computed, action, configure, observable } from "mobx";
 import { DiceCaller, DiceConfig, TextboxConfig, TextSeConfig } from "./structs";
 import { colors, getSpeaker, randomInt } from "./utils";
@@ -555,5 +549,4 @@ export class Extract extends Window_Message {
     SuperWindowMessage.processCharacter(textState);
   }
 }
-
 export default config;

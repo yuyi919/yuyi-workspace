@@ -24,7 +24,7 @@
    * Specify one of: "pnpmVersion", "npmVersion", or "yarnVersion".  See the Rush documentation
    * for details about these alternatives.
    */
-  "pnpmVersion": "6.22.2",
+  "pnpmVersion": "6.30.1",
   // "npmVersion": "4.5.0",
   // "yarnVersion": "1.9.4",
   /**
@@ -487,25 +487,25 @@
       "packageName": "@yuyi919/advscript-editor",
       "projectFolder": "packages/libs/topic/advscript/packages/editor",
       "reviewCategory": "production",
-      "versionPolicyName": "shared"
+      "versionPolicyName": "advscript"
     },
     {
       "packageName": "@yuyi919/advscript-language-services",
       "projectFolder": "packages/libs/topic/advscript/packages/language-services",
       "reviewCategory": "production",
-      "versionPolicyName": "shared"
+      "versionPolicyName": "advscript"
     },
     {
       "packageName": "@yuyi919/advscript-parser",
       "projectFolder": "packages/libs/topic/advscript/packages/parser",
       "reviewCategory": "production",
-      "versionPolicyName": "shared"
+      "versionPolicyName": "advscript"
     },
     {
       "packageName": "@yuyi919/advscript-vite-plugin",
       "projectFolder": "packages/libs/topic/advscript/packages/vite-plugin",
       "reviewCategory": "production",
-      "versionPolicyName": "shared"
+      "versionPolicyName": "advscript"
     },
     {
       "packageName": "@yuyi919/build-tools",
@@ -538,19 +538,19 @@
       "packageName": "@yuyi919/rpgmz-core",
       "projectFolder": "packages/libs/topic/rpgmz/packages/core",
       "reviewCategory": "production",
-      "versionPolicyName": "shared"
+      "versionPolicyName": "rpgmz"
     },
     {
       "packageName": "@yuyi919/rpgmz-plugin-transformer",
       "projectFolder": "packages/libs/topic/rpgmz/packages/plugin-transformer",
       "reviewCategory": "production",
-      "versionPolicyName": "shared"
+      "versionPolicyName": "rpgmz"
     },
     {
       "packageName": "@yuyi919/rpgmz-plugins",
       "projectFolder": "packages/libs/topic/rpgmz/packages/plugins",
       "reviewCategory": "production",
-      "versionPolicyName": "shared"
+      "versionPolicyName": "rpgmz"
     },
     {
       "packageName": "@yuyi919/shared",
@@ -592,7 +592,7 @@
       "packageName": "@yuyi919/topic-advscript",
       "projectFolder": "packages/libs/topic/advscript",
       "reviewCategory": "production",
-      "versionPolicyName": "shared"
+      "versionPolicyName": "advscript"
     },
     {
       "packageName": "@yuyi919/topic-aitalk-service",
@@ -604,7 +604,7 @@
       "packageName": "@yuyi919/topic-rpgmz",
       "projectFolder": "packages/libs/topic/rpgmz",
       "reviewCategory": "production",
-      "versionPolicyName": "shared"
+      "versionPolicyName": "rpgmz"
     },
     {
       "packageName": "@yuyi919/vue-antv-plus2",

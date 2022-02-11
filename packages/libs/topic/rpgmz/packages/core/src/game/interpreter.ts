@@ -553,10 +553,11 @@ export class Game_Interpreter {
         break;
       case 3: // Timer
         if ($gameTimer.isWorking()) {
+          const sec = $gameTimer.frames() / 60;
           if (params[2] === 0) {
-            result = $gameTimer.seconds() >= params[1];
+            result = sec >= params[1];
           } else {
-            result = $gameTimer.seconds() <= params[1];
+            result = sec <= params[1];
           }
         }
         break;
@@ -1899,7 +1900,8 @@ export class Game_Interpreter {
 
   // Plugin Command
   command357(params: any): boolean {
-    PluginManager.callCommand(this, params[0], params[1], params[3]);
+    const pluginName = Utils.extractFileName(params[0]);
+    PluginManager.callCommand(this, pluginName, params[1], params[3]);
     return true;
   }
 }

@@ -52,6 +52,7 @@ export class Window_ChoiceList extends Window_Command {
     this.placeCancelButton();
     this.createContents();
     this.refresh();
+    this.scrollTo(0, 0);
     this.selectDefault();
     this.open();
     this.activate();

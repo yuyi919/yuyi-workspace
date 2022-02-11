@@ -128,6 +128,10 @@ export class Game_Temp {
   retrieveCommonEvent(): MZ.DataCommonEvent {
     return $dataCommonEvents[this._commonEventQueue.shift()!];
   }
+  
+  clearCommonEventReservation() {
+    this._commonEventQueue.length = 0;
+  }
 
   isCommonEventReserved(): boolean {
     return this._commonEventQueue.length > 0;

@@ -78,9 +78,15 @@ export class Game_Party extends Game_Unit {
   }
 
   battleMembers(): Game_Actor[] {
-    return this.allMembers()
-      .slice(0, this.maxBattleMembers())
-      .filter((actor) => actor.isAppeared());
+    return this.allBattleMembers().filter((actor) => actor.isAppeared());
+  }
+
+  hiddenBattleMembers() {
+    return this.allBattleMembers().filter((actor) => actor.isHidden());
+  }
+
+  allBattleMembers() {
+    return this.allMembers().slice(0, this.maxBattleMembers());
   }
 
   maxBattleMembers(): number {
@@ -320,6 +326,10 @@ export class Game_Party extends Game_Unit {
     } else {
       return false;
     }
+  }
+
+  isEscaped(item?: any) {
+    return this.isAllDead() && this.hiddenBattleMembers().length > 0;
   }
 
   onPlayerWalk(): void {

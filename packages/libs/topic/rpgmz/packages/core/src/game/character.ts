@@ -387,6 +387,7 @@ export class Game_Character extends Game_CharacterBase {
     } else if (this._moveRouteForcing) {
       this._moveRouteForcing = false;
       this.restoreMoveRoute();
+      this.setMovementSuccess(false);
     }
   }
 

@@ -65,6 +65,10 @@ export class Sprite_Gauge extends Sprite {
     return 24;
   }
 
+  textHeight(): number {
+    return 24;
+  }
+
   gaugeHeight(): number {
     return 12;
   }
@@ -308,7 +312,7 @@ export class Sprite_Gauge extends Sprite {
 
   drawGauge(): void {
     const gaugeX = this.gaugeX();
-    const gaugeY = this.bitmapHeight() - this.gaugeHeight();
+    const gaugeY = this.textHeight() - this.gaugeHeight();
     const gaugewidth = this.bitmapWidth() - gaugeX;
     const gaugeHeight = this.gaugeHeight();
     this.drawGaugeRect(gaugeX, gaugeY, gaugewidth, gaugeHeight);
@@ -340,7 +344,7 @@ export class Sprite_Gauge extends Sprite {
     const x = this.labelOutlineWidth() / 2;
     const y = this.labelY();
     const width = this.bitmapWidth();
-    const height = this.bitmapHeight();
+    const height = this.textHeight();
     this.setupLabelFont();
     this.bitmap!.paintOpacity = this.labelOpacity();
     this.bitmap!.drawText(label, x, y, width, height, "left");
@@ -357,7 +361,9 @@ export class Sprite_Gauge extends Sprite {
 
   measureLabelWidth() {
     this.setupLabelFont();
-    return this.bitmap.measureTextWidth(this.label());
+    const labels = [TextManager.hpA, TextManager.mpA, TextManager.tpA];
+    const widths = labels.map(str => this.bitmap.measureTextWidth(str));
+    return Math.ceil(Math.max(...widths));
   }
 
   labelOpacity(): number {
@@ -367,7 +373,7 @@ export class Sprite_Gauge extends Sprite {
   drawValue(): void {
     const currentValue = this.currentValue();
     const width = this.bitmapWidth();
-    const height = this.bitmapHeight();
+    const height = this.textHeight();
     this.setupValueFont();
     this.bitmap!.drawText(String(currentValue), 0, 0, width, height, "right");
   }

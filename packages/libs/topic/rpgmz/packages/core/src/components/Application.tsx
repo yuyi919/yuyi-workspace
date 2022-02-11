@@ -67,7 +67,6 @@ export const PApplication = defineComponent({
   emits: EventHandlers,
   setup(props, context) {
     const render = useApplication(props, context);
-
     return () => {
       return (
         <canvas ref={render} id={props.canvasId}>

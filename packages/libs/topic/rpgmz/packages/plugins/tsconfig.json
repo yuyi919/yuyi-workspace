@@ -4,6 +4,7 @@
     "target": "es2017",
     "module": "esnext",
     "emitDeclarationOnly": true,
+    "jsx": "react",
     "outDir": "./dist",
     "rootDir": "./src",
     "tsBuildInfoFile": "./node_modules/@yuyi919/workspace-base-rig/.tsBuildInfo/topic-rpgmz-packages-plugins.json"

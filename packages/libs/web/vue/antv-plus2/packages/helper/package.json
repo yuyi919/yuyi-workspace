@@ -15,7 +15,7 @@
   },
   "dependencies": {
     "@yuyi919/shared-types": "workspace:0.0.5",
-    "@yuyi919/vue-shared-decorators": "workspace:0.0.1",
+    "@yuyi919/vue-shared-decorators": "workspace:0.0.3",
     "lodash": "4.17.21",
     "lodash-es": "4.17.21",
     "tslib": "~2.3.1",

@@ -84,6 +84,7 @@ export class Sprite_Clickable extends Sprite {
   }
 
   onMouseEnter(): void {
+    console.log("onMouseEnter")
     //
   }
 

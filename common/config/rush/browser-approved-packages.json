@@ -31,6 +31,14 @@
       "allowedCategories": [ "production" ]
     },
     {
+      "name": "@inlet/react-pixi",
+      "allowedCategories": [ "production" ]
+    },
+    {
+      "name": "@lazarv/wasm-yoga",
+      "allowedCategories": [ "production" ]
+    },
+    {
       "name": "@microsoft/api-extractor",
       "allowedCategories": [ "tools" ]
     },
@@ -73,6 +81,10 @@
     {
       "name": "@ohm-js/cli",
       "allowedCategories": [ "production" ]
+    },
+    {
+      "name": "@rollup/plugin-alias",
+      "allowedCategories": [ "tools" ]
     },
     {
       "name": "@rollup/plugin-babel",
@@ -579,6 +591,14 @@
       "allowedCategories": [ "production" ]
     },
     {
+      "name": "pixi-better-scroller",
+      "allowedCategories": [ "production" ]
+    },
+    {
+      "name": "pixi-flex",
+      "allowedCategories": [ "production" ]
+    },
+    {
       "name": "pixi.js",
       "allowedCategories": [ "production" ]
     },
@@ -593,6 +613,18 @@
     {
       "name": "prettier",
       "allowedCategories": [ "production", "tools" ]
+    },
+    {
+      "name": "react",
+      "allowedCategories": [ "production" ]
+    },
+    {
+      "name": "react-dom",
+      "allowedCategories": [ "production" ]
+    },
+    {
+      "name": "react-spring",
+      "allowedCategories": [ "production" ]
     },
     {
       "name": "readability-scores",
@@ -856,6 +888,18 @@
     },
     {
       "name": "yargs",
+      "allowedCategories": [ "production" ]
+    },
+    {
+      "name": "yoga-layout",
+      "allowedCategories": [ "production" ]
+    },
+    {
+      "name": "yoga-layout-prebuilt",
+      "allowedCategories": [ "production" ]
+    },
+    {
+      "name": "yoga-layout-wasm",
       "allowedCategories": [ "production" ]
     },
     {

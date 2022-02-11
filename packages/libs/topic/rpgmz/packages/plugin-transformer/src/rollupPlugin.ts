@@ -1,6 +1,6 @@
-import MagicString from "magic-string";
 import { ensureDir, readJsonSync, writeJSON } from "fs-extra";
-import { defaults, cloneDeep } from "lodash";
+import { defaults } from "lodash";
+import MagicString from "magic-string";
 import { basename, join } from "path";
 import { OutputChunk } from "rollup";
 import ts from "typescript";
@@ -84,15 +84,21 @@ export function createPlugin(options?: {
           if (nameCache[key]) {
             delete bundle[key];
             nameCache[key] = pluginName;
+            // console.log("generateBundle", key);
             const writeCode = `${top}${file.code.replace(
               /('|")\.\/plugin\.libs([0-9]*)(\.js|)('|")/g,
-              (name: string) => `"${getPluginName(name.replace(/^('|")|('|")$/g, ""), prefix)}"`
+              (name: string) => {
+                return `"${getPluginName(name.replace(/^('|")|('|")$/g, ""), prefix)}"`;
+              }
             )}`;
             const next = file;
             // console.log(key, pluginName);
             if (/^plugin\.libs([0-9]*)\.js$/.test(key)) {
               console.log("generateBundle", key, "=>", nameCache[chunkFileNames]);
-              libChunks.push(next);
+              libChunks.push({
+                ...next,
+                code: writeCode,
+              });
               //  else if (libChunks) {
               //   nextBundle.code = libChunks.code + nextBundle.code;
               // }
@@ -161,11 +167,11 @@ export function createPlugin(options?: {
           writeJSON(cacheDir + "/cache.json", normlize(cache), { spaces: 2 })
         );
 
-        code = code.replace(`define([`, `loadEsModule("${pluginName}", [`);
         const banner = texts.length > 0 ? `${texts.join("\r\n")}\r\n` : `\r\n`;
         if (!options.sourcemap) {
-          return `${banner}\r\n${code}`;
+          return `${banner}\r\n${code.replace(`define([`, `loadEsModule("${pluginName}", [`)}`;
         }
+        code = code.replace(`define([`, `loadEsModule("${pluginName}", [`);
         const magicString = new MagicString(code);
         magicString.prepend(banner);
         // console.log("renderChunk", fileName, pluginName);

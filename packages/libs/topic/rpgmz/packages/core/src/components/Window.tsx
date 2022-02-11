@@ -111,9 +111,7 @@ export function useWindowEffect<T extends WindowBase, Deps extends WatchSource<u
   );
 }
 
-export function createCommandWindow(
-  props: PWindowProps
-): typeof Window_Command & Constructable<Window_Command> {
+export function createCommandWindow(props: PWindowProps): Constructable<Window_Command> {
   return class TestCommand extends Window_Command {
     initialize(rect?: RectangleLike): void {
       super.initialize(rect);
@@ -213,7 +211,6 @@ export const PHelperWindow = defineComponent({
       [computed(() => props.help)]
     );
     const parent = useParent(props);
-
     return () => (
       <PBaseWindow
         {...props}
@@ -253,24 +250,8 @@ export const PWindow = defineComponent({
     // mask.endFill();
     // window.mask = mask
     return () => {
-      console.log("window", (
-        <>
-          <PBaseWindow
-            {...props}
-            parent={parent.value}
-            factory={window}
-            x={wx}
-            y={wy}
-            width={ww}
-            height={wh}
-          >
-            {context.slots.default?.()}
-          </PBaseWindow>
-          <PHelperWindow {...props} parent={parent.value} />
-        </>
-      ))
       return (
-        <>
+        <i>
           <PBaseWindow
             {...props}
             parent={parent.value}
@@ -283,7 +264,7 @@ export const PWindow = defineComponent({
             {context.slots.default?.()}
           </PBaseWindow>
           <PHelperWindow {...props} parent={parent.value} />
-        </>
+        </i>
       );
     };
   },

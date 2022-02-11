@@ -163,8 +163,9 @@ export class Spriteset_Map extends Spriteset_Base {
       this._parallax!.bitmap = ImageManager.loadParallax(this._parallaxName);
     }
     if (this._parallax!.bitmap) {
-      this._parallax!.origin.x = $gameMap.parallaxOx();
-      this._parallax!.origin.y = $gameMap.parallaxOy();
+      const bitmap = this._parallax.bitmap;
+      this._parallax.origin.x = $gameMap.parallaxOx() % bitmap.width;
+      this._parallax.origin.y = $gameMap.parallaxOy() % bitmap.height;
     }
   }
 

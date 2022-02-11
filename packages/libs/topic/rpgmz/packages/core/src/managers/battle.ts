@@ -2,7 +2,7 @@ import { AudioManager } from "./audio";
 import { SoundManager } from "./sound";
 import { SceneManager } from "./scene";
 import { TextManager } from "./text";
-import { $gameMessage, $gameParty, $gameScreen, $gameSystem, $gameTroop } from "./data";
+import { $gameMessage, $gameParty, $gameTemp, $gameScreen, $gameSystem, $gameTroop } from "./data";
 import { $dataSystem } from "./data";
 import { Game_Action, Game_Actor, Game_Enemy, Game_Battler } from "../game";
 import { Window_BattleLog } from "../windows";
@@ -513,6 +513,15 @@ export class BattleManager {
     }
   }
 
+  static updateTurnEnd(): void {
+    if (this.isTpb()) {
+      this.startTurn();
+    } else {
+      this.endAllBattlersTurn();
+      this._phase = "start";
+    }
+  }
+
   static endAllBattlersTurn(): void {
     for (const battler of this.allBattleMembers()) {
       battler.onTurnEnd();
@@ -526,14 +535,6 @@ export class BattleManager {
       this._logWindow!.displayCurrentState(battler);
     }
     this._logWindow!.displayRegeneration(battler);
-  }
-
-  static updateTurnEnd(): void {
-    if (this.isTpb()) {
-      this.startTurn();
-    } else {
-      this.startInput();
-    }
   }
 
   static getNextSubject(): Game_Battler | null {
@@ -674,7 +675,8 @@ export class BattleManager {
 
   static checkBattleEnd(): boolean {
     if (this._phase) {
-      if (this.checkAbort()) {
+      if ($gameParty.isEscaped()) {
+        this.processPartyEscape();
         return true;
       } else if ($gameParty.isAllDead()) {
         this.processDefeat();
@@ -688,8 +690,9 @@ export class BattleManager {
   }
 
   static checkAbort(): boolean {
-    if ($gameParty.isEmpty() || this.isAborting()) {
+    if (this.isAborting()) {
       this.processAbort();
+      return true;
     }
     return false;
   }
@@ -733,6 +736,11 @@ export class BattleManager {
     }
   }
 
+  static processPartyEscape() {
+    this._escaped = true;
+    this.processAbort();
+  }
+
   static processAbort(): void {
     $gameParty.removeBattleStates();
     this._logWindow!.clear();
@@ -763,6 +771,7 @@ export class BattleManager {
     } else if (this._escaped) {
       $gameSystem.onBattleEscape();
     }
+    $gameTemp.clearCommonEventReservation();
   }
 
   static updateBattleEnd(): void {

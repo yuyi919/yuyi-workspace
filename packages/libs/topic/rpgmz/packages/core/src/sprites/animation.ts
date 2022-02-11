@@ -25,7 +25,6 @@ export class Sprite_Animation extends Sprite {
   _flashColor: MZ.RGBAColorArray = [0, 0, 0, 0];
   _flashDuration = 0;
   _viewportSize = 4096;
-  _originalViewport: Int32Array | null = null;
   z = 8;
 
   constructor();
@@ -58,7 +57,6 @@ export class Sprite_Animation extends Sprite {
     this._flashColor = [0, 0, 0, 0];
     this._flashDuration = 0;
     this._viewportSize = 4096;
-    this._originalViewport = null;
     this.z = 8;
   }
 
@@ -124,9 +122,9 @@ export class Sprite_Animation extends Sprite {
   }
 
   shouldWaitForPrevious(): boolean {
-    // [Note] Effekseer is very heavy on some mobile devices, so we don't
-    //   display many effects at the same time.
-    return Utils.isMobileDevice();
+    // [Note] Older versions of Effekseer were very heavy on some mobile
+    //   devices. We don't need this anymore.
+    return false;
   }
 
   updateEffectGeometry(): void {
@@ -200,7 +198,6 @@ export class Sprite_Animation extends Sprite {
   _render(renderer: PIXI.Renderer): void {
     if (this._targets.length > 0 && this._handle && this._handle.exists) {
       this.onBeforeRender(renderer);
-      this.saveViewport(renderer);
       this.setProjectionMatrix(renderer);
       this.setCameraMatrix(renderer);
       this.setViewport(renderer);
@@ -270,16 +267,8 @@ export class Sprite_Animation extends Sprite {
     return sprite.worldTransform.apply(point);
   }
 
-  saveViewport(renderer: PIXI.Renderer): void {
-    // [Note] Retrieving the viewport is somewhat heavy.
-    if (!this._originalViewport) {
-      this._originalViewport = renderer.gl.getParameter(renderer.gl.VIEWPORT);
-    }
-  }
-
   resetViewport(renderer: PIXI.Renderer): void {
-    const vp = this._originalViewport;
-    renderer.gl.viewport(vp![0], vp![1], vp![2], vp![3]);
+    renderer.gl.viewport(0, 0, renderer.view.width, renderer.view.height);
   }
 
   onBeforeRender(renderer: PIXI.Renderer): void {
@@ -288,7 +277,6 @@ export class Sprite_Animation extends Sprite {
   }
 
   onAfterRender(renderer: PIXI.Renderer): void {
-    renderer.texture.contextChange();
     renderer.texture.reset();
     renderer.geometry.reset();
     renderer.state.reset();

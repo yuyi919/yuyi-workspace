@@ -12,7 +12,7 @@ export const RPGMAKER_NAME: string = "MZ";
  * @type string
  * @constant
  */
-export const RPGMAKER_VERSION: string = "1.1.1";
+export const RPGMAKER_VERSION: string = "1.4.3";
 
 /**
  * Checks whether the current RPG Maker version is greater than or equal to
@@ -179,6 +179,18 @@ export function canPlayWebm(): boolean {
  */
 export function encodeURI(str: string): string {
   return encodeURIComponent(str).replace(/%2F/g, "/");
+}
+
+/**
+ * Gets the filename that does not include subfolders.
+ *
+ * @param {string} filename - The filename with subfolders.
+ * @returns {string} The filename without subfolders.
+ */
+export function extractFileName(filename: string): string {
+  const match = filename.match(/\/(.+)$/);
+  return match ? match[1] : filename;
+  // return filename.split("/").pop();
 }
 
 /**

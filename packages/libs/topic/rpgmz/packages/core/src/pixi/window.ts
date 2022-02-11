@@ -582,16 +582,17 @@ export class Window extends WindowSuper {
     const h = Math.max(0, this._height - m * 2);
     const sprite = this._backSprite!;
     const tilingSprite = sprite.children[0] as TilingSprite;
-    sprite.bitmap = this._windowskin!;
-    sprite.setFrame(0, 0, 96, 96);
+    // [Note] We use 95 instead of 96 here to avoid blurring edges.
+    sprite.bitmap = this._windowskin;
+    sprite.setFrame(0, 0, 95, 95);
     sprite.move(m, m);
-    sprite.scale.x = w / 96;
-    sprite.scale.y = h / 96;
-    tilingSprite.bitmap = this._windowskin!;
+    sprite.scale.x = w / 95;
+    sprite.scale.y = h / 95;
+    tilingSprite.bitmap = this._windowskin;
     tilingSprite.setFrame(0, 96, 96, 96);
     tilingSprite.move(0, 0, w, h);
-    tilingSprite.scale.x = 96 / w;
-    tilingSprite.scale.y = 96 / h;
+    tilingSprite.scale.x = 1 / sprite.scale.x;
+    tilingSprite.scale.y = 1 / sprite.scale.y;
     sprite.setColorTone(this._colorTone);
   }
 

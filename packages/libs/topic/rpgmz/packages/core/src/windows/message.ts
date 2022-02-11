@@ -227,7 +227,7 @@ export class Window_Message extends Window_Base {
         }
       }
       this.flushTextState(textState);
-      if (this.isEndOfText(textState) && !this.pause) {
+      if (this.isEndOfText(textState) && !this.isWaiting()) {
         this.onEndOfText();
       }
       return true;
@@ -241,7 +241,7 @@ export class Window_Message extends Window_Base {
       if (!this._showFast && !this._lineShowFast) {
         return true;
       }
-      if (this.pause || this._waitCount > 0) {
+      if (this.isWaiting()) {
         return true;
       }
     }
@@ -405,5 +405,9 @@ export class Window_Message extends Window_Base {
   startPause(): void {
     this.startWait(10);
     this.pause = true;
+  }
+
+  isWaiting(): boolean {
+    return this.pause || this._waitCount > 0;
   }
 }

@@ -1,6 +1,6 @@
 {
   "name": "@yuyi919/rpgmz-plugin-transformer",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "",
   "author": "",
   "main": "dist/index.js",
@@ -23,7 +23,7 @@
   "devDependencies": {
     "@types/jest": "~27.0.1",
     "@types/node": "~16.7.2",
-    "@yuyi919/shared-logger": "workspace:0.0.12",
+    "@yuyi919/shared-logger": "workspace:0.0.14",
     "@yuyi919-ts-transformer/ast-utils": "workspace:0.0.2",
     "@yuyi919-ts-transformer/dev-utils": "workspace:0.0.2",
     "@yuyi919/workspace-base-rig": "workspace:1.2.5",

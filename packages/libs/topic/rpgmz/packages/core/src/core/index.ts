@@ -561,6 +561,7 @@ export interface Advanced {
   fallbackFonts: string;
   fontSize: number;
   mainFontFilename: string;
+  windowOpacity: number;
 }
 
 export namespace BattleSystem {

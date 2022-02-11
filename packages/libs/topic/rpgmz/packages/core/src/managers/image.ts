@@ -118,16 +118,16 @@ export class ImageManager {
   }
 
   static isObjectCharacter(filename: string): boolean {
-    const sign = filename.match(/^[!$]+/);
+    const sign = Utils.extractFileName(filename).match(/^[!$]+/);
     return !!sign && sign[0].includes("!");
   }
 
   static isBigCharacter(filename: string): boolean {
-    const sign = filename.match(/^[!$]+/);
+    const sign = Utils.extractFileName(filename).match(/^[!$]+/);
     return !!sign && sign[0].includes("$");
   }
 
   static isZeroParallax(filename: string): boolean {
-    return filename.charAt(0) === "!";
+    return Utils.extractFileName(filename).charAt(0) === "!";
   }
 }

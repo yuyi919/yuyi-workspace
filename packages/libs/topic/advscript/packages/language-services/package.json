@@ -32,7 +32,7 @@
     "tsdx": "^0.14.1",
     "tslib": "~2.3.1",
     "typescript": "4.1.2",
-    "@yuyi919/shared-logger": "workspace:0.0.12",
+    "@yuyi919/shared-logger": "workspace:0.0.14",
     "jssm-viz": "~1.18.1",
     "jssm": "~5.39.0"
   },

@@ -88,12 +88,12 @@ export class Window_Base extends Window {
   }
 
   updateBackOpacity(): void {
-    this.backOpacity = 192;
+    this.backOpacity = $gameSystem.windowOpacity();
   }
 
   /**
    * 返回具体到行数的推测高度
-   * @param numLines 
+   * @param numLines
    */
   fittingHeight(numLines: number): number {
     return numLines * this.itemHeight() + $gameSystem.windowPadding() * 2;
