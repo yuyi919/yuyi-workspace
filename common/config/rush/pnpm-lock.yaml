@@ -151,7 +151,7 @@ importers:
       '@yuyi919/shared-constant': workspace:0.0.3
       '@yuyi919/shared-decorator': workspace:0.0.2
       '@yuyi919/shared-types': workspace:0.0.5
-      '@yuyi919/shared-utils': workspace:0.0.36
+      '@yuyi919/shared-utils': workspace:0.0.37
       '@yuyi919/workspace-base-rig': workspace:1.2.5
       jest: ~27.1.0
       lodash: 4.17.21
@@ -859,7 +859,7 @@ importers:
       '@types/nw.js': ^0.13.9
       '@vue/composition-api': ^1.0.2
       '@yuyi919/shared-types': workspace:0.0.5
-      '@yuyi919/shared-utils': workspace:0.0.36
+      '@yuyi919/shared-utils': workspace:0.0.37
       '@yuyi919/vue-jsx-factory': workspace:0.0.1
       '@yuyi919/vue-shared-decorators': workspace:0.0.3
       '@yuyi919/vue-use': workspace:0.0.3
@@ -1109,7 +1109,7 @@ importers:
       '@types/node': ~16.7.2
       '@vue/composition-api': ^1.0.2
       '@yuyi919/shared-types': workspace:0.0.5
-      '@yuyi919/shared-utils': workspace:0.0.36
+      '@yuyi919/shared-utils': workspace:0.0.37
       '@yuyi919/vue-jsx-factory': workspace:0.0.1
       '@yuyi919/vue-use': workspace:0.0.3
       '@yuyi919/workspace-base-rig': workspace:1.2.5
@@ -1208,7 +1208,7 @@ importers:
       '@types/node': ~16.7.2
       '@vue/composition-api': ^1.0.2
       '@yuyi919/shared-types': workspace:0.0.5
-      '@yuyi919/shared-utils': workspace:0.0.36
+      '@yuyi919/shared-utils': workspace:0.0.37
       '@yuyi919/vue-antv-plus2-action': workspace:0.0.1
       '@yuyi919/vue-antv-plus2-helper': workspace:0.0.1
       '@yuyi919/vue-antv-plus2-shared': workspace:0.0.1
@@ -1249,7 +1249,7 @@ importers:
       '@types/node': ~16.7.2
       '@vue/composition-api': ^1.0.2
       '@yuyi919/shared-types': workspace:0.0.5
-      '@yuyi919/shared-utils': workspace:0.0.36
+      '@yuyi919/shared-utils': workspace:0.0.37
       '@yuyi919/vue-antv-plus2-helper': workspace:0.0.1
       '@yuyi919/vue-antv-plus2-theme': workspace:0.0.1
       '@yuyi919/vue-jss': workspace:0.0.3

@@ -1,6 +1,6 @@
 {
   "name": "@yuyi919/shared",
-  "version": "0.0.38",
+  "version": "0.0.39",
   "description": "",
   "author": "",
   "license": "MIT",
@@ -20,7 +20,7 @@
     "@yuyi919/shared-constant": "workspace:0.0.3",
     "@yuyi919/shared-decorator": "workspace:0.0.2",
     "@yuyi919/shared-types": "workspace:0.0.5",
-    "@yuyi919/shared-utils": "workspace:0.0.36",
+    "@yuyi919/shared-utils": "workspace:0.0.37",
     "lodash": "4.17.21",
     "lodash-es": "4.17.21"
   },

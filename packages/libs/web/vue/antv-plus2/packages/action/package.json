@@ -16,7 +16,7 @@
   "dependencies": {
     "@yuyi919/shared-types": "workspace:0.0.5",
     "@yuyi919/vue-use": "workspace:0.0.3",
-    "@yuyi919/shared-utils": "workspace:0.0.36",
+    "@yuyi919/shared-utils": "workspace:0.0.37",
     "@yuyi919/vue-jsx-factory": "workspace:0.0.1",
     "lodash": "4.17.21",
     "lodash-es": "4.17.21",
