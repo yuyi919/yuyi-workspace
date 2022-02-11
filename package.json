@@ -5,7 +5,7 @@
   "private": true,
   "scripts": {
     "dev:antv-plus2": "rush build:dev --to @yuyi919/vue-antv-plus2",
-    "dev:shared": "rush build:dev --to-version-policy shared",
+    "dev:shared": "rush build:dev --to shared",
     "publish:with": "cross-env rush publish --apply --include-all --set-access-level public --publish --version-policy",
     "publish:shared": "pnpm publish:with shared",
     "workspace": "pnpm workspace:ts & pnpm workspace:types_node & pnpm workspace:heft-jest & pnpm workspace:rig & pnpm workspace:jest & pnpm workspace:ts-jest",
