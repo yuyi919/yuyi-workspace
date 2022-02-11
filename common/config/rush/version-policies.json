@@ -121,5 +121,10 @@
     "definitionName": "lockStepVersion",
     "version": "0.0.2",
     "nextBump": "patch"
+  },
+  {
+    "policyName": "vue",
+    "definitionName": "individualVersion",
+    "lockedMajor": 0
   }
 ]

@@ -597,8 +597,7 @@
     {
       "packageName": "@yuyi919/topic-aitalk-service",
       "projectFolder": "packages/libs/topic/aitalk-service",
-      "reviewCategory": "production",
-      "versionPolicyName": "shared"
+      "reviewCategory": "production"
     },
     {
       "packageName": "@yuyi919/topic-rpgmz",
@@ -610,7 +609,7 @@
       "packageName": "@yuyi919/vue-antv-plus2",
       "projectFolder": "packages/libs/web/vue/antv-plus2",
       "reviewCategory": "production",
-      "versionPolicyName": "shared"
+      "versionPolicyName": "vue"
     },
     {
       "packageName": "@yuyi919/vue-antv-plus2-action",
@@ -656,24 +655,24 @@
       "packageName": "@yuyi919/vue-jsx-factory",
       "projectFolder": "packages/libs/web/vue/jsx-factory",
       "reviewCategory": "production",
-      "versionPolicyName": "shared"
+      "versionPolicyName": "vue"
     },
     {
       "packageName": "@yuyi919/vue-shared-decorators",
       "projectFolder": "packages/libs/web/vue/shared/decorators",
       "reviewCategory": "production",
-      "versionPolicyName": "shared"
+      "versionPolicyName": "vue"
     },
     {
       "packageName": "@yuyi919/vue-use",
       "projectFolder": "packages/libs/web/vue/use",
-      "reviewCategory": "production"
+      "reviewCategory": "production",
+      "versionPolicyName": "vue"
     },
     {
       "packageName": "@yuyi919/web-solid-playground",
       "projectFolder": "packages/libs/web/solid/playground",
-      "reviewCategory": "production",
-      "versionPolicyName": "shared"
+      "reviewCategory": "production"
     },
     {
       "packageName": "@yuyi919/workspace",
@@ -683,7 +682,8 @@
     {
       "packageName": "@yuyi919/workspace-base-rig",
       "projectFolder": "packages/libs/tools/workspace-base-rig",
-      "reviewCategory": "tools"
+      "reviewCategory": "tools",
+      "versionPolicyName": "shared"
     },
     {
       "packageName": "vscode-advscript",
