@@ -16,7 +16,6 @@ export {
   isArrayLike,
   isBoolean,
   isDate,
-  isEmpty,
   isObject,
   isRegExp,
   isString,

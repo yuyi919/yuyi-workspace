@@ -60,7 +60,7 @@ function expectTo(value: any, configs: [any, any, boolean?][], elseValue?: any):
   return (expect = r && r[1]), expect !== undefined ? expect : elseValue;
 }
 
-export function getType(v: any): Type {
+function getType(v: any): Type {
   // console.log('mergeFuncPipe', v, expectTo(v, match, Type.BASE))
   return expectTo(v, match, Type.BASE);
 }

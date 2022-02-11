@@ -11,3 +11,5 @@ export * from "./custom-is";
 
 import * as Setter from "./setter";
 export { Setter };
+
+export * from "@yuyi919/shared-types";

@@ -1,8 +1,9 @@
 import { Constant$ } from "@yuyi919/shared-constant";
-import { isBoolean, isArray, isEmpty, values, isString } from "./lodash";
+import { isEmpty } from "@yuyi919/shared-types";
 import { isNotEmptyValue } from "./isNil";
-import { isNumber } from "./isNumber";
+import { checkNumber } from "./isNumber";
 import { isPureObj } from "./isObject";
+import { isArray, isBoolean, isString, values } from "./lodash";
 
 /**
  * 判断是否为数型或布尔型
@@ -10,7 +11,7 @@ import { isPureObj } from "./isObject";
  * @public
  */
 export function isBoolOrNum(value: any): value is boolean | number {
-  return isBoolean(value) || isNumber(value);
+  return isBoolean(value) || checkNumber(value);
 }
 /**
  * 判断是否为空的数组
@@ -57,7 +58,7 @@ export function isEmptyArrayStrict(value: any): value is any[] {
  * @public
  */
 export function isEmptyData(value: any): value is any[] {
-  return !isBoolean(value) && !isNumber(value) && (isEmptyArrayStrict(value) || isEmpty(value));
+  return !isBoolean(value) && !checkNumber(value) && (isEmptyArrayStrict(value) || isEmpty(value));
 }
 
 /**
@@ -66,7 +67,7 @@ export function isEmptyData(value: any): value is any[] {
  * @public
  */
 export function isNotEmptyData(value: any): boolean {
-  return isBoolean(value) || isNumber(value) || !(isEmptyArrayStrict(value) || isEmpty(value));
+  return isBoolean(value) || checkNumber(value) || !(isEmptyArrayStrict(value) || isEmpty(value));
 }
 
 // export function paramShiftObjPairs<T>(func?: T): T {

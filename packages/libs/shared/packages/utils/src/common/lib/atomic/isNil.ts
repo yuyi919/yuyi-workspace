@@ -1,6 +1,5 @@
 import { isString, trim } from "./lodash";
-import { isNaN } from "./isNumber";
-import { isNil } from "lodash";
+import { isNil, isNaN } from "@yuyi919/shared-types";
 
 /**
  * 检查`value`是否为 `null` 或 `undefined`
@@ -43,5 +42,3 @@ export function isNotEmptyValue(
 ): value is string | number | boolean | object | Function {
   return !isEmptyValue(value);
 }
-
-export { isNil };
