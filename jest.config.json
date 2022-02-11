@@ -1,0 +1,12 @@
+{
+    "preset": "ts-jest",
+    "roots": [
+        "<rootDir>/packages/langium/test",
+        "<rootDir>/examples/arithmetics/test",
+        "<rootDir>/examples/domainmodel/test",
+        "<rootDir>/examples/statemachine/test"
+    ],
+    "collectCoverageFrom": ["packages/langium/src/**/{!(generated),}/*"],
+    "testEnvironment": "node",
+    "setupFilesAfterEnv": ["jest-expect-message"]
+}

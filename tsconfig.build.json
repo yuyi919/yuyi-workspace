@@ -1,0 +1,13 @@
+{
+    "extends": "./tsconfig.json",
+    "files": [],
+    "references": [
+        { "path": "packages/langium" },
+        { "path": "packages/langium-cli" },
+        { "path": "packages/langium-sprotty" },
+        { "path": "packages/generator-langium" },
+        { "path": "examples/arithmetics" },
+        { "path": "examples/domainmodel" },
+        { "path": "examples/statemachine" }
+    ]
+ }
