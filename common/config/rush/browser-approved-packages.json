@@ -128,11 +128,11 @@
     },
     {
       "name": "@typescript-eslint/eslint-plugin",
-      "allowedCategories": [ "tools" ]
+      "allowedCategories": [ "external", "tools" ]
     },
     {
       "name": "@typescript-eslint/parser",
-      "allowedCategories": [ "tools" ]
+      "allowedCategories": [ "external", "tools" ]
     },
     {
       "name": "@vue/compiler-sfc",
@@ -348,7 +348,7 @@
     },
     {
       "name": "chevrotain",
-      "allowedCategories": [ "production" ]
+      "allowedCategories": [ "external", "production" ]
     },
     {
       "name": "chroma.ts",
@@ -368,11 +368,11 @@
     },
     {
       "name": "colors",
-      "allowedCategories": [ "production" ]
+      "allowedCategories": [ "external", "production" ]
     },
     {
       "name": "commander",
-      "allowedCategories": [ "production" ]
+      "allowedCategories": [ "external", "production" ]
     },
     {
       "name": "comment-json",
@@ -412,11 +412,15 @@
     },
     {
       "name": "eslint",
-      "allowedCategories": [ "production", "tools" ]
+      "allowedCategories": [ "external", "production", "tools" ]
     },
     {
       "name": "eslint-config-prettier",
       "allowedCategories": [ "tools" ]
+    },
+    {
+      "name": "eslint-plugin-header",
+      "allowedCategories": [ "external" ]
     },
     {
       "name": "eslint-plugin-solid",
@@ -440,7 +444,7 @@
     },
     {
       "name": "fs-extra",
-      "allowedCategories": [ "production", "tools" ]
+      "allowedCategories": [ "external", "production", "tools" ]
     },
     {
       "name": "glob",
@@ -480,7 +484,7 @@
     },
     {
       "name": "jest",
-      "allowedCategories": [ "production", "tools" ]
+      "allowedCategories": [ "external", "production", "tools" ]
     },
     {
       "name": "jquery",
@@ -489,6 +493,10 @@
     {
       "name": "js-yaml",
       "allowedCategories": [ "production" ]
+    },
+    {
+      "name": "jsonschema",
+      "allowedCategories": [ "external" ]
     },
     {
       "name": "jss",
@@ -508,7 +516,7 @@
     },
     {
       "name": "langium",
-      "allowedCategories": [ "production" ]
+      "allowedCategories": [ "external", "production" ]
     },
     {
       "name": "less",
@@ -524,7 +532,7 @@
     },
     {
       "name": "lodash",
-      "allowedCategories": [ "production", "tools" ]
+      "allowedCategories": [ "external", "production", "tools" ]
     },
     {
       "name": "lodash-es",
@@ -651,6 +659,10 @@
       "allowedCategories": [ "production" ]
     },
     {
+      "name": "rimraf",
+      "allowedCategories": [ "external" ]
+    },
+    {
       "name": "rollup",
       "allowedCategories": [ "production", "tools" ]
     },
@@ -724,7 +736,7 @@
     },
     {
       "name": "ts-jest",
-      "allowedCategories": [ "production", "tools" ]
+      "allowedCategories": [ "external", "production", "tools" ]
     },
     {
       "name": "ts-nameof",
@@ -748,7 +760,7 @@
     },
     {
       "name": "typescript",
-      "allowedCategories": [ "production", "tools" ]
+      "allowedCategories": [ "external", "production", "tools" ]
     },
     {
       "name": "username",
@@ -816,7 +828,7 @@
     },
     {
       "name": "vscode-languageserver",
-      "allowedCategories": [ "production" ]
+      "allowedCategories": [ "external", "production" ]
     },
     {
       "name": "vscode-languageserver-protocol",
@@ -824,7 +836,7 @@
     },
     {
       "name": "vscode-languageserver-textdocument",
-      "allowedCategories": [ "production" ]
+      "allowedCategories": [ "external", "production" ]
     },
     {
       "name": "vscode-languageserver-types",
@@ -844,7 +856,7 @@
     },
     {
       "name": "vscode-uri",
-      "allowedCategories": [ "production" ]
+      "allowedCategories": [ "external", "production" ]
     },
     {
       "name": "vue",
