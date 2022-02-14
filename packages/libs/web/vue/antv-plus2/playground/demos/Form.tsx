@@ -44,7 +44,7 @@ const Components: any = {
   TreeSelect,
   NumberPicker: InputNumber,
   Radio,
-  Switch: Switch,
+  ASwitch: Switch,
 };
 const SchemaField = {
   String: defineComponent({
@@ -206,10 +206,10 @@ export const FormDemo = defineComponent({
                 }}
               />
               <SchemaField.String
-                name="Switch"
-                title="Switch"
+                name="ASwitch"
+                title="ASwitch"
                 x-decorator="FormItem"
-                x-component="Switch"
+                x-component="ASwitch"
                 required
                 x-decorator-props={{
                   inset: false,

@@ -23,6 +23,10 @@
       "allowedCategories": [ "production" ]
     },
     {
+      "name": "@chevrotain/types",
+      "allowedCategories": [ "external" ]
+    },
+    {
       "name": "@codingame/monaco-jsonrpc",
       "allowedCategories": [ "production" ]
     },
@@ -347,6 +351,10 @@
       "allowedCategories": [ "production" ]
     },
     {
+      "name": "chalk",
+      "allowedCategories": [ "external" ]
+    },
+    {
       "name": "chevrotain",
       "allowedCategories": [ "external", "production" ]
     },
@@ -381,6 +389,10 @@
     {
       "name": "copyfiles",
       "allowedCategories": [ "production" ]
+    },
+    {
+      "name": "cpy-cli",
+      "allowedCategories": [ "external" ]
     },
     {
       "name": "csstype",
@@ -448,11 +460,11 @@
     },
     {
       "name": "glob",
-      "allowedCategories": [ "production" ]
+      "allowedCategories": [ "external", "production" ]
     },
     {
       "name": "glob-to-regexp",
-      "allowedCategories": [ "production" ]
+      "allowedCategories": [ "external", "production" ]
     },
     {
       "name": "goober",
@@ -487,6 +499,10 @@
       "allowedCategories": [ "external", "production", "tools" ]
     },
     {
+      "name": "jest-expect-message",
+      "allowedCategories": [ "external" ]
+    },
+    {
       "name": "jquery",
       "allowedCategories": [ "production" ]
     },
@@ -516,6 +532,10 @@
     },
     {
       "name": "langium",
+      "allowedCategories": [ "external", "production" ]
+    },
+    {
+      "name": "langium-cli",
       "allowedCategories": [ "external", "production" ]
     },
     {
@@ -553,6 +573,10 @@
     {
       "name": "mobx",
       "allowedCategories": [ "production" ]
+    },
+    {
+      "name": "mocha",
+      "allowedCategories": [ "external" ]
     },
     {
       "name": "monaco-editor",
@@ -652,7 +676,7 @@
     },
     {
       "name": "regexp-to-ast",
-      "allowedCategories": [ "production" ]
+      "allowedCategories": [ "external", "production" ]
     },
     {
       "name": "resize-observer-polyfill",
@@ -723,6 +747,14 @@
       "allowedCategories": [ "production" ]
     },
     {
+      "name": "source-map-loader",
+      "allowedCategories": [ "external" ]
+    },
+    {
+      "name": "sprotty-protocol",
+      "allowedCategories": [ "external" ]
+    },
+    {
       "name": "tiny-warning",
       "allowedCategories": [ "production" ]
     },
@@ -737,6 +769,10 @@
     {
       "name": "ts-jest",
       "allowedCategories": [ "external", "production", "tools" ]
+    },
+    {
+      "name": "ts-loader",
+      "allowedCategories": [ "external" ]
     },
     {
       "name": "ts-nameof",
@@ -820,11 +856,11 @@
     },
     {
       "name": "vscode-jsonrpc",
-      "allowedCategories": [ "production" ]
+      "allowedCategories": [ "external", "production" ]
     },
     {
       "name": "vscode-languageclient",
-      "allowedCategories": [ "production" ]
+      "allowedCategories": [ "external", "production" ]
     },
     {
       "name": "vscode-languageserver",
@@ -832,7 +868,7 @@
     },
     {
       "name": "vscode-languageserver-protocol",
-      "allowedCategories": [ "production" ]
+      "allowedCategories": [ "external", "production" ]
     },
     {
       "name": "vscode-languageserver-textdocument",
@@ -840,7 +876,7 @@
     },
     {
       "name": "vscode-languageserver-types",
-      "allowedCategories": [ "production" ]
+      "allowedCategories": [ "external", "production" ]
     },
     {
       "name": "vscode-oniguruma",
@@ -848,7 +884,7 @@
     },
     {
       "name": "vscode-test",
-      "allowedCategories": [ "production" ]
+      "allowedCategories": [ "external", "production" ]
     },
     {
       "name": "vscode-textmate",
@@ -891,6 +927,14 @@
       "allowedCategories": [ "production" ]
     },
     {
+      "name": "webpack",
+      "allowedCategories": [ "external" ]
+    },
+    {
+      "name": "webpack-cli",
+      "allowedCategories": [ "external" ]
+    },
+    {
       "name": "winston",
       "allowedCategories": [ "production" ]
     },
@@ -901,6 +945,10 @@
     {
       "name": "yargs",
       "allowedCategories": [ "production" ]
+    },
+    {
+      "name": "yeoman-generator",
+      "allowedCategories": [ "external" ]
     },
     {
       "name": "yoga-layout",

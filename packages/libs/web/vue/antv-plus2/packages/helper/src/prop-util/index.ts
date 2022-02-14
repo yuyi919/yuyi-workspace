@@ -17,18 +17,7 @@ export interface TypedPropOptions<T, Required extends boolean> {
   validator?: any;
 }
 
-export {
-  Component,
-  createPropExtractor,
-  extractProps,
-  extractPropsWith,
-  extractUnsafeProps,
-  initDefaultProps,
-  Prop,
-  PropTypes,
-  TypedPropsGroup,
-  WalkHandler,
-} from "@yuyi919/vue-shared-decorators";
+export * from "@yuyi919/vue-shared-decorators";
 
 export type VModelDefine<K extends string = string> = {
   prop?: K;

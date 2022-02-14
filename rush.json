@@ -691,18 +691,42 @@
       "projectFolder": "packages/libs/topic/advscript/packages/vscode-extension",
       "reviewCategory": "production",
       "versionPolicyName": "advscript"
-    },
-    {
-      "packageName": "langium",
-      "projectFolder": "externals/langium/packages/langium",
-      "reviewCategory": "external",
-      "skipRushCheck": true
-    },
-    {
-      "packageName": "langium-cli",
-      "projectFolder": "externals/langium/packages/langium-cli",
-      "reviewCategory": "external",
-      "skipRushCheck": true
     }
+    // {
+    //   "packageName": "langium",
+    //   "projectFolder": "externals/langium/packages/langium",
+    //   "reviewCategory": "external",
+    //   "skipRushCheck": true
+    // },
+    // {
+    //   "packageName": "langium-cli",
+    //   "projectFolder": "externals/langium/packages/langium-cli",
+    //   "reviewCategory": "external",
+    //   "skipRushCheck": true
+    // },
+    // {
+    //   "packageName": "langium-vscode",
+    //   "projectFolder": "externals/langium/packages/langium-vscode",
+    //   "reviewCategory": "external",
+    //   "skipRushCheck": true
+    // },
+    // {
+    //   "packageName": "langium-sprotty",
+    //   "projectFolder": "externals/langium/packages/langium-sprotty",
+    //   "reviewCategory": "external",
+    //   "skipRushCheck": true
+    // },
+    // {
+    //   "packageName": "generator-langium",
+    //   "projectFolder": "externals/langium/packages/generator-langium",
+    //   "reviewCategory": "external",
+    //   "skipRushCheck": true
+    // },
+    // {
+    //   "packageName": "langium-workspaces",
+    //   "projectFolder": "externals/langium",
+    //   "reviewCategory": "external",
+    //   "skipRushCheck": true
+    // }
   ]
 }

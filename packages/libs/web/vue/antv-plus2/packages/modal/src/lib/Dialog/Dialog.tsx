@@ -153,7 +153,7 @@ export const Dialog = defineComponent({
     const dialog = useDialog(
       reactive({
         ...toRefs(props),
-        ...toRefs(portalProps),
+        ...portalProps,
         wrapClassName: computed(() =>
           [
             props.centered && "ant-modal-centered",
