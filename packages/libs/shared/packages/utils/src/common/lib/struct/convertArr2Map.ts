@@ -4,6 +4,12 @@ import { isObject, map, Setter } from "../atomic";
 
 const { REDUCE } = Constant$;
 
+/**
+ * @param obj -
+ * @param defineKey -
+ * @deprecated TODO
+ * @beta
+ */
 export function convertMap2UnieqArray<
   Target extends {},
   Keys extends string,
@@ -17,11 +23,19 @@ export function convertMap2UnieqArray<
 } & { [key: string]: any })[] {
   return obj instanceof Array ? obj : map(obj, (r, key) => Setter.setValue$$(r, defineKey, key));
 }
-
-export function convertArr2Map(arr: string[]): IKeyValueMap<true> {
-  return arr ? (REDUCE(arr, Setter.setTrue$$, {}) as any) : {};
+/**
+ * @param stringArray -
+ * @beta
+ * @deprecated TODO
+ */
+export function convertArr2Map(stringArray: string[]): IKeyValueMap<true> {
+  return stringArray ? (REDUCE(stringArray, Setter.setTrue$$, {}) as any) : {};
 }
 
+/**
+ * @internal
+ * @deprecated TODO
+ */
 export function getSafeMapOptions(
   options?: string[] | IKeyValueMap<boolean>,
   defaultValue?: IKeyValueMap<boolean>
@@ -33,6 +47,10 @@ export function getSafeMapOptions(
     : defaultValue;
 }
 
+/**
+ * @deprecated TODO
+ * @alpha
+ */
 export function convertKeys2ValuesMap<O extends IKeyValueMap<string>>(
   obj: O
 ): { [K in O[keyof O]]: K } {
@@ -40,10 +58,16 @@ export function convertKeys2ValuesMap<O extends IKeyValueMap<string>>(
 }
 
 /**
- * 将下拉OptionList转化为Map<value, label>用于快速翻译查表
- * @param arr
- * @param labelKey
- * @param valKey
+ * 将下拉OptionList转化为
+ *```ts
+ * Map<VALUE, LABEL>
+ *```
+ * 用于快速翻译查表
+ * @param arr -
+ * @param labelKey -
+ * @param valKey -
+ * @alpha
+ * @deprecated TODO
  */
 export function convertOptions2Map<T extends IKeyValueMap>(
   arr: T[],

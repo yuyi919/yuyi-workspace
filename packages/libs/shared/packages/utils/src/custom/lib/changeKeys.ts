@@ -6,6 +6,7 @@ import { Constant$ } from "@yuyi919/shared-constant";
  * - `ShiftMode.Copy`复制一个`key`的值到另一个`key`的值上
  * - `ShiftMode.cut`表示在移动`key`的值后会`移除`原`key`
  * - `ShiftMode.Auto`表示如果没有明确定义在`shiftKeysMap`中时，自动交换源key与目标key的值
+ * @alpha
  */
 export const enum ShiftMode {
   /** 自动模式 */
@@ -24,17 +25,23 @@ function defaultShifter(key: string, map: object) {
 }
 /**
  *
- * @param obj 对象
- * @param shiftKeysMap 替换key与key的映射map
- * @param shiftMode 移动模式
+ * @param obj - 对象
+ * @param shiftKeysMap - 替换key与key的映射map
+ * @param shiftMode - 移动模式
  * - `ShiftMode.Copy/ShiftMode.cut`表示在移动key的值后会`保留/移除`原key
  * - `ShiftMode.Auto`表示如果没有明确定义在`shiftKeysMap`中时自动交换两个字段
+ * @alpha
  */
 export function shiftKeyGroup<T, K extends keyof T, Map extends Record<K, K | string>>(
   obj: Record<string | number | K, any>,
   shiftKeysMap: Partial<Map>,
   shiftMode?: ShiftMode
 ): Record<K, any>;
+/**
+ *
+ * {@inheritDoc (shiftKeyGroup:1)}
+ * @alpha
+ */
 export function shiftKeyGroup<
   T extends Record<any, any>,
   K extends keyof T,
@@ -107,9 +114,10 @@ export function shiftKeyGroup<
 
 /**
  * `交换`一个对象中的两个`key`的`value`
- * @param target
- * @param sourceKey 源key
- * @param targetKey 目标key
+ * @param target -
+ * @param sourceKey - 源key
+ * @param targetKey - 目标key
+ * @alpha
  */
 export function shiftKeyTo<T, SK extends keyof T, TK extends keyof T>(
   target: T,
@@ -120,10 +128,11 @@ export function shiftKeyTo<T, SK extends keyof T, TK extends keyof T>(
 /**
  * `交换`一个对象中的两个`key`的`value`
  * 或`剪切`/`复制`一个对象的`key`的`value`粘贴到另一个`key`上
- * @param target
- * @param sourceKey 源key
- * @param targetKey 目标key
- * @param mode 移动模式
+ * @param target -
+ * @param sourceKey - 源key
+ * @param targetKey - 目标key
+ * @param mode - 移动模式
+ * @alpha
  */
 export function shiftKeyTo<T, SK extends keyof T, TK extends keyof T, Mode extends ShiftMode.Auto>(
   target: T,
@@ -135,10 +144,11 @@ export function shiftKeyTo<T, SK extends keyof T, TK extends keyof T, Mode exten
 /**
  * `交换`一个对象中的两个`key`的`value`
  * 或`剪切`/`复制`一个对象的`key`的`value`粘贴到另一个`key`上
- * @param target
- * @param sourceKey 源key
- * @param targetKey 目标key
- * @param mode 移动模式
+ * @param target -
+ * @param sourceKey - 源key
+ * @param targetKey - 目标key
+ * @param mode - 移动模式
+ * @alpha
  */
 export function shiftKeyTo<
   T,
@@ -155,23 +165,29 @@ export function shiftKeyTo<
 >(target: T, sourceKey: SK, targetKey: TK, mode?: Mode): Shifted<T, SK, TK, Mode> {
   return shiftKeyGroup(target, { [sourceKey]: targetKey }, mode) as any;
 }
-shiftKeyTo.cut = function <T, SK extends keyof T, TK extends keyof T>(
-  target: T,
-  sourceKey: SK,
-  targetKey: TK
-): Shifted<T, SK, TK, ShiftMode.Cut> {
-  return shiftKeyTo(target, sourceKey, targetKey, ShiftMode.Cut);
-};
-shiftKeyTo.copy = function <T, SK extends keyof T, TK extends keyof T>(
-  target: T,
-  sourceKey: SK,
-  targetKey: TK
-): Shifted<T, SK, TK, ShiftMode.Copy> {
-  return shiftKeyTo(target, sourceKey, targetKey, ShiftMode.Copy);
-};
+/**
+ * @alpha
+ */
+export namespace shiftKeyTo {
+  export function cut<T, SK extends keyof T, TK extends keyof T>(
+    target: T,
+    sourceKey: SK,
+    targetKey: TK
+  ): Shifted<T, SK, TK, ShiftMode.Cut> {
+    return shiftKeyTo(target, sourceKey, targetKey, ShiftMode.Cut);
+  }
+  export function copy<T, SK extends keyof T, TK extends keyof T>(
+    target: T,
+    sourceKey: SK,
+    targetKey: TK
+  ): Shifted<T, SK, TK, ShiftMode.Copy> {
+    return shiftKeyTo(target, sourceKey, targetKey, ShiftMode.Copy);
+  }
+}
 
 /**
  * 移动/复制了一个对象的key到另一个key
+ * @alpha
  */
 export type Shifted<
   T,
@@ -187,6 +203,7 @@ export type Shifted<
 
 /**
  * 交换了一个对象的两个key
+ * @alpha
  */
 export type Exchanged<T, SK extends keyof T, TK extends keyof T> = {
   [K in keyof T]: T[K extends TK ? SK : K extends SK ? TK : K];

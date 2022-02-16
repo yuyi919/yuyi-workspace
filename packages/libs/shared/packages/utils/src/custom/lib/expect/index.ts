@@ -3,7 +3,7 @@
 /* eslint-disable prefer-rest-params */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-empty-function */
-import { expectTo } from "./filterTo";
+import { extendToFilter } from "./filterTo";
 
 export * from "./filterTo";
 export * from "./filterTypes";
@@ -17,9 +17,15 @@ declare module "./check" {
   }
 }
 
+/**
+ * @alpha
+ */
 export type ExpectorOptions = {
   [K in keyof TypeExpectors]?: (target?: any) => boolean;
 };
+/**
+ * @alpha
+ */
 export type GlobalExpector = {
   (options?: ExpectorOptions): Checker<any>;
   is: Checker<any>;
@@ -36,8 +42,7 @@ type Filter<T> = {
 type Checker<T> = {
   [K in keyof TypeExpectors]: TypeExpectors[K] &
     Checker<TypeExpectors[K] extends (target: any) => target is infer T ? T : any>;
-} &
-  BaseChecker<T>;
+} & BaseChecker<T>;
 
 function appendPipe(o: any, name: string, func: any, enumerable = true) {
   return (
@@ -109,7 +114,7 @@ function createChecker(
     appendPipe(result, "not", () => configure(env, "not"));
     appendPipe(result, "filter", () => {
       if (!env.type) throw Error("[Error]: need type checker!");
-      env.filter = expectTo.extend(env.type);
+      env.filter = extendToFilter(env.type);
       return filterRunner.bind(null, env);
     });
     env.core = result;
@@ -117,6 +122,9 @@ function createChecker(
   return result as any;
 }
 
+/**
+ * @alpha
+ */
 export const expect$: GlobalExpector = Object.assign(
   (options?: ExpectorOptions) => createChecker(void 0, options),
   {

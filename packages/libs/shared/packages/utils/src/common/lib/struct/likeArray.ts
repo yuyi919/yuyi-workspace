@@ -20,7 +20,9 @@ function isLikeArray(array: any[], other: any[]) {
  * @example
  *```ts
  * likeArray([1, 2, 3, 4], [4, 3, 2, 1])
- *```=> true
+ * // => true
+ *```
+ * @alpha
  */
 export function likeArray(target: any[], other: any[]) {
   // if the other array is a falsy value, return
@@ -35,8 +37,9 @@ export function likeArray(target: any[], other: any[]) {
  * 对于数组，判断是否数组元素无序相等
  * 对于对象，无序判断是否有相同的key以及相同的value
  * 其余判断是否全等
- * @param target
- * @param other
+ * @param target -
+ * @param other -
+ * @alpha
  */
 export function isLikeEquals(target: any, other: any) {
   return target === other || likeArray(target, other);

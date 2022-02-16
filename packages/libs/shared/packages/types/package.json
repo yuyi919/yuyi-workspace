@@ -6,12 +6,14 @@
   "license": "MIT",
   "main": "dist/index.js",
   "module": "lib/index.js",
-  "types": "dist/index.d.ts",
+  "types": "dist/shared-types.d.ts",
   "scripts": {
     "build": "heft build --clean",
     "build:dev": "heft build",
     "build:watch": "heft build --watch",
+    "clean": "heft clean",
     "dev": "heft build --watch",
+    "docs": "heft build && api-documenter markdown --input temp --output docs/api",
     "test": "heft test",
     "test:watch": "heft test --watch"
   },
@@ -19,15 +21,15 @@
     "csstype": "^3.0.2"
   },
   "devDependencies": {
-    "@rushstack/heft": "~0.36.4",
-    "@rushstack/heft-node-rig": "~1.2.5",
+    "@microsoft/api-documenter": "^7.15.3",
+    "@rushstack/heft": "^0.44.2",
+    "@rushstack/heft-web-rig": "^0.9.0",
     "@types/heft-jest": "1.0.2",
     "@types/node": "~16.7.2",
     "@yuyi919/workspace-base-rig": "workspace:1.2.5",
     "jest": "~27.1.0",
     "ts-jest": "~27.0.5",
-    "tslib": "~2.3.1",
-    "typescript": "4.1.2"
+    "tslib": "~2.3.1"
   },
   "peerDependencies": {},
   "files": [

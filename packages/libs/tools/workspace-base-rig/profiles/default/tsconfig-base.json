@@ -2,7 +2,8 @@
   "extends": "../tsconfig.base.json",
   "compilerOptions": {
     "rootDir": "../../../../../src",
-    "outDir": "../../../../../dist",
+    "outDir": "../../../../../lib",
+    "tsBuildInfoFile": "../../../../../temp/.tsBuildInfo",
     "types": ["heft-jest", "node"]
   },
   "include": ["../../../../../src/**/*.ts", "../../../../../src/**/*.tsx"]

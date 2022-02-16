@@ -6,6 +6,9 @@ type Join<K, P> = K extends string | number
     : never
   : never;
 
+/**
+ * @beta
+ */
 export type Paths<T, D extends number = 10> = [D] extends [never]
   ? never
   : T extends object
@@ -16,11 +19,17 @@ export type Paths<T, D extends number = 10> = [D] extends [never]
     }[keyof T]
   : "";
 
+/**
+ * @beta
+ */
 export type LeafPaths<T, D extends number = 10> = [D] extends [never]
   ? never
   : T extends object
   ? { [K in keyof T]-?: Join<K, LeafPaths<T[K], Types.Number.Minus<D>>> }[keyof T]
   : "";
+/**
+ * @beta
+ */
 export type ParentPaths<T, D extends number = 10> = [D] extends [never]
   ? never
   : T extends object
@@ -58,6 +67,9 @@ const s = Object.create({});
  * // 等价于
  * Object.prototype.hasOwnProperty.call(target, key)
  * ```
+ */
+/**
+ * @beta
  */
 export function hasOwnKey<Key extends string | symbol, T = any>(
   target: any,

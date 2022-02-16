@@ -1,5 +1,5 @@
 import { isEsModule, isEsModuleWithDefaultExport } from "./module";
-import * as Module from "..";
+import * as Module from "./module";
 import { hasOwnKey } from "./object";
 
 describe("isEsModule", () => {
@@ -14,3 +14,5 @@ describe("isEsModule", () => {
     expect(isEsModuleWithDefaultExport(Module)).toBeTruthy();
   });
 });
+
+export default true;

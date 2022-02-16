@@ -23,7 +23,6 @@ import { cloneDeep, isPureObj } from "../atomic";
  * //*print => 'hello world';
  *```
  * @example
- * class误区，请使用装饰器——{@link autobind | @autobind}
  *```ts
  * class Logger {
  *    core = console.log;
@@ -37,7 +36,7 @@ import { cloneDeep, isPureObj } from "../atomic";
  * //*error => this is undefined;
  *```
  * @remarks
- * 对于class的自动绑定，请使用{@link autobind | @autobind}
+ * 对于class的自动绑定，请使用{@link https://www.lodashjs.com/docs/latest#_groupbycollection-iteratee_identity| @autobind}
  * @public
  */
 export function autoBindObj<T>(target: T, isCloneDeep = true) {

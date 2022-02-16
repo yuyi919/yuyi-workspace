@@ -13,9 +13,12 @@ type JoinWith<
       Result extends "" ? Keys[0] : `${Result}${JoinStr}${Keys[0]}`
     >;
 
+/**
+ * @beta
+ */
 export type Join<Keys extends string[], JoinStr extends string = ""> = JoinWith<Keys, JoinStr>;
 
-type test = Types.Array.Join<Types.String.Peaces<"ABC?D,ADA.asSASasas">, "|">;
+// type test = Types.Array.Join<Types.String.Peaces<"ABC?D,ADA.asSASasas">, "|">;
 
 export * from "./Split";
 export * from "./Length";

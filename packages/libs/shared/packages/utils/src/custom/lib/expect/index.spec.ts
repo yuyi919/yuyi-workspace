@@ -1,5 +1,4 @@
 import { expect$ } from ".";
-import { bool } from "./check/atomic";
 describe("test", () => {
   it("base", () => {
     expect([

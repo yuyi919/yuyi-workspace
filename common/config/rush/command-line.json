@@ -24,17 +24,37 @@
        */
       "commandKind": "bulk",
       "name": "build:dev",
-      "summary": "Imports translated strings into each project.",
+      "summary": "Dev build (no clean)",
       "description": "Requests translated strings from the translation service and imports them into each project.",
       "enableParallelism": true,
       "watchForChanges": true,
       "ignoreMissingScript": true,
-      "incremental": true
+      "incremental": true,
+      "safeForSimultaneousRushProcesses": true
+    },
+    {
+      /**
+       * (Required) Determines the type of custom command.
+       * Rush's "bulk" commands are invoked separately for each project.  Rush will look in
+       * each project's package.json file for a "scripts" entry whose name matches the
+       * command name.  By default, the command will run for every project in the repo,
+       * according to the dependency graph (similar to how "rush build" works).
+       * The set of projects can be restricted e.g. using the "--to" or "--from" parameters.
+       */
+      "commandKind": "bulk",
+      "name": "docs",
+      "summary": "docs",
+      "description": "docs",
+      "enableParallelism": true,
+      "ignoreMissingScript": true,
+      "incremental": true,
+      "safeForSimultaneousRushProcesses": true
     },
     {
       "commandKind": "bulk",
       "name": "build",
-      "ignoreMissingScript": true
+      "ignoreMissingScript": true,
+      "summary": "build"
     },
     {
       /**

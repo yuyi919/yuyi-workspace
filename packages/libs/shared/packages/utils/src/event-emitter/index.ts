@@ -18,17 +18,35 @@ import { sleep } from "../common";
 
 export { PartialObserver, NextObserver, ErrorObserver, CompletionObserver, Subscription2 };
 
-export function subscribe$$<T>(source: Observable<T>, observer?: PartialObserver<T>): Subscription2;
+/**
+ * 订阅
+ * @param source -
+ * @param next -
+ * @param error -
+ * @param complete -
+ * @beta
+ */
 export function subscribe$$<T>(
   source: Observable<T>,
   next?: (value: T) => void,
   error?: (error: any) => void,
   complete?: () => void
 ): Subscription2;
+/**
+ * @param observer -
+ * @beta
+ * {@inheritDoc (subscribe$$:1)}
+ */
+export function subscribe$$<T>(source: Observable<T>, observer?: PartialObserver<T>): Subscription2;
 
 export function subscribe$$<T>(source: Observable<T>, ...observer: any[]) {
   return source.subscribe(...observer);
 }
+/**
+ *
+ * @param source -
+ * @internal
+ */
 export function unsubscribe$$(source: Subscription2) {
   source.unsubscribe();
 }
@@ -44,7 +62,7 @@ const { CREATE_PROMISE } = Constant$;
  *
  * 销毁 见{@link EventEmitter.dispose | EventEmitter.dispose()}
  *
- * @includeSnippet ~/test/Rx/EventEmitter.test.ts#"EventEmitter 基本使用"
+ * // TODO includeSnippet ~/test/Rx/EventEmitter.test.ts#"EventEmitter 基本使用"
  *
  * @typeParam T - 事件类型
  * @example
@@ -69,9 +87,9 @@ export class EventEmitter<T = any> {
 
   /**
    * 实例化EventEmitter
-   * @param next 订阅事件方法
-   * @param error 订阅错误事件方法
-   * @param complete 订阅completed事件方法
+   * @param next - 订阅事件方法
+   * @param error - 订阅错误事件方法
+   * @param complete - 订阅completed事件方法
    */
   constructor(next?: NextObserver<T>, error?: ErrorObserver<T>, complete?: CompletionObserver<T>) {
     // this.unsubscribe()
@@ -81,9 +99,9 @@ export class EventEmitter<T = any> {
   }
   /**
    * 初始化
-   * @param next 订阅事件方法
-   * @param error 订阅错误事件方法
-   * @param complete 订阅completed事件方法
+   * @param next - 订阅事件方法
+   * @param error - 订阅错误事件方法
+   * @param complete - 订阅completed事件方法
    */
   public init(observer?: PartialObserver<T>): Subject<T>;
   public init(
@@ -111,10 +129,10 @@ export class EventEmitter<T = any> {
 
   /**
    * 订阅事件
-   * @param observer 事件观察者
-   * @param next 观察到发射值时的回调
-   * @param error 错误的回调
-   * @param complete 完成的回调
+   * @param observer - 事件观察者
+   * @param next - 观察到发射值时的回调
+   * @param error - 错误的回调
+   * @param complete - 完成的回调
    */
   //@ts-ignore
   subscribe(observer?: PartialObserver<T>): Subscription2;
@@ -139,7 +157,7 @@ export class EventEmitter<T = any> {
 
   /**
    * 管道
-   * @param operators 传入操作符
+   * @param operators - 传入操作符
    */
   public pipe(...operators: OperatorFunction<any, any>[]): this {
     this.init();
@@ -162,7 +180,7 @@ export class EventEmitter<T = any> {
   }
   /**
    * 发射一个事件后立即销毁监听器
-   * @param value
+   * @param value -
    */
   public once(value: T) {
     this.emit(value);
@@ -223,9 +241,9 @@ export class EventEmitter<T = any> {
 
   /**
    * 转化成标准Promise，指定超时时间
-   * @param timeout 超时时间
-   * @param timeoutValue 超时时默认返回的值
-   * @param timeoutError 超市时是否返回错误，返回reject(timeoutValue)
+   * @param timeout - 超时时间
+   * @param timeoutValue - 超时时默认返回的值
+   * @param timeoutError - 超市时是否返回错误，返回reject(timeoutValue)
    */
   public toPromiseUntil<T>(timeout: number, timeoutValue?: T, timeoutError?: boolean) {
     return Promise.race([this.toPromise(), sleep(timeout, timeoutValue, timeoutError)]);
@@ -242,7 +260,7 @@ export class EventEmitter<T = any> {
 /**
  * {@link EventEmitter}的变体，它保存了发送给观察者的最新事件。并且当有新的观察者订阅时，会立即接收到最新事件。
  *
- * > [!当创建 ReplaySubject 时，你可以指定回放多少个值，还可以指定 window time (以毫秒为单位)来确定多久之前的值可以记录。]
+ * \> [!当创建 ReplaySubject 时，你可以指定回放多少个值，还可以指定 window time (以毫秒为单位)来确定多久之前的值可以记录。]
  * @example
  * 在下面的示例中，BehaviorEventEmitter 使用值0进行初始化。
  * 当第一个观察者订阅时会得到0。第二个观察者订阅时会得到值2，尽管它是在值2发送之后订阅的。

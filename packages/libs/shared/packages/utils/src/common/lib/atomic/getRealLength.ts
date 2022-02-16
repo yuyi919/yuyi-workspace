@@ -1,6 +1,7 @@
 /**
  * 获得字符串实际长度，中文占2，英文占1
- * @param str 字符串
+ * @param str - 字符串
+ * @beta
  */
 export function getRealLength(str: string) {
   let realLength = 0;

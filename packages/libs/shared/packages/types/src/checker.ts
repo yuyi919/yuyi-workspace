@@ -1,4 +1,4 @@
-import type Types from ".";
+import { DynamicString, Recordable } from "./namespaces/shared";
 
 const types = [
   "boolean",
@@ -11,72 +11,180 @@ const types = [
   "object",
   "error",
   "symbol",
+  "ArrayBuffer",
 ] as const;
-export type BuiltinTypes = typeof types[number] | "null" | "NaN" | "undefined" | "bigint";
+
+/**
+ *
+ * @public
+ */
+export type BuiltinTypes =
+  | typeof types[number]
+  | "null"
+  | "NaN"
+  | "typedArray"
+  | "undefined"
+  | "bigint";
 const class2type = {} as Record<string, BuiltinTypes>;
 
 for (const type of types) {
-  class2type[`[object ${type}]`] = type;
+  class2type[`[object ${type[0].toUpperCase() + type.slice(1)}]`] = type;
 }
 
-export function getType(object: unknown): BuiltinTypes {
-  const type = Object.toString.call(object) as string;
-  if (object === null) return "null";
-  if (typeof object === "number" && object !== object) return "NaN";
+/**
+ *
+ * @param target -
+ * @beta
+ */
+export function getType(target: unknown): BuiltinTypes | DynamicString {
+  const type = Object.prototype.toString.call(target) as string;
+  if (target === null) return "null";
+  if (typeof target === "number" && target !== target) return "NaN";
 
-  const isObject = typeof object === "object";
-  const isFn = typeof object === "function";
-  return isObject || isFn ? class2type[type] || "object" : typeof object;
+  const isObject = typeof target === "object";
+  const isFn = typeof target === "function";
+  return isObject || isFn
+    ? class2type[type] || (/\wArray\]$/.test(type) ? "typedArray" : "object")
+    : typeof target;
 }
 
-export function isPrimitive(tar: unknown): tar is string | number {
-  return isNum(tar) || typeof tar === "string";
+/**
+ *
+ * @param target -
+ * @beta
+ */
+export function getTypeTag(target: unknown) {
+  return Object.prototype.toString.call(target) as string;
 }
-export function isArr<T>(tar: unknown): tar is T[] {
-  return getType(tar) === "array";
+
+/**
+ *
+ * @param target -
+ * @public
+ */
+export function isPrimitive(target: unknown): target is string | number {
+  return isNum(target) || typeof target === "string";
 }
-export function isNum(tar: unknown): tar is number {
-  return typeof tar === "number" && tar === tar;
+
+/**
+ *
+ * @param target -
+ * @public
+ */
+export function isArr<T>(target: unknown): target is T[] {
+  return getType(target) === "array";
 }
-export function isStr(tar: unknown): tar is string {
-  return typeof tar === "string";
+
+/**
+ *
+ * @param target -
+ * @public
+ */
+export function isNum(target: unknown): target is number {
+  return typeof target === "number" && target === target;
 }
-export function isObj(tar: unknown): tar is object {
-  return getType(tar) === "object";
+
+/**
+ *
+ * @param target -
+ * @public
+ */
+export function isStr(target: unknown): target is string {
+  return typeof target === "string";
 }
+
+/**
+ *
+ * @param target -
+ * @public
+ */
+export function isObj(target: unknown): target is object {
+  return getType(target) === "object";
+}
+/**
+ *
+ * @param target -
+ * @public
+ */
+export function isBool(target: unknown): target is boolean {
+  return !!target === target;
+}
+
+/**
+ *
+ * @param target -
+ * @public
+ */
 export function isFn<Func extends (...data: any) => any = (...data: any) => any>(
-  tar: unknown
-): tar is Func {
-  return typeof tar === "function" && "call" in tar;
-}
-export function isUndefined(tar: unknown): tar is undefined {
-  return tar === void 0;
-}
-export function isNull(tar: unknown): tar is null {
-  return tar === null;
+  target: unknown
+): target is Func {
+  return typeof target === "function" && "call" in target;
 }
 
-export function isEmpty(tar: unknown): boolean {
-  const t = getType(tar);
+/**
+ *
+ * @param target -
+ * @public
+ */
+export function isUndefined(target: unknown): target is undefined {
+  return target === void 0;
+}
+
+/**
+ *
+ * @param target -
+ * @public
+ */
+export function isNull(target: unknown): target is null {
+  return target === null;
+}
+
+/**
+ *
+ * @param target -
+ * @public
+ */
+export function isEmpty(target: unknown): boolean {
+  const t = getType(target);
   switch (t) {
     case "object":
-      return Object.keys(tar as Types.Recordable).length === 0;
+      return Object.keys(target as Recordable).length === 0;
     case "array":
-      return (tar as any[]).length === 0;
+      return (target as any[]).length === 0;
     case "string":
-      return !(tar as string).trim();
+      return !(target as string).trim();
+    case "number":
+      return target === 0;
     case "undefined":
     case "null":
-    case "NaN":
-    case "boolean":
       return true;
     default:
       return false;
   }
 }
-export function isNil(tar: unknown): tar is null | undefined {
-  return tar === void 0 || tar === null;
+
+/**
+ *
+ * @param target -
+ * @public
+ */
+export function isNil(target: unknown): target is null | undefined {
+  return target === void 0 || target === null;
 }
-export function isNaN(tar: unknown): boolean {
-  return typeof tar === "number" && tar !== tar;
+
+/**
+ * 严格检查一个NaN数值
+ * @param target -
+ * @public
+ * @example
+ * ```
+ * isNumNaN(NaN) // => true
+ * globalThis.isNaN({}) // => true
+ * globalThis.isNaN(undefined) // => true
+ * isNumNaN({}) // => false
+ * isNumNaN(undefined) // => false
+ * ```
+ */
+export function isNumNaN(target: unknown): target is number {
+  return typeof target === "number" && target !== target;
 }

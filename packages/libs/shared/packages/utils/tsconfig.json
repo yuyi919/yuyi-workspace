@@ -1,18 +1,7 @@
 {
   "extends": "./node_modules/@yuyi919/workspace-base-rig/profiles/default/tsconfig-base.json",
   "compilerOptions": {
-    "rootDir": "./src",
-    "tsBuildInfoFile": "./node_modules/@yuyi919/workspace-base-rig/.tsBuildInfo/shared-utils.json",
-    "plugins": [
-      {
-        "transform": "ts-import-plugin",
-        "type": "config",
-        "style": false,
-        "libraryName": "lodash",
-        "libraryDirectory": null,
-        "camel2DashComponentName": false
-      }
-    ]
+    "rootDir": "./src"
   },
   "references": [
     {

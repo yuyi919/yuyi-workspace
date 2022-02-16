@@ -1,5 +1,12 @@
 import { toGetter } from "./toGetter";
 
+/**
+ *
+ * @param target -
+ * @param values -
+ * @param options -
+ * @public
+ */
 export function defineProperties<T, V>(
   target: T,
   values: V,
@@ -16,6 +23,12 @@ export function defineProperties<T, V>(
   return Object.defineProperties(target, descs) as any;
 }
 
+/**
+ *
+ * @param target -
+ * @param values -
+ * @public
+ */
 export function defineGetters<T, G>(target: T, values: G): T & G {
   const descs: any = {};
   for (const key in values) {

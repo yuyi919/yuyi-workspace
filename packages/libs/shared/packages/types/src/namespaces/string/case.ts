@@ -32,11 +32,23 @@ import { Types } from "../..";
 // type UpperKey = Uppercase<keyof KeyWords>;
 // type LowerKey = Lowercase<KeyWords[keyof KeyWords]>;
 
+/**
+ * @beta
+ */
 export type ToUpperCase<S extends string> = Uppercase<S>;
+/**
+ * @beta
+ */
 export type ToLowerCase<S extends string> = Lowercase<S>;
+/**
+ * @beta
+ */
 export type ToUpperCaseFirst<T extends string> = T extends `${infer A}${infer B}`
   ? `${ToUpperCase<A>}${B}`
   : T;
+/**
+ * @beta
+ */
 export type ToLowerCaseFirst<T extends string> = T extends `${infer A}${infer B}`
   ? `${ToLowerCase<A>}${B}`
   : T;
@@ -69,9 +81,10 @@ type CamelCaseInner<
   : `${R}${ToUpperCaseFirst<T>}`;
 /**
  * 将字符串转换为驼峰格式
- * @typeArg T - 字符串，必传
- * @typeArg Split - 分隔符，默认为 "-"
- * @typeArg Deep - 递归类型层级，默认为10，不宜过高
+ * @typeParam T - 字符串，必传
+ * @typeParam Split - 分隔符，默认为 "-"
+ * @typeParam Deep - 递归类型层级，默认为10，不宜过高
+ * @beta
  */
 export type CamelCase<
   T extends string,

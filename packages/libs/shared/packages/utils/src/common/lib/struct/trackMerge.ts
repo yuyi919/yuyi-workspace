@@ -49,7 +49,7 @@ const match: [any, any, boolean?][] = [
   [isUndefined, Type.UNDEFINED],
 ];
 
-function expectTo(value: any, configs: [any, any, boolean?][], elseValue?: any): any {
+function _expectTo(value: any, configs: [any, any, boolean?][], elseValue?: any): any {
   var expect: any;
   const r = configs.find((config) => {
     var expectType = config[0];
@@ -62,7 +62,7 @@ function expectTo(value: any, configs: [any, any, boolean?][], elseValue?: any):
 
 function getType(v: any): Type {
   // console.log('mergeFuncPipe', v, expectTo(v, match, Type.BASE))
-  return expectTo(v, match, Type.BASE);
+  return _expectTo(v, match, Type.BASE);
 }
 
 function isTrackFunc(func: any) {
@@ -70,6 +70,9 @@ function isTrackFunc(func: any) {
   return isFunction(func) && isArray(func.__track);
 }
 // pipe(v)
+/**
+ * @alpha
+ */
 export function mergeFuncPipe(funcA: any, funcB: any) {
   var res: any;
   const { __track: current = [funcA], ...otherA } = funcA;
@@ -91,12 +94,17 @@ export function mergeFuncPipe(funcA: any, funcB: any) {
 
 /**
  * 栈合并
- * @param target
- * @param source
+ * @param target -
+ * @param source -
  * @remarks
  * 实现细节见: {@link https://www.lodashjs.com/docs/latest#_mergewithobject-sources-customizer}
+ * @alpha
  */
 export function trackMergePipe<Object, Source>(target: Object, ...source: Source[]): any;
+/**
+ * {@inheritdoc (trackMergePipe:1)}
+ * @beta
+ */
 export function trackMergePipe<Object, Source>(target: Object, ...source: any[]): any;
 export function trackMergePipe<Object>(__merge: Object) {
   let i = 0,
@@ -108,16 +116,21 @@ export function trackMergePipe<Object>(__merge: Object) {
   return result.__merge;
 }
 
+/**
+ *
+ * @alpha
+ */
 export interface TrackMergeOptions {
   ignoreKeys?: string[];
   extendsKeys?: string[];
 }
 /**
  * 栈合并
- * @param target
- * @param source
+ * @param target -
+ * @param source -
  * @remarks
  * 实现细节见: {@link https://www.lodashjs.com/docs/latest#_mergewithobject-sources-customizer}
+ * @alpha
  */
 export function trackMerge<Target, Source>(
   object: Target,
@@ -143,6 +156,15 @@ export function trackMerge<Target, Source>(
   }
   return mergeWith(object, source, trackMergeTo);
 }
+/**
+ *
+ * @param value -
+ * @param srcValue -
+ * @param key -
+ * @param object -
+ * @param source -
+ * @alpha
+ */
 export const trackMergeTo: MergeWithCustomizer = (value, srcValue, key?, object?, source?) => {
   const adapter = useAdapter<Types.Function.Base>(
     TrackAdapter,
@@ -166,6 +188,12 @@ const TrackAdapter: { [key: string]: MergeWithCustomizer } = {
   // [CustomizerAdapterType.ObjWithObj]: ReturnIgrone
 };
 
+/**
+ *
+ * @param adapter -
+ * @param adapterKey -
+ * @alpha
+ */
 export function useAdapter<T = Types.Function.Base>(
   adapter: IKeyValueMap<T>,
   adapterKey: Exclude<TKey, symbol>

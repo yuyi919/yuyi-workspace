@@ -5,10 +5,11 @@ import { castComputedPipe } from "./castUtils";
 /**
  * 管道函数，将一组函数组合成管道，像流水线一样让原始值流过。
  * @param initialValue - 原始值
- * @param funcArr - @rest 函数数组
+ * @param funcArr - rest 函数数组
  * @typeParam T - 输入值类型
  * @typeParam R - 输出值类型
  * @returns 从第二个函数开始，入参都为上一个函数返回的结果。最后返回最后一个函数输出的结果
+ * @alpha
  * @example
  * 基本使用
  *```ts
@@ -25,10 +26,11 @@ export function pipe<T, R>(initialValue: T, ...funcArr: ((v: T | R) => R)[]): R 
 /**
  * 管道函数，将一组函数组合成管道，像流水线一样让原始值流过。
  * @param initialValue - 原始值
- * @param funcArr - @rest 函数数组
+ * @param funcArr - rest 函数数组
  * @typeParam T - 输入值类型
  * @typeParam R - 输出值类型
  * @returns 返回一个数组，第一个为原始值，之后为每个函数按顺序执行返回的结果
+ * @alpha
  * @example
  * 基本使用
  *```ts
@@ -54,10 +56,11 @@ export function pipeTrack<T, R>(initialValue: T, ...funcArr: ((v: T | R) => R)[]
 /**
  * 管道函数，将一组函数组合成管道，像流水线一样让检查值流过。
  * @param checkValue - 检查值
- * @param funcArr - @rest 函数数组
+ * @param funcArr - rest 函数数组
  * @typeParam T - 输入值类型
  * @typeParam R - 输出值类型
  * @returns 如果每个函数都通过，最后则返回检查值自身。否则返回`undefined`
+ * @alpha
  * @example
  * 基本使用
  *```ts

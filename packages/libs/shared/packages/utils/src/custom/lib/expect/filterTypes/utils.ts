@@ -19,6 +19,7 @@ import {
 
 /**
  * Filter函数类型生成器
+ * @internal
  */
 export type FilterGenerator<Target> = <
   Expect extends IsBaseType<

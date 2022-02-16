@@ -8,6 +8,7 @@ import { isNotEmptyValue } from "./isNil";
  * @param noStrict - 启用非严格模式(默认为false)，null和undefined视为相等
  * @returns 如果两个值完全相同，那么返回true，否则返回false。
  * @example
+ * ```
  * const object = { 'a': 1 };
  * const other = { 'a': 1 };
  *
@@ -15,11 +16,12 @@ import { isNotEmptyValue } from "./isNil";
  * // => true
  * object === other;
  * // => false
- *
- * @remarks \
+ * ```
+ * @remarks
  * NOTE:
  * # **注意**.
  * 这个方法支持比较 arrays, array buffers, booleans, date objects, error objects, maps, numbers, Object objects, regexes, sets, strings, symbols, 以及 typed arrays. Object 对象值比较自身的属性，不包括继承的和可枚举的属性。 不支持函数和DOM节点比较。
+ * @beta
  */
 export function isEqual(value: any, other: any, noStrict = false): boolean {
   if (noStrict) {
@@ -30,7 +32,6 @@ export function isEqual(value: any, other: any, noStrict = false): boolean {
     return _eq(value, other);
   }
 }
-isEqual._ = _eq;
 
 /**
  * @remarks see:  {@link https://www.lodashjs.com/docs/latest#_isequalvalue-other}

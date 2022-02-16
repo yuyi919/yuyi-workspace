@@ -5,6 +5,10 @@ import { Constant$ } from "@yuyi919/shared-constant";
 import { IKeyValueMap } from "@yuyi919/shared-types";
 import { List } from "lodash";
 
+/**
+ *
+ * @beta
+ */
 export type ReduceMapObjectIterator<
   TSource = any,
   Result = TSource[keyof TSource],
@@ -13,6 +17,10 @@ export type ReduceMapObjectIterator<
   }
 > = (curr: TSource[keyof TSource], key: keyof TSource, source: TSource, prev: TResult) => TResult;
 
+/**
+ *
+ * @beta
+ */
 export type ReduceMapListIterator<
   TSource = any,
   Result = any,
@@ -23,11 +31,12 @@ export type ReduceMapListIterator<
 
 /**
  * 近似_.map，callback需返回一个Object，最后将所有返回的Object组合为一个Object
- * @param collection
- * @param callback
- * @param accumulator 基于预先存在的Object
+ * @param collection -
+ * @param callback -
+ * @param accumulator - 基于预先存在的Object
  * @remarks see:  _.reduce
  * @remarks see:  _.map
+ * @beta
  */
 export function reduceMap<
   T,
@@ -43,6 +52,7 @@ export function reduceMap<
 
 /**
  * @remarks see:  _.reduce
+ * @beta
  */
 export function reduceMap<
   T extends IKeyValueMap,

@@ -7,9 +7,14 @@ export * from "./atomic";
 export * from "./struct";
 export * from "./async";
 
-export function extendMap<T extends Map<any, any>>(...map: T[]): T {
+/**
+ *
+ * @param source -
+ * @beta
+ */
+export function extendMap<T extends Map<any, any>>(...source: T[]): T {
   let r = [] as [string, any][];
-  for (const o of map) {
+  for (const o of source) {
     if (o) {
       r = r.concat(Array.from(o.entries()));
     }

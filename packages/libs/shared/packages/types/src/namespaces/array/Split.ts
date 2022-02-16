@@ -1,3 +1,6 @@
+/**
+ * @beta
+ */
 export type SplitWith<
   List extends any[],
   Match extends any,
@@ -12,10 +15,16 @@ export type SplitWith<
     : [List, never]
   : [List, never];
 
+/**
+ * @beta
+ */
 export type Split<List extends any[], Match extends any> = SplitWith<List, Match>;
 
 /**
  * 类似于 [first, ...other] 返回other
+ */
+/**
+ * @beta
  */
 export type RestOther<
   List extends any[] | readonly any[],
@@ -34,7 +43,7 @@ export type RestOther<
     : RestOther<Other, [any, ...Cache, Item]>
   : never;
 
-type R = Split<
-  ["a", "?", "b", ",", "c", "?", "b", ",", "c", "?", "b", ",", "c", "?", "b", ",", "c"],
-  "," | "?"
->;
+// type R = Split<
+//   ["a", "?", "b", ",", "c", "?", "b", ",", "c", "?", "b", ",", "c", "?", "b", ",", "c"],
+//   "," | "?"
+// >;

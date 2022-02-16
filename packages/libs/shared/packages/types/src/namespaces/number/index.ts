@@ -66,5 +66,11 @@ type NextIndex = [
   30,
   ...30[]
 ];
+/**
+ * @beta
+ */
 export type Minus<T extends number> = PrevIndex[T];
+/**
+ * @beta
+ */
 export type Plus<T extends number> = NextIndex[T];

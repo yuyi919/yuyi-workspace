@@ -24,6 +24,7 @@ export function sleep<V = void>(time: number, emitValue?: V, isError = false): P
 /**
  * {@inheritDoc sleep}
  * @deprecated 该方法迟早被弃用，使用 {@link sleep | sleep()} 代替
+ * @internal
  */
 export function waitingPromise<V = void>(
   time: number,
@@ -38,6 +39,7 @@ export function waitingPromise(a, b, c) {
 /**
  * 等待下一帧cpu时序
  * @param emitValue - 默认不需要
+ * @beta
  */
 export function nextTick(): Promise<void> {
   return CREATE_PROMISE(function (resolve) {

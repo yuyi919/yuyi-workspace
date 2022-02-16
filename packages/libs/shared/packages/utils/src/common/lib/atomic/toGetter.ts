@@ -5,10 +5,24 @@ function get<T, K extends keyof T>(target: T, key: K, defaultValue?: any): T[K] 
   return v === undefined ? defaultValue : v;
 }
 
+/**
+ *
+ * @param target -
+ * @param key -
+ * @param defaultValue -
+ * @alpha
+ */
 export function toGetter<T, K extends keyof T>(target: T, key: K, defaultValue?: any): () => T[K] {
   return get.bind(null, target, key, defaultValue);
 }
 
+/**
+ *
+ * @param target -
+ * @param key -
+ * @param defaultValue -
+ * @alpha
+ */
 export function toDeepGetter<T, K extends keyof T>(
   target: T,
   key: K,

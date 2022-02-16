@@ -9,12 +9,17 @@ import { IKeyValueMap } from "@yuyi919/shared-types";
  * 对象为key-value对会删除值为空的key，如果对象为Array会挤掉空的下标，但不会影响下标顺序
  * @param target - 目标对象
  * @param isRemoveRepeat - 是否移除重复（浅比较）的值（默认为true）
+ * @beta
  */
 export function zipEmptyData<T = any>(
   target: Array<T | undefined | null>,
   isRemoveRepeat?: boolean
 ): T[];
 
+/**
+ * {@inheritDoc (zipEmptyData:1)}
+ * @beta
+ */
 export function zipEmptyData<T = any>(
   target: IKeyValueMap<T | undefined | null>,
   isRemoveRepeat?: boolean

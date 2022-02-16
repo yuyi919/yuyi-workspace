@@ -1,9 +1,8 @@
 /**
  * @module LodashExtraUtils
  */
-
-import { IKeyValueMap } from "@yuyi919/shared-types";
 import { Constant$ } from "@yuyi919/shared-constant";
+import { IKeyValueMap } from "@yuyi919/shared-types";
 import { isString } from "lodash";
 import { isFunction } from "../atomic";
 
@@ -15,6 +14,8 @@ import { isFunction } from "../atomic";
  * @returns 返回一个新对象
  * @remarks
  * 更复杂的控制参照{@link https://www.lodashjs.com/docs/latest#_groupbycollection-iteratee_identity | Lodash.groupBy}
+ * TODO
+ * @beta
  */
 export function createGroupWith<T extends object = any>(
   list: T[],

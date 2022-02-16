@@ -6,6 +6,7 @@ import { difference } from "lodash";
  * @param subArray - 要判断是否为的子集
  * @param strict - 判断是否为真子集
  * @returns 是否为（真）子集
+ * @alpha
  */
 
 export function isSubArray<T>(array: T[], subArray: T[], strict?: boolean) {
