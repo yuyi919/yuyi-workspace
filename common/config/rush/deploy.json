@@ -25,7 +25,7 @@
    *
    * The default value is false.
    */
-  "includeDevDependencies": true,
+  "includeDevDependencies": false,
 
   /**
    * When deploying a local Rush project, normally the .npmignore filter is applied so that Rush only copies
@@ -54,7 +54,7 @@
    *   create the links described in the "deploy-metadata.json" output file.
    * - "none": Do nothing; some other tool may create the links later.
    */
-  // "linkCreation": "script",
+  "linkCreation": "script",
 
   /**
    * If this path is specified, then after "rush deploy", recursively copy the files from this folder to
@@ -72,7 +72,6 @@
     //    * The full package name of the project, which must be declared in rush.json.
     //    */
     //   "projectName": "@my-scope/my-project",
-    //
     //   /**
     //    * A list of additional local Rush projects to be deployed with this project (beyond the package.json
     //    * dependencies).  Specify full package names, which must be declared in rush.json.
@@ -80,7 +79,6 @@
     //   "additionalProjectsToInclude": [
     //     // "@my-scope/my-project2"
     //   ],
-    //
     //   /**
     //    * When deploying a project, the included dependencies are normally determined automatically based on
     //    * package.json fields such as "dependencies", "peerDependencies", and "optionalDependencies",
@@ -95,7 +93,6 @@
     //   "additionalDependenciesToInclude": [
     //     // "@rushstack/node-core-library"
     //   ],
-    //
     //   /**
     //    * This setting prevents specific dependencies from being deployed.  It only filters dependencies that
     //    * are explicitly declared in package.json for this project.  It does not affect dependencies added
