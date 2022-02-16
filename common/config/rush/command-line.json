@@ -1,15 +1,12 @@
 {
   "$schema": "https://developer.microsoft.com/json-schemas/rush/v5/command-line.schema.json",
-
   "commands": [
     {
       "name": "prettier",
       "commandKind": "global",
       "summary": "Used by the pre-commit Git hook. This command invokes Prettier to reformat staged changes.",
       "safeForSimultaneousRushProcesses": true,
-
       "autoinstallerName": "rush-prettier",
-
       // This will invoke common/autoinstallers/rush-prettier/node_modules/.bin/pretty-quick
       "shellCommand": "pretty-quick --staged"
     },
@@ -84,7 +81,6 @@
       "shellCommand": "node common/scripts/deploy-app.js"
     }
   ],
-
   "parameters": [
     // {
     //   /**

@@ -3,13 +3,11 @@
  */
 {
   "$schema": "https://developer.microsoft.com/json-schemas/heft/typescript.schema.json",
-
   /**
    * Optionally specifies another JSON config file that this file extends from. This provides a way for standard
    * settings to be shared across multiple projects.
    */
   // "extends": "base-project/config/typescript.json",
-
   /**
    * If provided, emit these module kinds in addition to the modules specified in the tsconfig.
    * Note that this option only applies to the main tsconfig.json configuration.
@@ -26,23 +24,19 @@
     //    */
     //    "outFolderName": "lib-amd"
     // }
-
     {
       "moduleKind": "commonjs",
       "outFolderName": "dist"
     }
   ],
-
   /**
    * If true, emit CommonJS module output to the folder specified in the tsconfig "outDir" compiler option with the .cjs extension alongside (or instead of, if TSConfig specifies CommonJS) the default compilation output.
    */
   // "emitCjsExtensionForCommonJS": true,
-
   /**
    * If true, emit ESNext module output to the folder specified in the tsconfig "outDir" compiler option with the .mjs extension alongside (or instead of, if TSConfig specifies ESNext) the default compilation output.
    */
   // "emitMjsExtensionForESModule": true,
-
   /**
    * Specifies the intermediary folder that tests will use.  Because Jest uses the
    * Node.js runtime to execute tests, the module format must be CommonJS.
@@ -50,18 +44,15 @@
    * The default value is "lib".
    */
   "emitFolderNameForTests": "dist",
-
   /**
    * If set to "true", the TSlint task will not be invoked.
    */
   "disableTslint": true,
-
   /**
    * Set this to change the maximum number of file handles that will be opened concurrently for writing.
    * The default is 50.
    */
   // "maxWriteParallelism": 50,
-
   /**
    * Configures additional file types that should be copied into the TypeScript compiler's emit folders, for example
    * so that these files can be resolved by import statements.
@@ -93,14 +84,12 @@
       ".woff",
       ".woff2"
     ]
-
     /**
      * Glob patterns that should be explicitly included.
      */
     // "includeGlobs": [
     //   "some/path/*.js"
     // ],
-
     /**
      * Glob patterns that should be explicitly excluded. This takes precedence over globs listed
      * in "includeGlobs" and files that match the file extensions provided in "fileExtensions".
