@@ -87,6 +87,14 @@
       "allowedCategories": [ "production" ]
     },
     {
+      "name": "@pixi/sound",
+      "allowedCategories": [ "production" ]
+    },
+    {
+      "name": "@react-spring/web",
+      "allowedCategories": [ "production" ]
+    },
+    {
       "name": "@rollup/plugin-alias",
       "allowedCategories": [ "tools" ]
     },
@@ -767,6 +775,10 @@
       "allowedCategories": [ "production", "tools" ]
     },
     {
+      "name": "ts-import-plugin",
+      "allowedCategories": [ "production", "tools" ]
+    },
+    {
       "name": "ts-jest",
       "allowedCategories": [ "external", "production", "tools" ]
     },
@@ -797,6 +809,10 @@
     {
       "name": "typescript",
       "allowedCategories": [ "external", "production", "tools" ]
+    },
+    {
+      "name": "typescript-transform-paths",
+      "allowedCategories": [ "tools" ]
     },
     {
       "name": "username",

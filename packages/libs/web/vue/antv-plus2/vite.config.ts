@@ -11,7 +11,7 @@ const VariablesOutput = require("less-plugin-variables-output");
 export default defineViteConfig({
   // preset: "babel-ts",
   hooks: (_, utils) => {
-    const paths = loadTsconfigPaths("./tsconfig.json");
+    const paths = loadTsconfigPaths("./tsconfig.path.json");
     return {
       logLevel: "info",
       resolve: {

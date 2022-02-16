@@ -34,11 +34,13 @@ importers:
       prettier: ^2.3.1
       reflect-metadata: ^0.1.13
       rxjs: ~6.6.3
+      ts-import-plugin: ~2.0.0
       ts-jest: ~27.0.5
       ts-patch: ^1.4.1
       tsdx: ^0.14.1
       tslib: ~2.3.1
       typescript: 4.1.2
+      typescript-transform-paths: ~3.3.1
       vue: 2.6.14
       vue-template-compiler: 2.6.14
     dependencies:
@@ -75,6 +77,8 @@ importers:
       typescript: 4.1.2
     devDependencies:
       '@nrwl/jest': 12.5.8
+      ts-import-plugin: 2.0.0_typescript@4.1.2
+      typescript-transform-paths: 3.3.1_typescript@4.1.2
       vue: 2.6.14
       vue-template-compiler: 2.6.14
 
@@ -285,9 +289,11 @@ importers:
       jest: ~27.1.0
       lodash: 4.17.21
       lodash-es: 4.17.21
+      ts-import-plugin: ~2.0.0
       ts-jest: ~27.0.5
+      ts-patch: ~2.0.1
       tslib: ~2.3.1
-      typescript: 4.1.2
+      typescript: 4.5.5
     dependencies:
       '@yuyi919/shared-constant': link:../constant
       '@yuyi919/shared-types': link:../types
@@ -300,9 +306,11 @@ importers:
       '@types/node': 16.7.7
       '@yuyi919/workspace-base-rig': link:../../../tools/workspace-base-rig
       jest: 27.1.0
-      ts-jest: 27.0.5_jest@27.1.0+typescript@4.1.2
+      ts-import-plugin: 2.0.0_typescript@4.5.5
+      ts-jest: 27.0.5_jest@27.1.0+typescript@4.5.5
+      ts-patch: 2.0.1_typescript@4.5.5
       tslib: 2.3.1
-      typescript: 4.1.2
+      typescript: 4.5.5
 
   ../../packages/libs/tools/build-tools:
     specifiers:
@@ -793,10 +801,15 @@ importers:
 
   ../../packages/libs/topic/rpgmz:
     specifiers:
+      '@inlet/react-pixi': ^6.6.5
+      '@pixi/sound': ~4.2.0
+      '@react-spring/web': ~9.4.3
       '@types/http-proxy': ^1.17.4
       '@types/jest': ~27.0.1
       '@types/node': ~16.7.2
       '@types/nw.js': ^0.13.9
+      '@types/react': ^17.0.33
+      '@types/react-dom': ^17.0.11
       '@vitejs/plugin-react': ^1.0.7
       '@yuyi919/build-tools': workspace:0.1.10
       '@yuyi919/rpgmz-core': workspace:0.0.2
@@ -810,7 +823,7 @@ importers:
       jest: ~27.1.0
       mobx: 6.0.4
       pixi-better-scroller: ~0.2.0
-      pixi-flex: 1.0.13
+      pixi.js: 5.2.4
       react: ^17.0.2
       react-dom: ^17.0.2
       react-spring: ^9.4.2
@@ -830,18 +843,23 @@ importers:
       mobx: 6.0.4
       reflect-metadata: 0.1.13
     devDependencies:
+      '@inlet/react-pixi': 6.6.5_07abf0f3d2f216e8b8ec1a15043a67e1
+      '@pixi/sound': 4.2.0
+      '@react-spring/web': 9.4.3_react-dom@17.0.2+react@17.0.2
       '@types/http-proxy': 1.17.7
       '@types/jest': 27.0.1
       '@types/node': 16.7.7
       '@types/nw.js': 0.13.14
+      '@types/react': 17.0.39
+      '@types/react-dom': 17.0.11
       '@vitejs/plugin-react': 1.1.4
       '@yuyi919/build-tools': link:../../tools/build-tools
       '@yuyi919/shared-types': link:../../shared/packages/types
       '@yuyi919/workspace-base-rig': link:../../tools/workspace-base-rig
       http-proxy: 1.18.1
       jest: 27.1.0
-      pixi-better-scroller: 0.2.0
-      pixi-flex: 1.0.13
+      pixi-better-scroller: 0.2.0_pixi.js@5.2.4
+      pixi.js: 5.2.4
       react: 17.0.2
       react-dom: 17.0.2_react@17.0.2
       react-spring: 9.4.2_react-dom@17.0.2+react@17.0.2
@@ -860,7 +878,6 @@ importers:
       '@vue/composition-api': ^1.0.2
       '@yuyi919/shared-types': workspace:0.0.5
       '@yuyi919/shared-utils': workspace:0.0.37
-      '@yuyi919/vue-jsx-factory': workspace:0.0.1
       '@yuyi919/vue-shared-decorators': workspace:0.0.3
       '@yuyi919/vue-use': workspace:0.0.3
       '@yuyi919/workspace-base-rig': workspace:1.2.5
@@ -878,7 +895,6 @@ importers:
     dependencies:
       '@yuyi919/shared-types': link:../../../../shared/packages/types
       '@yuyi919/shared-utils': link:../../../../shared/packages/utils
-      '@yuyi919/vue-jsx-factory': link:../../../../web/vue/jsx-factory
       '@yuyi919/vue-shared-decorators': link:../../../../web/vue/shared/decorators
       '@yuyi919/vue-use': link:../../../../web/vue/use
       lodash: 4.17.21
@@ -941,6 +957,8 @@ importers:
       '@inlet/react-pixi': ^6.6.5
       '@lazarv/wasm-yoga': ~1.1.0
       '@types/jest': ~27.0.1
+      '@types/lodash': ^4.14.171
+      '@types/lodash-es': ~4.17.6
       '@types/node': ~16.7.2
       '@types/react': ^17.0.33
       '@yuyi919/rpgmz-core': workspace:0.0.2
@@ -976,6 +994,8 @@ importers:
       yoga-layout-prebuilt: 1.10.0
     devDependencies:
       '@types/jest': 27.0.1
+      '@types/lodash': 4.14.172
+      '@types/lodash-es': 4.17.6
       '@types/node': 16.7.7
       '@types/react': 17.0.39
       '@yuyi919/rpgmz-plugin-transformer': link:../plugin-transformer
@@ -1110,6 +1130,7 @@ importers:
       '@vue/composition-api': ^1.0.2
       '@yuyi919/shared-types': workspace:0.0.5
       '@yuyi919/shared-utils': workspace:0.0.37
+      '@yuyi919/vue-antv-plus2-helper': workspace:0.0.1
       '@yuyi919/vue-jsx-factory': workspace:0.0.1
       '@yuyi919/vue-use': workspace:0.0.3
       '@yuyi919/workspace-base-rig': workspace:1.2.5
@@ -1123,6 +1144,7 @@ importers:
     dependencies:
       '@yuyi919/shared-types': link:../../../../../shared/packages/types
       '@yuyi919/shared-utils': link:../../../../../shared/packages/utils
+      '@yuyi919/vue-antv-plus2-helper': link:../helper
       '@yuyi919/vue-jsx-factory': link:../../../jsx-factory
       '@yuyi919/vue-use': link:../../../use
       lodash: 4.17.21
@@ -3384,6 +3406,19 @@ packages:
   /@humanwhocodes/object-schema/1.2.0:
     resolution: {integrity: sha512-wdppn25U8z/2yiaT6YGquE6X8sSv7hNMWSXYSSU1jGv/yd6XqjXgTDJ8KP4NgjTXfJ3GbRjeeb8RTV7a/VpM+w==}
 
+  /@inlet/react-pixi/6.6.5_07abf0f3d2f216e8b8ec1a15043a67e1:
+    resolution: {integrity: sha512-xflQcnxHtf/wlSAaFSk4r6ePGwe4iRRkMceYRqbweTTKfJEudN5LksxDbxpuNPm9vw6DqFKnOtUXG1Qa1ZmNjg==}
+    peerDependencies:
+      pixi.js: ^6.0.0
+      prop-types: ^15.7.2
+      react: ^17.0.1
+      react-dom: ^17.0.1
+    dependencies:
+      pixi.js: 5.2.4
+      react: 17.0.2
+      react-dom: 17.0.2_react@17.0.2
+    dev: true
+
   /@inlet/react-pixi/6.6.5_react-dom@17.0.2+react@17.0.2:
     resolution: {integrity: sha512-xflQcnxHtf/wlSAaFSk4r6ePGwe4iRRkMceYRqbweTTKfJEudN5LksxDbxpuNPm9vw6DqFKnOtUXG1Qa1ZmNjg==}
     peerDependencies:
@@ -4402,6 +4437,15 @@ packages:
     dependencies:
       ismobilejs: 1.1.1
 
+  /@pixi/sound/4.2.0:
+    resolution: {integrity: sha512-l7pbmLQa5soahfssyJjs/nkXMND8QwxqB3dA/zGr+87sVebOqohbJ5dLleBUWdPsAV+VeaQHi/4ohZR8fRt3og==}
+    peerDependencies:
+      '@pixi/core': '>=5'
+      '@pixi/loaders': '>=5'
+      '@pixi/ticker': '>=5'
+      '@pixi/utils': '>=5'
+    dev: true
+
   /@pixi/sprite-animated/5.2.4:
     resolution: {integrity: sha512-7+OoaHpLbHKAQe1wlY11u7gNu5KoNINJWGlsc7wFRHOW6QpNaOTaWyttpLQDfrLe0Z+rAawdqj0252nSKWRNPw==}
     dependencies:
@@ -4564,6 +4608,15 @@ packages:
       '@react-spring/types': 9.4.2
       react: 17.0.2
 
+  /@react-spring/animated/9.4.3_react@17.0.2:
+    resolution: {integrity: sha512-hKKmeXPoGpJ/zrG/RC8stwW8PmMH0BbewHD8aUPLbyzD9fNvZEJ0mjKmOI0CcSwMpb43kuwY2nX3ZJVImPQCoQ==}
+    peerDependencies:
+      react: ^16.8.0  || ^17.0.0
+    dependencies:
+      '@react-spring/shared': 9.4.3_react@17.0.2
+      '@react-spring/types': 9.4.3
+      react: 17.0.2
+
   /@react-spring/core/9.4.2_react@17.0.2:
     resolution: {integrity: sha512-Ej/ULwdx8rQtMAWEpLgwbKcQEx6vPfjyG3cxLP05zAInpCoWkYpl+sXOp9tn3r99mTNQPTTt7BgQsSnmQA8+rQ==}
     peerDependencies:
@@ -4573,6 +4626,17 @@ packages:
       '@react-spring/rafz': 9.4.2
       '@react-spring/shared': 9.4.2_react@17.0.2
       '@react-spring/types': 9.4.2
+      react: 17.0.2
+
+  /@react-spring/core/9.4.3_react@17.0.2:
+    resolution: {integrity: sha512-Jr6/GjHwXYxAtttcYDXOtH36krO0XGjYaSsGR6g+vOUO4y0zAPPXoAwpK6vS7Haip5fRwk7rMdNG+OzU7bB4Bg==}
+    peerDependencies:
+      react: ^16.8.0  || ^17.0.0
+    dependencies:
+      '@react-spring/animated': 9.4.3_react@17.0.2
+      '@react-spring/rafz': 9.4.3
+      '@react-spring/shared': 9.4.3_react@17.0.2
+      '@react-spring/types': 9.4.3
       react: 17.0.2
 
   /@react-spring/konva/9.4.2_react@17.0.2:
@@ -4603,6 +4667,9 @@ packages:
   /@react-spring/rafz/9.4.2:
     resolution: {integrity: sha512-rSm+G8E/XEEpnCGtT/xYN6o8VvEXlU8wN/hyKp4Q44XAZzGSMHLIFP7pY94/MmWsxCxjkw1AxUWhiFYxWrnI5Q==}
 
+  /@react-spring/rafz/9.4.3:
+    resolution: {integrity: sha512-KnujiZNIHzXsRq1D4tVbCajl8Lx+e6vtvUk7o69KbuneSpEgil9P/x3b+hMDk8U0NHGhJjzhU7723/CNsQansA==}
+
   /@react-spring/shared/9.4.2_react@17.0.2:
     resolution: {integrity: sha512-mZtbQLpMm6Vy5+O1MSlY9KuAcMO8rdUQvtdnC7Or7y7xiZlnzj8oAILyO6Y2rD2ZC1PmgVS0gMev/8T+MykW+Q==}
     peerDependencies:
@@ -4610,6 +4677,15 @@ packages:
     dependencies:
       '@react-spring/rafz': 9.4.2
       '@react-spring/types': 9.4.2
+      react: 17.0.2
+
+  /@react-spring/shared/9.4.3_react@17.0.2:
+    resolution: {integrity: sha512-mB1UUD/pl1LzaY0XeNWZtvJzxMa8gLQf02nY12HAz4Rukm9dFRj0jeYwQYLdfYLsGFo1ldvHNurun6hZMG7kiQ==}
+    peerDependencies:
+      react: ^16.8.0  || ^17.0.0
+    dependencies:
+      '@react-spring/rafz': 9.4.3
+      '@react-spring/types': 9.4.3
       react: 17.0.2
 
   /@react-spring/three/9.4.2_react@17.0.2:
@@ -4628,16 +4704,19 @@ packages:
   /@react-spring/types/9.4.2:
     resolution: {integrity: sha512-GGiIscTM+CEUNV52anj3g5FqAZKL2+eRKtvBOAlC99qGBbvJ3qTLImrUR/I3lXY7PRuLgzI6kh34quA1oUxWYQ==}
 
-  /@react-spring/web/9.4.2_react-dom@17.0.2+react@17.0.2:
-    resolution: {integrity: sha512-sWfA9NkVuvVOpjSlMkD2zcF6X3i8NSHTeH/uHCGKsN3mYqgkhvAF+E8GASO/H4KKGNhbRvgCZiwJXOtOGyUg6A==}
+  /@react-spring/types/9.4.3:
+    resolution: {integrity: sha512-dzJrPvUc42K2un9y6D1IsrPQO5tKsbWwUo+wsATnXjG3ePWyuDBIOMJuPe605NhIXUmPH+Vik2wMoZz06hD1uA==}
+
+  /@react-spring/web/9.4.3_react-dom@17.0.2+react@17.0.2:
+    resolution: {integrity: sha512-llKve/uJ73JVagBAVvA74S/LfZP4oSB3XP1qmggSUNXzPZZo5ylIMrs55PxpLyxgzzihuhDU5N17ct3ATViOHw==}
     peerDependencies:
       react: ^16.8.0  || ^17.0.0
       react-dom: ^16.8.0  || ^17.0.0
     dependencies:
-      '@react-spring/animated': 9.4.2_react@17.0.2
-      '@react-spring/core': 9.4.2_react@17.0.2
-      '@react-spring/shared': 9.4.2_react@17.0.2
-      '@react-spring/types': 9.4.2
+      '@react-spring/animated': 9.4.3_react@17.0.2
+      '@react-spring/core': 9.4.3_react@17.0.2
+      '@react-spring/shared': 9.4.3_react@17.0.2
+      '@react-spring/types': 9.4.3
       react: 17.0.2
       react-dom: 17.0.2_react@17.0.2
 
@@ -5276,6 +5355,12 @@ packages:
   /@types/json5/0.0.29:
     resolution: {integrity: sha1-7ihweulOEdK4J7y+UnC86n8+ce4=}
 
+  /@types/lodash-es/4.17.6:
+    resolution: {integrity: sha512-R+zTeVUKDdfoRxpAryaQNRKk3105Rrgx2CFRClIgRGaqDTdjsm8h6IYA8ir584W3ePzkZfst5xIgDwYrlh9HLg==}
+    dependencies:
+      '@types/lodash': 4.14.172
+    dev: true
+
   /@types/lodash/4.14.172:
     resolution: {integrity: sha512-/BHF5HAx3em7/KkzVKm3LrsD6HZAXuXO1AJZQ3cRRBZj4oHZDviWPYu0aEplAqDFNHZPW6d3G7KN+ONcCCC7pw==}
 
@@ -5316,6 +5401,12 @@ packages:
 
   /@types/prop-types/15.7.4:
     resolution: {integrity: sha512-rZ5drC/jWjrArrS8BR6SIr4cWpW09RNTYt9AMZo3Jwwif+iacXAqgVjm0B0Bv/S1jhDXKHqRVNCbACkJ89RAnQ==}
+    dev: true
+
+  /@types/react-dom/17.0.11:
+    resolution: {integrity: sha512-f96K3k+24RaLGVu/Y2Ng3e1EbZ8/cVJvypZWd7cy0ofCBaf2lcM46xNhycMZ2xGwbBjRql7hOlZ+e2WlJ5MH3Q==}
+    dependencies:
+      '@types/react': 17.0.39
     dev: true
 
   /@types/react/17.0.39:
@@ -5401,6 +5492,7 @@ packages:
 
   /@types/yoga-layout/1.9.2:
     resolution: {integrity: sha512-S9q47ByT2pPvD65IvrWp7qppVMpk9WGMbVq9wbWZOHg6tnXSD4vyhao6nOSBwwfDdV2p3Kx9evA9vI+XWTfDvw==}
+    dev: false
 
   /@typescript-eslint/eslint-plugin/2.34.0_2b015b1c4b7c4a3ed9a197dc233b1a35:
     resolution: {integrity: sha512-4zY3Z88rEE99+CNvTbXSyovv2z9PNOVffTWD2W8QF5s2prBQtwN2zadqERcrHpcR7O/+KMI3fcTAmUUhK/iQcQ==}
@@ -14714,18 +14806,20 @@ packages:
     dependencies:
       node-modules-regexp: 1.0.0
 
-  /pixi-better-scroller/0.2.0:
+  /pixi-better-scroller/0.2.0_pixi.js@5.2.4:
     resolution: {integrity: sha512-A+O81sco5kbmJSi0lpqSxvBJbiZGG5sUn2WegNoFhVf/jBQVbMUYqKwykpL+CGe6Vutk7UmPI1ko49gbdwy2dg==}
     peerDependencies:
       pixi.js: ^5.2.1
     dependencies:
       colornames: 1.1.1
+      pixi.js: 5.2.4
     dev: true
 
   /pixi-flex/1.0.13:
     resolution: {integrity: sha512-VtAdtmwbRA7i9w9jm9nGf8Ef8u7FUkq0Vq733/x317BUhFT1xCJixRZhTfZ0mH98JY7wDQlhhi/YjyjpDKr56w==}
     dependencies:
       yoga-layout-prebuilt-low-memory: 1.9.8
+    dev: false
 
   /pixi.js/5.2.4:
     resolution: {integrity: sha512-QNmWPI1VscGleR2jUDiBlH9Lq8wh5mqi6K8RRUpW3O1xOXAKDTpD/TPA9EHzkYI9axag/AcChS7aiJVnwV2ytw==}
@@ -15219,7 +15313,7 @@ packages:
       '@react-spring/konva': 9.4.2_react@17.0.2
       '@react-spring/native': 9.4.2_react@17.0.2
       '@react-spring/three': 9.4.2_react@17.0.2
-      '@react-spring/web': 9.4.2_react-dom@17.0.2+react@17.0.2
+      '@react-spring/web': 9.4.3_react-dom@17.0.2+react@17.0.2
       '@react-spring/zdog': 9.4.2_react-dom@17.0.2+react@17.0.2
     transitivePeerDependencies:
       - '@react-three/fiber'
@@ -17094,6 +17188,22 @@ packages:
     resolution: {integrity: sha512-Npe9xQaJBH/2bQkKNKEV5KmzAHG5MRZL+FUMamQhSAwtohDHLMrgOQD0QqWcAhUgWJOVy5+tplY5v55fTJQt+g==}
     dev: false
 
+  /ts-import-plugin/2.0.0_typescript@4.1.2:
+    resolution: {integrity: sha512-pjWVq8uCjExk1XarLAUCWssEnCtHHlcQavLdhpsxIguTgKyz7sx2GqR8a0irnrHZR/+bu1SPT5L77LCuu6y5BA==}
+    peerDependencies:
+      typescript: '>= 4.2'
+    dependencies:
+      typescript: 4.1.2
+    dev: true
+
+  /ts-import-plugin/2.0.0_typescript@4.5.5:
+    resolution: {integrity: sha512-pjWVq8uCjExk1XarLAUCWssEnCtHHlcQavLdhpsxIguTgKyz7sx2GqR8a0irnrHZR/+bu1SPT5L77LCuu6y5BA==}
+    peerDependencies:
+      typescript: '>= 4.2'
+    dependencies:
+      typescript: 4.5.5
+    dev: true
+
   /ts-jest/25.5.1_jest@25.5.4+typescript@3.9.10:
     resolution: {integrity: sha512-kHEUlZMK8fn8vkxDjwbHlxXRB9dHYpyzqKIGDNxbzs+Rz+ssNDSDNusEK8Fk/sDd4xE6iKoQLfFkFVaskmTJyw==}
     engines: {node: '>= 8'}
@@ -17175,6 +17285,36 @@ packages:
       typescript: 4.1.2
       yargs-parser: 20.2.9
 
+  /ts-jest/27.0.5_jest@27.1.0+typescript@4.5.5:
+    resolution: {integrity: sha512-lIJApzfTaSSbtlksfFNHkWOzLJuuSm4faFAfo5kvzOiRAuoN4/eKxVJ2zEAho8aecE04qX6K1pAzfH5QHL1/8w==}
+    engines: {node: ^10.13.0 || ^12.13.0 || ^14.15.0 || >=15.0.0}
+    hasBin: true
+    peerDependencies:
+      '@babel/core': '>=7.0.0-beta.0 <8'
+      '@types/jest': ^27.0.0
+      babel-jest: '>=27.0.0 <28'
+      jest: ^27.0.0
+      typescript: '>=3.8 <5.0'
+    peerDependenciesMeta:
+      '@babel/core':
+        optional: true
+      '@types/jest':
+        optional: true
+      babel-jest:
+        optional: true
+    dependencies:
+      bs-logger: 0.2.6
+      fast-json-stable-stringify: 2.1.0
+      jest: 27.1.0
+      jest-util: 27.1.0
+      json5: 2.2.0
+      lodash: 4.17.21
+      make-error: 1.3.6
+      semver: 7.3.5
+      typescript: 4.5.5
+      yargs-parser: 20.2.9
+    dev: true
+
   /ts-loader/5.4.5_typescript@4.1.2:
     resolution: {integrity: sha512-XYsjfnRQCBum9AMRZpk2rTYSVpdZBpZK+kDh0TeT3kxmQNBDVIeUjdPjY5RZry4eIAb8XHc4gYSUiUWPYvzSRw==}
     engines: {node: '>=6.11.5'}
@@ -17237,6 +17377,22 @@ packages:
       shelljs: 0.8.4
       strip-ansi: 6.0.0
       typescript: 4.1.2
+
+  /ts-patch/2.0.1_typescript@4.5.5:
+    resolution: {integrity: sha512-mP7beU1QkmyDs1+SzXYVaSTD6Xo7ZCibOJ3sZkb/xsQjoAQXvn4oPjk0keC2LfCNAgilqtqgjiWp3pQri1uz4w==}
+    hasBin: true
+    peerDependencies:
+      typescript: '>=4.0.0'
+    dependencies:
+      chalk: 4.1.2
+      glob: 7.2.0
+      global-prefix: 3.0.0
+      minimist: 1.2.5
+      resolve: 1.20.0
+      shelljs: 0.8.4
+      strip-ansi: 6.0.0
+      typescript: 4.5.5
+    dev: true
 
   /ts-toolbelt/9.6.0:
     resolution: {integrity: sha512-nsZd8ZeNUzukXPlJmTBwUAuABDe/9qtVDelJeT/qW0ow3ZS3BsQJtNkan1802aM9Uf68/Y8ljw86Hu0h5IUW3w==}
@@ -17434,6 +17590,15 @@ packages:
   /typedarray/0.0.6:
     resolution: {integrity: sha1-hnrHTjhkGHsdPUfZlqeOxciDB3c=}
 
+  /typescript-transform-paths/3.3.1_typescript@4.1.2:
+    resolution: {integrity: sha512-c+8Cqd2rsRtTU68rJI0NX/OtqgBDddNs1fIxm1nCNyhn0WpoyqtpUxc1w9Ke5c5kgE4/OT5xYbKf2cf694RYEg==}
+    peerDependencies:
+      typescript: '>=3.6.5'
+    dependencies:
+      minimatch: 3.0.4
+      typescript: 4.1.2
+    dev: true
+
   /typescript/3.9.10:
     resolution: {integrity: sha512-w6fIxVE/H1PkLKcCPsFqKE7Kv7QUwhU8qQY2MueZXWx5cPZdwFupLgKK3vntcK98BtNHZtAF4LA/yl2a7k8R6Q==}
     engines: {node: '>=4.2.0'}
@@ -17451,6 +17616,12 @@ packages:
 
   /typescript/4.4.2:
     resolution: {integrity: sha512-gzP+t5W4hdy4c+68bfcv0t400HVJMMd2+H9B7gae1nQlBzCqvrXX+6GL/b3GAgyTH966pzrZ70/fRjwAtZksSQ==}
+    engines: {node: '>=4.2.0'}
+    hasBin: true
+    dev: true
+
+  /typescript/4.5.5:
+    resolution: {integrity: sha512-TCTIul70LyWe6IJWT8QSYeA54WQe8EjQFU4wY52Fasj5UKx88LNYKCgBEHcOMOrFF1rKGbD8v/xcNWVUq9SymA==}
     engines: {node: '>=4.2.0'}
     hasBin: true
     dev: true
@@ -18697,6 +18868,7 @@ packages:
     engines: {node: '>=8'}
     dependencies:
       '@types/yoga-layout': 1.9.2
+    dev: false
 
   /yoga-layout-prebuilt/1.10.0:
     resolution: {integrity: sha512-YnOmtSbv4MTf7RGJMK0FvZ+KD8OEe/J5BNnR0GHhD8J/XcG/Qvxgszm0Un6FTHWW4uHlTgP0IztiXQnGyIR45g==}
