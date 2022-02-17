@@ -4,7 +4,6 @@
 /* eslint-disable no-useless-constructor */
 /* eslint-disable no-use-before-define */
 import { cloneDeep, defaults, upperFirst } from "lodash";
-import * as path from "path";
 
 export interface LoggerOption {
   /**

@@ -24,7 +24,7 @@ export function getOutputDirForSourceFile(context: VisitorContext, sourceFile: S
   const outputPath = getOwnEmitOutputFilePath(
     sourceFile.fileName,
     emitHost,
-    getOutputExtension(sourceFile, compilerOptions)
+    getOutputExtension(sourceFile.fileName, compilerOptions)
   );
   if (!outputPath)
     throw new Error(
@@ -92,7 +92,9 @@ export function getTsNodeRegistrationProperties(tsInstance: typeof ts) {
     : void 0;
 
   const fileNames = pcl?.fileNames || config.fileNames;
-  const compilerOptions = Object.assign(config.options, options.compilerOptions, { outDir: pcl?.options.outDir });
+  const compilerOptions = Object.assign(config.options, options.compilerOptions, {
+    outDir: pcl?.options.outDir,
+  });
 
   return { compilerOptions, fileNames };
 }

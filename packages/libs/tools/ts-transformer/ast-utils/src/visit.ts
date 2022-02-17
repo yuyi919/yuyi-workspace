@@ -186,7 +186,8 @@ export function visitExportDeclaration(
           (typeof moduleSpecifier === "string"
             ? ts.factory.createStringLiteral(moduleSpecifier)
             : moduleSpecifier)) ||
-          node.moduleSpecifier //ts.factory.createStringLiteral('lodash-es')
+          node.moduleSpecifier, //ts.factory.createStringLiteral('lodash-es')
+        node.assertClause
       )
     : null;
 }
@@ -222,7 +223,8 @@ export function visitImportDeclaration(
           (typeof moduleSpecifier === "string"
             ? ts.factory.createStringLiteral(moduleSpecifier)
             : moduleSpecifier)) ||
-          node.moduleSpecifier
+          node.moduleSpecifier,
+        node.assertClause
       )
     : null;
 }

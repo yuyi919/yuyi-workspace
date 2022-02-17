@@ -65,7 +65,7 @@ export type TsdxOptions = {
   name: string;
   errorMapFilePath?: string;
   input: string;
-  minify?: boolean
+  minify?: boolean;
 };
 export type ExtendConfig = RollupOptions & {
   preset?: "ts" | "vue3" | "babel-ts" | "ts-only";
@@ -84,45 +84,52 @@ export type ExtendConfig = RollupOptions & {
 /**
  * 继承默认的配置tsdx构建
  */
-export function extendTsdxConfig(extendConfig: ExtendConfig = {}) {
-  const {
-    output,
-    preset,
-    plugins: prePlugins,
-    bundleDeps,
-    excludeDundleDeps = [],
-    babelHelpers,
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    transpiler = "all",
-    extractErrors,
-    overwriteTsConfig,
-    commonjs: commonjsOptions,
-    alias: aliasOptions,
-    ...next
-  } = extendConfig;
-  if (preset && !["ts", "vue3", "babel-ts", "ts-only"].includes(preset)) {
-    Logger.error(`preset [${preset}] is invalid!`);
-  } else {
-    Logger.info("use preset: " + (extendConfig.preset || "default"));
-  }
-  let filter = bundleDeps || [];
-  filter.length > 0 && Logger.info("external resolve modules: " + filter.join(", "));
-
-  filter = Array.from(
-    new Set(["babel-plugin-transform-async-to-promises/helpers", "tslib", ...filter])
-  );
-  const excludeFilter = Array.from(new Set(excludeDundleDeps || []));
-  excludeFilter.length > 0 && Logger.info("exclude resolve modules: " + excludeFilter.join(", "));
+export function extendTsdxConfig(
+  configure:
+    | ExtendConfig
+    | ((config: RollupOptions, options: TsdxOptions, outputNum: number) => ExtendConfig) = {}
+) {
   let num = 0;
-  // console.log(config.plugins.map(p => p && p.name))
-  const ignoreWarnHooks = [] as (string | ((warning: RollupWarning) => boolean))[];
   return {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     rollup(config: RollupOptions, options: TsdxOptions, outputNum: number = num++) {
+      const extendConfig =
+        configure instanceof Function ? configure(config, options, outputNum) : configure;
+      const {
+        output,
+        preset,
+        plugins: prePlugins,
+        bundleDeps,
+        excludeDundleDeps = [],
+        babelHelpers,
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        transpiler = "all",
+        extractErrors,
+        overwriteTsConfig,
+        commonjs: commonjsOptions,
+        alias: aliasOptions,
+        ...next
+      } = extendConfig;
+      if (preset && !["ts", "vue3", "babel-ts", "ts-only"].includes(preset)) {
+        Logger.error(`preset [${preset}] is invalid!`);
+      } else {
+        Logger.info("use preset: " + (extendConfig.preset || "default"));
+      }
+      let filter = bundleDeps || [];
+      filter.length > 0 && Logger.info("external resolve modules: " + filter.join(", "));
+
+      filter = Array.from(
+        new Set(["babel-plugin-transform-async-to-promises/helpers", "tslib", ...filter])
+      );
+      const excludeFilter = Array.from(new Set(excludeDundleDeps || []));
+      excludeFilter.length > 0 &&
+        Logger.info("exclude resolve modules: " + excludeFilter.join(", "));
+      // console.log(config.plugins.map(p => p && p.name))
+      const ignoreWarnHooks = [] as (string | ((warning: RollupWarning) => boolean))[];
       // Logger.info(outputNum);
       process.env.NODE_TSDX_FORMAT = options.format;
-      const NODE_ENV = JSON.stringify(options.minify ? "production" : "development")
-      console.log("process.env.NODE_ENV", NODE_ENV)
+      const NODE_ENV = JSON.stringify(options.minify ? "production" : "development");
+      console.log("process.env.NODE_ENV", NODE_ENV);
       const { plugins = [] } = config;
       if (preset === "vue3") {
         plugins.unshift(createPluginVue());
@@ -231,7 +238,7 @@ export function extendTsdxConfig(extendConfig: ExtendConfig = {}) {
         replacer({
           delimiters: ["", ""],
           values: {
-            "process.env.NODE_ENV": NODE_ENV
+            "process.env.NODE_ENV": NODE_ENV,
           },
         }),
         replacer({

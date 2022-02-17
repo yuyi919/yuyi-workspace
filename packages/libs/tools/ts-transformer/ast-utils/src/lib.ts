@@ -547,7 +547,7 @@ export function createNamedImports(
         importNames.map((names) => {
           const [name, asName = undefined] = castArray(names);
           const nameIdent = useName(name);
-          return factory.createImportSpecifier(useName(asName) /** 别名**/, nameIdent);
+          return factory.createImportSpecifier(false, useName(asName) /** 别名**/, nameIdent);
         })
       )
     ),
