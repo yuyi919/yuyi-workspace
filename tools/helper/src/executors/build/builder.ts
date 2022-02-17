@@ -1,5 +1,6 @@
 /* eslint-disable no-extra-boolean-cast */
 import { BuilderContext, BuilderOutput, createBuilder } from "@angular-devkit/architect";
+import { Builder } from "@angular-devkit/architect/src/internal";
 import { Observable, of } from "rxjs";
 import { tap } from "rxjs/operators";
 import { BuildBuilderSchema } from "./schema";
@@ -19,4 +20,4 @@ export function runBuilder(
   );
 }
 
-export default createBuilder(runBuilder);
+export default createBuilder(runBuilder) as Builder<BuildBuilderSchema>;

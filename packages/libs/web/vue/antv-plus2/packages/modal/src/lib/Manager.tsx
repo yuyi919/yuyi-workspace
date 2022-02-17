@@ -179,7 +179,7 @@ function getConfirmOption(
   placement?: any
 ): ConfirmOptions | false {
   return confirm !== false
-    ? ((expect$.is.OBJ.filter(confirm) || {
+    ? ((expect$.is.obj.filter(confirm) || {
         title: "提示",
         // placement,
         // getContainer: false,

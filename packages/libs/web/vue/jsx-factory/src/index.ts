@@ -31,6 +31,8 @@ export interface ExtendIntrinsicAttributes {
   id?: string;
   refInFor?: boolean;
   domPropsInnerHTML?: string;
+  props?: any;
+  [key: string]: any;
 }
 const CLASS_NAME = "class";
 const STYLE = "style";
@@ -156,7 +158,7 @@ export function jsxEsbuild(
   if (options) {
     const { data, children: renderChildren } = getJArgumentsWithOptions(element, options, children);
     if (element === Fragment) {
-      return  h("div", fragFunction, [renderChildren]);
+      return h("div", fragFunction, [renderChildren]);
     }
     return h(element, data, renderChildren);
   }
@@ -194,4 +196,4 @@ import type * as base from "../types/base.d";
 import type * as builtin from "../types/builtin-components.d";
 import type * as dom from "../types/dom.d";
 
-export type { base, builtin, dom }
+export type { base, builtin, dom };

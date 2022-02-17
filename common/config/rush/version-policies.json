@@ -105,6 +105,10 @@
     "lockedMajor": 0
   },
   {
+    "definitionName": "individualVersion",
+    "policyName": "config"
+  },
+  {
     "policyName": "internal",
     "definitionName": "lockStepVersion",
     "version": "0.1.0",

@@ -13,10 +13,10 @@
     "dev": "tsc --build --watch"
   },
   "dependencies": {
-    "@yuyi919/shared-utils": "workspace:0.0.38",
-    "@yuyi919/shared-types": "workspace:0.0.5",
-    "@yuyi919/vue-shared-decorators": "workspace:0.0.3",
-    "@yuyi919/vue-use": "workspace:0.0.3",
+    "@yuyi919/shared-utils": "workspace:0.0.39",
+    "@yuyi919/shared-types": "workspace:0.0.7",
+    "@yuyi919/vue-shared-decorators": "workspace:0.0.5",
+    "@yuyi919/vue-use": "workspace:0.0.5",
     "vue-pixi-wrapper": "1.1.5",
     "lodash": "4.17.21",
     "lodash-es": "4.17.21"
@@ -25,8 +25,8 @@
     "@types/jest": "~27.0.1",
     "@types/node": "~16.7.2",
     "@types/nw.js": "^0.13.9",
-    "@yuyi919/workspace-base-rig": "workspace:1.2.5",
-    "@vue/composition-api": "^1.0.2",
+    "@yuyi919/workspace-base-rig": "workspace:1.2.7",
+    "@vue/composition-api": "~1.4.6",
     "jest": "~27.1.0",
     "localforage": "1.9.0",
     "pako": "1.0.11",

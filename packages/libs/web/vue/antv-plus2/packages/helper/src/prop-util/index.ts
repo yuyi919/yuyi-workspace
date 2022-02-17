@@ -1,4 +1,4 @@
-import { getCurrentInstance, onUnmounted, reactive, SetupContext } from "@vue/composition-api";
+import { getCurrentInstance, onUnmounted, reactive, SetupContext } from "vue-demi";
 import { Types } from "@yuyi919/shared-types";
 import type { TypedPropsGroup } from "@yuyi919/vue-shared-decorators";
 import { cloneDeep, omit } from "lodash";

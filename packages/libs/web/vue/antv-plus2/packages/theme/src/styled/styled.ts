@@ -1,7 +1,7 @@
 /* eslint-disable @nrwl/nx/enforce-module-boundaries */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable no-redeclare */
-import { computed, ComputedRef, inject } from "@vue/composition-api";
+import { computed, ComputedRef, inject } from "vue-demi";
 import {
   getFromVueComponent,
   hackFromVueComponent,

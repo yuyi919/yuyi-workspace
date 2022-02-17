@@ -1,4 +1,4 @@
-import { extractUnsafeProps } from "@antv-plus2/helper";
+import { extractUnsafeProps, VueComponent2 } from "@antv-plus2/helper";
 import { useInherit } from "@yuyi919/vue-use";
 import { computed, defineComponent } from "vue-demi";
 import { cls, usePrefixCls } from "../__builtins__";
@@ -58,7 +58,7 @@ export const FormLayout = Object.assign(
         return <div class={layoutClassName}>{getInherit().children}</div>;
       };
     },
-  }),
+  }) as VueComponent2<FormLayoutProps>,
   {
     Item: FormLayoutItem,
   }

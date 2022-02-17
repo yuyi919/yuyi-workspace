@@ -93,8 +93,8 @@ export function createThemeHelper<Theme>() {
     const deepStyles = {} as Output;
     const keys = {} as ClassKeyMap;
     for (const key in input) {
-      styles[`${prefix}-${key}`] = noop;
-      deepStyles[`&$${prefix}-${key}`] = input[key];
+      styles[`${prefix}-${key}` as any] = noop;
+      deepStyles[`&$${prefix}-${key}` as any] = input[key];
       keys[key as string] = `$${prefix}-${key}` as `$${Prefix}-${ClassNames}`;
     }
     return {
@@ -117,7 +117,7 @@ export function createThemeHelper<Theme>() {
     const styles = {} as Output;
     const keys = {} as ClassKeyMap;
     for (const key in input) {
-      styles[`${prefix}-${key}`] = input[key];
+      styles[`${prefix}-${key}` as any] = input[key];
       keys[key as string] = `$${prefix}-${key}` as `$${Prefix}-${ClassNames}`;
     }
     return {
@@ -132,11 +132,11 @@ export function createThemeHelper<Theme>() {
       [K in `${Prefix}-${ClassName}`]: any;
     }
   >(className: ClassName[], prefix: Prefix) {
-    const r: Result = {} as any;
+    const r = {} as any;
     for (const key of className) {
       r[`${prefix}-${key}`] = noop;
     }
-    return r;
+    return r as Result;
   }
   return {
     ...methods,

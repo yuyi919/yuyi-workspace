@@ -24,11 +24,13 @@ export interface Context {
   generateId?: GenerateId;
 }
 
-export type Classes = { [key: string]: string };
+interface IClasses {
+  [key: string]: string;
+}
 
 export type InnerProps = {
   children?: Node;
-  classes: Classes;
+  classes: IClasses;
 };
 
 export type DynamicRules = {

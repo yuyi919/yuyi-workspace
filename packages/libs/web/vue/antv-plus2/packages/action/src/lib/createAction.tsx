@@ -1,4 +1,4 @@
-import { defineComponent } from "@vue/composition-api";
+import { defineComponent } from "vue-demi";
 import { expect$, sleep, stubFunction } from "@yuyi919/shared-utils";
 import { extractProps, TypedPropsGroup } from "@antv-plus2/helper";
 import { Popconfirm } from "ant-design-vue";
@@ -12,7 +12,7 @@ export const StaticProps = {
 };
 
 export function createConfirmButton(initialConfirm: any) {
-  return defineComponent({
+  return defineComponent<any, any, any, any, any>({
     functional: true,
     render(
       _,

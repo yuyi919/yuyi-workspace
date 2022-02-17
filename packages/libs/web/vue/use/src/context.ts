@@ -42,7 +42,7 @@ export function createContext<Target extends any>(
       defaultValue: Target | (() => Target) = defaultProvide,
       treatDefaultAsFactory?: boolean
     ): Target {
-      return inject(key, (defaultValue as any) || null, treatDefaultAsFactory);
+      return inject(key, (defaultValue as any) || null, treatDefaultAsFactory as true);
     },
     get Provider() {
       if (!Provider) {

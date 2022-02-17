@@ -1,6 +1,6 @@
 import { Icon } from "ant-design-vue";
 import { configureModalAdapter, ConfirmOptionAdapter, AlertOptionsAdapter } from "./utils";
-import { watch } from "@vue/composition-api";
+import { watch } from "vue-demi";
 import { useModalAction } from "./context";
 import { ModalManager, ICustomModalProps } from "./Manager";
 import { defineLoaderModalComponent } from "./Resolve";

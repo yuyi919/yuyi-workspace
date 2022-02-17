@@ -1,4 +1,4 @@
-import { defineAsyncComponent, defineComponent, h, PropType } from "@vue/composition-api";
+import { defineAsyncComponent, defineComponent, h, PropType } from "vue-demi";
 import { VueComponent2 } from "../helper";
 import type { ActionGroupProps } from "./Props";
 

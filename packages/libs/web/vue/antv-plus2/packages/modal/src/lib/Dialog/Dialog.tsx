@@ -129,7 +129,7 @@ export const Dialog = defineComponent({
     }),
     centered: {
       type: Boolean,
-      required: false,
+      default: false,
     },
     scrollBehavior: String,
   },
@@ -194,4 +194,6 @@ export const Dialog = defineComponent({
     };
   },
 });
-console.log(Dialog);
+// console.log(<Dialog  />);
+// type a = ExtractPropTypes<typeof Dialog['props']>
+// type b = ExtractDefaultPropTypes<typeof Dialog['props']>

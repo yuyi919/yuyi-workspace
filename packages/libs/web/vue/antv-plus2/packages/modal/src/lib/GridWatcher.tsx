@@ -3,7 +3,7 @@ import { extractProps, getPropsClass, VueComponent2 } from "@antv-plus2/helper";
 import { styled } from "@antv-plus2/theme";
 import { Col, IColProps } from "ant-design-vue";
 import { debounce, reduce } from "lodash";
-import { computed, defineComponent } from "@vue/composition-api";
+import { computed, defineComponent } from "vue-demi";
 
 const AutoColProps = getPropsClass(Col, {
   xl: 16,

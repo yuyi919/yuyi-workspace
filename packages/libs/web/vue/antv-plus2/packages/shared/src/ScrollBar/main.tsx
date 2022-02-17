@@ -11,7 +11,7 @@ import {
   onMounted,
   reactive,
   watch,
-} from "@vue/composition-api";
+} from "vue-demi";
 import { addResizeListener, removeResizeListener, useNamedRef } from "@yuyi919/vue-use";
 import { CSSProperties } from "@yuyi919/shared-types";
 import { castArray } from "@yuyi919/shared-utils";

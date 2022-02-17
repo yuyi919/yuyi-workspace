@@ -17,7 +17,7 @@ export default defineViteConfig({
       resolve: {
         alias: {
           ...paths,
-          "lodash": "lodash-es",
+          lodash: "lodash-es",
           "/src/*": utils.pathResolve("./src", true),
           "/src/": utils.pathResolve("./index.ts"),
           "@ant-design/icons/lib/dist": "@ant-design/icons/lib/index.es.js",
@@ -62,8 +62,8 @@ export default defineViteConfig({
         }) as any,
       ],
       optimizeDeps: {
-        exclude: ["@yuyi919-vue/jss", "vue-demi", "vue-demi2", "@vue/composition-api"],
-        include: ["tslib", "lodash-es", "vue", "ant-design-vue/es/style.js"],
+        exclude: ["@vue/composition-api", "@yuyi919-vue/jss", "vue-demi", "vue-demi2"],
+        include: ["classnames", "tslib", "lodash-es", "vue", "ant-design-vue/es/style.js"],
       },
       css: {
         modules: {

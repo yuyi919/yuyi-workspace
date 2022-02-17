@@ -2,7 +2,7 @@
 import { unwrap } from "@yuyi919/vue-use";
 import { WrapValue } from "@yuyi919/shared-types";
 import { convertArr2Map } from "@yuyi919/shared-utils";
-import { reactive, toRef } from "@vue/composition-api";
+import { reactive, toRef } from "vue-demi";
 
 export class CodeFilter<K extends string> {
   constructor(

@@ -25,13 +25,13 @@ export type InheritHooks<K extends string = string> = readonly [
      * 继承事件
      */
     on: {
-      [key: string]: (...args: any[]) => void;
+      [key: string]: (...args: any[]) => any;
     };
   },
   /**
    * 必要的事件句柄
    */
-  requiredEventHandle: Record<K, (...args: any[]) => void>
+  requiredEventHandle: Record<K, (...args: any[]) => any>
 ];
 
 /**
@@ -60,7 +60,7 @@ export type InheritHooks<K extends string = string> = readonly [
  * })
  */
 export function useInherit<K extends string = string>(
-  context: SetupContext,
+  context: SetupContext<any>,
   usedEvent?: K[]
 ): InheritHooks<K> {
   const self = getCurrentInstance().proxy;

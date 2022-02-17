@@ -1,3 +1,5 @@
+import { Classes, createHooksApi } from "@yuyi919/vue-jss";
+import { createTheme } from "./styles";
 import { ThemeUtils } from "./theme/utils";
 
 export * from "./classes";
@@ -7,12 +9,10 @@ export * from "./styled";
 export { createTheme as createMuiTheme } from "./styles";
 export * from "./theme";
 export * from "./utils";
-import { createHooksApi } from "@yuyi919/vue-jss";
+
 export type PaletteMode = "light" | "dark";
 export default ThemeUtils;
 
-import { createTheme } from "./styles";
-import { style2Str } from "./utils";
 export const MATERIAL_DEFAULT_THEME = createTheme();
 export const {
   ThemeContext,

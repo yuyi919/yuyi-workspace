@@ -1,5 +1,5 @@
 import { extractProps, VueComponent2 } from "../helper";
-import { defineComponent } from "@vue/composition-api";
+import { defineComponent } from "vue-demi";
 import { ActionGroupProps } from "./Props";
 import { useActionGroup } from "./hooks";
 

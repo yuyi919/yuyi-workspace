@@ -1,12 +1,5 @@
 import { unwrap, useComponentLoader, useLoader } from "@yuyi919/vue-use";
-import {
-  defineComponent,
-  computed,
-  onMounted,
-  reactive,
-  watch,
-  PropType,
-} from "@vue/composition-api";
+import { defineComponent, computed, onMounted, reactive, watch, PropType } from "vue-demi";
 import { defaultsDeep, isEqual } from "lodash";
 import Vue, { VNode, CreateElement } from "vue";
 import { ActionType, IActionConfig, ICallableActionConfig } from "@antv-plus2/action";

@@ -1,5 +1,5 @@
 /* eslint-disable no-unused-expressions */
-import { computed, ComputedRef } from "@vue/composition-api";
+import { computed, ComputedRef } from "vue-demi";
 import { IButtonProps } from "ant-design-vue";
 import { ButtonProps } from "./ButtonProps";
 import classNames from "./Theme.module.less";

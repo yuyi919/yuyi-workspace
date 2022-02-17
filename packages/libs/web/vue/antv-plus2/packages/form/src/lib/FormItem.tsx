@@ -2,18 +2,19 @@ import { Types } from "@yuyi919/shared-types";
 import { getGridSpanStyle, useGridSpan } from "@antv-plus2/shared";
 import { useEffect, useElementRect, useInherit, useNamedRef, useState } from "@yuyi919/vue-use";
 import { Icon, Popover, Tooltip } from "ant-design-vue";
-import { computed, defineComponent } from "vue-demi";
+import { ComputedRef, computed, defineComponent } from "vue-demi";
 import { cls, usePrefixCls } from "../__builtins__";
 import { FormLayoutShallowContext, useFormLayout } from "./context";
 import { FormItemPropConfig, FormItemProps, useFormLayoutItemProps } from "./FormItemProps";
+import { VueComponent2 } from "@yuyi919/vue-antv-plus2-helper";
 
-export function useFormItemLayout(props: FormItemProps) {
+export function useFormItemLayout(props: FormItemProps): ComputedRef<FormItemProps> {
   const layoutRef = useFormLayout();
   return computed(() => {
     const { value: layoutProps } = layoutRef;
     const autoProps = useFormLayoutItemProps(props, (key, value, option) => {
       return key in layoutProps ? value ?? layoutProps[key as keyof typeof layoutProps] : value;
-    });
+    }) as FormItemProps;
     // console.log("autoProps gridSpan", autoProps.gridSpan, autoProps, {...autoProps});
     return autoProps;
   });
@@ -63,7 +64,8 @@ function useOverflow2<Container extends HTMLElement, Content extends HTMLElement
     contentRef,
   };
 }
-export const FormItemLabel = defineComponent({
+
+export const FormItemLabel: VueComponent2<FormItemProps> = defineComponent({
   props: FormItemPropConfig,
   setup(props) {
     const { overflow, containerRef, contentRef } = useOverflow();
@@ -135,7 +137,7 @@ export const FormItemLabel = defineComponent({
     };
   },
 });
-export const FormLayoutItem = defineComponent({
+export const FormLayoutItem: VueComponent2<FormItemProps> = defineComponent({
   props: FormItemPropConfig,
   setup(props, context) {
     const popoverContainerRef = useNamedRef<HTMLDivElement>("popoverContainerRef");

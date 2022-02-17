@@ -7,10 +7,10 @@ import App from "./App";
   document.querySelector("#root")!
 );
 
-@C
-class A {}
-console.log(A);
+// @C
+// class A {}
+// console.log(A);
 
-function C(target: any) {
-  target.ccc = "a";
-}
+// function C(target: any) {
+//   target.ccc = "a";
+// }

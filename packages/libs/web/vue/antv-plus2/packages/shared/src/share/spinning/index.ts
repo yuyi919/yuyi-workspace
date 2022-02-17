@@ -1,7 +1,7 @@
 import { convertArr2Map } from "@yuyi919/shared-utils";
 import type { IKeyValueMap } from "@yuyi919/shared-types";
 import { HookFactory, useHookFactory } from "@antv-plus2/helper";
-import { watch, SetupContext } from "@vue/composition-api";
+import { watch, SetupContext } from "vue-demi";
 import { SpinningProps } from "./props";
 
 export class SpinningHook extends HookFactory<SpinningProps> {
@@ -65,7 +65,7 @@ export class ActionSpinningHook extends SpinningHook {
     return this.spinningActionMap[actionName] || (!strict && this.spinningActionMap[actionName]);
   }
   public get spinningAction(): string[] {
-    const r = [];
+    const r: string[] = [];
     for (const [name, loading] of Object.entries(this.spinningActionMap)) {
       loading && r.push(name);
     }

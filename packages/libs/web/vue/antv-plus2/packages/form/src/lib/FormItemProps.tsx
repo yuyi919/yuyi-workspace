@@ -1,4 +1,4 @@
-import { CSSProperties, Types } from "@yuyi919/shared-types";
+import { CSSProperties, RequiredTo, Types } from "@yuyi919/shared-types";
 import { Component, extractUnsafeProps, Prop } from "@antv-plus2/helper";
 import { isNum } from "@antv-plus2/shared";
 import { autoSizer } from "@antv-plus2/theme";
@@ -70,7 +70,7 @@ export class FormItemProps extends LayoutItemProps {
 export default FormItemProps;
 
 export const [FormItemPropConfig, useFormLayoutItemProps] = extractUnsafeProps(
-  FormItemProps,
+  FormItemProps as typeof FormItemProps,
   (props) => {
     const {
       feedbackStatus,
@@ -105,6 +105,6 @@ export const [FormItemPropConfig, useFormLayoutItemProps] = extractUnsafeProps(
       wrapperStyle,
       labelStyle,
       enableCol,
-    };
+    } as RequiredTo<FormItemProps, "feedbackIcon" | "wrapperStyle" | "enableCol" | "labelStyle">;
   }
 );

@@ -7,14 +7,12 @@ import type { Types, KeyOf, ValueOf } from "@yuyi919/shared-types";
 // };
 // type HandleEventNames = OnEvents<EventNames>;
 type ToOnEventName<K extends string> = `on${Types.String.CamelCase<K, "-" | ":", 8>}`;
-type ToOnEventNameMap<T extends Record<string, any>> = ValueOf<
-  {
-    [K in KeyOf<T>]: {
-      SourceKey: K;
-      OnName: ToOnEventName<K>;
-    };
-  }
->;
+type ToOnEventNameMap<T extends Record<string, any>> = ValueOf<{
+  [K in KeyOf<T>]: {
+    SourceKey: K;
+    OnName: ToOnEventName<K>;
+  };
+}>;
 
 export type OnEvents<On> = {
   [K in ToOnEventName<KeyOf<On>>]: KeyOf<On> extends string
@@ -74,19 +72,19 @@ export type TypeTsxProps<
   Attributes extends Types.Recordable = {}
 > = InnerTypeTsxProps<Props, EventHandlers<Events>, ScopedSlots, Attributes>;
 
-export type InnerTypeTsxProps<
+// type a = TypeTsxProps<{}, { a: 1 }>["onA"];
+// type b = EventHandler<1> | EventHandler<1>[];
+
+type InnerTypeTsxProps<
   Props extends Types.Recordable,
   Events extends Types.Recordable = {},
   ScopedSlots extends Types.Recordable = {},
   Attributes extends Types.Recordable = {}
 > = Attributes &
-  Props &
-  {
-    [K in ToOnEventName<KeyOf<Events>>]?: EventHandler<
-      KeyOf<Events> extends string
-        ? Events[Extract<ToOnEventNameMap<Events>, { SourceKey: any; OnName: K }>["SourceKey"]]
-        : never
-    >;
+  Props & {
+    [K in ToOnEventName<KeyOf<Events>>]?: KeyOf<Events> extends string
+      ? Events[Extract<ToOnEventNameMap<Events>, { SourceKey: any; OnName: K }>["SourceKey"]]
+      : never;
   } & {
     attrs?: Attributes;
     on?: Events;

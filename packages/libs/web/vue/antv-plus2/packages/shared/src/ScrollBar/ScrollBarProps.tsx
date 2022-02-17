@@ -90,7 +90,7 @@ export class ScrollBarProps extends PropProvider<ScrollBarProps> {
   noPadding?: boolean;
 
   @Prop(Function)
-  wrapRef?: (e: HTMLDivElement | null) => void;
+  wrapRef?: (e?: HTMLDivElement | null) => void;
 
   @Prop(String)
   debug?: string;

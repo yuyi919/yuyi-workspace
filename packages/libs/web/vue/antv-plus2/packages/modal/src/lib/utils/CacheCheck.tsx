@@ -1,4 +1,4 @@
-import { onMounted, defineComponent } from "@vue/composition-api";
+import { onMounted, defineComponent } from "vue-demi";
 import { useComponentEl } from "@yuyi919/vue-use";
 
 export const LocalStorage = {

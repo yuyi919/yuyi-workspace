@@ -1,6 +1,6 @@
 {
   "name": "@yuyi919/shared-types",
-  "version": "0.0.5",
+  "version": "0.0.7",
   "description": "",
   "author": "",
   "license": "MIT",
@@ -26,7 +26,7 @@
     "@rushstack/heft-web-rig": "^0.9.0",
     "@types/heft-jest": "1.0.2",
     "@types/node": "~16.7.2",
-    "@yuyi919/workspace-base-rig": "workspace:1.2.5",
+    "@yuyi919/workspace-base-rig": "workspace:1.2.7",
     "jest": "~27.1.0",
     "eslint": "~7.30.0",
     "ts-jest": "~27.0.5",

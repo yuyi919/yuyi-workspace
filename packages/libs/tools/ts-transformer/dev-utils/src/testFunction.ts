@@ -8,7 +8,7 @@ export const testModule = ts.factory.createSourceFile(
         false,
         undefined,
         factory.createNamedImports([
-          factory.createImportSpecifier(false, undefined, factory.createIdentifier("map")),
+          factory.createImportSpecifier(undefined, factory.createIdentifier("map")),
         ])
       ),
       factory.createStringLiteral("lodash")

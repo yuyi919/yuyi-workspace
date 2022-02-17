@@ -1,5 +1,5 @@
 /* eslint-disable no-redeclare */
-import { computed, inject, provide } from "@vue/composition-api";
+import { computed, inject, provide } from "vue-demi";
 import { WrapValue, unwrap } from "@yuyi919/vue-use";
 import { ThemeProvider } from "vue-styled-components";
 

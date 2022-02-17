@@ -1,7 +1,7 @@
 import { sleep } from "@yuyi919/shared-utils";
 import { HookFactory, useHookFactory } from "../helper";
 import { castArray, defaults, delay, isObject, merge } from "lodash";
-import { h, SetupContext } from "@vue/composition-api";
+import { h, SetupContext } from "vue-demi";
 import { getConfirmContainerComponent } from "./createAction";
 import { IButtonProps, utils } from "../shared";
 import { convertArrayProps } from "./castProps";
@@ -19,7 +19,7 @@ const hooks = {};
 type InnerActionConfig<
   T extends ActionType = ActionType,
   Type extends "event" | "handler" = any
-> = Types.Required<
+> = Types.RequiredTo<
   Type extends "handler" ? ICallableActionConfig<T> : IListenableActionConfig<T>,
   "type" | "name" | "component" | "actionType" | "render"
 >;
@@ -401,7 +401,7 @@ export class ActionGroupHooks extends HookFactory<ActionGroupProps> {
   }
 
   private isOtherAction<T extends ActionType>(
-    config: Types.Required<
+    config: Types.RequiredTo<
       ICallableActionConfig<T> | IListenableActionConfig<T>,
       "type" | "name" | "component" | "actionType" | "render"
     >

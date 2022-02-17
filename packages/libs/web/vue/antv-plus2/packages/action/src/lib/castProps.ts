@@ -40,8 +40,8 @@ export function convertArrayProps<T, Target>(
   deepLimit = 0
 ): Target[] {
   const input = [obj];
-  const r = [];
-  const nextLevelSize = [];
+  const r: Target[] = [];
+  const nextLevelSize: number[] = [];
   let currentIndex = 0;
   while (input.length > 0) {
     if (nextLevelSize.length > 0 && currentIndex === nextLevelSize[0]) {
@@ -51,12 +51,14 @@ export function convertArrayProps<T, Target>(
     const allowContinue = deepLimit === 0 || nextLevelSize.length < deepLimit;
     const target = input.shift();
     const targetType = typeof target;
-    const next = [];
+    const next: T[] = [];
     if (targetType === "string" || targetType === "number") {
       r.push(...castArray(obj2Array ? obj2Array(target) : (target as any)));
     } else if (target instanceof Object) {
       if (!allowContinue) {
-        r.push(...(obj2Array ? castArray(obj2Array(target)) : defaultObject2Array(target)));
+        r.push(
+          ...((obj2Array ? castArray(obj2Array(target)) : defaultObject2Array(target)) as Target[])
+        );
       } else if (target instanceof Array) {
         nextLevelSize.push(target.length);
         next.push(...target);

@@ -29,7 +29,7 @@
     "@types/react": "^17.0.33",
     "@types/jest": "~27.0.1",
     "@types/node": "~16.7.2",
-    "@yuyi919/workspace-base-rig": "workspace:1.2.5",
+    "@yuyi919/workspace-base-rig": "workspace:1.2.7",
     "@yuyi919/rpgmz-plugin-transformer": "workspace:0.0.2",
     "babel-plugin-transform-typescript-metadata": "^0.3.2",
     "gulp": "^4.0.2",

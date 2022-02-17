@@ -684,7 +684,7 @@
       "packageName": "@yuyi919/workspace-base-rig",
       "projectFolder": "packages/libs/tools/workspace-base-rig",
       "reviewCategory": "tools",
-      "versionPolicyName": "shared"
+      "versionPolicyName": "config"
     },
     {
       "packageName": "vscode-advscript",

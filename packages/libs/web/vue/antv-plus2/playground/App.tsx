@@ -3,15 +3,7 @@
 import "ant-design-vue/es/style.js";
 // import "ant-design-vue/es/vc-dialog/assets/index.less";
 import "@yuyi919/vue-antv-plus2-theme/index.less";
-import {
-  reactive,
-  defineComponent,
-  getCurrentInstance,
-  onMounted,
-  nextTick,
-  ref,
-  watch,
-} from "vue-demi2";
+import { reactive, defineComponent, getCurrentInstance, onMounted, ref, watch } from "vue-demi2";
 import { Button, Modal } from "../src";
 import { HintFlag } from "../src";
 import Demo from "./demo.vue";
@@ -26,7 +18,7 @@ export let manager: Modal.ModalManager;
 export default defineComponent({
   name: "App",
   setup() {
-    useTransitions({});
+    // useTransitions({});
     const store = reactive({
       closeIcon: (
         <span class={`${"ant-modal"}-close-x`}>

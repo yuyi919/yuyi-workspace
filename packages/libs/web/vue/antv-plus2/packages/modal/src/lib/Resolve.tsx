@@ -1,6 +1,6 @@
 // @ts-nocheck TODO 待处理
 import Vue, { CreateElement, PropOptions, VueConstructor } from "vue";
-import { h, SetupContext } from "@vue/composition-api";
+import { h, SetupContext } from "vue-demi";
 import { ICommonModalProps, SubmitModalComponent, LoaderModalComponent } from "./Manager";
 
 // let a: SubmitModalComponent<{}, {}>["Type"];

@@ -1,5 +1,5 @@
 /* eslint-disable no-use-before-define */
-import { defineComponent } from "@vue/composition-api";
+import { defineComponent } from "vue-demi";
 import { useInherit } from "@yuyi919/vue-use";
 import { Component, extractProps, getPropsClass, Prop, VueComponent2 } from "@antv-plus2/helper";
 import Theme, { createUseClasses, styled } from "@antv-plus2/theme";

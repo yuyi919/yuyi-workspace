@@ -2,7 +2,7 @@
 /* eslint-disable @typescript-eslint/no-empty-interface */
 import "./antv";
 import { VNodeData, VNode } from "vue";
-import { ComponentRenderProxy } from "@vue/composition-api";
+import { ComponentRenderProxy } from "vue-demi";
 import { TypedPropsGroup } from "@yuyi919/vue-shared-decorators";
 import type { ExtendIntrinsicAttributes, base, builtin } from "@yuyi919/vue-jsx-factory";
 

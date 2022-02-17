@@ -1,8 +1,8 @@
-import { computed, defineComponent, reactive } from "@vue/composition-api";
+import { computed, defineComponent, reactive } from "vue-demi";
 import { useInherit } from "@yuyi919/vue-use";
 import { IColProps, Modal as AntModal } from "ant-design-vue";
 import { pick } from "lodash";
-import { extractProps } from "@antv-plus2/helper";
+import { extractProps, VueComponent2 } from "@antv-plus2/helper";
 import { GridWatcher } from "../GridWatcher";
 import { useContentRender } from "../hooks";
 import { INormalizeModalProps, NormalizeModalProps } from "../NormalizeModalProps";
@@ -12,9 +12,12 @@ export function getGridProps(props: IColProps) {
   return pick(props, "md", "lg", "sm", "span", "xs", "xl", "xxl");
 }
 
-export const NormlizeModal = defineComponent({
+export const NormlizeModal: VueComponent2<
+  INormalizeModalProps,
+  { close: any; cancel: any; ok: any }
+> = defineComponent({
   props: extractProps(NormalizeModalProps),
-  emits: ["close"],
+  emits: ["cancel", "close", "ok"],
   setup(props, context) {
     const state = reactive({
       modalWidth: 0,

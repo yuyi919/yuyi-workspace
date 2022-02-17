@@ -53,7 +53,7 @@ const getCssProperties = memoize((prop: AliasesKey | Aliases | Types.DynamicStri
     ? ((direction as unknown as DirectionsValue[]).map((dir) => property + dir) as
         | [`${PropertiesValue}Left`, `${PropertiesValue}Right`]
         | [`${PropertiesValue}Top`, `${PropertiesValue}Bottom`])
-    : ([property + direction] as [`${PropertiesValue}${typeof direction}`]);
+    : ([property + direction] as [`${PropertiesValue}${DirectionsValue}`]);
 });
 
 const marginKeys = [

@@ -1,13 +1,6 @@
 /* eslint-disable @typescript-eslint/ban-types */
 /* eslint-disable prefer-spread */
-import {
-  computed,
-  ComputedRef,
-  defineComponent,
-  PropType,
-  reactive,
-  Ref,
-} from "@vue/composition-api";
+import { computed, ComputedRef, defineComponent, PropType, reactive, Ref } from "vue-demi";
 import { unwrap } from "@yuyi919/vue-use";
 import { KeyOf, Types, WrapValue } from "@yuyi919/shared-types";
 import type { VueClass } from "@antv-plus2/helper";

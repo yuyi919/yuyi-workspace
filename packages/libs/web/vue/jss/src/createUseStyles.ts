@@ -1,5 +1,5 @@
 import Types from "@yuyi919/shared-types";
-import { Classes } from "jss";
+import { Classes } from "./jss";
 import { ComputedRef, isRef, onBeforeUnmount, Ref, shallowRef, watch, watchEffect } from "vue-demi";
 import {
   createUseStylesHooks,
@@ -50,7 +50,7 @@ export function createUseStylesWithHook<Theme = DefaultTheme, ClassKey extends s
       hooks.dispose();
     });
 
-    return classes;
+    return classes as unknown as ComputedRef<Classes<ClassKey>>;
   };
 }
 export function createUseStyles<Theme = DefaultTheme, C extends string = string>(
@@ -62,9 +62,9 @@ export function createUseStyles<Theme = DefaultTheme, C extends string = string>
   // const useTheme =
   //   typeof styles === "function" ? (theming ? theming.useTheme : useDefaultTheme) : useDefaultTheme;
   const useHooks = createUseStylesHooks(styles, options);
-  return createUseStylesWithHook(useHooks, theming)
+  return createUseStylesWithHook(useHooks, theming);
   // return function useStyles(data?: any) {
-    
+
   //   const hooks = useHooks(data);
   //   const theme = useTheme() as Ref<Theme>;
   //   const context = injectJssContext();

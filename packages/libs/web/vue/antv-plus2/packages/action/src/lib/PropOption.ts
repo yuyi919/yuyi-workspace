@@ -1,7 +1,7 @@
 /* eslint-disable no-use-before-define */
 import { PropsOption as PropValidator } from "./PropsOptionsGroup";
 import Vue from "vue";
-import { PropType } from "@vue/composition-api";
+import { PropType } from "vue-demi";
 import { TypedPropsGroup } from "../helper";
 const dummyProps = {
   objectProp: Object,
@@ -25,7 +25,7 @@ const dummyProps = {
     type: Date,
   },
 };
-export type DummyPropsType = import("@vue/composition-api").ExtractPropTypes<typeof dummyProps>;
+export type DummyPropsType = import("vue-demi").ExtractPropTypes<typeof dummyProps>;
 export type DummyPropsType2 = ExtractPropTypes<typeof dummyProps>;
 
 export type DummyType = {
@@ -58,10 +58,10 @@ const dummyProps2 = {
   },
   unionType: [Function, Number] as PropType<DummyCls | number>,
 } as const;
-export type DummyProps2Type = import("@vue/composition-api").ExtractPropTypes<typeof dummyProps2>;
+export type DummyProps2Type = import("vue-demi").ExtractPropTypes<typeof dummyProps2>;
 export type DummyProps2Type2 = ExtractPropTypes<typeof dummyProps2>;
 
-export type DefaultProps = import("@vue/composition-api").ExtractDefaultPropTypes<{
+export type DefaultProps = import("vue-demi").ExtractDefaultPropTypes<{
   defaultProps: {
     type: PropType<DummyCls>;
     default: { colorInherit: false };
@@ -133,10 +133,9 @@ export type RequiredPropNames<PropsDef extends TypedPropsGroup<{}>> = {
 
 export type PropsForOutside<Props, RequiredPropNames extends keyof Props> = {
   [K in RequiredPropNames]: Props[K];
-} &
-  {
-    [K in Exclude<keyof Props, RequiredPropNames>]?: Props[K];
-  };
+} & {
+  [K in Exclude<keyof Props, RequiredPropNames>]?: Props[K];
+};
 
 export type ExtractDefineProps<T extends TypedPropsGroup<any>> = {
   [K in keyof RequiredValidate<T, RequiredPropNames<T>>]: ExtractPropType<

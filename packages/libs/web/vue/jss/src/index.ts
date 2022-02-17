@@ -9,6 +9,8 @@ export { SheetsRegistry, createGenerateId } from "jss";
 export * from "./theming";
 export * from "./Factory";
 export * from "./hooks";
+export * from "./types";
+export * from "./theming";
 // import { default as jss } from "./jss";
 // import stt from "./helper/merge"
 // // JSS Setup

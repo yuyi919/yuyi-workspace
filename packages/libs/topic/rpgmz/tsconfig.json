@@ -6,6 +6,7 @@
     "baseUrl": ".",
     "allowSyntheticDefaultImports": true,
     "types": ["node"],
+    "skipLibCheck": true,
     "paths": {
       "@plugins/*": ["./node_modules/@yuyi919/rpgmz-plugins/src/*"]
     }
@@ -16,12 +17,6 @@
     },
     {
       "path": "./packages/plugin-transformer"
-    },
-    {
-      "path": "./tsconfig.lib.json"
-    },
-    {
-      "path": "./tsconfig.cjs.json"
     }
   ]
 }

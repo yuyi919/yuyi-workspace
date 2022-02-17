@@ -2,6 +2,46 @@
   "name": "@yuyi919/shared-decorator",
   "entries": [
     {
+      "version": "0.0.4",
+      "tag": "@yuyi919/shared-decorator_v0.0.4",
+      "date": "Thu, 17 Feb 2022 06:47:20 GMT",
+      "comments": {
+        "patch": [
+          {
+            "comment": "auto-bump"
+          }
+        ],
+        "dependency": [
+          {
+            "comment": "Updating dependency \"@yuyi919/shared-types\" from `0.0.6` to `0.0.7`"
+          },
+          {
+            "comment": "Updating dependency \"@yuyi919/workspace-base-rig\" from `1.2.6` to `1.2.7`"
+          }
+        ]
+      }
+    },
+    {
+      "version": "0.0.3",
+      "tag": "@yuyi919/shared-decorator_v0.0.3",
+      "date": "Thu, 17 Feb 2022 05:29:01 GMT",
+      "comments": {
+        "patch": [
+          {
+            "comment": "auto-bump"
+          }
+        ],
+        "dependency": [
+          {
+            "comment": "Updating dependency \"@yuyi919/shared-types\" from `0.0.5` to `0.0.6`"
+          },
+          {
+            "comment": "Updating dependency \"@yuyi919/workspace-base-rig\" from `1.2.5` to `1.2.6`"
+          }
+        ]
+      }
+    },
+    {
       "version": "0.0.2",
       "tag": "@yuyi919/shared-decorator_v0.0.2",
       "date": "Wed, 08 Sep 2021 04:48:53 GMT",

@@ -1,6 +1,6 @@
 {
   "name": "@yuyi919/shared-constant",
-  "version": "0.0.3",
+  "version": "0.0.5",
   "description": "",
   "author": "",
   "keywords": [
@@ -23,7 +23,7 @@
     "test:watch": "heft test --watch"
   },
   "dependencies": {
-    "@yuyi919/shared-types": "workspace:0.0.5",
+    "@yuyi919/shared-types": "workspace:0.0.7",
     "lodash": "4.17.21",
     "lodash-es": "4.17.21"
   },
@@ -32,7 +32,7 @@
     "@rushstack/heft-node-rig": "~1.2.5",
     "@types/heft-jest": "1.0.2",
     "@types/node": "~16.7.2",
-    "@yuyi919/workspace-base-rig": "workspace:1.2.5",
+    "@yuyi919/workspace-base-rig": "workspace:1.2.7",
     "jest": "~27.1.0",
     "ts-jest": "~27.0.5",
     "typescript": "4.5.5",

@@ -32,7 +32,7 @@
     "@types/jest": "~27.0.1",
     "@types/node": "~16.7.2",
     "@types/vscode": "~1.61.0",
-    "@yuyi919/workspace-base-rig": "workspace:1.2.5",
+    "@yuyi919/workspace-base-rig": "workspace:1.2.7",
     "@yuyi919/advscript-vite-plugin": "workspace:0.0.1",
     "@types/ws": "~8.2.0",
     "@ohm-js/cli": "~1.0.0",

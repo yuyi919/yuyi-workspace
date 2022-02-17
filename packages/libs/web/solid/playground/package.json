@@ -29,8 +29,8 @@
   "devDependencies": {
     "@types/jest": "~27.0.1",
     "@types/node": "~16.7.2",
-    "@yuyi919/build-tools": "workspace:0.1.10",
-    "@yuyi919/workspace-base-rig": "workspace:1.2.5",
+    "@yuyi919/build-tools": "workspace:0.1.12",
+    "@yuyi919/workspace-base-rig": "workspace:1.2.7",
     "jest": "~27.1.0",
     "eslint": "~7.30.0",
     "eslint-plugin-solid": "~0.1.2",

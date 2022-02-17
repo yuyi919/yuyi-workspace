@@ -1,11 +1,14 @@
 {
   "extends": "./node_modules/@yuyi919/workspace-base-rig/profiles/default/tsconfig-base.json",
   "compilerOptions": {
-    "module": "commonjs",
     "types": ["heft-jest", "node", "fs-extra"],
     "allowSyntheticDefaultImports": true,
     "declaration": true,
     "skipLibCheck": true
   },
-  "include": ["./src/**/*.ts", "./src/**/*.json", "./node_modules/@microsoft/rush-lib/dist/rush-lib.d.ts"]
+  "include": [
+    "./src/**/*.ts",
+    "./src/**/*.json",
+    "./node_modules/@microsoft/rush-lib/dist/rush-lib.d.ts"
+  ]
 }

@@ -177,7 +177,7 @@ export function usePortalWrapper(props: PortalWrapperProps) {
 
     render(children: (...args: any[]) => any) {
       const { forceRender, visible } = props;
-      let portal = null;
+      let portal: JSX.Element | null = null;
       if (forceRender || visible || cache._component) {
         portal = (
           <Portal

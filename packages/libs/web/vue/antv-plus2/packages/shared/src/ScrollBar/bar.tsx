@@ -11,7 +11,7 @@ import {
   Ref,
   ref,
   watch,
-} from "@vue/composition-api";
+} from "vue-demi";
 import { unwrap, useComponentEl, useNamedRef, WrapValue } from "@yuyi919/vue-use";
 import { DomUtils, TypedPropsGroup } from "@antv-plus2/helper";
 import { throttle } from "lodash";

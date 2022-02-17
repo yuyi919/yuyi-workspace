@@ -1,11 +1,5 @@
 /* eslint-disable no-use-before-define */
-import {
-  computed,
-  defineComponent,
-  getCurrentInstance,
-  reactive,
-  watch,
-} from "@vue/composition-api";
+import { computed, defineComponent, getCurrentInstance, reactive, watch } from "vue-demi";
 import { useElementRect, useInherit, useNamedRef } from "@yuyi919/vue-use";
 import { autoSizer, styled } from "@antv-plus2/theme";
 

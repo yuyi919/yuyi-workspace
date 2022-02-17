@@ -2,6 +2,58 @@
   "name": "@yuyi919/vue-antv-plus2",
   "entries": [
     {
+      "version": "0.0.6",
+      "tag": "@yuyi919/vue-antv-plus2_v0.0.6",
+      "date": "Thu, 17 Feb 2022 06:47:20 GMT",
+      "comments": {
+        "patch": [
+          {
+            "comment": "auto-bump"
+          }
+        ],
+        "dependency": [
+          {
+            "comment": "Updating dependency \"@yuyi919/vue-jsx-factory\" from `0.0.2` to `0.0.3`"
+          },
+          {
+            "comment": "Updating dependency \"@yuyi919/vue-use\" from `0.0.4` to `0.0.5`"
+          },
+          {
+            "comment": "Updating dependency \"@yuyi919/build-tools\" from `0.1.11` to `0.1.12`"
+          },
+          {
+            "comment": "Updating dependency \"@yuyi919/workspace-base-rig\" from `1.2.6` to `1.2.7`"
+          }
+        ]
+      }
+    },
+    {
+      "version": "0.0.5",
+      "tag": "@yuyi919/vue-antv-plus2_v0.0.5",
+      "date": "Thu, 17 Feb 2022 05:29:01 GMT",
+      "comments": {
+        "patch": [
+          {
+            "comment": "auto-bump"
+          }
+        ],
+        "dependency": [
+          {
+            "comment": "Updating dependency \"@yuyi919/vue-jsx-factory\" from `0.0.1` to `0.0.2`"
+          },
+          {
+            "comment": "Updating dependency \"@yuyi919/vue-use\" from `0.0.3` to `0.0.4`"
+          },
+          {
+            "comment": "Updating dependency \"@yuyi919/build-tools\" from `0.1.10` to `0.1.11`"
+          },
+          {
+            "comment": "Updating dependency \"@yuyi919/workspace-base-rig\" from `1.2.5` to `1.2.6`"
+          }
+        ]
+      }
+    },
+    {
       "version": "0.0.4",
       "tag": "@yuyi919/vue-antv-plus2_v0.0.4",
       "date": "Thu, 17 Feb 2022 05:21:27 GMT",

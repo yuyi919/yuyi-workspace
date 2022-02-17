@@ -1,6 +1,6 @@
 {
   "name": "@yuyi919/workspace-base-rig",
-  "version": "1.2.5",
+  "version": "1.2.7",
   "description": "A rig package for Node.js projects that build using Heft",
   "license": "MIT",
   "repository": {

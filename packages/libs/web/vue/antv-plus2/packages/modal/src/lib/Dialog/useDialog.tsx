@@ -122,7 +122,7 @@ function setTransformOrigin(node: { style: any }, value: string) {
   style[`transformOrigin`] = value;
 }
 
-function offset(el: HTMLElement) {
+function offset(el: Element) {
   const rect = el.getBoundingClientRect();
   const pos = {
     left: Math.max(rect.left, 0),

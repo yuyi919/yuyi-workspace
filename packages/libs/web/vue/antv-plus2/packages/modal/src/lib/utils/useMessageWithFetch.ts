@@ -45,8 +45,8 @@ export function useMessageWithFetch<T = any>(
         const r = await fetch();
         onSuccess && messageArray("success", castArray(onSuccess) as Req[]);
         resolve(r);
-      } catch (e) {
-        const msg = (e && e.message) || e;
+      } catch (e: any) {
+        const msg: string = (e as Error)?.message || (e as string);
         messageArray(
           "error",
           (castArray(onFailed) as Req[]).concat([enforce ? [msg, 150, "error", true] : msg])

@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/ban-types */
 /* eslint-disable @typescript-eslint/no-empty-interface */
 import { VNodeData, VNode } from "vue";
-import { ComponentRenderProxy } from "@vue/composition-api";
+import { ComponentRenderProxy } from "vue-demi";
 import { base, builtin } from "@antv-plus2/helper";
 import type { ExtendIntrinsicAttributes } from "@yuyi919/vue-jsx-factory";
 

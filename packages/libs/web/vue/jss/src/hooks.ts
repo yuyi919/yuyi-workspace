@@ -8,11 +8,15 @@ import {
   CreateUseStylesOptions,
   createUseStylesWithHook,
 } from "./createUseStyles";
-import { CreateUseStylesHookOptions, createUseStylesHooks } from "./createUseStylesHook";
+import {
+  CreateUseStylesHookOptions,
+  createUseStylesHooks,
+  StyleHooks,
+} from "./createUseStylesHook";
 import { BaseCreateStyle } from "./Factory";
 import { define } from "./helper/merge";
 import { defineClasses, defineStyles, StyleObjectThemedCallback, Styles } from "./styles";
-import { createTheming } from "./theming";
+import { Theming, createTheming } from "./theming";
 
 export class StylesApi<Role, P = any, N extends string = string> {
   constructor(public role: Role, public styles: BaseCreateStyle<P> = {}, public name?: N) {
@@ -93,7 +97,38 @@ export type ExtractStylesApi<Target extends Record<string, StylesApi<any>>> = {
 
 const defaultName = "__hooks_jss_provide_key__";
 let i = 0;
-export function createHooksApi<ITheme>(defaultTheme: ITheme, themeName?: string) {
+
+export interface IHooksApi<ITheme> {
+  ThemeContext: Theming<ITheme>;
+  createUseStyles: <Props extends Types.IObj<any>, C extends string = string>(
+    styles: Styles<ITheme, Props, C>,
+    options?: CreateUseStylesOptions<ITheme>
+  ) => (data?: Props) => ComputedRef<Classes<C>>;
+  defineClasses: typeof defineClasses;
+  defineStyles: typeof defineStyles;
+  createThemedMixins: <Props extends Types.IObj<any>, Args extends any[]>(
+    styles: StyleObjectThemedCallback<ITheme, Props, Args>
+  ) => StyleObjectThemedCallback<ITheme, Props, Args>;
+  createUseStylesHook: <R extends Record<string, StylesApi<any, any, string>>>(
+    hooks: () => R,
+    options?: CreateUseStylesHookOptions
+  ) => (data?: unknown) => ComputedRef<Classes<Extract<keyof R, string>>>;
+  createStylesHook: <R extends Record<string, StylesApi<any, any, string>>>(
+    hooks: () => R,
+    options?: CreateUseStylesHookOptions
+  ) => <Data>(initialData: Data) => StyleHooks<ITheme, Data, Extract<keyof R, string>>;
+  useBlock: <N extends string>(name: N) => IBlock<any, N>;
+  useElement: <B extends IBlock<any, string>, N extends string>(
+    block: B,
+    name: N
+  ) => IElement<any, `${B["name"]}-${N}`>;
+  useTheme: () => ITheme;
+}
+
+export function createHooksApi<ITheme>(
+  defaultTheme: ITheme,
+  themeName?: string
+): IHooksApi<ITheme> {
   const ThemeContext = createTheming(themeName || defaultName + i++, defaultTheme);
   const context: HookContext<ITheme> = {
     theme: void 0,

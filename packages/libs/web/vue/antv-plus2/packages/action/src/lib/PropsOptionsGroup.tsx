@@ -1,4 +1,4 @@
-import { PropOptions as PropOptionsRequired } from "@vue/composition-api";
+import { PropOptions as PropOptionsRequired } from "vue-demi";
 import { PropValidator } from "vue/types/options";
 
 export type PropsOption<T extends any> = PropOptionsRequired<T> | PropValidator<T>;
