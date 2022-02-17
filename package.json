@@ -60,7 +60,6 @@
     "update": "nx migrate latest",
     "workspace-generator": "nx workspace-generator",
     "dep-graph": "nx dep-graph",
-    "prepare": "ts-patch install -s",
     "help": "nx help"
   },
   "prisma": {

@@ -8,7 +8,6 @@
   "module": "lib/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
-    "prepare": "ts-patch install -s",
     "build2": "tsc --build --force",
     "build": "heft build --clean",
     "build:dev": "heft build",

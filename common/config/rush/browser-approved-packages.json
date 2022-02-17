@@ -151,6 +151,10 @@
       "allowedCategories": ["tools"]
     },
     {
+      "name": "@rushstack/eslint-config",
+      "allowedCategories": ["tools"]
+    },
+    {
       "name": "@rushstack/heft",
       "allowedCategories": ["production", "tools"]
     },

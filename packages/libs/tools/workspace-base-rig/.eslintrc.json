@@ -18,28 +18,14 @@
     "jest.preset.js",
     "**/*.prisma"
   ],
-  "plugins": [
-    "@nrwl/nx"
-  ],
+  "plugins": ["@rushstack/eslint-config/profile/node"],
   "overrides": [
     {
-      "files": [
-        "*.ts",
-        "*.tsx",
-        "*.js",
-        "*.jsx"
-      ],
-      "rules": {
-      }
+      "files": ["*.ts", "*.tsx", "*.js", "*.jsx"],
+      "rules": {}
     },
     {
-      "files": [
-        "*.ts",
-        "*.tsx"
-      ],
-      "extends": [
-        "plugin:@nrwl/nx/typescript"
-      ],
+      "files": ["*.ts", "*.tsx"],
       "rules": {
         "@typescript-eslint/ban-ts-comment": "off",
         "@typescript-eslint/no-inferrable-types": "off",
@@ -48,16 +34,6 @@
         "no-redeclare": "off",
         "@typescript-eslint/no-empty-interface": "off"
       }
-    },
-    {
-      "files": [
-        "*.js",
-        "*.jsx"
-      ],
-      "extends": [
-        "plugin:@nrwl/nx/javascript"
-      ],
-      "rules": {}
     }
   ]
 }

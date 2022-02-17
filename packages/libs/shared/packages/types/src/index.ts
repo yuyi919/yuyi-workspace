@@ -25,6 +25,7 @@ type ComputedCheckerKey<K extends CheckerKey> = K extends `${infer A}${infer B}`
  * @beta
  */
 export type Checker = typeof checker;
+
 /**
  * @beta
  */
@@ -32,6 +33,7 @@ const is = {} as {
   [K in CheckerKey]: Checker[ComputedCheckerKey<K>];
 };
 
+// eslint-disable-next-line guard-for-in
 for (const key in checker) {
   const type = key.replace(/^is/, "");
   type K = "num";

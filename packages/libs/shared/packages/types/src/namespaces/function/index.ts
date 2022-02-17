@@ -30,15 +30,15 @@ export type Bind3<A, B, C, Args extends any[] = [], Result = any> = (
 /**
  * @beta
  */
-export type Arg0<T> = T extends Bind1<infer T, any[]> ? T : any;
+export type Arg0<F> = F extends Bind1<infer T, any[]> ? T : any;
 /**
  * @beta
  */
-export type Arg1<T> = T extends Bind2<any, infer T, any[]> ? T : any;
+export type Arg1<F> = F extends Bind2<any, infer T, any[]> ? T : any;
 /**
  * @beta
  */
-export type Arg2<T> = T extends Bind3<any, any, infer T, any[]> ? T : any;
+export type Arg2<F> = F extends Bind3<any, any, infer T, any[]> ? T : any;
 /**
  * @beta
  */

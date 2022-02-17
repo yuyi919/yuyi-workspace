@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import type { Types } from "@yuyi919/shared-types";
 import "reflect-metadata";
 

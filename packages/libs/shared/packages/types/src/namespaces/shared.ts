@@ -84,9 +84,9 @@ export type AnyConstructorType<A = IKeyValueMap> = new (...input: any[]) => A;
 /**
  * @beta
  */
-export type ConstructorType<T, Args extends any[] = [any?, any?, ...any[]]> = {
-  new (...args: Args): T;
-};
+export type ConstructorType<T, Args extends any[] = [any?, any?, ...any[]]> = new (
+  ...args: Args
+) => T;
 
 /**
  * @beta
@@ -146,9 +146,7 @@ export type Fn<Args extends any[] = any[], R = any> = Types.Function.Base<Args, 
 /**
  * @beta
  */
-export interface PromiseFn<Args extends any[] = any, R = any> {
-  (...arg: Args): Promise<R>;
-}
+export type PromiseFn<Args extends any[] = any, R = any> = (...arg: Args) => Promise<R>;
 
 /**
  * `ThenableValue`的别名
@@ -209,7 +207,7 @@ export type Recordable<T extends any = any, Key extends string | number | symbol
 >;
 
 /**
- * 包含{ Key: T }的Record
+ * 包含`{ Key: T }`的Record
  */
 /**
  * @beta
@@ -218,7 +216,7 @@ export type RecordWithKey<Key extends string | symbol, T = any> = {
   [key in Key]: T;
 } & Recordable<any>;
 /**
- * 包含{ Key?: T }的Record
+ * 包含`{ Key?: T }`的Record
  */
 /**
  * @beta
@@ -230,9 +228,9 @@ export type RecordWithOptionalKey<Key extends string | symbol, T = any> = {
 /**
  * @internal
  */
-export type Readonly<T extends any = any> = {
+export interface IReadonly<T extends any = any> {
   readonly [key: string]: T;
-};
+}
 
 /**
  * 深度Partial
@@ -293,14 +291,14 @@ export type IntervalHandle = ReturnType<typeof setInterval>;
 /**
  * @beta
  */
-export interface ComponentElRef<T extends HTMLElement = HTMLDivElement> {
+export interface IComponentElRef<T extends HTMLElement = HTMLDivElement> {
   $el: T;
 }
 
 /**
  * @beta
  */
-export type ComponentRef<T extends HTMLElement = HTMLDivElement> = ComponentElRef<T> | null;
+export type ComponentRef<T extends HTMLElement = HTMLDivElement> = IComponentElRef<T> | null;
 
 /**
  * @beta
