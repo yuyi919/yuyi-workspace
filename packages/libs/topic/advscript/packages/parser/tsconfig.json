@@ -18,7 +18,7 @@
     "tsBuildInfoFile": "./node_modules/@yuyi919/workspace-base-rig/.tsBuildInfo/topic-advscript-packages-parser.json"
   },
   "exclude": ["src/**/*.spec.ts", "src/**/*.test.ts", "**/__test__/**"],
-  "include": ["./node_modules/**/*.d.ts", "src/**/*.ts"],
+  "include": ["src/**/*.ts"],
   "references": [
     {
       "path": "./tsconfig.spec.json"

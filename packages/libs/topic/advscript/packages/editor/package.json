@@ -1,6 +1,6 @@
 {
   "name": "@yuyi919/advscript-editor",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "",
   "author": "",
   "main": "dist/index.js",
@@ -15,14 +15,14 @@
   },
   "dependencies": {
     "chevrotain": "^9.1.0",
-    "@yuyi919/advscript-parser": "workspace:0.0.1",
-    "@yuyi919/advscript-language-services": "workspace:0.0.1"
+    "@yuyi919/advscript-parser": "workspace:0.0.2",
+    "@yuyi919/advscript-language-services": "workspace:0.0.2"
   },
   "devDependencies": {
     "@types/jest": "~27.0.1",
     "@types/node": "~16.7.2",
     "@types/vscode": "~1.61.0",
-    "@yuyi919/workspace-base-rig": "workspace:1.2.7",
+    "@yuyi919/workspace-base-rig": "workspace:1.2.8",
     "@types/ws": "~8.2.0",
     "jest": "~27.1.0",
     "tsdx": "^0.14.1",
@@ -30,7 +30,7 @@
     "typescript": "4.1.6",
     "ws": "~8.2.3",
     "vite": "2.4.4",
-    "vscode-advscript": "workspace:0.0.1",
+    "vscode-advscript": "workspace:0.0.2",
     "vscode-oniguruma": "1.3.0",
     "onigasm": "^2.0.0",
     "vscode-textmate": "5.1.1",

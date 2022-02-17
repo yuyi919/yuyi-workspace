@@ -1,6 +1,6 @@
 {
-	"version": "2.0.0",
-	"tasks": [
+  "version": "2.0.0",
+  "tasks": [
     {
       "type": "shell",
       "command": [
@@ -12,32 +12,38 @@
     {
       "type": "shell",
       "command": [
-        "rush version --bump --version-policy shared"
+        "rush publish --include-all --version-policy shared --set-access-level public -p --pack --release-folder ${workspaceFolder}/common/temp/dry-publish-cache"
       ],
-      "label": "rush: bump shared packages",
-      "detail": "rush version --bump --version-policy shared --ensure-version-policy"
+      "label": "尝试 rush: publish Shared packages",
+      "detail": "rush publish --apply --include-all --set-access-level public --publish --version-policy shared"
     },
     {
       "type": "shell",
-      "command": [
-        "rush version --bump --version-policy rpgmz"
-      ],
+      "command": ["rush version --bump --version-policy shared"],
+      "label": "rush: bump shared packages",
+      "detail": "rush version --bump --version-policy shared"
+    },
+    {
+      "type": "shell",
+      "command": ["rush version --bump"],
+      "label": "rush: bump all packages",
+      "detail": "rush version --bump"
+    },
+    {
+      "type": "shell",
+      "command": ["rush version --bump --version-policy rpgmz"],
       "label": "rush: bump rpgmz packages",
       "detail": "rush version --bump --version-policy shared --ensure-version-policy"
     },
     {
       "type": "shell",
-      "command": [
-        "rush change --bulk --bump-type patch --overwrite --message auto-bump"
-      ],
+      "command": ["rush change --bulk --bump-type patch --overwrite --message auto-bump"],
       "label": "rush: change with \"auto\"",
       "detail": "rush change --bulk --bump-type patch --overwrite --message auto-bump"
     },
     {
       "type": "shell",
-      "command": [
-        "rush change --overwrite"
-      ],
+      "command": ["rush change --overwrite"],
       "label": "rush: change --overwrite",
       "detail": "rush change --overwrite"
     }

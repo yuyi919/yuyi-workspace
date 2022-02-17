@@ -24,7 +24,7 @@
     "@typescript-eslint/eslint-plugin": "4.19.0",
     "@typescript-eslint/parser": "4.19.0",
     "@yuyi919/nx-plugin-workspace-helper": "workspace:0.0.1",
-    "@yuyi919/workspace-base-rig": "workspace:1.2.7",
+    "@yuyi919/workspace-base-rig": "workspace:1.2.8",
     "eslint": "~7.30.0",
     "eslint-config-prettier": "8.1.0",
     "fs-extra": "^10.0.0",

@@ -3,7 +3,7 @@
   "displayName": "Vscode-Advscript",
   "description": "AdvScript support for VSCode",
   "aiKey": "0c2689ab-4ce9-416d-a585-c9765b7f4c88.local",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "publisher": "yuyi919",
   "capabilities": {
     "untrustedWorkspaces": {
@@ -436,7 +436,7 @@
     "@types/jest": "~27.0.1",
     "@types/node": "~16.7.2",
     "@types/vscode": "~1.61.0",
-    "@yuyi919/workspace-base-rig": "workspace:1.2.7",
+    "@yuyi919/workspace-base-rig": "workspace:1.2.8",
     "copyfiles": "^2.4.1",
     "d3": "^5.16.0",
     "datatables.net": "1.10.25",

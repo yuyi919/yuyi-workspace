@@ -2,6 +2,23 @@
   "name": "@yuyi919/build-tools",
   "entries": [
     {
+      "version": "0.1.13",
+      "tag": "@yuyi919/build-tools_v0.1.13",
+      "date": "Thu, 17 Feb 2022 11:11:32 GMT",
+      "comments": {
+        "patch": [
+          {
+            "comment": "auto-bump"
+          }
+        ],
+        "dependency": [
+          {
+            "comment": "Updating dependency \"@yuyi919/workspace-base-rig\" from `1.2.7` to `1.2.8`"
+          }
+        ]
+      }
+    },
+    {
       "version": "0.1.12",
       "tag": "@yuyi919/build-tools_v0.1.12",
       "date": "Thu, 17 Feb 2022 06:47:20 GMT",

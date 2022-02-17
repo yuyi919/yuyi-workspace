@@ -2,6 +2,18 @@
   "name": "@yuyi919/workspace-base-rig",
   "entries": [
     {
+      "version": "1.2.8",
+      "tag": "@yuyi919/workspace-base-rig_v1.2.8",
+      "date": "Thu, 17 Feb 2022 11:11:32 GMT",
+      "comments": {
+        "patch": [
+          {
+            "comment": "auto-bump"
+          }
+        ]
+      }
+    },
+    {
       "version": "1.2.7",
       "tag": "@yuyi919/workspace-base-rig_v1.2.7",
       "date": "Thu, 17 Feb 2022 06:47:20 GMT",

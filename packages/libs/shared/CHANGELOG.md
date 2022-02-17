@@ -1,6 +1,14 @@
 # Change Log - @yuyi919/shared
 
-This log was last generated on Thu, 17 Feb 2022 06:47:20 GMT and should not be manually modified.
+This log was last generated on Thu, 17 Feb 2022 11:11:32 GMT and should not be manually modified.
+
+## 0.0.42
+
+Thu, 17 Feb 2022 11:11:32 GMT
+
+### Patches
+
+- auto-bump
 
 ## 0.0.41
 

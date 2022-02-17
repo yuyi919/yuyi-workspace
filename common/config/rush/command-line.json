@@ -11,6 +11,14 @@
       "shellCommand": "pretty-quick --staged"
     },
     {
+      "name": "drypub",
+      "commandKind": "global",
+      "summary": "尝试发布",
+      "safeForSimultaneousRushProcesses": true,
+      // This will invoke common/autoinstallers/rush-prettier/node_modules/.bin/pretty-quick
+      "shellCommand": "rush publish --include-all --set-access-level public -p --pack --release-folder ./common/temp/dry-publish-cache"
+    },
+    {
       /**
        * (Required) Determines the type of custom command.
        * Rush's "bulk" commands are invoked separately for each project.  Rush will look in
@@ -88,6 +96,28 @@
     }
   ],
   "parameters": [
+    {
+      /**
+       * (Required) Determines the type of custom parameter.
+       * "A "choice" is a custom command-line parameter whose argument must be chosen from a list
+       * of allowable alternatives.
+       */
+      "parameterKind": "choice",
+      "longName": "--version-policy",
+      "description": "版本名称",
+      "shortName": "-p",
+      "associatedCommands": ["drypub"],
+      "alternatives": [
+        {
+          "name": "shared",
+          "description": "各领域共享工具包"
+        },
+        {
+          "name": "config",
+          "description": "各领域共享配置包"
+        }
+      ]
+    }
     // {
     //   /**
     //    * (Required) Determines the type of custom parameter.
