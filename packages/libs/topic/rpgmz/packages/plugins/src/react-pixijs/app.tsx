@@ -5,6 +5,7 @@ import {
   Container,
   AnimatedSprite as ReactPixiAnimatedSprite,
   useApp,
+  Sprite,
   _ReactPixi,
 } from "@inlet/react-pixi/animated";
 import { useUpdater } from "./hooks";
@@ -55,18 +56,40 @@ export const App: React.FC<any> = (props) => {
     return null;
   }
   return (
-    <Container ref={ref} {...props}>
+    <Container
+      ref={ref}
+      interactive={true}
+      width={200}
+      height={200}
+      rotation={rot}
+      mouseout={() => {
+        console.log("mouseout", props);
+        setIsPlaying(() => true);
+      }}
+      pointerout={() => {
+        console.log("pointerout", props);
+        setIsPlaying(() => true);
+      }}
+      pointerleave={() => {
+        console.log("pointerleave", props);
+        setIsPlaying(() => true);
+      }}
+      pointerupoutside={() => {
+        console.log("pointerupoutside", props);
+        setIsPlaying(() => true);
+      }}
+      pointercancel={() => {
+        console.log("pointercancel", props);
+        setIsPlaying(() => true);
+      }}
+      pointerover={() => {
+        console.log("pointerover", props);
+        setIsPlaying(() => false);
+      }}
+      {...props}
+    >
+      <Sprite width={200} anchor={0.5} height={200} texture={PIXI.Texture.WHITE} />
       <AnimatedSprite
-        rotation={rot}
-        interactive={true}
-        pointerout={() => {
-          console.log("pointerout", props);
-          setIsPlaying(() => true);
-        }}
-        pointerover={() => {
-          console.log("pointerover", props);
-          setIsPlaying(() => false);
-        }}
         animationSpeed={0.5}
         isPlaying={isPlaying && globalThis.SceneManager.isGameActive()}
         textures={frames}

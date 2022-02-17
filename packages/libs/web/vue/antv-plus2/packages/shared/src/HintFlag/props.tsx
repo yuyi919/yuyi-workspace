@@ -1,4 +1,4 @@
-import { Component, Prop } from "@yuyi919/vue-antv-plus2-helper";
+import { Component, Prop } from "@antv-plus2/helper";
 import { AntPopoverProps } from "../antv";
 import { ThemedIcon } from "../Icon";
 

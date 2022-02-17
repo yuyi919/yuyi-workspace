@@ -1,11 +1,11 @@
 import * as PIXI from "pixi.js";
 import { Window } from "./window";
-import { WindowSuper } from "./windowSuper";
+import { SuperWindow } from "./windowSuper";
 
 declare module "pixi.js" {
   namespace systems {
     interface FramebufferSystem {
-      forceStencil(): void
+      forceStencil(): void;
     }
   }
 }
@@ -17,7 +17,7 @@ declare module "pixi.js" {
  * @class
  * @extends PIXI.Container
  */
-export class WindowLayer extends WindowSuper {
+export class WindowLayer extends SuperWindow {
   constructor();
   constructor(thisClass: Constructable<WindowLayer>);
   constructor(arg?: any) {
@@ -30,7 +30,7 @@ export class WindowLayer extends WindowSuper {
 
   initialize(): void {
     // dup with constructor super()
-    PIXI.Container.call(this);
+    super._initialize();
   }
 
   /**
@@ -59,7 +59,7 @@ export class WindowLayer extends WindowSuper {
     const gl = renderer.gl;
     const children = this.children.clone();
 
-    (renderer.framebuffer).forceStencil();
+    renderer.framebuffer.forceStencil();
     graphics.transform = this.transform;
     renderer.batch.flush();
     gl.enable(gl.STENCIL_TEST);

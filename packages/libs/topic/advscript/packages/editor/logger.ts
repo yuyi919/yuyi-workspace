@@ -8,7 +8,7 @@ import {
 } from "vite-plugin-macro";
 import { basename, join } from "path";
 import { upperFirst } from "lodash";
-import { readFileSync } from "fs-extra";
+import fs from "fs-extra";
 
 class MacroLogger {
   callLog = (ctx: MacroContext, babel: Babel, helper: MacroHelper) => {
@@ -82,7 +82,8 @@ export default defineMacroProvider({
       macros: [log, time],
     },
     "@logger-helper": {
-      code: readFileSync(join(__dirname, "./helper.ts"))
+      code: fs
+        .readFileSync(join(__dirname, "./helper.ts"))
         .toString()
         .replace(/:\s*\w+/g, ""),
     },

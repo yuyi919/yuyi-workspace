@@ -9,7 +9,7 @@ import {
   Mixins,
   VCProps,
   VueComponent2,
-} from "@yuyi919/vue-antv-plus2-helper";
+} from "@antv-plus2/helper";
 import { mergeJsxPropToVNode } from "@yuyi919/vue-jsx-factory";
 // import { defaultTo } from "lodash";
 import Vue from "vue";

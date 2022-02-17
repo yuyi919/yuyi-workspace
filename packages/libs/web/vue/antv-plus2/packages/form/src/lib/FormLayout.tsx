@@ -1,4 +1,4 @@
-import { extractUnsafeProps } from "@yuyi919/vue-antv-plus2-helper";
+import { extractUnsafeProps } from "@antv-plus2/helper";
 import { useInherit } from "@yuyi919/vue-use";
 import { computed, defineComponent } from "vue-demi";
 import { cls, usePrefixCls } from "../__builtins__";

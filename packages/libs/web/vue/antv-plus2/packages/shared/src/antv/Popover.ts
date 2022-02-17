@@ -1,5 +1,5 @@
 /* eslint-disable no-redeclare */
-import { getPropsClass, TypeTsxProps, VCProps } from "@yuyi919/vue-antv-plus2-helper";
+import { getPropsClass, TypeTsxProps, VCProps } from "@antv-plus2/helper";
 import { Popover, Popconfirm } from "ant-design-vue";
 
 declare module "ant-design-vue/types/ant-design-vue.d" {

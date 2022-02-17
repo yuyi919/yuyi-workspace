@@ -1,4 +1,5 @@
 import * as PIXI from "pixi.js";
+import { PIXIContainer } from "./Extend";
 
 //-----------------------------------------------------------------------------
 /**
@@ -7,7 +8,7 @@ import * as PIXI from "pixi.js";
  * @class
  * @extends PIXI.Container
  */
-export class ScreenSprite extends PIXI.Container {
+export class ScreenSprite extends PIXIContainer {
   _graphics = new PIXI.Graphics();
   _red = -1;
   _green = -1;
@@ -24,7 +25,7 @@ export class ScreenSprite extends PIXI.Container {
 
   initialize(): void {
     // dup with constructor super()
-    PIXI.Container.call(this);
+    super._initialize();
 
     this._graphics = new PIXI.Graphics();
     this.addChild(this._graphics);

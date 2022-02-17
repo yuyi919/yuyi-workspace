@@ -1,6 +1,8 @@
 /* eslint-disable no-var */
 import * as PIXI from "pixi.js";
+import { PIXIObjectRenderer } from "./Extend";
 import { MAX_GL_TEXTURES } from "./tilemapLayer";
+
 declare module "pixi.js" {
   interface Shader {
     // NOTE 不知为何缺失的定义
@@ -13,7 +15,8 @@ declare module "pixi.js" {
     readonly plugins: PIXI.Renderer["plugins"] & CustomPlugins;
   }
 }
-export class TilemapRenderer extends PIXI.ObjectRenderer {
+
+export class TilemapRenderer extends PIXIObjectRenderer {
   _shader: PIXI.Shader | null = null;
   _images: TexImageSource[] = [];
   _internalTextures: PIXI.BaseRenderTexture[] = [];
@@ -29,9 +32,9 @@ export class TilemapRenderer extends PIXI.ObjectRenderer {
     this.initialize(arg);
   }
 
-  initialize(renderer?: PIXI.Renderer): void {
+  initialize(renderer: PIXI.Renderer): void {
     // dup with constructor super()
-    PIXI.ObjectRenderer.call(this, renderer!);
+    super._initialize(renderer);
     this._shader = null;
     this._images = [];
     this._internalTextures = [];

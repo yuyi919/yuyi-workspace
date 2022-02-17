@@ -15,7 +15,7 @@
   },
   "dependencies": {
     "@yuyi919/shared-types": "workspace:0.0.5",
-    "@yuyi919/shared-utils": "workspace:0.0.37",
+    "@yuyi919/shared-utils": "workspace:0.0.38",
     "@yuyi919/vue-antv-plus2-action": "workspace:0.0.1",
     "@yuyi919/vue-antv-plus2-helper": "workspace:0.0.1",
     "@yuyi919/vue-antv-plus2-shared": "workspace:0.0.1",
@@ -33,7 +33,7 @@
     "@yuyi919/workspace-base-rig": "workspace:1.2.5",
     "jest": "~27.1.0",
     "tslib": "~2.3.1",
-    "typescript": "4.1.2",
+    "typescript": "4.1.6",
     "vue": "2.6.14"
   },
   "peerDependencies": {},

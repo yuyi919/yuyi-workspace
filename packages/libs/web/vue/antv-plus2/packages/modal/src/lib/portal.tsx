@@ -9,12 +9,12 @@ import {
 } from "@vue/composition-api";
 import { defaultsDeep, isEqual } from "lodash";
 import Vue, { VNode, CreateElement } from "vue";
-import { ActionType, IActionConfig, ICallableActionConfig } from "../action";
+import { ActionType, IActionConfig, ICallableActionConfig } from "@antv-plus2/action";
 import { IModalAction, ModalContext } from "./context";
 import { IModalProps } from "./props";
 import { castComputed } from "@yuyi919/shared-utils";
 import { IModalOptionsAdapter } from "./utils";
-import { ButtonProps } from "../shared";
+import { ButtonProps } from "@antv-plus2/shared";
 
 export interface IPortalModalOptions
   extends Omit<IModalProps, "okButtonProps" | "cancelButtonProps">,

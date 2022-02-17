@@ -1,6 +1,6 @@
 /* eslint-disable no-redeclare */
 import type { InputSearch as AntInputSearch } from "ant-design-vue/types/input/input-search";
-import { TypeTsxProps, VCProps } from "@yuyi919/vue-antv-plus2-helper";
+import { TypeTsxProps, VCProps } from "@antv-plus2/helper";
 import { IInputSearchProps, IInputSearchEvents, IInputSearchPublicMembers } from "ant-design-vue";
 
 declare module "ant-design-vue" {

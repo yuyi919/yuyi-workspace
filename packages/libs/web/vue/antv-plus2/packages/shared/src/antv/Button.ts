@@ -1,9 +1,4 @@
-import {
-  getPropsClass,
-  ResolveSubModule,
-  TypeTsxProps,
-  VCProps,
-} from "@yuyi919/vue-antv-plus2-helper";
+import { getPropsClass, ResolveSubModule, TypeTsxProps, VCProps } from "@antv-plus2/helper";
 import {
   Button,
   IButtonEvents,

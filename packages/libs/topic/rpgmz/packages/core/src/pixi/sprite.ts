@@ -3,6 +3,7 @@ import { Bitmap } from "./bitmap";
 import { Rectangle } from "./rectangle";
 import { ColorFilter } from "./colorFilter";
 import { MZ } from "../MZ";
+import { PIXISprite } from "./Extend";
 
 //-----------------------------------------------------------------------------
 /**
@@ -12,7 +13,7 @@ import { MZ } from "../MZ";
  * @extends PIXI.Sprite
  * @param {Bitmap} bitmap - The image for the sprite.
  */
-export class Sprite extends PIXI.Sprite {
+export class Sprite extends PIXISprite {
   static _emptyBaseTexture: PIXI.BaseTexture | null = null;
   static _counter = 0;
   spriteId = 0;
@@ -42,7 +43,7 @@ export class Sprite extends PIXI.Sprite {
     const frame = new Rectangle();
     const texture = new PIXI.Texture(Sprite._emptyBaseTexture, frame);
     // dup with constructor super()
-    PIXI.Sprite.call(this, texture);
+    super._initialize(texture);
     this.spriteId = Sprite._counter++;
     this._bitmap = bitmap!;
     this._frame = frame;
@@ -148,7 +149,7 @@ export class Sprite extends PIXI.Sprite {
    */
   update(): void {
     for (const child of this.children) {
-      (child as Sprite).update?.()
+      (child as Sprite).update?.();
     }
   }
 

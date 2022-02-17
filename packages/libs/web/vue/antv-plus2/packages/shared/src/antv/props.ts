@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-// import { ResolveSubModule } from "@yuyi919/vue-antv-plus2-helper";
+// import { ResolveSubModule } from "@antv-plus2/helper";
 // import { VCProps } from "../prop-utils";
 
 // declare module "ant-design-vue" {

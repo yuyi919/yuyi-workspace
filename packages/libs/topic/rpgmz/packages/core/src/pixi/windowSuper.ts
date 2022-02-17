@@ -1,13 +1,19 @@
-import * as PIXI from "pixi.js";
+import { PIXIContainer } from "./Extend";
 
 /**
- * The window in the game.
+ * The super window in the game.
  *
  * @class
  * @extends PIXI.Container
  */
-export class WindowSuper extends PIXI.Container {
-  children: WindowSuper[];
+export class SuperWindow extends PIXIContainer {
+  constructor(args?: Constructable<SuperWindow>) {
+    super();
+    if (!args) {
+      super._initialize();
+    }
+  }
+  children: SuperWindow[];
   update(): void {
     const { children } = this;
     for (let i = children.length; --i > -1; ) {

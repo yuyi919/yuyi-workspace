@@ -1,1 +1,1 @@
-export * from "@yuyi919/vue-antv-plus2-shared";
+export * from "@antv-plus2/shared";

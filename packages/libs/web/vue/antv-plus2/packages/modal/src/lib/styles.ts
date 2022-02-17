@@ -1,4 +1,4 @@
-import { createUseClasses, styled } from "@yuyi919/vue-antv-plus2-theme";
+import { createUseClasses, styled } from "@antv-plus2/theme";
 
 const [classes, useClasses, ClassesProps] = createUseClasses("modal", {
   wrap: "wrap",

@@ -13,7 +13,7 @@ import {
   watch,
 } from "@vue/composition-api";
 import { unwrap, useComponentEl, useNamedRef, WrapValue } from "@yuyi919/vue-use";
-import { DomUtils, TypedPropsGroup } from "@yuyi919/vue-antv-plus2-helper";
+import { DomUtils, TypedPropsGroup } from "@antv-plus2/helper";
 import { throttle } from "lodash";
 import { useBarClasses } from "./classes";
 import { getScrollMoveInstance } from "./main";
@@ -86,20 +86,18 @@ export function useThrottleHandle<T extends (...args: any[]) => any>(
       { immediate: true }
     );
     onUnmounted(() => (innerMethod as Cancelable)?.cancel?.());
-    return (
-      Object.assign(
-        function (this: any, ...args: any[]) {
-          return innerMethod.apply(this, args);
+    return Object.assign(
+      function (this: any, ...args: any[]) {
+        return innerMethod.apply(this, args);
+      },
+      {
+        cancel() {
+          (innerMethod as Cancelable)?.cancel?.();
         },
-        {
-          cancel() {
-            (innerMethod as Cancelable)?.cancel?.();
-          },
-          flush() {
-            return (innerMethod as Cancelable<ReturnType<T>>)?.flush?.();
-          },
-        }
-      )
+        flush() {
+          return (innerMethod as Cancelable<ReturnType<T>>)?.flush?.();
+        },
+      }
     ) as T & Cancelable<ReturnType<T>>;
   }
   if (wait > 0) {

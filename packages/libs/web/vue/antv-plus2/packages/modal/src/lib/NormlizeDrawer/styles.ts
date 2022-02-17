@@ -1,4 +1,4 @@
-import { autoSizer, createUseClasses, styled } from "@yuyi919/vue-antv-plus2-theme";
+import { autoSizer, createUseClasses, styled } from "@antv-plus2/theme";
 import { IModalProps } from "../props";
 
 const [classes, useClasses] = createUseClasses("normalize-drawer", {

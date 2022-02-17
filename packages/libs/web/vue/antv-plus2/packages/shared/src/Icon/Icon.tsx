@@ -1,14 +1,8 @@
 /* eslint-disable no-use-before-define */
 import { defineComponent } from "@vue/composition-api";
 import { useInherit } from "@yuyi919/vue-use";
-import {
-  Component,
-  extractProps,
-  getPropsClass,
-  Prop,
-  VueComponent2,
-} from "@yuyi919/vue-antv-plus2-helper";
-import Theme, { createUseClasses, styled } from "@yuyi919/vue-antv-plus2-theme";
+import { Component, extractProps, getPropsClass, Prop, VueComponent2 } from "@antv-plus2/helper";
+import Theme, { createUseClasses, styled } from "@antv-plus2/theme";
 import { Icon } from "ant-design-vue";
 
 const [classes, useClasses] = createUseClasses("icon", {});

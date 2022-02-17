@@ -7,17 +7,26 @@
     "module": "esnext",
     "rootDir": "./src",
     "baseUrl": ".",
-    "strict": true,
-    "target": "ES2019",
     "paths": {
+      "@antv-plus2/theme/index.less": ["node_modules/@yuyi919/vue-antv-plus2-theme/index.less"],
+      "@antv-plus2/*": ["node_modules/@yuyi919/vue-antv-plus2-*"]
     }
   },
   "references": [
     {
+      "path": "../use"
+    },
+    {
+      "path": "../../../tools/build-tools"
+    },
+    {
+      "path": "./packages/helper"
+    },
+    {
       "path": "./packages/theme"
     },
     {
-      "path": "../use"
+      "path": "./packages/shared"
     },
     {
       "path": "./packages/table"
@@ -26,19 +35,10 @@
       "path": "./packages/action"
     },
     {
-      "path": "./packages/helper"
-    },
-    {
       "path": "./packages/modal"
     },
     {
       "path": "./packages/form"
-    },
-    {
-      "path": "./packages/shared"
-    },
-    {
-      "path": "../../../tools/build-tools"
     },
     {
       "path": "./tsconfig.lib.json"

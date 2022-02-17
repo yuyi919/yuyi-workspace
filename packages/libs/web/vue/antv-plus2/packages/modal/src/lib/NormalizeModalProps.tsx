@@ -1,5 +1,5 @@
 import { CSSProperties } from "@yuyi919/shared-types";
-import { Component, Prop, PropsMixins } from "../helper";
+import { Component, Prop, PropsMixins } from "@antv-plus2/helper";
 import { ClassesProps } from "./styles";
 
 export type NormalizeModalPlacement = "top" | "bottom" | "left" | "right" | "center";
@@ -123,7 +123,7 @@ export class NormalizeModalProps extends PropsMixins(ClassesProps) {
 
   @Prop({ type: Object })
   parentModal?: {
-    getInnerModal(): any
+    getInnerModal(): any;
   };
 }
 

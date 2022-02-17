@@ -5,7 +5,7 @@ declare module "vue-styled-components" {
     ...args: import("./types").TemplateArgs<TProps, Theme>
   ): void;
 
-  export const ThemeProvider: import("@yuyi919/vue-antv-plus2-helper").VueComponent2<{
+  export const ThemeProvider: import("@antv-plus2/helper").VueComponent2<{
     theme: import("../theme").ITheme;
   }>;
 

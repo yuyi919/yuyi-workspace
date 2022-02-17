@@ -2,15 +2,16 @@
   "extends": "./tsconfig.json",
   "compilerOptions": {
     "paths": {
+      "@antv-plus2/action": ["./packages/action/src/index.ts"],
+      "@antv-plus2/form": ["./packages/form/src/index.ts"],
+      "@antv-plus2/helper": ["./packages/helper/src/index.ts"],
+      "@antv-plus2/modal": ["./packages/modal/src/index.ts"],
+      "@antv-plus2/shared": ["./packages/shared/src/index.ts"],
+      "@antv-plus2/table": ["./packages/table/src/index.ts"],
+      "@antv-plus2/theme/index.less": ["./packages/theme/index.less"],
+      "@antv-plus2/theme": ["./packages/theme/src/index.ts"],
+
       "@yuyi919/vue-antv-plus2": ["./src/index.ts"],
-      "@yuyi919/vue-antv-plus2-action": ["./packages/action/src/index.ts"],
-      "@yuyi919/vue-antv-plus2-form": ["./packages/form/src/index.ts"],
-      "@yuyi919/vue-antv-plus2-helper": ["./packages/helper/src/index.ts"],
-      "@yuyi919/vue-antv-plus2-modal": ["./packages/modal/src/index.ts"],
-      "@yuyi919/vue-antv-plus2-shared": ["./packages/shared/src/index.ts"],
-      "@yuyi919/vue-antv-plus2-stable": ["./packages/stable/src/index.ts"],
-      "@yuyi919/vue-antv-plus2-theme/index.less": ["./packages/theme/index.less"],
-      "@yuyi919/vue-antv-plus2-theme": ["./packages/theme/src/index.ts"],
       "@yuyi919/vue-jss": ["../jss/src/index.ts"],
       "@yuyi919/vue-use": ["../use/src/index.ts"]
     }

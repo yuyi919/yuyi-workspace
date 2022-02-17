@@ -1,7 +1,7 @@
 /* eslint-disable no-redeclare */
 import { Select as AntSelect } from "ant-design-vue";
 import type { Option as AntSelectOption } from "ant-design-vue/types/select/option";
-import { VCProps, VueComponent2 } from "@yuyi919/vue-antv-plus2-helper";
+import { VCProps, VueComponent2 } from "@antv-plus2/helper";
 
 export interface ISelectOptionProps extends VCProps<AntSelectOption, false> {}
 

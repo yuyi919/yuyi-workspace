@@ -1,6 +1,6 @@
 /* eslint-disable no-redeclare */
 import { Spin, Table as AntTable } from "ant-design-vue";
-import { VCProps, VueComponent2, getPropsClass } from "@yuyi919/vue-antv-plus2-helper";
+import { VCProps, VueComponent2, getPropsClass } from "@antv-plus2/helper";
 import { PaginationConfig as AntPaginationConfig } from "ant-design-vue/types/table/table";
 import { Column, IColumnProps } from "./column";
 export interface ITableProps<T = any>

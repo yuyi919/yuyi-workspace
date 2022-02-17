@@ -1,7 +1,7 @@
 import { CSSProperties, Types } from "@yuyi919/shared-types";
-import { Component, extractUnsafeProps, Prop } from "@yuyi919/vue-antv-plus2-helper";
-import { isNum } from "@yuyi919/vue-antv-plus2-shared";
-import { autoSizer } from "@yuyi919/vue-antv-plus2-theme";
+import { Component, extractUnsafeProps, Prop } from "@antv-plus2/helper";
+import { isNum } from "@antv-plus2/shared";
+import { autoSizer } from "@antv-plus2/theme";
 import { Icon } from "ant-design-vue";
 import { LayoutItemProps } from "./Layout";
 

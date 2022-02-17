@@ -1,7 +1,7 @@
 /* eslint-disable no-redeclare */
 // @ts-nocheck
 import type { AntdComponent as AntAntdComponent } from "ant-design-vue/types/component";
-import { VCProps, VueComponent2 } from "@yuyi919/vue-antv-plus2-helper";
+import { VCProps, VueComponent2 } from "@antv-plus2/helper";
 
 export interface IAntdComponentProps extends VCProps<AntAntdComponent, false> {}
 export interface IAntdComponentEvents {}

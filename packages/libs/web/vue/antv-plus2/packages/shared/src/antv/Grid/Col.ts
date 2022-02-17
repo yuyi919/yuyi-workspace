@@ -1,7 +1,7 @@
 /* eslint-disable no-redeclare */
 // @ts-nocheck
 import { Col as AntCol } from "ant-design-vue";
-import { TypeTsxProps, VCProps } from "@yuyi919/vue-antv-plus2-helper";
+import { TypeTsxProps, VCProps } from "@antv-plus2/helper";
 
 declare module "ant-design-vue/types/ant-design-vue.d" {
   export interface IColProps extends VCProps<AntCol, false> {}

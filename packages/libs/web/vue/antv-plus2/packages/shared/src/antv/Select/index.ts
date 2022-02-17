@@ -1,6 +1,6 @@
 /* eslint-disable no-redeclare */
 import { Select as AntSelect } from "ant-design-vue";
-import { VCProps, VueComponent2, getPropsClass } from "@yuyi919/vue-antv-plus2-helper";
+import { VCProps, VueComponent2, getPropsClass } from "@antv-plus2/helper";
 import { SelectOption } from "./Option";
 import { SelectOptionGroup } from "./OptGroup";
 import { CSSProperties } from "@yuyi919/shared-types";

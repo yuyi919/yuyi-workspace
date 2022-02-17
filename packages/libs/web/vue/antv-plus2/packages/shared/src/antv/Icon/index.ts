@@ -1,5 +1,5 @@
 import { Icon, IIconProps, IIconPublicMembers, IIconEvents } from "ant-design-vue";
-import { getPropsClass, TypeTsxProps, VCProps } from "@yuyi919/vue-antv-plus2-helper";
+import { getPropsClass, TypeTsxProps, VCProps } from "@antv-plus2/helper";
 
 declare module "ant-design-vue/types/ant-design-vue.d" {
   export interface IIconProps extends VCProps<Icon, false> {}

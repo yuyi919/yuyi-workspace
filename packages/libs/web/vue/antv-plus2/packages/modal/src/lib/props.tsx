@@ -1,8 +1,8 @@
 import { Types } from "@yuyi919/shared-types";
-import { Component, Prop, PropsMixins } from "../helper";
+import { Component, Prop, PropsMixins } from "@antv-plus2/helper";
 import { IColProps } from "ant-design-vue";
-import { ActionType, ICallableActionConfig, ActionGroupProps } from "../action";
-import { ButtonProps } from "../shared";
+import { ActionType, ICallableActionConfig, ActionGroupProps } from "@antv-plus2/action";
+import { ButtonProps } from "@antv-plus2/shared";
 import { NormalizeModalProps } from "./NormalizeModalProps";
 import { ClassesProps } from "./styles";
 

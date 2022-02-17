@@ -1,4 +1,4 @@
-import { extractProps } from "@yuyi919/vue-antv-plus2-helper";
+import { extractProps } from "@antv-plus2/helper";
 import { useChildren, useInherit, useNamedRef, useQuerySelector } from "@yuyi919/vue-use";
 import { Drawer, IDrawerProps } from "ant-design-vue";
 import {
@@ -10,7 +10,7 @@ import {
   reactive,
   watch,
 } from "vue-demi";
-import { AutoSizer, AutoSizerAction } from "../../shared";
+import { AutoSizer, AutoSizerAction } from "@antv-plus2/shared";
 import { InnerModalContext } from "../context";
 import { useContentRender } from "../hooks";
 import { INormalizeModalProps, NormalizeModalProps } from "../NormalizeModalProps";
@@ -30,7 +30,7 @@ export const NormlizeDrawer = defineComponent({
         });
       }
     );
-    provide("parentDrawer", props.parentModal?.getInnerModal())
+    provide("parentDrawer", props.parentModal?.getInnerModal());
     const [getInherit, inheritEvent] = useInherit(context, ["close", "change"]);
     const sizerRef = useNamedRef<AutoSizerAction>("sizerRef");
     /**

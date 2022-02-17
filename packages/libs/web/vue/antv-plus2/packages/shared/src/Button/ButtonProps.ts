@@ -2,7 +2,7 @@
 /* eslint-disable @typescript-eslint/no-empty-interface */
 
 import { Types } from "@yuyi919/shared-types";
-import { Component, getPropsClass, Prop } from "@yuyi919/vue-antv-plus2-helper";
+import { Component, getPropsClass, Prop } from "@antv-plus2/helper";
 import { Button, IButtonProps } from "ant-design-vue";
 
 @Component({})

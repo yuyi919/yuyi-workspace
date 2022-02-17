@@ -4,8 +4,8 @@ import {
   KeyframePoint,
   styled,
   style2Str,
-} from "@yuyi919/vue-antv-plus2-theme";
-import { NativeScrollbarMixins } from "../../shared";
+} from "@antv-plus2/theme";
+import { NativeScrollbarMixins } from "@antv-plus2/shared";
 import { IModalProps } from "../props";
 
 const [classes, useClasses, ClassesProps] = createUseClasses("normalize-modal", {

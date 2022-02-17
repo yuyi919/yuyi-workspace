@@ -1,5 +1,5 @@
-import * as PIXI from "pixi.js";
 import { MZ } from "../MZ";
+import { PIXIFilter } from "./Extend";
 
 //-----------------------------------------------------------------------------
 /**
@@ -8,11 +8,11 @@ import { MZ } from "../MZ";
  * @class
  * @extends PIXI.Filter
  */
-export class ColorFilter extends PIXI.Filter {
+export class ColorFilter extends PIXIFilter {
   constructor();
   constructor(thisClass: Constructable<ColorFilter>);
   constructor(arg?: any) {
-    super(undefined, undefined);
+    super();
     if (arg === ColorFilter) {
       return;
     }
@@ -21,7 +21,7 @@ export class ColorFilter extends PIXI.Filter {
 
   initialize(..._: any): void {
     // dup with constructor super()
-    PIXI.Filter.call(this, undefined, this._fragmentSrc());
+    super._initialize(undefined, this._fragmentSrc());
     this.uniforms.hue = 0;
     this.uniforms.colorTone = [0, 0, 0, 0];
     this.uniforms.blendColor = [0, 0, 0, 0];

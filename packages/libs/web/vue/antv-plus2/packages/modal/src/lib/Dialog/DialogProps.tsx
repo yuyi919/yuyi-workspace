@@ -1,4 +1,4 @@
-import { Component, Prop, PropTypes } from "@yuyi919/vue-antv-plus2-helper";
+import { Component, Prop, PropTypes } from "@antv-plus2/helper";
 
 @Component()
 export class DialogProps {

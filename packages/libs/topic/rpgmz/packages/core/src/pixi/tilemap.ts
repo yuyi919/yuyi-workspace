@@ -5,6 +5,7 @@ import { TilemapRenderer } from ".";
 import { Point } from ".";
 import { Bitmap } from ".";
 import { Sprite } from "./sprite";
+import { PIXIContainer } from "./Extend";
 
 //-----------------------------------------------------------------------------
 /**
@@ -13,7 +14,7 @@ import { Sprite } from "./sprite";
  * @class
  * @extends PIXI.Container
  */
-export class Tilemap extends PIXI.Container {
+export class Tilemap extends PIXIContainer {
   static Layer = TilemapLayer;
   static Renderer = TilemapRenderer;
 
@@ -52,9 +53,9 @@ export class Tilemap extends PIXI.Container {
     this.initialize(...arguments);
   }
 
-  initialize(..._: any): void {
+  initialize(...args: any): void {
     // dup with constructor super()
-    PIXI.Container.call(this);
+    super._initialize();
 
     this._width = Graphics.width;
     this._height = Graphics.height;

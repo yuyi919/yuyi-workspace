@@ -10,7 +10,7 @@ import {
 } from "@vue/composition-api";
 import { unwrap } from "@yuyi919/vue-use";
 import { KeyOf, Types, WrapValue } from "@yuyi919/shared-types";
-import type { VueClass } from "@yuyi919/vue-antv-plus2-helper";
+import type { VueClass } from "@antv-plus2/helper";
 import { createBEM } from "../classes";
 import { Theme, ThemeProps, useTheme } from "../styled";
 // import { componentGetter } from "../exports/component";

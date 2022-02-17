@@ -1,6 +1,6 @@
 import { useComponentEl, useEffect, useInherit, usePropLocal } from "@yuyi919/vue-use";
-import { extractProps, getPropsClass, VueComponent2 } from "../helper";
-import { styled } from "@yuyi919/vue-antv-plus2-theme";
+import { extractProps, getPropsClass, VueComponent2 } from "@antv-plus2/helper";
+import { styled } from "@antv-plus2/theme";
 import { Col, IColProps } from "ant-design-vue";
 import { debounce, reduce } from "lodash";
 import { computed, defineComponent } from "@vue/composition-api";

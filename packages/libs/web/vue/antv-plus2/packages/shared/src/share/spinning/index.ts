@@ -1,6 +1,6 @@
 import { convertArr2Map } from "@yuyi919/shared-utils";
 import type { IKeyValueMap } from "@yuyi919/shared-types";
-import { HookFactory, useHookFactory } from "@yuyi919/vue-antv-plus2-helper";
+import { HookFactory, useHookFactory } from "@antv-plus2/helper";
 import { watch, SetupContext } from "@vue/composition-api";
 import { SpinningProps } from "./props";
 
@@ -18,7 +18,7 @@ export class SpinningHook extends HookFactory<SpinningProps> {
       // console.log('spinning changed', spinning)
       this.localSpinning = spinning;
     }
-  };
+  }
 
   onSpinningUpdated(spinning: boolean) {
     /**
@@ -26,7 +26,7 @@ export class SpinningHook extends HookFactory<SpinningProps> {
      * @type { boolean }
      */
     this.$emit("update:spinning", spinning);
-  };
+  }
 
   get isSpinning() {
     return this.localSpinning;

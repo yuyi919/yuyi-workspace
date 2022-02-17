@@ -10,7 +10,6 @@ import {
   Text,
   Graphics,
 } from "@inlet/react-pixi/animated";
-import { AnimatedProps } from "react-spring";
 
 import * as PIXI from "pixi.js";
 import React from "react";
@@ -18,29 +17,12 @@ import { Spring } from "react-spring";
 import { Types } from "@yuyi919/shared-types";
 import { App } from "./app";
 import { addUpdater, removeUpdater, useUpdater } from "./hooks";
-import { Flex, FlexBox, YogaProvider } from "./yoga-grid";
+import { Flex, FlexBox } from "./components";
 import PixiBetterScroller from "./scroll";
 import { gradient } from "./utils";
+import { AnimatedDisplayObjectProps } from "./types";
 
-// 补充遗漏的定义
-declare module "@inlet/react-pixi/animated" {
-  // unmount component
-  export const unmountComponentAtNode: (container: PIXI.Container) => void;
-}
-
-type FilterPropsKeys<T, U> = {
-  // 移除内部字段(_开头)
-  [key in keyof T]: key extends `_${string}` ? never : T[key] extends U ? never : key;
-}[keyof T];
-
-type FixProps<T, U> = AnimatedProps<Pick<T, FilterPropsKeys<T, U>>>;
-
-export type DisplayObjectProps<T extends PIXI.DisplayObject = PIXI.DisplayObject> = FixProps<
-  _ReactPixi.Container<T, {}>,
-  Types.Function.Base
->;
-
-export function Window(app: globalThis.PIXI.Application, parent = app.stage) {
+export function Window(app: PIXI.Application, parent = app.stage) {
   const config = {
     size: { width: 1280, height: 720 },
     spring: { mass: 10, tension: 1000, friction: 100 },
@@ -108,12 +90,11 @@ export function Window(app: globalThis.PIXI.Application, parent = app.stage) {
     },
     willUnmount(instance, parent) {
       removeUpdater(instance.update);
-      console.log("unmount");
     },
   });
   type TextStyle = (typeof PIXI.TextStyle extends new (...args: infer Args) => any ? Args : [])[0];
   const StyledButton: React.FC<
-    DisplayObjectProps<PIXI.Container> & { textStyle?: TextStyle; text: string }
+    AnimatedDisplayObjectProps<PIXI.Container> & { textStyle?: TextStyle; text: string }
   > = (props) => {
     const textRef = React.useRef<PIXI.Text>();
     const draw = React.useCallback(
@@ -156,12 +137,12 @@ export function Window(app: globalThis.PIXI.Application, parent = app.stage) {
     );
   };
   const ScrollerContainer = PixiComponent("ScrollerContainer", {
-    create(props: DisplayObjectProps<PIXI.Container>) {
+    create(props: AnimatedDisplayObjectProps<PIXI.Container>) {
       return new PixiBetterScroller({
-        width: 500,
-        height: 500,
+        width: 600,
+        height: 600,
         onScroll(pos) {
-          // console.log("scroll", pos);
+          console.log("scroll", pos);
         },
         onBounce(direction, back) {
           // console.log("onBounce", direction);
@@ -175,104 +156,122 @@ export function Window(app: globalThis.PIXI.Application, parent = app.stage) {
       instance.update();
     },
   });
-  const Renderer = () => {
+  const Renderer = (props: { onRemoved: () => any }) => {
     const [items, update] = React.useState<number[]>([0]);
+    const ref = React.useRef<PIXI.Container>();
+    const removed = React.useRef(null);
+    React.useLayoutEffect(() => {
+      removed.current = props.onRemoved;
+    }, [props.onRemoved]);
+
+    React.useLayoutEffect(() => {
+      ref.current.once("removed", removed.current);
+      return () => {
+        ref.current.off("removed", removed.current);
+      };
+    }, [removed.current, ref.current]);
     return (
-      <Container {...config.size}>
-        <YogaProvider>
-          <Flex
-            {...{
-              ...config.size,
-              flexDirection: "row",
-              alignItems: "center",
-              justifyContent: "space-evenly",
-              margin: 0,
-              centerAnchor: true,
-            }}
-          >
-            <FlexBox width={200} height={200} centerAnchor>
-              {(props, visible) => {
-                // console.log(props);
-                return (
-                  <Box {...props}>
-                    {(p) => {
-                      return (
-                        // <StyledButton text="开始" {...{ x: p.x, y: p.y }} textStyle={{}} />
-                        <Container {...{ x: p.x, y: p.y }}>
-                          <Button
-                            interactive
-                            // pointerover={() => {
-                            //   console.log("pointerover");
-                            //   update((items) => items.concat([0]));
-                            // }}
-                            pointerup={(e) => {
-                              update((items) => items.concat([0]));
-                            }}
-                          />
-                        </Container>
-                      );
-                    }}
-                    {/* <App {...props} /> */}
-                  </Box>
-                );
-              }}
-            </FlexBox>
-            {items.map((_, key) => {
+      <Container ref={ref} {...config.size}>
+        <Flex
+          {...{
+            ...config.size,
+            flexDirection: "row",
+            alignItems: "center",
+            justifyContent: "space-evenly",
+            margin: 0,
+            centerAnchor: true,
+          }}
+        >
+          <FlexBox width={200} height={200} centerAnchor>
+            {(props, visible) => {
+              // console.log(props);
               return (
-                <FlexBox key={key} width={200} height={200} centerAnchor>
-                  {(props, visible) => {
-                    // console.log(props);
+                <Box {...props}>
+                  {(p) => {
                     return (
-                      // <AppProvider value={app}>
-                      //   <Container {...config.size}>
-                      //   <Box {...props}>
-                      //   {/* <Sprite texture={PIXI.Texture.WHITE} tint={0xaddb67} {...props} /> */}
-                      //   {/* <App /> */}
-                      //   {(p) => <App {...p} />}
-                      // </Box>
-                      <Spring to={props} config={{ mass: 10, tension: 1000, friction: 100 }}>
-                        {(p) => {
-                          // console.log(props, visible, p);
-                          return (
-                            <Container {...{ x: p.x, y: p.y }}>
-                              <ScrollerContainer {...{ width: 200, height: 200, x: 0, y: 0 }}>
-                                <Container>
-                                  <Sprite
-                                    width={1280}
-                                    height={720}
-                                    texture={PIXI.Texture.WHITE}
-                                    tint={0xaddb67}
-                                  />
-                                  <App />
-                                </Container>
-                              </ScrollerContainer>
-                            </Container>
-                          );
-                        }}
-                      </Spring>
-                      //   </Container>
-                      // </AppProvider>
+                      // <StyledButton text="开始" {...{ x: p.x, y: p.y }} textStyle={{}} />
+                      <Container {...{ x: p.x, y: p.y }}>
+                        <Button
+                          interactive
+                          // pointerover={() => {
+                          //   console.log("pointerover");
+                          //   update((items) => items.concat([0]));
+                          // }}
+                          pointerup={(e) => {
+                            update((items) => items.concat([0]));
+                          }}
+                        />
+                      </Container>
                     );
                   }}
-                </FlexBox>
+                  {/* <App {...props} /> */}
+                </Box>
               );
-            })}
-          </Flex>
-        </YogaProvider>
+            }}
+          </FlexBox>
+          {items.map((_, key) => {
+            return (
+              <FlexBox key={key} width={200} height={200}>
+                {(props) => {
+                  // console.log(props);
+                  return (
+                    // <AppProvider value={app}>
+                    //   <Container {...config.size}>
+                    //   <Box {...props}>
+                    //   {/* <Sprite texture={PIXI.Texture.WHITE} tint={0xaddb67} {...props} /> */}
+                    //   {/* <App /> */}
+                    //   {(p) => <App {...p} />}
+                    // </Box>
+                    <Spring to={props} config={{ mass: 10, tension: 1000, friction: 100 }}>
+                      {(p) => {
+                        // console.log(props, visible, p);
+                        return (
+                          <Container {...{ x: p.x, y: p.y }}>
+                            <ScrollerContainer {...{ width: 400, height: 400, x: 0, y: 0 }}>
+                              <Container>
+                                <Sprite
+                                  width={1280}
+                                  height={720}
+                                  texture={PIXI.Texture.WHITE}
+                                  tint={0xaddb67}
+                                />
+                                <App x={100} y={100} archor={0.5} />
+                              </Container>
+                            </ScrollerContainer>
+                          </Container>
+                        );
+                      }}
+                    </Spring>
+                    //   </Container>
+                    // </AppProvider>
+                  );
+                }}
+              </FlexBox>
+            );
+          })}
+        </Flex>
       </Container>
     );
   };
+
+  return renderTo(Renderer, app, parent);
+}
+
+export function renderTo(
+  Component: React.ComponentType<{ onRemoved?: (args?: any) => any }>,
+  app: PIXI.Application,
+  parent = app.stage
+) {
+  function remove() {
+    unmountComponentAtNode(parent);
+    console.log("unmount");
+  }
+  remove();
   render(
     <AppProvider value={app}>
-      {/* <Container {...config.size}>
-        <Box x={0} y={100}>
-          {(p) => <App {...p} />}
-        </Box>
-      </Container> */}
-      {/* <Main2 /> */}
-      <Renderer />
+      <Component onRemoved={remove} />
     </AppProvider>,
     parent
   );
-  return () => unmountComponentAtNode(parent);
+  return remove;
 }

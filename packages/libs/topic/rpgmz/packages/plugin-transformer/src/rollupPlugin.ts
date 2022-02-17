@@ -35,6 +35,7 @@ export const transformHook = async (code: string, id: string, cache: Cache) => {
 
 export function createPlugin(options?: {
   pluginNamesMap: Record<string, string>;
+  minify?: boolean;
 }): import("rollup").Plugin {
   const cache: Cache = {
     collect: {},
@@ -70,10 +71,10 @@ export function createPlugin(options?: {
       }));
     },
     // generateBundle,
-    generateBundle(_, bundle) {
+    generateBundle(outputOptions, bundle) {
       const files = Object.entries(bundle);
       const pkg = readJsonSync(join(process.cwd(), "./package.json"));
-      const top = `//=============================================================================
+      let top = `//=============================================================================
 // RPG Maker MZ - ${pkg.name} (v${pkg.version})
 //=============================================================================\r\n`;
       for (const [key, file] of files) {
@@ -84,6 +85,9 @@ export function createPlugin(options?: {
           if (nameCache[key]) {
             delete bundle[key];
             nameCache[key] = pluginName;
+            if (options.minify) {
+              top += getDocs(file.modules, cache) + "\r\n";
+            }
             // console.log("generateBundle", key);
             const writeCode = `${top}${file.code.replace(
               /('|")\.\/plugin\.libs([0-9]*)(\.js|)('|")/g,
@@ -146,7 +150,7 @@ export function createPlugin(options?: {
         // libChunks.code = libCodes.join("\n");
       }
     },
-    renderChunk(code, { modules, fileName, map }, options) {
+    renderChunk(code, { modules, fileName, map }, outputOptions) {
       // console.log("renderChunk", fileName);
       if (modules) {
         // libChunks = null;
@@ -154,25 +158,12 @@ export function createPlugin(options?: {
         const prefix = pkg.author;
         const pluginName = getPluginName(fileName, prefix);
         nameCache[fileName] = pluginName;
-        const files = Object.keys(modules);
-        const collectMap = files
-          ?.map((file) => cache.file_collect[file])
-          .filter(Boolean)
-          .reduce((r, collect) => Object.assign(r, collect), {});
-        const texts = Object.values(transformToComment(collectMap, { cache, lang: "zh" }).result);
-        // console.log(code)
-
-        const cacheDir = join(process.cwd(), "node_modules/.cache/rpgmz-plugin-transformer");
-        ensureDir(cacheDir).then(() =>
-          writeJSON(cacheDir + "/cache.json", normlize(cache), { spaces: 2 })
-        );
-
-        const banner = texts.length > 0 ? `${texts.join("\r\n")}\r\n` : `\r\n`;
-        if (!options.sourcemap) {
-          return `${banner}\r\n${code.replace(`define([`, `loadEsModule("${pluginName}", [`)}`;
+        if (!outputOptions.sourcemap || options.minify) {
+          return `${code.replace(`define([`, `loadEsModule("${pluginName}", [`)}`;
         }
         code = code.replace(`define([`, `loadEsModule("${pluginName}", [`);
         const magicString = new MagicString(code);
+        const banner = getDocs(modules, cache);
         magicString.prepend(banner);
         // console.log("renderChunk", fileName, pluginName);
         return {
@@ -180,10 +171,26 @@ export function createPlugin(options?: {
           map: magicString.generateMap({ hires: true }),
         };
       }
-      return options.sourcemap ? { code, map } : code;
+      return outputOptions.sourcemap ? { code, map } : code;
     },
     transform(code, id) {
       return transformHook(code, id, cache);
     },
   };
+}
+function getDocs(modules, cache: Cache) {
+  const files = Object.keys(modules);
+  const collectMap = files
+    ?.map((file) => cache.file_collect[file])
+    .filter(Boolean)
+    .reduce((r, collect) => Object.assign(r, collect), {});
+  const texts = Object.values(transformToComment(collectMap, { cache, lang: "zh" }).result);
+  // console.log(code)
+  const cacheDir = join(process.cwd(), "node_modules/.cache/rpgmz-plugin-transformer");
+  ensureDir(cacheDir).then(() =>
+    writeJSON(cacheDir + "/cache.json", normlize(cache), { spaces: 2 })
+  );
+
+  const banner = texts.length > 0 ? `${texts.join("\r\n")}\r\n` : `\r\n`;
+  return banner;
 }

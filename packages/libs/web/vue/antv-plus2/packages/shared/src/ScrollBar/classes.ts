@@ -1,4 +1,4 @@
-import { autoSizer, createUseClasses, fade, styled } from "@yuyi919/vue-antv-plus2-theme";
+import { autoSizer, createUseClasses, fade, styled } from "@antv-plus2/theme";
 import { IScrollBarProps } from "./ScrollBarProps";
 import { BAR_MAP } from "./util";
 

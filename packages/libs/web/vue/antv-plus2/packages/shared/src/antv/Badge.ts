@@ -1,6 +1,6 @@
 /* eslint-disable no-redeclare */
 import { Badge as AntBadge } from "ant-design-vue";
-import { VCProps, VueComponent2 } from "@yuyi919/vue-antv-plus2-helper";
+import { VCProps, VueComponent2 } from "@antv-plus2/helper";
 
 export interface IBadgeProps extends VCProps<AntBadge, false> {}
 export interface IBadgeEvents {

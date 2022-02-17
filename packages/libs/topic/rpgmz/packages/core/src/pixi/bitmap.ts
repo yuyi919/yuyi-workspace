@@ -30,9 +30,12 @@ export class Bitmap {
   outlineColor = "rgba(0, 0, 0, 0.5)";
   outlineWidth = 3;
 
-  constructor(width: number, height: number);
-  constructor(thisClass: Constructable<Bitmap>);
+  constructor(width?: number, height?: number);
+  constructor(thisClass?: Constructable<Bitmap>);
   constructor(...args: any[]) {
+    if (args.length === 1 && typeof args[0] !== "number") {
+      return;
+    }
     this.initialize(...args);
   }
 
@@ -110,9 +113,8 @@ export class Bitmap {
    * @returns {Bitmap} The new bitmap object.
    */
   static load(url: string): Bitmap {
-    const bitmap = Object.create(Bitmap.prototype);
+    const bitmap = new Bitmap();
     // console.log(url)
-    bitmap.initialize();
     bitmap._url = url;
     bitmap._startLoading();
     return bitmap;

@@ -1,5 +1,5 @@
 import { CSSProperties } from "@yuyi919/shared-types";
-import { Prop, Component, VCProps, PropProvider } from "@yuyi919/vue-antv-plus2-helper";
+import { Prop, Component, VCProps, PropProvider } from "@antv-plus2/helper";
 
 @Component({})
 export class ScrollBarProps extends PropProvider<ScrollBarProps> {

@@ -11,7 +11,7 @@ const logger = console;
 
 type SystemModule = {
   setters?: ((module: typeof module_exports) => void)[];
-  execute: Function;
+  execute?: Function;
 };
 
 const modules: Record<string, SystemModule> = {};
@@ -40,7 +40,7 @@ export const System = {
         const requireds = requires.map((name) =>
           name === "exports" ? exports : module_exports[name] || modules[name]?.execute?.()
         );
-        //@ts-ignore
+        // @ts-ignore
         const Module = loadListener[name]
           ? await loadListener[name](...requireds)
           : module(
@@ -69,7 +69,7 @@ export const System = {
           document.currentScript ||
             (currentScript &&
               Object.defineProperty(document, "currentScript", { value: currentScript }));
-          module_exports[name] = Module.execute() || module_exports[name];
+          module_exports[name] = Module.execute?.() || module_exports[name];
           modules[name] = Module;
           return Module;
         }
@@ -113,7 +113,7 @@ System.register("@yuyi919/rpgmz-core", [], () => ({
       });
       Object.defineProperty(exports, "default", {
         get() {
-          return globalThis
+          return globalThis;
         },
       });
     }

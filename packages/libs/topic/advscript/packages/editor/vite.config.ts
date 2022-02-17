@@ -1,4 +1,5 @@
 import path, { join } from "path";
+import { readlinkSync } from "fs";
 import { escapeRegExp } from "lodash";
 import builtins from "rollup-plugin-node-builtins";
 import { defineConfig, UserConfigFn } from "vite";
@@ -22,6 +23,28 @@ const macroPlugin = vitePluginMacro({
   .use(Provider)
   .toPlugin();
 
+const langiumDir = resolveLink(path.resolve("../../node_modules/langium-workspaces"));
+function resolveLink(linkPath: string) {
+  let p = linkPath;
+  // eslint-disable-next-line no-constant-condition
+  while (true) {
+    let np: string;
+    try {
+      np = readlinkSync(p);
+      if (np === p) {
+        break;
+      }
+    } catch (error) {
+      break;
+    }
+    p = np;
+  }
+  return p;
+}
+function resolveLangium(...paths: string[]) {
+  return path.join(langiumDir, ...paths);
+}
+
 export default defineConfig(async ({ mode }) => {
   const isProd = mode === "production";
   const local = true;
@@ -31,8 +54,8 @@ export default defineConfig(async ({ mode }) => {
       alias: {
         "@yuyi919/zora": path.resolve("./src/test/zora-wrapper.ts"),
         vscode: path.resolve("./libs/vscode-languageclient/vscode-compatibility.js"),
-        "langium/lib": path.resolve("../langium/packages/langium/src"),
-        langium: path.resolve("../langium/packages/langium/src/index.ts"),
+        "langium/lib": resolveLangium("packages/langium/src"),
+        langium: resolveLangium("packages/langium/src/index.ts"),
         "@yuyi919/advscript-language-services": isProd
           ? path.resolve("./node_modules/@yuyi919/advscript-language-services")
           : path.resolve("../language-services/src/index.ts"),

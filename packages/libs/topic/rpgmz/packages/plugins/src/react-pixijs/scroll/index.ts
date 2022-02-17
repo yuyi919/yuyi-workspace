@@ -113,6 +113,7 @@ export default class PixiBetterScroller extends Container implements IContainerL
   }
 
   private _init() {
+    this.interactive = true;
     this.sortableChildren = true;
     this.name = "Scroller";
 
@@ -162,16 +163,15 @@ export default class PixiBetterScroller extends Container implements IContainerL
   }
   private _removeMask() {
     super.removeChild(this.maskData);
-    super.removeChild(this.back);
-    this.back.destroy();
     this.maskData.destroy();
-    this.back = null;
     this.maskData = null;
     this.mask = null;
+    super.removeChild(this.back);
+    this.back.destroy();
+    this.back = null;
   }
 
   private _bindOriginEvent() {
-    this.interactive = true;
     ORIGIN_EVENT_MAP.map(({ name, fn }) => {
       this.on(name, this[fn], this);
     });
@@ -188,6 +188,7 @@ export default class PixiBetterScroller extends Container implements IContainerL
     this.curPoints.push(startPoint);
 
     this.touchScroller((this.touching = true));
+    console.log("_start");
   }
   public _move(ev: PScroller.PixiEvent) {
     if (!this.touching) return;
@@ -201,6 +202,7 @@ export default class PixiBetterScroller extends Container implements IContainerL
 
     this.scrollScroller(deltaX, deltaY);
     this._replaceCurPoint(curPoint);
+    console.log("_move");
   }
   public _end(ev: PScroller.PixiEvent) {
     this.touchScroller((this.touching = false));
@@ -216,6 +218,7 @@ export default class PixiBetterScroller extends Container implements IContainerL
 
     this.touchStartPoints = [];
     this.curPoints = [];
+    console.log("_end");
   }
 
   private _findStartPoint(id: number) {

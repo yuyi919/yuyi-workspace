@@ -2,7 +2,7 @@
   "name": "vscode-advscript",
   "displayName": "Vscode-Advscript",
   "description": "AdvScript support for VSCode",
-	"aiKey": "0c2689ab-4ce9-416d-a585-c9765b7f4c88.local",
+  "aiKey": "0c2689ab-4ce9-416d-a585-c9765b7f4c88.local",
   "version": "0.0.1",
   "publisher": "yuyi919",
   "capabilities": {
@@ -378,15 +378,15 @@
       }
     ],
     "grammars": [
-			{
-				"language": "fountain-script",
-				"scopeName": "text.source.fountain.script",
-				"path": "./syntaxes/fountain.tmlanguage.json",
+      {
+        "language": "fountain-script",
+        "scopeName": "text.source.fountain.script",
+        "path": "./syntaxes/fountain.tmlanguage.json",
         "embeddedLanguages": {
           "text.source.advscript": "text.source.advscript",
           "source.ts": "typescript"
         }
-			},
+      },
       {
         "language": "advscript",
         "scopeName": "text.source.advscript",
@@ -444,7 +444,7 @@
     "jest": "~27.1.0",
     "jquery": "^3.6.0",
     "tslib": "~2.3.1",
-    "typescript": "4.1.2",
+    "typescript": "4.1.6",
     "vite": "2.4.4",
     "vscode-codicons": "0.0.17",
     "vscode-test": "^1.6.1",

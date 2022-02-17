@@ -1,5 +1,5 @@
 /* eslint-disable no-redeclare */
-import { TypeTsxProps, VCProps } from "@yuyi919/vue-antv-plus2-helper";
+import { TypeTsxProps, VCProps } from "@antv-plus2/helper";
 import { IPasswordEvents, IPasswordProps, IPasswordPublicMembers } from "ant-design-vue";
 import type { Password as AntPassword } from "ant-design-vue/types/input/password";
 

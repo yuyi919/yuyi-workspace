@@ -3,7 +3,7 @@ import { defineComponent } from "@vue/composition-api";
 import { ActionGroupProps } from "./Props";
 import { useActionGroup } from "./hooks";
 
-import { createUseClasses, styled, keyframes } from "@yuyi919/vue-antv-plus2-theme";
+import { createUseClasses, styled, keyframes } from "@antv-plus2/theme";
 const anim = keyframes`
   to { 
     padding: 0;

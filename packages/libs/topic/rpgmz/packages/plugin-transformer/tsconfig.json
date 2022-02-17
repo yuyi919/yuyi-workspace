@@ -7,6 +7,12 @@
   },
   "references": [
     {
+      "path": "./node_modules/@yuyi919-ts-transformer/ast-utils"
+    },
+    {
+      "path": "./node_modules/@yuyi919-ts-transformer/dev-utils"
+    },
+    {
       "path": "./tsconfig.lib.json"
     },
     {

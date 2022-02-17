@@ -4,7 +4,7 @@ const builtins = require("rollup-plugin-node-polyfills");
 const path = require("path");
 const { createPlugin } = require("@yuyi919/rpgmz-plugin-transformer/dist/rollupPlugin");
 
-module.exports = extendTsdxConfig({
+module.exports = extendTsdxConfig((options, tsdx) => ({
   // preset: "babel-ts",
   // bundleDeps: [
   //   "regenerator-runtime",
@@ -46,6 +46,7 @@ module.exports = extendTsdxConfig({
     "scheduler",
     "@lazarv/wasm-yoga",
     "pixi-flex-layout",
+    "@yuyi919/shared",
     "lodash-es",
   ],
   excludeDundleDeps: [],
@@ -103,6 +104,7 @@ module.exports = extendTsdxConfig({
         MsgExtra: "增强文本控制符",
         libs: "Preset",
       },
+      minify: tsdx.minify,
     }),
     // {
     //   transform(code, id) {
@@ -116,4 +118,4 @@ module.exports = extendTsdxConfig({
     //   },
     // },
   ],
-});
+}));

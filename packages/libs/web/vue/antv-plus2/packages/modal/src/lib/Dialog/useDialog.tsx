@@ -7,7 +7,7 @@ import {
   noop,
   Transition,
   TsxTypeInfoHook,
-} from "@yuyi919/vue-antv-plus2-helper";
+} from "@antv-plus2/helper";
 import { createContext } from "@yuyi919/vue-use";
 // @ts-ignore
 import { getOptionProps } from "ant-design-vue/es/_util/props-util";

@@ -1,5 +1,5 @@
-import { Window_Command } from ".";
-import { Window_Message } from ".";
+import { Window_Command } from "./command";
+import { Window_Message } from "./message";
 import { ConfigManager } from "../managers";
 import { $gameMessage } from "../managers";
 import { Rectangle } from "../pixi";

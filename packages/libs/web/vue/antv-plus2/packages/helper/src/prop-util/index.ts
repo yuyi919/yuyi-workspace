@@ -1,23 +1,16 @@
-import {
-  getCurrentInstance,
-  onUnmounted,
-  PropType,
-  reactive,
-  SetupContext,
-} from "@vue/composition-api";
+import { getCurrentInstance, onUnmounted, reactive, SetupContext } from "@vue/composition-api";
 import { Types } from "@yuyi919/shared-types";
 import type { TypedPropsGroup } from "@yuyi919/vue-shared-decorators";
 import { cloneDeep, omit } from "lodash";
 import Vue from "vue";
 import { getFromVueComponent } from "../optionResolver";
-export interface TypedPropOptions<T, Required extends boolean> {
-  type?: PropType<T> | null;
-  required?: Required | null;
-  default?: T | (() => T) | null;
-  validator?: any;
-}
 
 export * from "@yuyi919/vue-shared-decorators";
+export type {
+  TypedPropOptions,
+  TypedPropsGroup,
+  WalkHandler,
+} from "@yuyi919/vue-shared-decorators";
 
 export type VModelDefine<K extends string = string> = {
   prop?: K;
@@ -94,10 +87,9 @@ function _getPropsClass1<T extends Record<string, any>>(props: T, replaceInitPro
 
 type Required<T, K extends keyof T> = {
   [Key in Exclude<keyof T, K extends false | undefined ? never : K>]+?: T[Key];
-} &
-  {
-    [Key in keyof Pick<T, K extends false | undefined ? never : K>]-?: T[Key];
-  };
+} & {
+  [Key in keyof Pick<T, K extends false | undefined ? never : K>]-?: T[Key];
+};
 
 export type AutoRequired<T, K extends keyof T | false | undefined = undefined> = K extends undefined
   ? T

@@ -1,7 +1,7 @@
 /* eslint-disable no-redeclare */
 import { Select as AntSelect } from "ant-design-vue";
 import type { OptionGroup as AntSelectOptionGroup } from "ant-design-vue/types/select/option-group";
-import { VCProps, VueComponent2 } from "@yuyi919/vue-antv-plus2-helper";
+import { VCProps, VueComponent2 } from "@antv-plus2/helper";
 
 export interface ISelectOptionGroupProps extends VCProps<AntSelectOptionGroup, false> {}
 

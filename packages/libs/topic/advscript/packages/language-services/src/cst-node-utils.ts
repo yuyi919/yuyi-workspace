@@ -1,19 +1,12 @@
 /* eslint-disable prefer-const */
 import { TokenType } from "chevrotain";
 import * as langium from "langium";
-import * as ast from "./ast-utils";
-import {
-  getContainerOfType,
-  findLeafNodeAtOffset,
-  isAction,
-  LeafCstNode,
-  RegexToken,
-} from "langium";
 import {
   CompositeCstNodeImpl,
   LeafCstNodeImpl,
   RootCstNodeImpl,
 } from "langium/lib/parser/cst-node-builder";
+import * as ast from "./ast-utils";
 import { toConstMap } from "./_utils";
 
 const enum GeneratorType {
@@ -501,7 +494,7 @@ export function* searchNextTokenNode(
  * @param offset
  */
 export function findLeafNodeAtStrictOffset(node: langium.CstNode, offset: number) {
-  const result = findLeafNodeAtOffset(node, offset);
+  const result = langium.findLeafNodeAtOffset(node, offset);
   if (result.end < offset) {
     for (node of searchNextTokenNode(result, true)) {
       // 忽略隐藏节点的判断，因隐藏节点的顺序可能发生错乱
@@ -617,7 +610,7 @@ export function getNodeTypeName(target: langium.CstNode) {
     (target &&
       (getRuleCallName(target.feature) ||
         getKeywordName(target.feature) ||
-        getRuleCallName((target as LeafCstNode).tokenType) ||
+        getRuleCallName((target as langium.LeafCstNode).tokenType) ||
         getCrossReferencedName(target.feature) ||
         (isLeafCstNode(target) && getTokenTypeName(target.tokenType)))) ||
     void 0

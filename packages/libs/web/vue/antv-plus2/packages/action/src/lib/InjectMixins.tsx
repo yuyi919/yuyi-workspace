@@ -1,6 +1,6 @@
 // import AutoOperationBar from ".";
 // import { VCProps } from "../../interface";
-// import { Component } from "@yuyi919/vue-antv-plus2-helper";
+// import { Component } from "@antv-plus2/helper";
 
 // @Component({
 //   components: { AutoOperationBar } as any,

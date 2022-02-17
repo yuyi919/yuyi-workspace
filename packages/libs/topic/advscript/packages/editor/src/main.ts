@@ -14,18 +14,17 @@ import { EditorExtensionsRegistry } from "monaco-editor/esm/vs/editor/browser/ed
 import { createEditor } from "./editor";
 import { triggerCommand, COMMAND_ID } from "./utils";
 
-
 import * as Logger from "@logger";
 
 Logger.log({ a: 1 });
-Logger.time("test", {b:1})
+Logger.time("test", { b: 1 });
 class A {
   de() {
     Logger.log(class {}.toString());
   }
 }
 new A().de();
-// import("@addLibs/*.avs").then((data) => console.log("workspaces", data.default));
+import("@addLibs/*.avs").then((data) => console.log("workspaces", data.default));
 
 async function run() {
   const languageId = "advscript";
@@ -35,12 +34,12 @@ async function run() {
   // services.init().then(() => services.registerCompletionItemProvider("advscript"));
   // services.addExtraLib(() => import("@addLibs/testLib/*").then((data) => data.default));
   bootstrap(monaco, languageId, async () => {
-    Logger.log(class {}.toString());
+    // Logger.log(class {}.toString());
     // return providers;
     return {};
   }).then(async (helper) => {
     const { startClient, startClientService } = await import("./startClient");
-    Logger.log(class {}.toString());
+    // Logger.log(class {}.toString());
     // startClient();
     await startClientService(monaco);
     monaco.editor.createModel(

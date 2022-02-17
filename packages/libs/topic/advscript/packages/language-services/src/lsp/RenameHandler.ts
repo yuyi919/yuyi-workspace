@@ -20,6 +20,7 @@ export class RenameHandler extends DefaultRenameHandler {
     }
     return references;
   }
+
   async linkedEditingLocation(
     document: LangiumDocument,
     params: Lsp.LinkedEditingRangeParams
@@ -27,7 +28,7 @@ export class RenameHandler extends DefaultRenameHandler {
     const references = await this.referenceFinder.findNameReferences2(document, {
       ...params,
       context: { includeDeclaration: true },
-    }, true);
+    });
     if (!Array.isArray(references) || !references.length) {
       return undefined;
     }

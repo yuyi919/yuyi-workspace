@@ -1,4 +1,4 @@
-import * as PIXI from "pixi.js";
+import { PIXIContainer } from "./Extend";
 
 //-----------------------------------------------------------------------------
 /**
@@ -7,7 +7,7 @@ import * as PIXI from "pixi.js";
  * @class
  * @extends PIXI.Container
  */
-export class Stage extends PIXI.Container {
+export class Stage extends PIXIContainer {
   constructor(arg?: Constructable<Stage>) {
     super();
     if (arg !== Stage) {
@@ -18,7 +18,7 @@ export class Stage extends PIXI.Container {
   initialize(): void {
     // console.log("Stage", "initialize");
     // dup with constructor super()
-    // PIXI.Container.call(this);
+    super._initialize();
   }
 
   /**

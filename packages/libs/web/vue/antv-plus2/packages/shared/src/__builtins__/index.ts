@@ -7,4 +7,4 @@ export function usePrefixCls(
   return (props?.prefixCls || "ant") + "-" + tag;
 }
 
-export { classnames as cls } from "@yuyi919/vue-antv-plus2-theme";
+export { classnames as cls } from "@antv-plus2/theme";

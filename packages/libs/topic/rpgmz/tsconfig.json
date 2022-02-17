@@ -1,10 +1,11 @@
 {
   "extends": "./node_modules/@yuyi919/workspace-base-rig/profiles/tsc/tsconfig-base.json",
   "compilerOptions": {
-    "jsx": "preserve",
-    "rootDir": ".",
+    "jsx": "react",
+    "rootDir": "./src",
     "baseUrl": ".",
     "allowSyntheticDefaultImports": true,
+    "types": ["node"],
     "paths": {
       "@plugins/*": ["./node_modules/@yuyi919/rpgmz-plugins/src/*"]
     }

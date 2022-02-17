@@ -21,6 +21,7 @@ export function proxyMethod<
     ]);
   };
 }
+
 export function overwriteMethod<
   T extends any,
   K extends keyof T,
@@ -35,6 +36,7 @@ export function overwriteMethod<
     return hacker.apply(this, [this, ...args] as [T, ...Args]);
   };
 }
+
 export function proxyMethodAfter<
   T extends { new (...args: any[]): any },
   K extends keyof InstanceType<T>,
@@ -71,7 +73,7 @@ export function overwriteStaticMethod<
   Args extends T[K] extends (...args: infer Arg) => any ? Arg : [],
   Result extends T[K] extends (...args: any[]) => infer R ? R : []
 >(target: T, methodName: K, hacker: (target: T, ...args: Args) => Result) {
-  target[methodName] = (function (...args: Args) {
+  target[methodName] = function (...args: Args) {
     return hacker.apply(this, [this, ...args] as [T, ...Args]);
-  }) as unknown as T[K];
+  } as unknown as T[K];
 }

@@ -1,6 +1,6 @@
 /* eslint-disable no-redeclare */
 import { Checkbox as AntCheckbox } from "ant-design-vue";
-import { getPropsClass, VCProps, TypeTsxProps } from "@yuyi919/vue-antv-plus2-helper";
+import { getPropsClass, VCProps, TypeTsxProps } from "@antv-plus2/helper";
 
 declare module "ant-design-vue/types/ant-design-vue.d" {
   export interface ICheckboxProps extends VCProps<AntCheckbox, false> {

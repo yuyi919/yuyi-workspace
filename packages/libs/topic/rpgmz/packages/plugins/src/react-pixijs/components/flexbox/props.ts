@@ -235,7 +235,7 @@ export type FlexCustomProps = Partial<{
   /**
    * Root container position
    */
-  size: [number, number, number];
+  // size: [number, number, number];
   yogaDirection: FlexYogaDirection;
   plane: FlexPlane;
   scaleFactor?: number;

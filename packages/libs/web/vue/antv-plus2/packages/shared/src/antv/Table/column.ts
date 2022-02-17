@@ -1,6 +1,6 @@
 /* eslint-disable no-redeclare */
 import type { Column as AntColumn, SortOrder } from "ant-design-vue/types/table/column";
-import { VCProps, VueComponent2 } from "@yuyi919/vue-antv-plus2-helper";
+import { VCProps, VueComponent2 } from "@antv-plus2/helper";
 import { Table as AntTable } from "ant-design-vue";
 
 export interface IColumnProps<T = any>

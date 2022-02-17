@@ -1,11 +1,11 @@
 import * as PIXI from "pixi.js";
-import { Bitmap } from ".";
-import { TilemapRenderer } from ".";
+import { Bitmap } from "./bitmap";
+import { PIXIContainer } from "./Extend";
 
 export const MAX_GL_TEXTURES = 3;
 export const VERTEX_STRIDE = 9 * 4;
 
-export class TilemapLayer extends PIXI.Container {
+export class TilemapLayer extends PIXIContainer {
   static readonly MAX_GL_TEXTURES = MAX_GL_TEXTURES;
   static readonly VERTEX_STRIDE = VERTEX_STRIDE;
 
@@ -34,7 +34,7 @@ export class TilemapLayer extends PIXI.Container {
 
   initialize(): void {
     // dup with constructor super()
-    PIXI.Container.call(this);
+    super._initialize();
     this._elements = [];
     this._indexBuffer = null;
     this._indexArray = new Float32Array(0);

@@ -13,9 +13,8 @@
     "dev": "tsc --build --watch"
   },
   "dependencies": {
-    "@yuyi919/shared-utils": "workspace:0.0.37",
+    "@yuyi919/shared-utils": "workspace:0.0.38",
     "@yuyi919/shared-types": "workspace:0.0.5",
-    "@yuyi919/vue-jsx-factory": "workspace:0.0.1",
     "@yuyi919/vue-shared-decorators": "workspace:0.0.3",
     "@yuyi919/vue-use": "workspace:0.0.3",
     "vue-pixi-wrapper": "1.1.5",
@@ -33,7 +32,7 @@
     "pako": "1.0.11",
     "pixi.js": "5.2.4",
     "tslib": "~2.3.1",
-    "typescript": "4.1.2",
+    "typescript": "4.1.6",
     "vue": "^2.6.14",
     "vue-demi": "^0.11.3"
   },

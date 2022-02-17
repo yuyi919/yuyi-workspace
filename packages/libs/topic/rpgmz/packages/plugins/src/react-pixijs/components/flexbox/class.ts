@@ -1,9 +1,8 @@
-import { FlexCustomFullProps, R3FlexProps, setYogaProperties } from "./props";
-import { isEqual } from "lodash-es";
 import wasm from "@lazarv/wasm-yoga";
+import { defaults, isEqual, throttle } from "lodash-es";
 import { Group } from "./context";
-import { getRootShift } from "./yoga-grid";
-import { defaults } from "lodash-es";
+import { FlexCustomFullProps, R3FlexProps, setYogaProperties } from "./props";
+import { getRootShift } from "./utils";
 
 let yoga: Yoga, loader: Promise<Yoga>;
 type Pos = {
@@ -18,6 +17,8 @@ export async function loadYoga() {
   }
   yoga = await loader;
   if (loader) loader = void 0;
+  globalThis.YOGA = yoga;
+  globalThis.FlexNode = FlexNode;
   return yoga;
 }
 
@@ -26,15 +27,26 @@ export type FlexNodeConfig = {
   yogaConfig?: YGConfig;
 };
 
+let id = 0;
 export abstract class FlexNode {
-  node: YGNode;
-  _root: FlexRootNode;
-  private _onComputed: (layout: YGLayout) => any;
-
   static loadYoga = loadYoga;
   static getYoga() {
     return yoga;
   }
+  static createYogaNode(props: R3FlexProps) {
+    const node = yoga.Node.createDefault();
+    setYogaProperties(yoga, node, props, 1);
+    return node;
+  }
+  node: YGNode;
+  id = id++;
+  // get id() {
+  //   return [this.parent?.id, this._id].filter(Boolean).join("-");
+  // }
+
+  protected _root: FlexRootNode;
+  protected _onComputed: (layout: YGLayout) => any;
+
   constructor(
     public flexProps: R3FlexProps,
     public config: FlexNodeConfig,
@@ -45,6 +57,7 @@ export abstract class FlexNode {
   }
   layout?: YGLayout;
   mounted = false;
+
   get root(): FlexRootNode {
     return this.parent?.root || this._root;
   }
@@ -64,22 +77,29 @@ export abstract class FlexNode {
       return handle(node, layout);
     };
   }
+
+  destory() {
+    this._onComputed = null;
+    this.parent?.removeChild(this);
+  }
+
   fireComputed(layout: YGLayout) {
-    return this._onComputed(layout);
+    return this._onComputed?.(layout);
   }
 
   append(node: FlexNode, group: any): FlexNode {
-    this.node.insertChild(node.node, this.node.getChildCount());
     node.parent = this;
+    this.node.insertChild(node.node, this.node.getChildCount());
     return this.root.registerBox(node, group);
   }
 
   removeChild(node: FlexNode) {
+    if (this.root) {
+      this.root.unregisterBox(node);
+    }
     this.node.removeChild(node.node);
     node.parent = void 0;
     node.root = void 0;
-
-    this.root.unregisterBox(node);
   }
 
   computedLayout(
@@ -108,20 +128,29 @@ export class FlexNodeItem extends FlexNode {
 
 export class FlexRootNode extends FlexNode {
   children: FlexNodeItem[] = [];
+  inited = false;
   constructor(public props: FlexCustomFullProps, public flexProps: R3FlexProps, config?: YGConfig) {
     super(flexProps, {
       centerAnchor: props.centerAnchor,
       yogaConfig: config,
     });
     this._root = this;
+    const ref = throttle(this.reflow, 17);
+    this.reflow = async (node, disabled) => {
+      return ref.call(this, node, disabled);
+    };
   }
 
   update(config: FlexCustomFullProps, props: R3FlexProps) {
-    setYogaProperties(yoga, this.node, props, this.root.scaleFactor);
+    setYogaProperties(yoga, this.node, props, this.scaleFactor);
     if (config) {
       const { centerAnchor = this.config.centerAnchor } = config;
       this.props = defaults(this.props, config);
       this.config = { ...this.config, centerAnchor };
+    }
+    if (!this.inited) {
+      this.inited = true;
+      console.log("inited");
     }
   }
 
@@ -130,13 +159,14 @@ export class FlexRootNode extends FlexNode {
   }
 
   registerBox(node: FlexNodeItem, group: Group) {
-    console.log("registerBox", this.children);
+    console.log("registerBox", node);
     const i = this.children.indexOf(node);
     if (i > -1) {
       this.children.splice(i, 1);
     }
     const box: FlexNodeItem = node;
     this.children.push(node);
+    this.reflow(node, true);
     return box;
   }
 
@@ -147,10 +177,17 @@ export class FlexRootNode extends FlexNode {
     }
   }
 
-  reflow(disableSizeRecalc?: boolean) {
+  async reflow(source: FlexNode, disableSizeRecalc?: boolean) {
+    if (this.inited) {
+      return this._reflow(disableSizeRecalc);
+    }
+    console.log("blocked", source);
+  }
+
+  private _reflow(disableSizeRecalc?: boolean) {
     if (!disableSizeRecalc) {
       // Recalc all the sizes
-      this.children.forEach((node) => {
+      for (const node of this.children) {
         const { flexProps } = node;
         const scaledWidth = flexProps.width;
         const scaledHeight = flexProps.height;
@@ -174,7 +211,7 @@ export class FlexRootNode extends FlexNode {
             height: flexProps.height,
           });
         }
-      });
+      }
     }
     const {
       node,
@@ -183,7 +220,7 @@ export class FlexRootNode extends FlexNode {
     } = this;
     // Perform yoga layout calculation
     node.calculateLayout(flexWidth * scaleFactor, flexHeight * scaleFactor, yogaDirection);
-    console.log("calculateLayout", this.children);
+    console.log("calculateLayout", [...this.children], this, node.getComputedLayout());
     const rootWidth = node.getComputedWidth();
     const rootHeight = node.getComputedHeight();
 
@@ -191,10 +228,11 @@ export class FlexRootNode extends FlexNode {
     let maxX = 0;
     let minY = 0;
     let maxY = 0;
-    console.log("Reposition after recalculation");
     // Reposition after recalculation
-    this.children.forEach((node, index, list) => {
+
+    for (const node of this.children) {
       const layout = node.node.getComputedLayout();
+      // console.log("calculateLayout", layout);
       const { left, top, width, height } = layout;
       const [mainAxisShift, crossAxisShift] = getRootShift(
         rootCenterAnchor,
@@ -221,7 +259,7 @@ export class FlexRootNode extends FlexNode {
       node.mounted = true;
       // group.position.copy(position);
       // console.log(node, left, top, width, height);
-    });
+    }
     return {
       width: (maxX - minX) / scaleFactor,
       height: (maxY - minY) / scaleFactor,

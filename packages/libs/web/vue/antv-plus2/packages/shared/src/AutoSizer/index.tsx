@@ -7,7 +7,7 @@ import {
   watch,
 } from "@vue/composition-api";
 import { useElementRect, useInherit, useNamedRef } from "@yuyi919/vue-use";
-import { autoSizer, styled } from "@yuyi919/vue-antv-plus2-theme";
+import { autoSizer, styled } from "@antv-plus2/theme";
 
 interface IAutoSizerProps {
   nowrap?: boolean;

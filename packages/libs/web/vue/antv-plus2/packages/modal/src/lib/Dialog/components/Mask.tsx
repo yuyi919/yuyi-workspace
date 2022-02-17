@@ -1,4 +1,4 @@
-import { getTransitionProps, Transition } from "@yuyi919/vue-antv-plus2-helper";
+import { getTransitionProps, Transition } from "@antv-plus2/helper";
 import { defineComponent } from "vue-demi";
 import { LazyRenderBox } from "../LazyRenderBox";
 
@@ -24,7 +24,7 @@ export const Mask = defineComponent({
     };
     return () => {
       const maskTransition = methods.getMaskTransitionName();
-      const content = props.visible &&  (
+      const content = props.visible && (
         <LazyRenderBox
           // directives={[{ name: "show", value: props.visible }]}
           key="mask"

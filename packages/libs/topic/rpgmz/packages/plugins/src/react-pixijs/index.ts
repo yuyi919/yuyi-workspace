@@ -2,18 +2,28 @@
 // import wasm from "@lazarv/wasm-yoga";
 // import { setYogaProperties } from "./props";
 
-Yuyi919.proxyStaticMethodAfter(globalThis.Video, "_createElement", (target) => {
+const { Video, Graphics } = globalThis;
+Yuyi919.proxyStaticMethodAfter(Video, "_createElement", (target) => {
   target._element.style.display = "none";
 });
 
-Yuyi919.proxyStaticMethodAfter(globalThis.Video, "_updateVisibility", (target, _, visible) => {
+Yuyi919.proxyStaticMethodAfter(Video, "_updateVisibility", (target, _, visible) => {
   target._element.style.display = visible ? "" : "none";
 });
-if (globalThis.Video._element && !globalThis.Video.isPlaying()) {
-  globalThis.Video._element.style.display = "none";
+if (Video._element && !Video.isPlaying()) {
+  Video._element.style.display = "none";
 }
 
+if (Graphics._errorPrinter) {
+  Graphics._errorPrinter.style.pointerEvents = "none";
+}
+
+Yuyi919.proxyStaticMethodAfter(Graphics, "_createErrorPrinter", (target, _) => {
+  target._errorPrinter.style.pointerEvents = "none";
+});
+
 export * from "./root";
+export * from "./types";
 
 // wasm().then((yoga) => {
 //   const Node = yoga.Node;

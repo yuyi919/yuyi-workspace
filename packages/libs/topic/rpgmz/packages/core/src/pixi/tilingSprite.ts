@@ -2,6 +2,7 @@ import * as PIXI from "pixi.js";
 import { Rectangle } from ".";
 import { Point } from ".";
 import { Bitmap } from ".";
+import { PIXITilingSprite } from "./Extend";
 
 //-----------------------------------------------------------------------------
 /**
@@ -11,7 +12,7 @@ import { Bitmap } from ".";
  * @extends PIXI.TilingSprite
  * @param {Bitmap} bitmap - The image for the tiling sprite.
  */
-export class TilingSprite extends PIXI.TilingSprite {
+export class TilingSprite extends PIXITilingSprite {
   static _emptyBaseTexture = new PIXI.BaseTexture(undefined, {
     width: 1,
     height: 1,
@@ -24,10 +25,10 @@ export class TilingSprite extends PIXI.TilingSprite {
   origin = new Point();
 
   constructor(bitmap?: Bitmap);
-  constructor(thisClass: Constructable<TilingSprite>);
+  constructor(thisClass?: Constructable<TilingSprite>);
   constructor(arg?: any) {
-    super(new PIXI.Texture(TilingSprite._emptyBaseTexture));
-    if (typeof arg === "function" && arg === TilingSprite) {
+    super();
+    if (arg === TilingSprite) {
       return;
     }
     this.initialize(...arguments);
@@ -41,7 +42,7 @@ export class TilingSprite extends PIXI.TilingSprite {
     const frame = new Rectangle();
     const texture = new PIXI.Texture(TilingSprite._emptyBaseTexture, frame);
     // dup with constructor super()
-    PIXI.TilingSprite.call(this, texture);
+    super._initialize(texture);
     this._bitmap = bitmap;
     this._width = 0;
     this._height = 0;
@@ -99,7 +100,7 @@ export class TilingSprite extends PIXI.TilingSprite {
    */
   update(): void {
     for (const child of this.children) {
-      (child as TilingSprite).update?.()
+      (child as TilingSprite).update?.();
     }
   }
 

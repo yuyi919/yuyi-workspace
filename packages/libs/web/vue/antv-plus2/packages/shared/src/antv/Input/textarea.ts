@@ -1,6 +1,6 @@
 /* eslint-disable no-redeclare */
 import type { TextArea as AntTextArea } from "ant-design-vue/types/input/textarea";
-import { TypeTsxProps, VCProps } from "@yuyi919/vue-antv-plus2-helper";
+import { TypeTsxProps, VCProps } from "@antv-plus2/helper";
 import { ITextAreaProps, ITextAreaEvents, ITextAreaPublicMembers } from "ant-design-vue";
 
 declare module "ant-design-vue/types/ant-design-vue.d" {

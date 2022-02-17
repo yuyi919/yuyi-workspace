@@ -1,9 +1,9 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 // import vue from "@vitejs/plugin-vue";
 // import vueJsx from "@vitejs/plugin-vue-jsx";
-import { defineViteConfig } from "@yuyi919/build-tools";
 import { resolve } from "path";
 import type { ConfigEnv, UserConfig } from "vite";
+import { defineConfig } from "vite";
 import html from "vite-plugin-html";
 import builtins from "rollup-plugin-node-builtins";
 import VitePluginReact from "@vitejs/plugin-react";
@@ -44,111 +44,108 @@ export function createProxy(list: ProxyList = [["/rpt", "http://10.100.156.251:8
   }
   return ret;
 }
-export default defineViteConfig({
-  hooks: ({ command, mode }: ConfigEnv): UserConfig => {
-    const isBuild = command === "build";
-    const VITE_GLOB_APP_TITLE = "VITE_GLOB_APP_TITLE";
-    return {
-      mode,
-      resolve: {
-        alias: {
-          "/@/": `${pathResolve("./src/App")}/`,
-          "/src/": `${pathResolve("./src")}/`,
-          "@yuyi919/rpgmz-core": `${pathResolve("./packages/core/src")}/`,
-          "@yuyi919/rpgmz-plugin-transformer": `${pathResolve(
-            "./packages/plugin-transformer/src"
-          )}/`,
-          lodash: "lodash-es",
-          "@advscript": pathResolve("../advscript/src/index.ts"),
-          "lodash/": "lodash-es/",
-          "pixi.js": pathResolve("./packages/core/node_modules/pixi.js"),
-          "@plugins/": `${pathResolve("./packages/plugins/src")}/`,
-          "@lazarv/wasm-yoga": pathResolve("./packages/plugins/fix/yoga.js"),
-        },
+export default defineConfig(({ command, mode }: ConfigEnv): UserConfig => {
+  const isBuild = command === "build";
+  const VITE_GLOB_APP_TITLE = "VITE_GLOB_APP_TITLE";
+  return {
+    mode,
+    resolve: {
+      dedupe: ["react", "react-dom", "pixi.js"],
+      alias: {
+        "@yuyi919/rpgmz-core": `${pathResolve("./packages/core/src")}/`,
+        "@yuyi919/rpgmz-plugin-transformer": `${pathResolve("./packages/plugin-transformer/src")}/`,
+        lodash: "lodash-es",
+        "@advscript": pathResolve("../advscript/src/index.ts"),
+        "lodash/": "lodash-es/",
+        "@plugins/": `${pathResolve("./packages/plugins/src")}/`,
+        "@lazarv/wasm-yoga": pathResolve("./packages/plugins/fix/yoga.js"),
       },
-      define: {
-        "process.env.NODE_ENV": JSON.stringify(mode),
-      },
-      esbuild: {
-        // jsx: "transform",
-        // jsxFactory: "jsx_runtime.jsxEsbuild",
-        // jsxFragment: "jsx_runtime.Fragment",
-        // jsxInject: "import * as jsx_runtime from '@yuyi919/vue-jsx-factory'",
-      },
-      root: pathResolve("."),
-      publicDir: command === "build" ? false : "project",
-      cacheDir: pathResolve("./node_modules/.vite"),
-      css: {
-        preprocessorOptions: {
-          less: {
-            modifyVars: {
-              // reference:  Avoid repeated references
-              // hack: `true; @import (reference) "${resolve("src/App/design/config.less")}";`,
-              // ...modifyVars,
-            },
-            javascriptEnabled: true,
+    },
+    define: {
+      "process.env.NODE_ENV": JSON.stringify(mode),
+    },
+    esbuild: {
+      // jsx: "transform",
+      // jsxFactory: "jsx_runtime.jsxEsbuild",
+      // jsxFragment: "jsx_runtime.Fragment",
+      // jsxInject: "import * as jsx_runtime from '@yuyi919/vue-jsx-factory'",
+    },
+    root: __dirname,
+    publicDir: command === "build" ? false : "project",
+    cacheDir: pathResolve("./node_modules/.vite"),
+    css: {
+      preprocessorOptions: {
+        less: {
+          modifyVars: {
+            // reference:  Avoid repeated references
+            // hack: `true; @import (reference) "${resolve("src/App/design/config.less")}";`,
+            // ...modifyVars,
           },
+          javascriptEnabled: true,
         },
       },
-      server: {
-        port: 8080,
-        proxy: {
-          ...createProxy([["/vro", "http://localhost:4090/api/v1"]]),
-        },
-        hmr: {
-          overlay: true,
-        },
+    },
+    server: {
+      port: 8080,
+      // proxy: {
+      //   ...createProxy([["/vro", "http://localhost:4090/api/v1"]]),
+      // },
+    },
+    assetsInclude: [/project\/img/, /project\/audio/, /project\/icon/],
+    build: {
+      target: "esnext",
+      outDir: "./dist",
+      assetsDir: "bundle",
+      emptyOutDir: true,
+      rollupOptions: {
+        output: { strict: false },
+        external: ["icon.png"],
       },
-      assetsInclude: [/project\/img/, /project\/audio/, /project\/icon/],
-      build: {
-        target: "esnext",
-        outDir: "./dist",
-        assetsDir: "bundle",
-        emptyOutDir: true,
-        rollupOptions: {
-          external: ["icon.png"],
+    },
+    plugins: [
+      VitePluginReact({
+        babel: {
+          configFile: false,
         },
+        // jsxRuntime: "classic",
+        // fastRefresh: false
+      }),
+      {
+        name: "builtins",
+        enforce: "pre",
+        ...builtins({ crypto: true }),
       },
-      plugins: [
-        // VitePluginStoryScript(),
-        // VitePluginFileSystem(),
-        // PurgeIcons(),
-        // vueJsx({}),
-        // vue({}),
-        {
-          name: "builtins",
-          enforce: "pre",
-          ...builtins({ crypto: true }),
-        },
-        VitePluginReact(),
-        html({
-          minify: isBuild,
-          inject: {
-            injectData: {
-              entry: "./src/main.ts",
-              title: VITE_GLOB_APP_TITLE,
-            },
-            tags: isBuild ? [] : [],
+      html({
+        minify: isBuild,
+        inject: {
+          injectData: {
+            entry: "./src/main.ts",
+            title: VITE_GLOB_APP_TITLE,
           },
-        }),
+          tags: isBuild ? [] : [],
+        },
+      }),
+    ],
+    optimizeDeps: {
+      include: [
+        "tslib",
+        // "storytailor/out/environment",
+        // "lodash-es",
+        // "resize-observer-polyfill",
+        // "ant-design-vue",
+        // "ant-design-vue/es/locale/zh_CN",
+        // "vue-types",
+        // "source-map",
+        // "@ant-design/icons-vue",
+        "react",
+        "react-dom",
+        "@inlet/react-pixi",
+        "pixi-flex",
+        "vue",
+        "pixi.js",
+        "@lazarv/wasm-yoga",
       ],
-      optimizeDeps: {
-        include: [
-          "tslib",
-          // "storytailor/out/environment",
-          // "lodash-es",
-          // "resize-observer-polyfill",
-          // "ant-design-vue",
-          // "ant-design-vue/es/locale/zh_CN",
-          // "vue-types",
-          // "source-map",
-          // "@ant-design/icons-vue",
-          "vue",
-          "pixi.js",
-          "@lazarv/wasm-yoga",
-        ],
-        exclude: ["fs"],
-      },
-    };
-  },
+      exclude: ["fs"],
+    },
+  };
 });

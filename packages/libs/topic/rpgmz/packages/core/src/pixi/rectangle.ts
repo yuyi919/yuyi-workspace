@@ -1,4 +1,5 @@
 import * as PIXI from "pixi.js";
+import { PIXIRectangle } from "./Extend";
 
 //-----------------------------------------------------------------------------
 /**
@@ -11,11 +12,11 @@ import * as PIXI from "pixi.js";
  * @param {number} width - The width of the rectangle.
  * @param {number} height - The height of the rectangle.
  */
-export class Rectangle extends PIXI.Rectangle {
+export class Rectangle extends PIXIRectangle {
   constructor(x?: number, y?: number, width?: number, height?: number);
   constructor(thisClass: Constructable<Rectangle>);
   constructor(arg?: any) {
-    super(...arguments);
+    super();
     if (arg === Rectangle) {
       return;
     }
@@ -24,7 +25,7 @@ export class Rectangle extends PIXI.Rectangle {
 
   initialize(x?: number, y?: number, width?: number, height?: number) {
     // dup with constructor super()
-    PIXI.Rectangle.call(this, x, y, width, height);
+    this._initialize(x, y, width, height);
   }
 }
 

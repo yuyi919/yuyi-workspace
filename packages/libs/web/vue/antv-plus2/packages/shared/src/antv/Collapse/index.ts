@@ -1,5 +1,5 @@
 /* eslint-disable no-redeclare */
-import { VCProps, VueComponent2 } from "@yuyi919/vue-antv-plus2-helper";
+import { VCProps, VueComponent2 } from "@antv-plus2/helper";
 import { Collapse as AntCollapse } from "ant-design-vue";
 
 export interface ICollapseProps extends VCProps<AntCollapse, false> {}

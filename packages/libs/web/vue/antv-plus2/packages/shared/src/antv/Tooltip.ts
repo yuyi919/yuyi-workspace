@@ -1,7 +1,7 @@
 /* eslint-disable no-redeclare */
 // @ts-nocheck
 import { Tooltip as AntTooltip } from "ant-design-vue";
-import { getPropsClass, VCProps, VueComponent2 } from "@yuyi919/vue-antv-plus2-helper";
+import { getPropsClass, VCProps, VueComponent2 } from "@antv-plus2/helper";
 
 export interface ITooltipProps extends VCProps<AntTooltip, false> {}
 export interface ITooltipEvents {}

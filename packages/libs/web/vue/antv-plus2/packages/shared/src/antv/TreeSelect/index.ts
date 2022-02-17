@@ -1,5 +1,5 @@
 /* eslint-disable no-redeclare */
-import { TypeTsxProps, VCProps } from "@yuyi919/vue-antv-plus2-helper";
+import { TypeTsxProps, VCProps } from "@antv-plus2/helper";
 import {
   ITreeSelectEvents,
   ITreeSelectProps,

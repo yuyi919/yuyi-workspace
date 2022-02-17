@@ -78,32 +78,22 @@ export function getNodeTypeWithKind<T extends TypeName = TypeName>(
         "literal",
         (node as ts.StringLiteral).text,
         "string",
-        node as ts.TypeNode
+        node
       ) as TypeDefine<T>;
     case ts.SyntaxKind.NumericLiteral:
       return createNodeTypeDefine(
         "literal",
         (node as ts.NumericLiteral).text,
         "number",
-        node as ts.TypeNode
+        node
       ) as TypeDefine<T>;
     case ts.SyntaxKind.ArrayType:
-      return createNodeTypeDefine(
-        "array",
-        "Array",
-        "reference",
-        node as ts.TypeNode
-      ) as TypeDefine<T>;
+      return createNodeTypeDefine("array", "Array", "reference", node) as TypeDefine<T>;
     case ts.SyntaxKind.TypeReference: {
       const typeName = (node as ts.TypeReferenceNode).typeName as ts.Identifier | ts.QualifiedName;
       const id = ts.isQualifiedName(typeName) ? typeName.right : typeName;
       // console.log(ts.SyntaxKind[typeName.kind], ts.isQualifiedName(typeName), ts.idText(id), printNode(typeName))
-      return createNodeTypeDefine(
-        ts.idText(id) as T,
-        void 0,
-        "reference",
-        node as ts.TypeNode
-      ) as TypeDefine<T>;
+      return createNodeTypeDefine(ts.idText(id) as T, void 0, "reference", node) as TypeDefine<T>;
     }
   }
   return createNodeTypeDefine("unknown") as TypeDefine<T>;
@@ -113,7 +103,7 @@ function createNodeTypeDefine<T extends TypeName, Text extends DynamicString | T
   name: T,
   text: Text = name as Text,
   type: TypeDefine["type"] = "keyword",
-  node?: ts.TypeNode
+  node?: ts.TypeNode | ts.LiteralExpression
 ): TypeDefine<T> {
   return {
     name,

@@ -1,6 +1,7 @@
 {
-  "extends": "./node_modules/@yuyi919/workspace-base-rig/profiles/tsc/tsconfig-base.json",
+  "extends": "../../tsconfig.json",
   "compilerOptions": {
+    "baseUrl": "../..",
     "jsx": "react-jsx",
     "jsxImportSource": "@yuyi919/vue-jsx-factory",
     "module": "esnext",

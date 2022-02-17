@@ -1,5 +1,5 @@
 import { Types } from "@yuyi919/shared-types";
-import { getGridSpanStyle, useGridSpan } from "@yuyi919/vue-antv-plus2-shared";
+import { getGridSpanStyle, useGridSpan } from "@antv-plus2/shared";
 import { useEffect, useElementRect, useInherit, useNamedRef, useState } from "@yuyi919/vue-use";
 import { Icon, Popover, Tooltip } from "ant-design-vue";
 import { computed, defineComponent } from "vue-demi";

@@ -5,7 +5,7 @@ import { MZ } from "../MZ";
 import { Bitmap } from "./bitmap";
 import { Rectangle } from "./rectangle";
 import { Point } from "./point";
-import { WindowSuper } from "./windowSuper";
+import { SuperWindow } from "./windowSuper";
 
 interface RectangleLike {
   x: number;
@@ -20,7 +20,7 @@ interface RectangleLike {
  * @class
  * @extends PIXI.Container
  */
-export class Window extends WindowSuper {
+export class Window extends SuperWindow {
   _isWindow = true;
   _windowskin: Bitmap | null = null;
   _width = 0;
@@ -32,7 +32,7 @@ export class Window extends WindowSuper {
   _margin = 4;
   _colorTone: MZ.RGBAColorArray = [0, 0, 0, 0];
   _innerChildren: PIXI.DisplayObject[] = [];
-  _container: WindowSuper | null = null;
+  _container: SuperWindow | null = null;
   _backSprite: Sprite | null = null;
   _frameSprite: Sprite | null = null;
   _contentsBackSprite: Sprite | null = null;
@@ -63,7 +63,7 @@ export class Window extends WindowSuper {
 
   initialize(): void {
     // dup with contructor super()
-    PIXI.Container.call(this);
+    super._initialize();
 
     this._isWindow = true;
     this._windowskin = null;
@@ -345,7 +345,7 @@ export class Window extends WindowSuper {
     if (this.active) {
       this._animationCount++;
     }
-    super.update()
+    super.update();
   }
 
   /**
@@ -508,7 +508,7 @@ export class Window extends WindowSuper {
   }
 
   _createContainer(): void {
-    this._container = new WindowSuper();
+    this._container = new SuperWindow();
     this.addChild(this._container);
   }
 

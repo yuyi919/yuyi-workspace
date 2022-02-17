@@ -1,4 +1,4 @@
-import * as PIXI from "pixi.js";
+import { PIXIPoint } from "./Extend";
 
 //-----------------------------------------------------------------------------
 /**
@@ -9,12 +9,12 @@ import * as PIXI from "pixi.js";
  * @param {number} x - The x coordinate.
  * @param {number} y - The y coordinate.
  */
-export class Point extends PIXI.Point {
+export class Point extends PIXIPoint {
   constructor(x?: number, y?: number);
-  constructor(thisClass: Constructable<Point>);
+  constructor(thisClass: Constructable<any>);
   constructor(arg?: any) {
-    super(...arguments);
-    if (arg === Point) {
+    super();
+    if (typeof arg === "function") {
       return;
     }
     this.initialize(...arguments);
@@ -22,6 +22,6 @@ export class Point extends PIXI.Point {
 
   initialize(x?: number, y?: number): void {
     // dup with constructor super()
-    PIXI.Point.call(this, x, y);
+    super._initialize(x, y);
   }
 }

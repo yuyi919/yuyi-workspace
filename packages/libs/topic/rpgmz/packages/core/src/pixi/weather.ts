@@ -1,9 +1,9 @@
-import * as PIXI from "pixi.js";
 import { Point } from "./point";
 import { Sprite } from "./sprite";
 import { Bitmap } from "./bitmap";
 import { ScreenSprite } from "./screenSprite";
 import { Graphics } from "../dom/graphics";
+import { PIXIContainer } from "./Extend";
 
 export type WeatherType = "none" | "rain" | "storm" | "snow";
 
@@ -25,7 +25,7 @@ declare module "pixi.js" {
  * @class
  * @extends PIXI.Container
  */
-export class Weather extends PIXI.Container {
+export class Weather extends PIXIContainer {
   _width = 0;
   _height = 0;
   _sprites: WeatherSprite[] = [];
@@ -44,12 +44,13 @@ export class Weather extends PIXI.Container {
     if (arg === Weather) {
       return;
     }
-    this.initialize(...arguments);
+    this.initialize(arg);
   }
 
-  initialize(..._: any): void {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  initialize(arg?: any): void {
     // move to constructor super()
-    // PIXI.Container.call(this);
+    super._initialize();
 
     this._width = Graphics.width;
     this._height = Graphics.height;

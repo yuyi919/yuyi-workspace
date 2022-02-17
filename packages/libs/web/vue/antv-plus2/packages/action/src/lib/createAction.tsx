@@ -1,6 +1,6 @@
 import { defineComponent } from "@vue/composition-api";
 import { expect$, sleep, stubFunction } from "@yuyi919/shared-utils";
-import { extractProps, TypedPropsGroup } from "@yuyi919/vue-antv-plus2-helper";
+import { extractProps, TypedPropsGroup } from "@antv-plus2/helper";
 import { Popconfirm } from "ant-design-vue";
 import AutoOperationBar from "./component";
 import { IConfirmButtonProps } from "./interface";
