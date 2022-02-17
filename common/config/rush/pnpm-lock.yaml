@@ -465,7 +465,7 @@ importers:
 
   ../../packages/libs/tools/workspace-base-rig:
     specifiers:
-      "@microsoft/api-extractor": 7.18.7
+      "@microsoft/api-extractor": 7.19.4
       "@nrwl/eslint-plugin-nx": 12.5.8
       "@nrwl/jest": 12.5.8
       "@rushstack/eslint-config": ~2.5.1
@@ -482,7 +482,7 @@ importers:
       ts-jest: ~27.0.5
       typescript: 4.5.5
     dependencies:
-      "@microsoft/api-extractor": 7.18.7
+      "@microsoft/api-extractor": 7.19.4
       "@nrwl/eslint-plugin-nx": 12.5.8_d606b7f89031c4bce6e32ca19715a082
       "@nrwl/jest": 12.5.8
       "@rushstack/eslint-config": 2.5.1_typescript@4.5.5
@@ -4430,17 +4430,6 @@ packages:
       "@rushstack/node-core-library": 3.44.0
     dev: true
 
-  /@microsoft/api-extractor-model/7.13.5:
-    resolution:
-      {
-        integrity: sha512-il6AebNltYo5hEtqXZw4DMvrwBPn6+F58TxwqmsLY+U+sSJNxaYn2jYksArrjErXVPR3gUgRMqD6zsdIkg+WEQ==,
-      }
-    dependencies:
-      "@microsoft/tsdoc": 0.13.2
-      "@microsoft/tsdoc-config": 0.15.2
-      "@rushstack/node-core-library": 3.40.0
-    dev: false
-
   /@microsoft/api-extractor-model/7.15.3:
     resolution:
       {
@@ -4450,7 +4439,6 @@ packages:
       "@microsoft/tsdoc": 0.13.2
       "@microsoft/tsdoc-config": 0.15.2
       "@rushstack/node-core-library": 3.45.0
-    dev: true
 
   /@microsoft/api-extractor/7.18.20:
     resolution:
@@ -4473,27 +4461,6 @@ packages:
       typescript: 4.4.4
     dev: true
 
-  /@microsoft/api-extractor/7.18.7:
-    resolution:
-      {
-        integrity: sha512-JhtV8LoyLuIecbgCPyZQg08G1kngIRWpai2UzwNil9mGVGYiDZVeeKx8c2phmlPcogmMDm4oQROxyuiYt5sJiw==,
-      }
-    hasBin: true
-    dependencies:
-      "@microsoft/api-extractor-model": 7.13.5
-      "@microsoft/tsdoc": 0.13.2
-      "@microsoft/tsdoc-config": 0.15.2
-      "@rushstack/node-core-library": 3.40.0
-      "@rushstack/rig-package": 0.3.0
-      "@rushstack/ts-command-line": 4.9.0
-      colors: 1.2.5
-      lodash: 4.17.21
-      resolve: 1.17.0
-      semver: 7.3.5
-      source-map: 0.6.1
-      typescript: 4.3.5
-    dev: false
-
   /@microsoft/api-extractor/7.19.4:
     resolution:
       {
@@ -4513,7 +4480,6 @@ packages:
       semver: 7.3.5
       source-map: 0.6.1
       typescript: 4.5.5
-    dev: true
 
   /@microsoft/rush-lib/5.52.0:
     resolution:
@@ -25744,6 +25710,7 @@ packages:
       }
     engines: { node: ">=4.2.0" }
     hasBin: true
+    dev: true
 
   /typescript/4.4.4:
     resolution:

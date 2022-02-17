@@ -1,0 +1,42 @@
+{
+  "incrementalBuildIgnoredGlobs": ["temp"],
+  // Let's eliminate the "buildCacheOptions" section, since now we seem to
+  // only need one setting in that category
+  "disableBuildCacheForProject": false,
+  // Note: these "settings" have no effect unless command-line.json defines the operation
+  "operationSettings": [
+    // 👈👈👈 revised
+    {
+      // This is the key from the package.json "scripts" section.
+      // To support rigs, it is OKAY to provide configuration for scripts that
+      // do not actually exist in package.json or are not actually mapped to
+      // a Rush command.
+      "operationName": "_phase:build", // 👈👈👈 revised
+      // These are the folders to be cached.  Their cache keys must not overlap,
+      // HOWEVER that validation can safely ignore: (1) scripts that aren't mapped
+      // to a Rush command in a given repo, (2) scripts that have opted out of
+      // caching, e.g. via disableBuildCacheForProject or disableBuildCacheForOperation
+      "outputFolderNames": ["lib", "dist"],
+      // Allows you to selectively disable the build cache for just one script
+      "disableBuildCacheForOperation": false // 👈👈👈 revised
+      // FUTURE FEATURE: If your shell command doesn't support a custom parameter
+      // such as "--lite" or "--production", you can filter it here.  This avoids
+      // having to replace "rm -Rf lib && tsc" with "node build.js" simply to
+      // discard a parameter.
+      // (We'll have a separate design discussion for this idea.)
+      // "unsupportedParameters": ["--lite"],
+      // FUTURE FEATURE: We could optionally allow rigs to define shell scripts in
+      // rush-project.json, eliminating the need for projects to copy+paste
+      // these commands into package.json.
+      // (We'll have a separate design discussion for this idea.)
+      // "shellScript": "heft build --clean"
+    },
+    {
+      // Addressing the question from PR #3144, the Rush Stack rig could provide
+      // both "build" and "_phase:build" definitions, allowing the rig to be used
+      // in any monorepo regardless of whether they are using phased commands.
+      "operationName": "build",
+      "outputFolderNames": ["lib", "dist"]
+    }
+  ]
+}

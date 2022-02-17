@@ -27,6 +27,7 @@
       "watchForChanges": true,
       "ignoreMissingScript": true,
       "incremental": true,
+      "allowWarningsInSuccessfulBuild": true,
       "safeForSimultaneousRushProcesses": true
     },
     {
@@ -45,13 +46,18 @@
       "enableParallelism": true,
       "ignoreMissingScript": true,
       "incremental": true,
-      "safeForSimultaneousRushProcesses": true
+      "safeForSimultaneousRushProcesses": true,
+      "allowWarningsInSuccessfulBuild": true
     },
     {
       "commandKind": "bulk",
       "name": "build",
       "ignoreMissingScript": true,
-      "summary": "build"
+      "summary": "build",
+      "incremental": true,
+      "enableParallelism": true,
+      "allowWarningsInSuccessfulBuild": true,
+      "description": "build"
     },
     {
       /**

@@ -7,8 +7,8 @@
   "module": "dist/web-solid-playground.esm.js",
   "types": "dist/index.d.ts",
   "scripts": {
-    "build": "pnpm build:client",
-    "build:dev": "pnpm build:client",
+    "build2": "pnpm build:client",
+    "build:dev2": "pnpm build:client",
     "build:watch": "pnpm build:client",
     "build:client": "cross-env IS_CLIENT=true vite build --outDir dist/client",
     "build:server": "vite build --outDir dist/server --ssr src/server.tsx",

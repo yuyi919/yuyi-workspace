@@ -1,0 +1,20 @@
+{
+  "incrementalBuildIgnoredGlobs": ["temp/**"],
+
+  "disableBuildCacheForProject": false, // formerly buildCacheOptions.disableBuildCache
+
+  "operationSettings": [
+    {
+      "operationName": "build",
+      "outputFolderNames": ["lib", "dist"]
+    },
+    {
+      "operationName": "_phase:build", // formerly phaseName
+      "outputFolderNames": ["lib", "dist"]
+    },
+    {
+      "operationName": "test",
+      "disableBuildCacheForOperation": true
+    }
+  ]
+}
