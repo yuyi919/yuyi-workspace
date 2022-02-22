@@ -8,10 +8,8 @@
   "types": "dist/index.d.ts",
   "scripts": {
     "start": "vite --port 37151",
-    "build": "tsc --build --force",
-    "build:dev": "tsc --build",
-    "build:watch": "tsc --build --watch",
-    "dev": "tsc --build --watch"
+    "build": "vite build",
+    "build:dev": "vite build --minify=false"
   },
   "dependencies": {
     "@yuyi919/rpgmz-core": "workspace:0.0.3",
@@ -25,7 +23,10 @@
     "lodash-es": "4.17.21"
   },
   "devDependencies": {
+    "@yuyi919/build-tools": "workspace:0.1.13",
     "@yuyi919/rpgmz-plugins": "workspace:0.0.3",
+    "@yuyi919/shared-types": "workspace:0.0.8",
+    "@yuyi919/workspace-base-rig": "workspace:1.2.8",
     "@types/react": "^17.0.33",
     "@types/react-dom": "^17.0.11",
     "@types/jest": "~27.0.1",
@@ -33,9 +34,6 @@
     "@types/node": "~16.7.2",
     "@types/nw.js": "^0.13.9",
     "@vitejs/plugin-react": "^1.0.7",
-    "@yuyi919/shared-types": "workspace:0.0.8",
-    "@yuyi919/workspace-base-rig": "workspace:1.2.8",
-    "@yuyi919/build-tools": "workspace:0.1.13",
     "@inlet/react-pixi": "^6.6.5",
     "regenerator-runtime": "0.13.7",
     "http-proxy": "^1.18.1",

@@ -64,10 +64,15 @@ export default defineConfig(({ command, mode }: ConfigEnv): UserConfig => {
         "@lazarv/wasm-yoga": pathResolve("./packages/plugins/fix/yoga.js")
       }
     },
-    define: {
-      "process.env.NODE_ENV": JSON.stringify(mode),
-      "global.": "globalThis."
-    },
+    define:
+      command === "build"
+        ? {
+            "process.env.NODE_ENV": JSON.stringify(mode),
+            "global.performance": "globalThis.performance"
+          }
+        : {
+            "process.env.NODE_ENV": JSON.stringify(mode)
+          },
     esbuild: {
       // jsx: "transform",
       // jsxFactory: "jsx_runtime.jsxEsbuild",
@@ -97,7 +102,7 @@ export default defineConfig(({ command, mode }: ConfigEnv): UserConfig => {
     },
     assetsInclude: [/project\/img/, /project\/audio/, /project\/icon/],
     build: {
-      target: "esnext",
+      target: ["esnext"],
       outDir: "./dist",
       assetsDir: "bundle",
       emptyOutDir: true,
@@ -106,36 +111,36 @@ export default defineConfig(({ command, mode }: ConfigEnv): UserConfig => {
         external: ["icon.png"]
       },
       commonjsOptions: {
-        include: [
-          "@lazarv/wasm-yoga",
-          /fix\/yoga\.js/,
-          // /@pixi\/polyfill/,
-          // /es6-promise-polyfill/,
-          // /object-assign/,
-          // /eventemitter3/,
-          /node_modules/
-        ]
+        include: ["@lazarv/wasm-yoga", /fix\/yoga\.js/, /node_modules/]
       }
     },
     plugins: [
       federation({
         name: "module-name",
         filename: "remoteEntry.js",
-        remotes: {
-          foo: "remote_foo"
+        // remotes: {
+        //   foo: "remote_foo"
+        // },
+        exposes: {
+          "./Dialog": "./src/Dialog.tsx"
+          // "/react": "react",
+          // "/react-dom": "react-dom",
+          // "/pixi-js": "pixi.js"
         },
-        shared: {
-          react: {
-            singleton: true,
-            requiredVersion: pkg.devDependencies.react,
-            version: pkg.devDependencies.react
-          },
-          "react-dom": {
-            singleton: true,
-            requiredVersion: pkg.devDependencies["react-dom"],
-            version: pkg.devDependencies["react-dom"]
-          }
-        }
+        shared: ["react", "react-dom", "pixi.js"].reduce((r, name) => {
+          const version = (pkg.devDependencies[name] || pkg.dependencies[name]).replace(
+            /^.+?:/,
+            ""
+          );
+          return {
+            ...r,
+            [name]: {
+              singleton: true,
+              requiredVersion: version,
+              version: version
+            }
+          };
+        }, {})
       }),
       VitePluginReact({
         babel: {
@@ -163,14 +168,6 @@ export default defineConfig(({ command, mode }: ConfigEnv): UserConfig => {
     optimizeDeps: {
       include: [
         "tslib",
-        // "storytailor/out/environment",
-        // "lodash-es",
-        // "resize-observer-polyfill",
-        // "ant-design-vue",
-        // "ant-design-vue/es/locale/zh_CN",
-        // "vue-types",
-        // "source-map",
-        // "@ant-design/icons-vue",
         "react",
         "react-dom",
         "@inlet/react-pixi",

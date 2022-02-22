@@ -829,7 +829,6 @@ importers:
       '@yuyi919/rpgmz-plugin-transformer': workspace:0.0.3
       '@yuyi919/rpgmz-plugins': workspace:0.0.3
       '@yuyi919/shared-types': workspace:0.0.8
-      '@yuyi919/shared-utils': workspace:0.0.40
       '@yuyi919/workspace-base-rig': workspace:1.2.8
       bitecs: ~0.3.21-6
       class-transformer: 0.2.3
@@ -878,7 +877,6 @@ importers:
       '@vitejs/plugin-react': 1.2.0
       '@yuyi919/build-tools': link:../../tools/build-tools
       '@yuyi919/shared-types': link:../../shared/packages/types
-      '@yuyi919/shared-utils': link:../../shared/packages/utils
       '@yuyi919/workspace-base-rig': link:../../tools/workspace-base-rig
       gsap: 3.9.1
       http-proxy: 1.18.1

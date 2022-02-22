@@ -812,7 +812,7 @@ export class WebAudio {
     sourceNode.loop = this._loop && this._isLoaded;
     sourceNode.loopStart = this._loopStartTime;
     sourceNode.loopEnd = this._loopStartTime + this._loopLengthTime;
-    console.log(this.name, sourceNode.loopStart, sourceNode.loopEnd);
+    // console.log(this.name, sourceNode.loopStart, sourceNode.loopEnd);
     sourceNode.playbackRate.setValueAtTime(this._pitch, currentTime);
     sourceNode.connect(this._gainNode!);
     this._sourceNodes[index] = sourceNode;

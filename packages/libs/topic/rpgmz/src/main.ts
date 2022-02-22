@@ -1,8 +1,7 @@
-import "./preset";
+import "./exports";
 import "./mock";
-// const main = new globalThis.Main();
-// main.run();
-import "./sound";
-import { load } from "./Dialog";
+import "./preset";
+// import { start } from "./preset";
+// start();
 
-load().then(() => import("./dev"));
+import "./lib/start";

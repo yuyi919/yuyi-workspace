@@ -1,4 +1,5 @@
 import { is } from "@yuyi919/shared-types";
+import * as PIXI from "pixi.js"
 
 export const SystemLoader = new PIXI.Loader("/public");
 

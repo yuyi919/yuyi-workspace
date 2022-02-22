@@ -157,7 +157,7 @@ export const App = () => {
       </ContextBridge> */}
       <Stage {...{ width, height }} options={{}} raf>
         {/* <Sprite image="/public/bg_1.jpg" /> */}
-        {/* <Dialog x={640} y={360}></Dialog> */}
+        <Dialog x={640} y={360}></Dialog>
         {/* <View></View> */}
       </Stage>
       {/* <Box ready>

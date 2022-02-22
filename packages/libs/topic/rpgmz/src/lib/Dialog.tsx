@@ -11,10 +11,10 @@ import { CSSProperties } from "@yuyi919/shared-types";
 import React from "react";
 import { FlexContainer } from "./FlexContainer";
 import { DisplayObjectProps } from "@plugins/react-pixijs";
-import { loadWithResource, SystemLoader, loadResources, ResourceIds } from "./SystemLoader";
-import * as Core from "@yuyi919/rpgmz-core";
+import { loadWithResource, ResourceIds } from "./SystemLoader";
 import Tween from "gsap";
 import * as gsapHelper from "gsap";
+import { CustomPixi } from "./utils";
 
 declare module "@inlet/react-pixi/animated" {
   namespace _ReactPixi {
@@ -40,13 +40,6 @@ declare module "@inlet/react-pixi/animated" {
       };
     }
   }
-}
-export async function load() {
-  for await (const item of loadResources(ResourceIds.DialogJson)) {
-    console.log(item);
-  }
-  Core.Sprite;
-  console.log(SystemLoader);
 }
 interface IDialogProps extends DisplayObjectProps<PIXI.Container> {}
 
@@ -93,13 +86,6 @@ class CoreDialog extends PIXI.Container {
   backWrapper: ContainerWrapper;
   frameRight: PIXI.Container;
   frameLeft: PIXI.Container;
-
-  get scaleX() {
-    return this.scale.x;
-  }
-  set scaleX(x) {
-    this.scale.x = x;
-  }
 
   constructor(public width: number, public height: number) {
     super();
@@ -207,14 +193,6 @@ class CoreDialog extends PIXI.Container {
 }
 // let _emptyBaseTexture: PIXI.BaseTexture;
 
-function hackDestory(target: PIXI.DisplayObject, parent: PIXI.Container = target.parent) {
-  const newP = new PIXI.Container();
-  const childIndex = parent.getChildIndex(target);
-  console.log("willUnmount", target);
-  newP.addChild(target);
-  parent.addChildAt(newP, childIndex);
-}
-
 export const enum BackParts {
   TopLeft,
   TopCenter,
@@ -234,8 +212,9 @@ export const enum FrameParts {
   BottomLeft,
   BottomRight
 }
-export const BaseDialog = PixiComponent("Dialog", {
+export const BaseDialog = CustomPixi("Dialog", {
   create({ width, height }: IDialogProps) {
+    console.log(this);
     // // const sprite = new Core.Sprite()
     // // sprite.bitmap
     // const empty =
@@ -252,9 +231,10 @@ export const BaseDialog = PixiComponent("Dialog", {
     { width: prevWidth, height: prevHeight, ...otherOldProps },
     { width, height, ...otherNewProps }
   ) {
-    applyDefaultProps(container, otherOldProps, otherNewProps);
+
+    console.log(otherOldProps, otherNewProps);
     for (const { name, texture } of loadWithResource(ResourceIds.DialogJson)) {
-      console.log(name, texture);
+      // console.log(name, texture);
       // container.addChild(res.texture)
       if (name === ResourceIds.DialogBack) {
         const frameWidth = texture.frame.width;
@@ -363,39 +343,23 @@ export const BaseDialog = PixiComponent("Dialog", {
             rocket.width = w;
             rocket.height = partHeight;
             rocket.scale.set(partScaleX, partScaleY);
-            console.log(name, partX, partY, rocket.width, rocket.height);
+            // console.log(name, partX, partY, rocket.width, rocket.height);
           }
-        }
-        function setX(x_offset: number) {
-          const rocket = new PIXI.Sprite(texture);
-          rocket.x = -x_offset;
-          rocket.y = -6;
-          const rocket2 = new PIXI.Sprite(texture);
-          rocket2.x = width - x_offset;
-          rocket2.y = -6;
-          rocket2.scale.x = -1;
-          container.addChild(rocket);
-          container.addChild(rocket2);
         }
       }
     }
     container.updateSize(width, height);
-    console.log(container);
-  },
-  config: {
-    destroy: false,
-    destroyChildren: false
-  },
-  willUnmount(container: CoreDialog, parent) {
-    hackDestory(this, parent);
-    container.destroy();
+    applyDefaultProps(container, otherOldProps, otherNewProps);
+    console.log(container.scale)
   }
 });
+
 const Dialog: React.FC<IDialogProps> = ({ x, y, width, height, ...other }) => {
   const app = useApp();
   const [loaded, setLoaded] = React.useState(true);
   const [localWidth, setWidth] = React.useState(width);
   const [localHeight, setHeight] = React.useState(height);
+  const [scale, setScale] = React.useState(100);
   React.useEffect(() => {
     // setTimeout(() => {
     //   setLoaded(false);
@@ -409,11 +373,12 @@ const Dialog: React.FC<IDialogProps> = ({ x, y, width, height, ...other }) => {
     <Container
       interactive
       pointerup={() => {
-        setWidth((x) => x - 80);
-        setHeight((y) => y - 40);
+        // setWidth((x) => x - 80);
+        // setHeight((y) => y - 40);
+        setScale((x) => x + 10);
       }}
       pointerout={() => {
-        setLoaded(false);
+        // setLoaded(false);
       }}
     >
       {loaded && (
@@ -421,6 +386,7 @@ const Dialog: React.FC<IDialogProps> = ({ x, y, width, height, ...other }) => {
           pivot={poivot}
           x={x - poivot.x}
           y={y - poivot.y}
+          scale={scale / 100}
           width={localWidth}
           height={localHeight}
         ></BaseDialog>

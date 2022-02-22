@@ -1,10 +1,3 @@
-import * as Core from "@yuyi919/rpgmz-core";
-import * as helper from "@yuyi919/rpgmz-plugin-transformer";
-import * as cls from "class-transformer";
-import * as mobx from "mobx";
-import "reflect-metadata";
-import * as tslib from "tslib";
-// import { createLogger } from "@yuyi919/shared-logger";
 
 const module_exports: Record<string, any> = {};
 const logger = console;
@@ -100,49 +93,4 @@ declare global {
     export { loadEsModule };
   }
 }
-System.register("@yuyi919/rpgmz-core", [], () => ({
-  execute() {
-    const exports = {
-      default: globalThis
-    };
-    // eslint-disable-next-line guard-for-in
-    for (const key in Core) {
-      Object.defineProperty(exports, key, {
-        get() {
-          return globalThis[key];
-        }
-      });
-      Object.defineProperty(exports, "default", {
-        get() {
-          return globalThis;
-        }
-      });
-    }
-    return exports;
-  }
-}));
-System.register("@yuyi919/rpgmz-plugin-transformer", [], () => ({
-  execute() {
-    return helper;
-  }
-}));
-System.register("class-transformer", [], () => ({
-  execute() {
-    return cls;
-  }
-}));
-System.register("mobx", [], () => ({
-  execute() {
-    return mobx;
-  }
-}));
-System.register("tslib", [], () => ({
-  execute() {
-    return tslib;
-  }
-}));
-System.register("pixi.js", [], () => ({
-  execute() {
-    return PIXI;
-  }
-}));
+

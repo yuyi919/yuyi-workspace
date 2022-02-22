@@ -1,4 +1,5 @@
-import { mockLoadedEsModule } from "./System";
+import { mockLoadedEsModule } from "./lib";
+
 // import * as Core from "@plugins/plugin.Core";
 // import * as AdvCore from "@plugins/plugin.AdvCore";
 // import * as NVMaker from "@plugins/plugin.NVMaker";
@@ -36,12 +37,16 @@ import { mockLoadedEsModule } from "./System";
 //     execute: () => NVMaker,
 //   };
 // });
-// mockLoadedEsModule("yuyi919_react-pixijs.js", async () => {
-//   const ReactPixi = await import("@plugins/plugin.react-pixijs");
-//   return {
-//     execute: () => ReactPixi,
-//   };
-// });
+mockLoadedEsModule("yuyi919_react-pixijs.js", async () => {
+  // await import("./lib/start")
+  return {
+    execute: () => null
+  };
+  // const ReactPixi = await import("@plugins/plugin.react-pixijs");
+  // return {
+  //   execute: () => ReactPixi,
+  // };
+});
 // mockLoadedEsModule("yuyi919_ADV核心.js", async () => {
 //   // const AdvCore = await import("@plugins/plugin.AdvCore");
 //   return {
