@@ -1,0 +1,20 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "outDir": "./node_modules/@yuyi919/workspace-base-rig/temp/out-tsc",
+    "types": ["heft-jest", "node"]
+  },
+  "include": [
+    "src/**/*.spec.ts",
+    "src/**/*.spec.tsx",
+    "src/**/*.test.ts",
+    "src/**/*.test.tsx",
+    "src/**/*.spec.js",
+    "src/**/*.spec.jsx",
+    "src/**/__test__/**/*.ts",
+    "src/**/__test__/**/*.tsx",
+    "src/**/__test__/**/*.js",
+    "src/**/__test__/**/*.jsx",
+    "src/**/*.d.ts"
+  ]
+}

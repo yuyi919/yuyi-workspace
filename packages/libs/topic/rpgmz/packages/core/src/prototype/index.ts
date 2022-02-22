@@ -1,3 +1,4 @@
+/* eslint-disable no-extend-native */
 /* eslint-disable prefer-rest-params */
 /* eslint-disable @typescript-eslint/no-empty-interface */
 import * as ArrayHack from "./Array";

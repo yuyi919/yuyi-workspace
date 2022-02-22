@@ -20,7 +20,9 @@
     "class-transformer": "0.2.3",
     "reflect-metadata": "^0.1.13",
     "mobx": "6.0.4",
-    "bitecs": "~0.3.21-6"
+    "bitecs": "~0.3.21-6",
+    "lodash": "4.17.21",
+    "lodash-es": "4.17.21"
   },
   "devDependencies": {
     "@yuyi919/rpgmz-plugins": "workspace:0.0.3",
@@ -48,8 +50,13 @@
     "react-spring": "^9.4.2",
     "pixi-better-scroller": "~0.2.0",
     "vite-plugin-html": "2.0.7",
+    "@react-spring/core": "~9.4.3",
     "@react-spring/web": "~9.4.3",
-    "@pixi/sound": "~4.2.0"
+    "@react-spring/types": "~9.4.3",
+    "@pixi/sound": "~4.2.0",
+    "gsap": "~3.9.1",
+    "react-feather": "~2.0.9",
+    "@originjs/vite-plugin-federation": "~1.1.0"
   },
   "files": [
     "dist",

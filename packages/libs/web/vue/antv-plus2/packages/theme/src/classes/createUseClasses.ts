@@ -1,3 +1,4 @@
+/* eslint-disable guard-for-in */
 /* eslint-disable @typescript-eslint/ban-types */
 /* eslint-disable prefer-spread */
 import { computed, ComputedRef, defineComponent, PropType, reactive, Ref } from "vue-demi";
@@ -73,12 +74,12 @@ type PrefixNameGroup<
   [K in KeyOf<Classes>]: PrefixName<Prefix, K, Classes[K]>;
 };
 
-export type UseClssesHook<Classes extends Record<string, string>> = {
+export interface UseClssesHook<Classes extends Record<string, string>> {
   <Prefix extends string>(className?: WrapValue<string>, theme?: WrapValue<Theme>): PrefixNameGroup<
     Prefix,
     Classes
   >;
-};
+}
 
 export function createUseClasses<
   Props extends {} = {},
@@ -91,7 +92,7 @@ export function createUseClasses<
 >(name: Name, nameMap: Classes | Readonly<Classes>): UseClasses<Props, Name, Classes> {
   const _names = {
     root: (props: ThemeProps, theme?: Theme) =>
-      ("." + prefixClsWithTheme(theme || props.theme!, name)) as `.${Name}`,
+      ("." + prefixClsWithTheme(theme || props.theme!, name)) as `.${Name}`
   } as unknown as {
     [K in KeyOf<Classes> | "root"]: <Prefix extends string>(
       props: ThemeProps
@@ -129,7 +130,7 @@ export function createUseClasses<
           return prefixClsWithTheme(theme.value, name);
         });
         classes = {
-          root,
+          root
         } as any;
         for (const key in nameMap) {
           if (key !== "root") {
@@ -150,7 +151,7 @@ export function createUseClasses<
           const classNames = unwrap(className);
           // eslint-disable-next-line eqeqeq
           return (classNames != void 0 ? classNames + " " : "") + classes.root.value;
-        }),
+        })
       }) as {
         [K in KeyOf<Classes> | "root"]: PrefixName<Prefix, K, TypedClassName<Name, Classes, K>>;
       };
@@ -159,10 +160,10 @@ export function createUseClasses<
       props: {
         classNames: {
           type: Object as PropType<Partial<Record<KeyOf<Classes> | "root", string>>>,
-          default: () => ({}),
-        },
-      },
-    }),
+          default: () => ({})
+        }
+      }
+    })
   ] as UseClasses<Props, Name, Classes>;
 }
 function prefixClsWithTheme<Name extends string>(theme: Theme, name: Name) {
@@ -210,16 +211,16 @@ export function ClassesComponent<
     props: {
       classNames: {
         type: Object as PropType<ClassNames>,
-        required: false,
-      },
+        required: false
+      }
     } as any,
     setup(props) {
       // const self = getCurrentInstance()!.proxy;
       // (self as any).classes = useClasses(useStyles(props as ExtendProps));
       return {
-        classes: useClasses(useStyles(props as ExtendProps)),
+        classes: useClasses(useStyles(props as ExtendProps))
       };
-    },
+    }
   }) as unknown as VueClass<{
     classes: PrefixNameGroup<string, Classes>;
     classNames: { [K in keyof Classes | "root"]: string };

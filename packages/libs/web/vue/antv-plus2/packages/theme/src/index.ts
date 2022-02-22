@@ -1,6 +1,7 @@
 import { Classes, createHooksApi } from "@yuyi919/vue-jss";
 import { createTheme } from "./styles";
 import { ThemeUtils } from "./theme/utils";
+import type { IObj } from "@yuyi919/shared-types";
 
 export * from "./classes";
 export * from "./color";
@@ -23,7 +24,7 @@ export const {
   createUseStylesHook,
   useBlock,
   useElement,
-  useTheme,
+  useTheme
 } = createHooksApi(MATERIAL_DEFAULT_THEME);
 const motionCommon = (duration: string) =>
   defineStyles({ animationDelay: duration, animationFillMode: "both" });
@@ -37,7 +38,7 @@ const makeMotion = (className: string, keyframeName: string, duration: string) =
       "100%": `
         transform: scale(1);
         opacity: 1;
-      `,
+      `
     },
     [`@keyframes ${keyframeName}Out`]: {
       "0%": `
@@ -47,16 +48,16 @@ const makeMotion = (className: string, keyframeName: string, duration: string) =
       "100%": `
           transform: scale(1);
           opacity: 1;
-        `,
+        `
     },
     "@global": defineClasses({
       [`.${className}-enter, .${className}-appear`]: {
         ...motionCommon(duration),
-        animationPlayState: "paused",
+        animationPlayState: "paused"
       },
       [`.${className}-leave`]: {
         ...motionCommon(duration),
-        animationPlayState: "paused",
+        animationPlayState: "paused"
       },
       [`.${className}-enter.${className}-enter-active, .${className}-appear.${className}-appear-active`]:
         `
@@ -67,8 +68,8 @@ const makeMotion = (className: string, keyframeName: string, duration: string) =
         animation-name: $${keyframeName}Out;
         animation-play-state: running;
         pointer-events: none;
-      ` as any,
-    }),
+      ` as any
+    })
   });
 export const useTransitions = createUseStyles((theme) => {
   const mixins = makeMotion("move", "test", theme.transitions.duration.standard + "ms");

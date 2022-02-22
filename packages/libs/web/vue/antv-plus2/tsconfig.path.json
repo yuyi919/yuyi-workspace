@@ -8,7 +8,7 @@
       "@antv-plus2/modal": ["./packages/modal/src/index.ts"],
       "@antv-plus2/shared": ["./packages/shared/src/index.ts"],
       "@antv-plus2/table": ["./packages/table/src/index.ts"],
-      "@antv-plus2/theme/index.less": ["./packages/theme/index.less"],
+      "~@antv-plus2/theme/index.less": ["./packages/theme/index.less"],
       "@antv-plus2/theme": ["./packages/theme/src/index.ts"],
 
       "@yuyi919/vue-antv-plus2": ["./src/index.ts"],

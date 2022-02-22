@@ -7,7 +7,7 @@ import {
   KEY_PROTOTYPE,
   OBJECT,
   PROMISE,
-  REGEXP,
+  REGEXP
 } from "./atomic";
 
 export function CREATE_PROMISE<T>(
@@ -77,11 +77,11 @@ export function INSTANCE_BIND<T extends Function, P extends T["prototype"], K ex
   instance: T,
   key: K
 ): FunctionArgsShifter<T, P, K> {
-  try {
-    return BIND(CALLER, instance[KEY_PROTOTYPE][key]);
-  } catch (error) {
-    console.log(instance, key);
-  }
+  // try {
+  return BIND(CALLER, instance[KEY_PROTOTYPE][key]) as any;
+  // } catch (error) {
+  //   console.log(instance, key);
+  // }
 }
 export function PROTOTYPE_BIND<T extends Function, P extends T["prototype"], K extends keyof P>(
   instance: T,
@@ -215,7 +215,7 @@ export function MAP$$<T, R>(arr: T[], callbackfn: ArrayIterator<T, R>): R[];
 export function MAP$$<T, R>(
   arr: T[],
   callbackfn: ArrayIterator<T, R>,
-  initialValue = [],
+  initialValue: R[] = [],
   i = 0,
   length = arr.length - 1
 ) {

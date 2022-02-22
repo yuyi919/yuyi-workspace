@@ -106,7 +106,7 @@ export function createStaticMetaDataDecorators<
     return _getMeta(metaKeys[key], target, propertyKey);
   }
   const helpers = {
-    getMeta,
+    getMeta
   };
   for (const key in configure) {
     const meta = configure[key];
@@ -150,6 +150,6 @@ export function createStaticMetaDataDecorators<
       // );
       // }
       return result;
-    },
+    }
   };
 }

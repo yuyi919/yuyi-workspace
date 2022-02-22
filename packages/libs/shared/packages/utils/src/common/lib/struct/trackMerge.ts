@@ -8,7 +8,7 @@ import {
   isUndefined,
   mergeWith,
   MergeWithCustomizer,
-  List,
+  List
 } from "lodash";
 import { isFunction } from "../atomic";
 import { convertArr2Map } from "./convertArr2Map";
@@ -24,7 +24,7 @@ const enum Type {
   NULL,
   UNDEFINED,
   NOTNIL,
-  ANY,
+  ANY
 }
 const enum CustomizerAdapterType {
   BaseWithArr = Type.BASE * 10 + Type.ARRAY, // 替换
@@ -35,7 +35,7 @@ const enum CustomizerAdapterType {
   ObjWithFunc = Type.OBJECT * 10 + Type.FUNCTION, // 迭代运算
   FuncWithObj = Type.FUNCTION * 10 + Type.OBJECT, // 迭代运算
   FuncWithFunc = Type.FUNCTION * 10 + Type.FUNCTION, // 迭代运算
-  ObjWithObj = Type.OBJECT * 10 + Type.OBJECT,
+  ObjWithObj = Type.OBJECT * 10 + Type.OBJECT
 }
 
 const IGRONE = Constant$.EMPTY_OBJECT;
@@ -46,7 +46,7 @@ const match: [any, any, boolean?][] = [
   [isPlainObject, Type.OBJECT],
   // [expect$.isNil.not, Type.NOTNIL],
   [isNull, Type.NULL],
-  [isUndefined, Type.UNDEFINED],
+  [isUndefined, Type.UNDEFINED]
 ];
 
 function _expectTo(value: any, configs: [any, any, boolean?][], elseValue?: any): any {
@@ -138,8 +138,8 @@ export function trackMerge<Target, Source>(
   options?: TrackMergeOptions
 ): Partial<Target & Source> {
   if (options) {
-    const cacheExtends = convertArr2Map(options.extendsKeys);
-    const cacheIgrone = convertArr2Map(options.ignoreKeys);
+    const cacheExtends = convertArr2Map(options.extendsKeys!);
+    const cacheIgrone = convertArr2Map(options.ignoreKeys!);
 
     return mergeWith(object, source, (value, srcValue, key?, object?, source?) => {
       if (cacheIgrone[key]) return value;
@@ -181,7 +181,7 @@ const TrackAdapter: { [key: string]: MergeWithCustomizer } = {
   [CustomizerAdapterType.ArrWithArr]: Constant$.ARR_CONCAT,
   [CustomizerAdapterType.FuncWithObj]: mergeFuncPipe,
   [CustomizerAdapterType.FuncWithFunc]: mergeFuncPipe,
-  [CustomizerAdapterType.ObjWithFunc]: (obj, func) => mergeFuncPipe(func, obj),
+  [CustomizerAdapterType.ObjWithFunc]: (obj, func) => mergeFuncPipe(func, obj)
   // [CustomizerAdapterType.ArrWithFunc](value: any[], srcValue: Types.Function.Base<[any[]], any[]>) {
   //   return srcValue(value);
   // },

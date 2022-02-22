@@ -7,8 +7,8 @@ export function SNumber({ number, ...props }) {
     config: {
       mass: 10,
       tension: 1000,
-      friction: 100,
-    },
+      friction: 100
+    }
   });
   console.log(next.number.to((x) => (x * 100).toFixed(0)));
   return <animated.span>{next.number.to((x) => (x * 100).toFixed(0))}</animated.span>;
@@ -50,3 +50,5 @@ export function Chestnut() {
     </animated.div>
   );
 }
+
+export * from "./MessageHub";

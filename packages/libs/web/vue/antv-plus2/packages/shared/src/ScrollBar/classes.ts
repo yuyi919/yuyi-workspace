@@ -12,14 +12,14 @@ const [classes, useClasses] = createUseClasses("scroll-container", {
   wrapNoPadding: ["wrap", "no-padding"],
   native: "native",
   [BAR_MAP.vertical.key]: ["wrap", "has-" + BAR_MAP.vertical.key],
-  [BAR_MAP.horizontal.key]: ["wrap", "has-" + BAR_MAP.horizontal.key],
+  [BAR_MAP.horizontal.key]: ["wrap", "has-" + BAR_MAP.horizontal.key]
 } as const);
 
 const [barClasses, useBarClasses] = createUseClasses("scrollbar", {
   [BAR_MAP.vertical.key]: BAR_MAP.vertical.key,
   [BAR_MAP.horizontal.key]: BAR_MAP.horizontal.key,
   active: "active",
-  thumb: "thumb",
+  thumb: "thumb"
 } as const);
 
 const nativeScrollbarThumbSizeMixins = (size: number) => {
@@ -190,7 +190,7 @@ export const useClass = styled.makeUse`
     }
   }
 `;
-// declare module "@project/shared" {
+// declare module "@antv-plus2/helper" {
 //   interface ComponentTheme {
 //     "scroll-container": ReturnType<typeof useClasses>;
 //     scrollbar: ReturnType<typeof useBarClasses>;

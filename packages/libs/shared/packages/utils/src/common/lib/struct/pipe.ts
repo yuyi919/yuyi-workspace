@@ -1,6 +1,7 @@
 import { isFunction } from "lodash";
 import { Constant$ } from "@yuyi919/shared-constant";
 import { castComputedPipe } from "./castUtils";
+import Types from "@yuyi919/shared-types";
 
 /**
  * 管道函数，将一组函数组合成管道，像流水线一样让原始值流过。
@@ -74,7 +75,7 @@ export function pipeTrack<T, R>(initialValue: T, ...funcArr: ((v: T | R) => R)[]
  */
 export function pipeFilter<T>(checkValue: T, ...funcArr: ((v: T) => boolean)[]): T | undefined {
   let index = -1;
-  let func = null;
+  let func: Types.Fn;
   while (++index < funcArr.length) {
     func = funcArr[index];
     if (isFunction(func) && !func(checkValue)) {

@@ -2,6 +2,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import Types from "@yuyi919/shared-types";
 import * as CSS from "csstype";
+import { CreateCSSProperties, PropsFunc, BaseCSSProperties } from "./styles";
 // import { createUseStylesHooks } from "./createUseStylesHook";
 // import { createThemeHelper } from "./helper";
 // import { define } from "./helper/merge";
@@ -14,27 +15,6 @@ export {};
 type JSSNormalCssProperties = CSS.Properties<number | string>;
 // type JSSFontface = CSS.AtRule.FontFace & { fallbacks?: CSS.AtRule.FontFace[] };
 
-export type PropsFunc<Props extends Types.IObj, T> = (props: Props) => T | [T, "!important"];
-
-/**
- * Allows the user to augment the properties available
- */
-export interface BaseCSSProperties extends JSSNormalCssProperties {
-  // '@font-face'?: JSSFontface | JSSFontface[];
-}
-
-export interface CSSProperties extends BaseCSSProperties {
-  // Allow pseudo selectors and media queries
-  // `unknown` is used since TS does not allow assigning an interface without
-  // an index signature to one with an index signature. This is to allow type safe
-  // module augmentation.
-  // Technically we want any key not typed in `BaseCSSProperties` to be of type
-  // `CSSProperties` but this doesn't work. The index signature needs to cover
-  // BaseCSSProperties as well. Usually you would use `BaseCSSProperties[keyof BaseCSSProperties]`
-  // but this would not allow assigning React.CSSProperties to CSSProperties
-  [k: string]: unknown | CSSProperties;
-}
-
 type BaseCreateStyleValue<Props extends keyof BaseCSSProperties> = BaseCSSProperties[Props];
 export type BaseCreateStyle<Props extends Types.IObj> = {
   [P in keyof BaseCSSProperties]:
@@ -46,11 +26,11 @@ export type CreateStyle<Theme extends Types.IObj, Props extends Types.IObj = Typ
   | BaseCreateStyle<Props>
   | ((theme?: Theme) => BaseCreateStyle<Props>);
 
-export interface CreateCSSProperties<Props extends Types.IObj = Types.IObj>
-  extends BaseCreateStyle<Props> {
-  // Allow pseudo selectors and media queries
-  [k: string]: BaseCreateStyle<Props>[keyof BaseCreateStyle<Props>] | CreateCSSProperties<Props>;
-}
+// export interface CreateCSSProperties<Props extends Types.IObj = Types.IObj>
+//   extends BaseCreateStyle<Props> {
+//   // Allow pseudo selectors and media queries
+//   [k: string]: BaseCreateStyle<Props>[keyof BaseCreateStyle<Props>] | CreateCSSProperties<Props>;
+// }
 
 // export class StyleSheetFactory<Theme, Names extends string> {
 //   _hasTheme = false;
@@ -229,26 +209,26 @@ function useButton() {
   const button = useBlock("button")
     .append<{ size: number }>({
       color: theme.color,
-      fontSize: 12,
+      fontSize: 12
     })
     .defaults({
       color: "red",
-      background: "url(image1.png) url(image2.png) !important",
+      background: "url(image1.png) url(image2.png) !important"
     });
 
   const buttonText = useElement(button, "text").append({
     color: "white",
-    fontSize: 12,
+    fontSize: 12
   });
   return {
     button,
-    buttonText,
+    buttonText
   };
 }
 
 export const createStyleHooks = createStylesHook(useButton, {
   name: "Button",
-  generateId: createGenerateClassName({ seed: "ant", global: true }),
+  generateId: createGenerateClassName({ seed: "ant", global: true })
   // (rule, sheet) => {
   //   console.log(rule, sheet);
   //   return ((sheet && sheet.options.classNamePrefix) || "") + rule.key.replace("\\", "");

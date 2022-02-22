@@ -10,33 +10,33 @@ const PropTypes = createTypes({
   number: void 0,
   array: void 0,
   object: void 0,
-  integer: void 0,
+  integer: void 0
 });
 
 PropTypes.extend([
   {
-    name: "shapeSize", 
+    name: "shapeSize",
     getter: true,
     type: [String, Number],
-    default: void 0,
+    default: void 0
   },
   {
     name: "looseBool",
     getter: true,
     type: Boolean,
-    default: void 0,
+    default: void 0
   },
   {
     name: "style",
     getter: true,
     type: [String, Object],
-    default: void 0,
+    default: void 0
   },
   {
     name: "VNodeChild",
     getter: true,
-    type: null,
-  },
+    type: null
+  }
 ]);
 
 export function withUndefined<T extends { default?: any }>(type: T): T {
@@ -64,11 +64,11 @@ export const initDefaultProps = <T>(
   }
 ): T => {
   const propTypes: T = {} as T;
+  // eslint-disable-next-line guard-for-in
   for (const k in types) {
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const prop = types[k] as unknown as VueTypeValidableDef;
     if (prop && k in defaultProps) {
-      prop.def ? prop.def(defaultProps[k]) : prop.default = defaultProps[k];
+      prop.def ? prop.def(defaultProps[k]) : (prop.default = defaultProps[k]);
     }
     propTypes[k as keyof T] = prop as unknown as T[keyof T];
   }

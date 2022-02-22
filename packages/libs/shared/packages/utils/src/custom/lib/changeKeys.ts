@@ -14,7 +14,7 @@ export const enum ShiftMode {
   /** 复制模式 */
   Copy,
   /** 剪切模式 */
-  Cut,
+  Cut
 }
 
 /**

@@ -4,1027 +4,1051 @@
   "packages": [
     {
       "name": "@angular-devkit/architect",
-      "allowedCategories": ["production", "tools"]
+      "allowedCategories": [ "production", "tools" ]
     },
     {
       "name": "@angular-devkit/core",
-      "allowedCategories": ["production", "tools"]
+      "allowedCategories": [ "production", "tools" ]
     },
     {
       "name": "@angular-devkit/schematics",
-      "allowedCategories": ["production", "tools"]
+      "allowedCategories": [ "production", "tools" ]
     },
     {
       "name": "@ant-design/icons",
-      "allowedCategories": ["production"]
+      "allowedCategories": [ "production" ]
     },
     {
       "name": "@ant-design/icons-vue",
-      "allowedCategories": ["production"]
+      "allowedCategories": [ "production" ]
     },
     {
       "name": "@antv-plus2/action",
-      "allowedCategories": ["production"]
+      "allowedCategories": [ "production" ]
     },
     {
       "name": "@antv-plus2/form",
-      "allowedCategories": ["production"]
+      "allowedCategories": [ "production" ]
     },
     {
       "name": "@antv-plus2/helper",
-      "allowedCategories": ["production"]
+      "allowedCategories": [ "production" ]
     },
     {
       "name": "@antv-plus2/modal",
-      "allowedCategories": ["production"]
+      "allowedCategories": [ "production" ]
     },
     {
       "name": "@antv-plus2/shared",
-      "allowedCategories": ["production"]
+      "allowedCategories": [ "production" ]
     },
     {
       "name": "@antv-plus2/table",
-      "allowedCategories": ["production"]
+      "allowedCategories": [ "production" ]
     },
     {
       "name": "@antv-plus2/theme",
-      "allowedCategories": ["production"]
+      "allowedCategories": [ "production" ]
     },
     {
       "name": "@chevrotain/types",
-      "allowedCategories": ["external"]
+      "allowedCategories": [ "external" ]
     },
     {
       "name": "@codingame/monaco-jsonrpc",
-      "allowedCategories": ["production"]
+      "allowedCategories": [ "production" ]
     },
     {
       "name": "@codingame/monaco-languageclient",
-      "allowedCategories": ["production"]
+      "allowedCategories": [ "production" ]
     },
     {
       "name": "@inlet/react-pixi",
-      "allowedCategories": ["production"]
+      "allowedCategories": [ "production" ]
     },
     {
       "name": "@lazarv/wasm-yoga",
-      "allowedCategories": ["production"]
+      "allowedCategories": [ "production" ]
     },
     {
       "name": "@microsoft/api-documenter",
-      "allowedCategories": ["production"]
+      "allowedCategories": [ "production" ]
     },
     {
       "name": "@microsoft/api-extractor",
-      "allowedCategories": ["tools"]
+      "allowedCategories": [ "tools" ]
     },
     {
       "name": "@microsoft/rush-lib",
-      "allowedCategories": ["production"]
+      "allowedCategories": [ "production", "tools" ]
     },
     {
       "name": "@nrwl/cli",
-      "allowedCategories": ["production", "tools"]
+      "allowedCategories": [ "production", "tools" ]
     },
     {
       "name": "@nrwl/devkit",
-      "allowedCategories": ["production", "tools"]
+      "allowedCategories": [ "production", "tools" ]
     },
     {
       "name": "@nrwl/eslint-plugin-nx",
-      "allowedCategories": ["tools"]
+      "allowedCategories": [ "tools" ]
     },
     {
       "name": "@nrwl/jest",
-      "allowedCategories": ["tools"]
+      "allowedCategories": [ "tools" ]
     },
     {
       "name": "@nrwl/node",
-      "allowedCategories": ["production", "tools"]
+      "allowedCategories": [ "production", "tools" ]
     },
     {
       "name": "@nrwl/nx-plugin",
-      "allowedCategories": ["production", "tools"]
+      "allowedCategories": [ "production", "tools" ]
     },
     {
       "name": "@nrwl/tao",
-      "allowedCategories": ["production", "tools"]
+      "allowedCategories": [ "production", "tools" ]
     },
     {
       "name": "@nrwl/workspace",
-      "allowedCategories": ["production", "tools"]
+      "allowedCategories": [ "production", "tools" ]
     },
     {
       "name": "@ohm-js/cli",
-      "allowedCategories": ["production"]
+      "allowedCategories": [ "production" ]
+    },
+    {
+      "name": "@originjs/vite-plugin-federation",
+      "allowedCategories": [ "production" ]
     },
     {
       "name": "@pixi/sound",
-      "allowedCategories": ["production"]
+      "allowedCategories": [ "production" ]
+    },
+    {
+      "name": "@react-spring/core",
+      "allowedCategories": [ "production" ]
+    },
+    {
+      "name": "@react-spring/types",
+      "allowedCategories": [ "production" ]
     },
     {
       "name": "@react-spring/web",
-      "allowedCategories": ["production"]
+      "allowedCategories": [ "production" ]
     },
     {
       "name": "@rollup/plugin-alias",
-      "allowedCategories": ["tools"]
+      "allowedCategories": [ "tools" ]
     },
     {
       "name": "@rollup/plugin-babel",
-      "allowedCategories": ["tools"]
+      "allowedCategories": [ "tools" ]
     },
     {
       "name": "@rollup/plugin-commonjs",
-      "allowedCategories": ["tools"]
+      "allowedCategories": [ "tools" ]
     },
     {
       "name": "@rollup/plugin-json",
-      "allowedCategories": ["tools"]
+      "allowedCategories": [ "tools" ]
     },
     {
       "name": "@rollup/plugin-node-resolve",
-      "allowedCategories": ["tools"]
+      "allowedCategories": [ "tools" ]
     },
     {
       "name": "@rollup/plugin-replace",
-      "allowedCategories": ["tools"]
+      "allowedCategories": [ "tools" ]
     },
     {
       "name": "@rushstack/eslint-config",
-      "allowedCategories": ["tools"]
+      "allowedCategories": [ "tools" ]
     },
     {
       "name": "@rushstack/heft",
-      "allowedCategories": ["production", "tools"]
+      "allowedCategories": [ "production", "tools" ]
     },
     {
       "name": "@rushstack/heft-jest-plugin",
-      "allowedCategories": ["tools"]
+      "allowedCategories": [ "tools" ]
     },
     {
       "name": "@rushstack/heft-node-rig",
-      "allowedCategories": ["production", "tools"]
+      "allowedCategories": [ "production", "tools" ]
     },
     {
       "name": "@rushstack/heft-web-rig",
-      "allowedCategories": ["production"]
+      "allowedCategories": [ "production" ]
     },
     {
       "name": "@rushstack/node-core-library",
-      "allowedCategories": ["production"]
+      "allowedCategories": [ "production" ]
     },
     {
       "name": "@typed-macro/core",
-      "allowedCategories": ["production"]
+      "allowedCategories": [ "production" ]
     },
     {
       "name": "@typescript-eslint/eslint-plugin",
-      "allowedCategories": ["external", "tools"]
+      "allowedCategories": [ "external", "tools" ]
     },
     {
       "name": "@typescript-eslint/parser",
-      "allowedCategories": ["external", "tools"]
+      "allowedCategories": [ "external", "tools" ]
     },
     {
       "name": "@vue/compiler-sfc",
-      "allowedCategories": ["tools"]
+      "allowedCategories": [ "tools" ]
     },
     {
       "name": "@vue/composition-api",
-      "allowedCategories": ["production"]
+      "allowedCategories": [ "production" ]
     },
     {
       "name": "@yuyi919-rmmz/core",
-      "allowedCategories": ["production"]
+      "allowedCategories": [ "production" ]
     },
     {
       "name": "@yuyi919-ts-transformer/ast-utils",
-      "allowedCategories": ["production"]
+      "allowedCategories": [ "production" ]
     },
     {
       "name": "@yuyi919-ts-transformer/dev-utils",
-      "allowedCategories": ["production"]
+      "allowedCategories": [ "production" ]
     },
     {
       "name": "@yuyi919-tsmacro/inline-loop.tsmacro",
-      "allowedCategories": ["production"]
+      "allowedCategories": [ "production" ]
     },
     {
       "name": "@yuyi919-vue/jss",
-      "allowedCategories": ["production"]
+      "allowedCategories": [ "production" ]
     },
     {
       "name": "@yuyi919/advscript-language-services",
-      "allowedCategories": ["production"]
+      "allowedCategories": [ "production" ]
     },
     {
       "name": "@yuyi919/advscript-parser",
-      "allowedCategories": ["production"]
+      "allowedCategories": [ "production" ]
     },
     {
       "name": "@yuyi919/advscript-vite-plugin",
-      "allowedCategories": ["production"]
+      "allowedCategories": [ "production" ]
     },
     {
       "name": "@yuyi919/build-tools",
-      "allowedCategories": ["production"]
+      "allowedCategories": [ "production" ]
     },
     {
       "name": "@yuyi919/jest-extra",
-      "allowedCategories": ["production", "tools"]
+      "allowedCategories": [ "production", "tools" ]
     },
     {
       "name": "@yuyi919/node-logger",
-      "allowedCategories": ["production"]
+      "allowedCategories": [ "production" ]
     },
     {
       "name": "@yuyi919/nx-plugin-workspace-helper",
-      "allowedCategories": ["tools"]
+      "allowedCategories": [ "tools" ]
     },
     {
       "name": "@yuyi919/rpgmz-core",
-      "allowedCategories": ["production"]
+      "allowedCategories": [ "production" ]
     },
     {
       "name": "@yuyi919/rpgmz-plugin-transformer",
-      "allowedCategories": ["production"]
+      "allowedCategories": [ "production" ]
     },
     {
       "name": "@yuyi919/rpgmz-plugins",
-      "allowedCategories": ["production"]
+      "allowedCategories": [ "production" ]
     },
     {
       "name": "@yuyi919/shared-constant",
-      "allowedCategories": ["production"]
+      "allowedCategories": [ "production" ]
     },
     {
       "name": "@yuyi919/shared-decorator",
-      "allowedCategories": ["production"]
+      "allowedCategories": [ "production" ]
     },
     {
       "name": "@yuyi919/shared-logger",
-      "allowedCategories": ["production"]
+      "allowedCategories": [ "production" ]
     },
     {
       "name": "@yuyi919/shared-types",
-      "allowedCategories": ["production"]
+      "allowedCategories": [ "production" ]
     },
     {
       "name": "@yuyi919/shared-utils",
-      "allowedCategories": ["production"]
+      "allowedCategories": [ "production" ]
     },
     {
       "name": "@yuyi919/ts-transformer-awesome",
-      "allowedCategories": ["production"]
+      "allowedCategories": [ "production" ]
     },
     {
       "name": "@yuyi919/ts-transformer-inline-macro",
-      "allowedCategories": ["production"]
+      "allowedCategories": [ "production" ]
     },
     {
       "name": "@yuyi919/vue-antv-plus2-action",
-      "allowedCategories": ["production"]
+      "allowedCategories": [ "production" ]
     },
     {
       "name": "@yuyi919/vue-antv-plus2-form",
-      "allowedCategories": ["production"]
+      "allowedCategories": [ "production" ]
     },
     {
       "name": "@yuyi919/vue-antv-plus2-helper",
-      "allowedCategories": ["production"]
+      "allowedCategories": [ "production" ]
     },
     {
       "name": "@yuyi919/vue-antv-plus2-modal",
-      "allowedCategories": ["production"]
+      "allowedCategories": [ "production" ]
     },
     {
       "name": "@yuyi919/vue-antv-plus2-shared",
-      "allowedCategories": ["production"]
+      "allowedCategories": [ "production" ]
     },
     {
       "name": "@yuyi919/vue-antv-plus2-stable",
-      "allowedCategories": ["production"]
+      "allowedCategories": [ "production" ]
     },
     {
       "name": "@yuyi919/vue-antv-plus2-table",
-      "allowedCategories": ["production"]
+      "allowedCategories": [ "production" ]
     },
     {
       "name": "@yuyi919/vue-antv-plus2-theme",
-      "allowedCategories": ["production"]
+      "allowedCategories": [ "production" ]
     },
     {
       "name": "@yuyi919/vue-jss",
-      "allowedCategories": ["production"]
+      "allowedCategories": [ "production" ]
     },
     {
       "name": "@yuyi919/vue-jsx-factory",
-      "allowedCategories": ["production"]
+      "allowedCategories": [ "production" ]
     },
     {
       "name": "@yuyi919/vue-shared-decorators",
-      "allowedCategories": ["production"]
+      "allowedCategories": [ "production" ]
     },
     {
       "name": "@yuyi919/vue-use",
-      "allowedCategories": ["production"]
+      "allowedCategories": [ "production" ]
+    },
+    {
+      "name": "@yuyi919/workspace-base-dev-rig",
+      "allowedCategories": [ "tools" ]
     },
     {
       "name": "@yuyi919/workspace-base-rig",
-      "allowedCategories": ["production", "tools"]
+      "allowedCategories": [ "production", "tools" ]
     },
     {
       "name": "ansi-escapes",
-      "allowedCategories": ["tools"]
+      "allowedCategories": [ "tools" ]
     },
     {
       "name": "ant-design-vue",
-      "allowedCategories": ["production"]
+      "allowedCategories": [ "production" ]
     },
     {
       "name": "asyncro",
-      "allowedCategories": ["tools"]
+      "allowedCategories": [ "tools" ]
     },
     {
       "name": "babel-eslint",
-      "allowedCategories": ["tools"]
+      "allowedCategories": [ "tools" ]
     },
     {
       "name": "babel-plugin-annotate-pure-calls",
-      "allowedCategories": ["tools"]
+      "allowedCategories": [ "tools" ]
     },
     {
       "name": "babel-plugin-const-enum",
-      "allowedCategories": ["tools"]
+      "allowedCategories": [ "tools" ]
     },
     {
       "name": "babel-plugin-dev-expression",
-      "allowedCategories": ["tools"]
+      "allowedCategories": [ "tools" ]
     },
     {
       "name": "babel-plugin-import",
-      "allowedCategories": ["production", "tools"]
+      "allowedCategories": [ "production", "tools" ]
     },
     {
       "name": "babel-plugin-macros",
-      "allowedCategories": ["tools"]
+      "allowedCategories": [ "tools" ]
     },
     {
       "name": "babel-plugin-polyfill-regenerator",
-      "allowedCategories": ["tools"]
+      "allowedCategories": [ "tools" ]
     },
     {
       "name": "babel-plugin-transform-rename-import",
-      "allowedCategories": ["tools"]
+      "allowedCategories": [ "tools" ]
     },
     {
       "name": "babel-plugin-transform-typescript-metadata",
-      "allowedCategories": ["production"]
+      "allowedCategories": [ "production" ]
     },
     {
       "name": "babel-plugin-transform-vue-jsx",
-      "allowedCategories": ["tools"]
+      "allowedCategories": [ "tools" ]
     },
     {
       "name": "babel-preset-vca-jsx",
-      "allowedCategories": ["production"]
+      "allowedCategories": [ "production" ]
     },
     {
       "name": "bitecs",
-      "allowedCategories": ["production"]
+      "allowedCategories": [ "production" ]
     },
     {
       "name": "blob",
-      "allowedCategories": ["production"]
+      "allowedCategories": [ "production" ]
     },
     {
       "name": "chalk",
-      "allowedCategories": ["external"]
+      "allowedCategories": [ "external" ]
     },
     {
       "name": "chevrotain",
-      "allowedCategories": ["external", "production"]
+      "allowedCategories": [ "external", "production" ]
     },
     {
       "name": "chroma.ts",
-      "allowedCategories": ["production"]
+      "allowedCategories": [ "production" ]
     },
     {
       "name": "class-transformer",
-      "allowedCategories": ["production"]
+      "allowedCategories": [ "production" ]
     },
     {
       "name": "classnames",
-      "allowedCategories": ["production"]
+      "allowedCategories": [ "production" ]
     },
     {
       "name": "cmake-js",
-      "allowedCategories": ["production"]
+      "allowedCategories": [ "production" ]
     },
     {
       "name": "colors",
-      "allowedCategories": ["external", "production"]
+      "allowedCategories": [ "external", "production" ]
     },
     {
       "name": "commander",
-      "allowedCategories": ["external", "production"]
+      "allowedCategories": [ "external", "production" ]
     },
     {
       "name": "comment-json",
-      "allowedCategories": ["production"]
+      "allowedCategories": [ "production" ]
     },
     {
       "name": "copyfiles",
-      "allowedCategories": ["production"]
+      "allowedCategories": [ "production" ]
     },
     {
       "name": "cpy-cli",
-      "allowedCategories": ["external"]
+      "allowedCategories": [ "external" ]
     },
     {
       "name": "csstype",
-      "allowedCategories": ["production"]
+      "allowedCategories": [ "production" ]
     },
     {
       "name": "d3",
-      "allowedCategories": ["production"]
+      "allowedCategories": [ "production" ]
     },
     {
       "name": "datatables.net",
-      "allowedCategories": ["production"]
+      "allowedCategories": [ "production" ]
     },
     {
       "name": "datatables.net-dt",
-      "allowedCategories": ["production"]
+      "allowedCategories": [ "production" ]
     },
     {
       "name": "diff",
-      "allowedCategories": ["production"]
+      "allowedCategories": [ "production" ]
     },
     {
       "name": "ecs-framework",
-      "allowedCategories": ["production"]
+      "allowedCategories": [ "production" ]
     },
     {
       "name": "enquirer",
-      "allowedCategories": ["production", "tools"]
+      "allowedCategories": [ "production", "tools" ]
     },
     {
       "name": "eslint",
-      "allowedCategories": ["external", "production", "tools"]
+      "allowedCategories": [ "external", "production", "tools" ]
     },
     {
       "name": "eslint-config-prettier",
-      "allowedCategories": ["tools"]
+      "allowedCategories": [ "tools" ]
     },
     {
       "name": "eslint-plugin-header",
-      "allowedCategories": ["external"]
+      "allowedCategories": [ "external" ]
     },
     {
       "name": "eslint-plugin-solid",
-      "allowedCategories": ["production"]
+      "allowedCategories": [ "production" ]
     },
     {
       "name": "eslint-utils",
-      "allowedCategories": ["production"]
+      "allowedCategories": [ "production" ]
     },
     {
       "name": "express",
-      "allowedCategories": ["production"]
+      "allowedCategories": [ "production" ]
     },
     {
       "name": "flesch-kincaid",
-      "allowedCategories": ["production"]
+      "allowedCategories": [ "production" ]
     },
     {
       "name": "font-finder",
-      "allowedCategories": ["production"]
+      "allowedCategories": [ "production" ]
     },
     {
       "name": "fs-extra",
-      "allowedCategories": ["external", "production", "tools"]
+      "allowedCategories": [ "external", "production", "tools" ]
     },
     {
       "name": "glob",
-      "allowedCategories": ["external", "production"]
+      "allowedCategories": [ "external", "production" ]
     },
     {
       "name": "glob-to-regexp",
-      "allowedCategories": ["external", "production"]
+      "allowedCategories": [ "external", "production" ]
     },
     {
       "name": "goober",
-      "allowedCategories": ["production"]
+      "allowedCategories": [ "production" ]
+    },
+    {
+      "name": "gsap",
+      "allowedCategories": [ "production" ]
     },
     {
       "name": "gulp",
-      "allowedCategories": ["production"]
+      "allowedCategories": [ "production" ]
     },
     {
       "name": "he",
-      "allowedCategories": ["production"]
+      "allowedCategories": [ "production" ]
     },
     {
       "name": "http-proxy",
-      "allowedCategories": ["production"]
+      "allowedCategories": [ "production" ]
     },
     {
       "name": "iconv-lite",
-      "allowedCategories": ["production"]
+      "allowedCategories": [ "production" ]
     },
     {
       "name": "ignore",
-      "allowedCategories": ["production"]
+      "allowedCategories": [ "production" ]
     },
     {
       "name": "inversify",
-      "allowedCategories": ["production"]
+      "allowedCategories": [ "production" ]
     },
     {
       "name": "jest",
-      "allowedCategories": ["external", "production", "tools"]
+      "allowedCategories": [ "external", "production", "tools" ]
     },
     {
       "name": "jest-expect-message",
-      "allowedCategories": ["external"]
+      "allowedCategories": [ "external" ]
     },
     {
       "name": "jquery",
-      "allowedCategories": ["production"]
+      "allowedCategories": [ "production" ]
     },
     {
       "name": "js-yaml",
-      "allowedCategories": ["production"]
+      "allowedCategories": [ "production" ]
     },
     {
       "name": "jsonschema",
-      "allowedCategories": ["external"]
+      "allowedCategories": [ "external" ]
     },
     {
       "name": "jss",
-      "allowedCategories": ["production"]
+      "allowedCategories": [ "production" ]
     },
     {
       "name": "jss-preset-default",
-      "allowedCategories": ["production"]
+      "allowedCategories": [ "production" ]
     },
     {
       "name": "jssm",
-      "allowedCategories": ["production"]
+      "allowedCategories": [ "production" ]
     },
     {
       "name": "jssm-viz",
-      "allowedCategories": ["production"]
+      "allowedCategories": [ "production" ]
     },
     {
       "name": "langium",
-      "allowedCategories": ["external", "production"]
+      "allowedCategories": [ "external", "production" ]
     },
     {
       "name": "langium-cli",
-      "allowedCategories": ["external", "production"]
+      "allowedCategories": [ "external", "production" ]
     },
     {
       "name": "less",
-      "allowedCategories": ["production"]
+      "allowedCategories": [ "production" ]
     },
     {
       "name": "less-plugin-variables-output",
-      "allowedCategories": ["production"]
+      "allowedCategories": [ "production" ]
     },
     {
       "name": "localforage",
-      "allowedCategories": ["production"]
+      "allowedCategories": [ "production" ]
     },
     {
       "name": "lodash",
-      "allowedCategories": ["external", "production", "tools"]
+      "allowedCategories": [ "external", "production", "tools" ]
     },
     {
       "name": "lodash-es",
-      "allowedCategories": ["production", "tools"]
+      "allowedCategories": [ "production", "tools" ]
     },
     {
       "name": "logform",
-      "allowedCategories": ["production"]
+      "allowedCategories": [ "production" ]
     },
     {
       "name": "magic-string",
-      "allowedCategories": ["production"]
+      "allowedCategories": [ "production" ]
     },
     {
       "name": "minimatch",
-      "allowedCategories": ["production"]
+      "allowedCategories": [ "production" ]
     },
     {
       "name": "mobx",
-      "allowedCategories": ["production"]
+      "allowedCategories": [ "production" ]
     },
     {
       "name": "mocha",
-      "allowedCategories": ["external"]
+      "allowedCategories": [ "external" ]
     },
     {
       "name": "monaco-editor",
-      "allowedCategories": ["production"]
+      "allowedCategories": [ "production" ]
     },
     {
       "name": "monaco-editor-core",
-      "allowedCategories": ["production"]
+      "allowedCategories": [ "production" ]
     },
     {
       "name": "monaco-editor-textmate",
-      "allowedCategories": ["production"]
+      "allowedCategories": [ "production" ]
     },
     {
       "name": "monaco-textmate",
-      "allowedCategories": ["production"]
+      "allowedCategories": [ "production" ]
     },
     {
       "name": "npm-run-all",
-      "allowedCategories": ["production"]
+      "allowedCategories": [ "production" ]
     },
     {
       "name": "ohm-js",
-      "allowedCategories": ["production"]
+      "allowedCategories": [ "production" ]
     },
     {
       "name": "onigasm",
-      "allowedCategories": ["production"]
+      "allowedCategories": [ "production" ]
     },
     {
       "name": "os-fonts",
-      "allowedCategories": ["production"]
+      "allowedCategories": [ "production" ]
     },
     {
       "name": "pako",
-      "allowedCategories": ["production"]
+      "allowedCategories": [ "production" ]
     },
     {
       "name": "pascal-case",
-      "allowedCategories": ["tools"]
+      "allowedCategories": [ "tools" ]
     },
     {
       "name": "pdfkit",
-      "allowedCategories": ["production"]
+      "allowedCategories": [ "production" ]
     },
     {
       "name": "pixi-better-scroller",
-      "allowedCategories": ["production"]
+      "allowedCategories": [ "production" ]
     },
     {
       "name": "pixi-flex",
-      "allowedCategories": ["production"]
+      "allowedCategories": [ "production" ]
     },
     {
       "name": "pixi.js",
-      "allowedCategories": ["production"]
+      "allowedCategories": [ "production" ]
     },
     {
       "name": "pkg",
-      "allowedCategories": ["production"]
+      "allowedCategories": [ "production" ]
     },
     {
       "name": "plist2",
-      "allowedCategories": ["production"]
+      "allowedCategories": [ "production" ]
     },
     {
       "name": "prettier",
-      "allowedCategories": ["production", "tools"]
+      "allowedCategories": [ "production", "tools" ]
     },
     {
       "name": "react",
-      "allowedCategories": ["production"]
+      "allowedCategories": [ "production" ]
     },
     {
       "name": "react-dom",
-      "allowedCategories": ["production"]
+      "allowedCategories": [ "production" ]
+    },
+    {
+      "name": "react-feather",
+      "allowedCategories": [ "production" ]
     },
     {
       "name": "react-spring",
-      "allowedCategories": ["production"]
+      "allowedCategories": [ "production" ]
     },
     {
       "name": "readability-scores",
-      "allowedCategories": ["production"]
+      "allowedCategories": [ "production" ]
     },
     {
       "name": "reconnecting-websocket",
-      "allowedCategories": ["production"]
+      "allowedCategories": [ "production" ]
     },
     {
       "name": "reflect-metadata",
-      "allowedCategories": ["production", "tools"]
+      "allowedCategories": [ "production", "tools" ]
     },
     {
       "name": "regenerator-runtime",
-      "allowedCategories": ["production"]
+      "allowedCategories": [ "production" ]
     },
     {
       "name": "regexp-to-ast",
-      "allowedCategories": ["external", "production"]
+      "allowedCategories": [ "external", "production" ]
     },
     {
       "name": "resize-observer-polyfill",
-      "allowedCategories": ["production"]
+      "allowedCategories": [ "production" ]
     },
     {
       "name": "rimraf",
-      "allowedCategories": ["external"]
+      "allowedCategories": [ "external" ]
     },
     {
       "name": "rollup",
-      "allowedCategories": ["production", "tools"]
+      "allowedCategories": [ "production", "tools" ]
     },
     {
       "name": "rollup-plugin-commonjs",
-      "allowedCategories": ["tools"]
+      "allowedCategories": [ "tools" ]
     },
     {
       "name": "rollup-plugin-multi-input",
-      "allowedCategories": ["production"]
+      "allowedCategories": [ "production" ]
     },
     {
       "name": "rollup-plugin-node-builtins",
-      "allowedCategories": ["production"]
+      "allowedCategories": [ "production" ]
     },
     {
       "name": "rollup-plugin-node-globals",
-      "allowedCategories": ["production"]
+      "allowedCategories": [ "production" ]
     },
     {
       "name": "rollup-plugin-node-polyfills",
-      "allowedCategories": ["production"]
+      "allowedCategories": [ "production" ]
     },
     {
       "name": "rollup-plugin-replace",
-      "allowedCategories": ["tools"]
+      "allowedCategories": [ "tools" ]
     },
     {
       "name": "rollup-plugin-sourcemaps",
-      "allowedCategories": ["tools"]
+      "allowedCategories": [ "tools" ]
     },
     {
       "name": "rollup-plugin-terser",
-      "allowedCategories": ["tools"]
+      "allowedCategories": [ "tools" ]
     },
     {
       "name": "rollup-plugin-typescript2",
-      "allowedCategories": ["tools"]
+      "allowedCategories": [ "tools" ]
     },
     {
       "name": "rollup-plugin-vue",
-      "allowedCategories": ["tools"]
+      "allowedCategories": [ "tools" ]
     },
     {
       "name": "rxjs",
-      "allowedCategories": ["production", "tools"]
+      "allowedCategories": [ "production", "tools" ]
     },
     {
       "name": "serve-static",
-      "allowedCategories": ["production"]
+      "allowedCategories": [ "production" ]
     },
     {
       "name": "solid-js",
-      "allowedCategories": ["production"]
+      "allowedCategories": [ "production" ]
     },
     {
       "name": "solid-styled-components",
-      "allowedCategories": ["production"]
+      "allowedCategories": [ "production" ]
     },
     {
       "name": "source-map-loader",
-      "allowedCategories": ["external"]
+      "allowedCategories": [ "external" ]
     },
     {
       "name": "sprotty-protocol",
-      "allowedCategories": ["external"]
+      "allowedCategories": [ "external" ]
     },
     {
       "name": "tiny-warning",
-      "allowedCategories": ["production"]
+      "allowedCategories": [ "production" ]
     },
     {
       "name": "triple-beam",
-      "allowedCategories": ["production"]
+      "allowedCategories": [ "production" ]
     },
     {
       "name": "ts-expose-internals",
-      "allowedCategories": ["production", "tools"]
+      "allowedCategories": [ "production", "tools" ]
     },
     {
       "name": "ts-import-plugin",
-      "allowedCategories": ["production", "tools"]
+      "allowedCategories": [ "production", "tools" ]
     },
     {
       "name": "ts-jest",
-      "allowedCategories": ["external", "production", "tools"]
+      "allowedCategories": [ "external", "production", "tools" ]
     },
     {
       "name": "ts-loader",
-      "allowedCategories": ["external"]
+      "allowedCategories": [ "external" ]
     },
     {
       "name": "ts-nameof",
-      "allowedCategories": ["production"]
+      "allowedCategories": [ "production" ]
     },
     {
       "name": "ts-node",
-      "allowedCategories": ["production", "tools"]
+      "allowedCategories": [ "production", "tools" ]
     },
     {
       "name": "ts-patch",
-      "allowedCategories": ["production", "tools"]
+      "allowedCategories": [ "production", "tools" ]
     },
     {
       "name": "tsdx",
-      "allowedCategories": ["production", "tools"]
+      "allowedCategories": [ "production", "tools" ]
     },
     {
       "name": "tslib",
-      "allowedCategories": ["production", "tools"]
+      "allowedCategories": [ "production", "tools" ]
     },
     {
       "name": "typescript",
-      "allowedCategories": ["external", "production", "tools"]
+      "allowedCategories": [ "external", "production", "tools" ]
     },
     {
       "name": "typescript-transform-paths",
-      "allowedCategories": ["tools"]
+      "allowedCategories": [ "tools" ]
     },
     {
       "name": "username",
-      "allowedCategories": ["production"]
+      "allowedCategories": [ "production" ]
     },
     {
       "name": "vite",
-      "allowedCategories": ["production", "tools"]
+      "allowedCategories": [ "production", "tools" ]
     },
     {
       "name": "vite-dts",
-      "allowedCategories": ["production"]
+      "allowedCategories": [ "production" ]
     },
     {
       "name": "vite-plugin-dts",
-      "allowedCategories": ["production"]
+      "allowedCategories": [ "production" ]
     },
     {
       "name": "vite-plugin-html",
-      "allowedCategories": ["production"]
+      "allowedCategories": [ "production" ]
     },
     {
       "name": "vite-plugin-imp",
-      "allowedCategories": ["production"]
+      "allowedCategories": [ "production" ]
     },
     {
       "name": "vite-plugin-macro",
-      "allowedCategories": ["production"]
+      "allowedCategories": [ "production" ]
     },
     {
       "name": "vite-plugin-monaco-editor",
-      "allowedCategories": ["production"]
+      "allowedCategories": [ "production" ]
     },
     {
       "name": "vite-plugin-monaco-editor-nls",
-      "allowedCategories": ["production"]
+      "allowedCategories": [ "production" ]
     },
     {
       "name": "vite-plugin-solid",
-      "allowedCategories": ["production"]
+      "allowedCategories": [ "production" ]
     },
     {
       "name": "vite-plugin-vue2",
-      "allowedCategories": ["production"]
+      "allowedCategories": [ "production" ]
     },
     {
       "name": "vscode-advscript",
-      "allowedCategories": ["production"]
+      "allowedCategories": [ "production" ]
     },
     {
       "name": "vscode-codicons",
-      "allowedCategories": ["production"]
+      "allowedCategories": [ "production" ]
     },
     {
       "name": "vscode-extension-telemetry",
-      "allowedCategories": ["production"]
+      "allowedCategories": [ "production" ]
     },
     {
       "name": "vscode-jsonrpc",
-      "allowedCategories": ["external", "production"]
+      "allowedCategories": [ "external", "production" ]
     },
     {
       "name": "vscode-languageclient",
-      "allowedCategories": ["external", "production"]
+      "allowedCategories": [ "external", "production" ]
     },
     {
       "name": "vscode-languageserver",
-      "allowedCategories": ["external", "production"]
+      "allowedCategories": [ "external", "production" ]
     },
     {
       "name": "vscode-languageserver-protocol",
-      "allowedCategories": ["external", "production"]
+      "allowedCategories": [ "external", "production" ]
     },
     {
       "name": "vscode-languageserver-textdocument",
-      "allowedCategories": ["external", "production"]
+      "allowedCategories": [ "external", "production" ]
     },
     {
       "name": "vscode-languageserver-types",
-      "allowedCategories": ["external", "production"]
+      "allowedCategories": [ "external", "production" ]
     },
     {
       "name": "vscode-oniguruma",
-      "allowedCategories": ["production"]
+      "allowedCategories": [ "production" ]
     },
     {
       "name": "vscode-test",
-      "allowedCategories": ["external", "production"]
+      "allowedCategories": [ "external", "production" ]
     },
     {
       "name": "vscode-textmate",
-      "allowedCategories": ["production"]
+      "allowedCategories": [ "production" ]
     },
     {
       "name": "vscode-uri",
-      "allowedCategories": ["external", "production"]
+      "allowedCategories": [ "external", "production" ]
     },
     {
       "name": "vue",
-      "allowedCategories": ["production", "tools"]
+      "allowedCategories": [ "production", "tools" ]
     },
     {
       "name": "vue-demi",
-      "allowedCategories": ["production"]
+      "allowedCategories": [ "production" ]
     },
     {
       "name": "vue-frag",
-      "allowedCategories": ["production"]
+      "allowedCategories": [ "production" ]
     },
     {
       "name": "vue-pixi-wrapper",
-      "allowedCategories": ["production"]
+      "allowedCategories": [ "production" ]
     },
     {
       "name": "vue-styled-components",
-      "allowedCategories": ["production"]
+      "allowedCategories": [ "production" ]
     },
     {
       "name": "vue-template-compiler",
-      "allowedCategories": ["production", "tools"]
+      "allowedCategories": [ "production", "tools" ]
     },
     {
       "name": "vue-types",
-      "allowedCategories": ["production"]
+      "allowedCategories": [ "production" ]
     },
     {
       "name": "wavefile",
-      "allowedCategories": ["production"]
+      "allowedCategories": [ "production" ]
     },
     {
       "name": "webpack",
-      "allowedCategories": ["external"]
+      "allowedCategories": [ "external" ]
     },
     {
       "name": "webpack-cli",
-      "allowedCategories": ["external"]
+      "allowedCategories": [ "external" ]
     },
     {
       "name": "winston",
-      "allowedCategories": ["production"]
+      "allowedCategories": [ "production" ]
     },
     {
       "name": "ws",
-      "allowedCategories": ["production"]
+      "allowedCategories": [ "production" ]
     },
     {
       "name": "yargs",
-      "allowedCategories": ["production"]
+      "allowedCategories": [ "production" ]
     },
     {
       "name": "yeoman-generator",
-      "allowedCategories": ["external"]
+      "allowedCategories": [ "external" ]
     },
     {
       "name": "yoga-layout",
-      "allowedCategories": ["production"]
+      "allowedCategories": [ "production" ]
     },
     {
       "name": "yoga-layout-prebuilt",
-      "allowedCategories": ["production"]
+      "allowedCategories": [ "production" ]
     },
     {
       "name": "yoga-layout-wasm",
-      "allowedCategories": ["production"]
+      "allowedCategories": [ "production" ]
     },
     {
       "name": "zora",
-      "allowedCategories": ["production"]
+      "allowedCategories": [ "production" ]
     },
     {
       "name": "zora-reporters",
-      "allowedCategories": ["production"]
+      "allowedCategories": [ "production" ]
     }
   ]
 }

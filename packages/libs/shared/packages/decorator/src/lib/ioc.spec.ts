@@ -6,7 +6,7 @@ import {
   Container,
   tagged,
   multiBindToService,
-  postConstruct,
+  postConstruct
 } from "inversify";
 
 export class PluginA {

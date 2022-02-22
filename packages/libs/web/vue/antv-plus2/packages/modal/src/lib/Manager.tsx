@@ -34,11 +34,11 @@ async function loadComponent<T extends VueConstructor>(target?: RendererOrCallba
     methods: {
       handleSubmit() {
         console.log("mock handleSubmit");
-      },
+      }
     },
     render() {
       return <div>{target}</div>;
-    },
+    }
   } as unknown as T;
 }
 
@@ -60,9 +60,9 @@ function getContentLoader<P extends ICommonModalProps<any>>(
             return {
               getInnerModal() {
                 return innerModal.value;
-              },
+              }
             };
-          },
+          }
         } as any;
         resolve(
           Render &&
@@ -73,8 +73,8 @@ function getContentLoader<P extends ICommonModalProps<any>>(
                   attrs: other,
                   on: {
                     close: handleOnClose!,
-                    update: forceUpdate!,
-                  },
+                    update: forceUpdate!
+                  }
                 }}
               />
             ))
@@ -85,7 +85,7 @@ function getContentLoader<P extends ICommonModalProps<any>>(
     content,
     getRef<SubmitData>(): CommonModalHandler<SubmitData> {
       return instance as any;
-    },
+    }
   };
 }
 export interface ICustomModalProps<
@@ -148,7 +148,7 @@ function normlizeModalProps(
   return defaults(props, {
     submitData,
     loadData,
-    content,
+    content
   });
 }
 
@@ -163,14 +163,14 @@ function convertModalProps(props: Partial<ICustomModalProps>) {
     maskClosable: true,
     confirmSubmit: false,
     confirmCancel: false,
-    confirmClose: false,
+    confirmClose: false
   });
   const { confirmSubmit, confirmCancel, confirmClose } = base;
   return Object.assign(base, {
     isSubmit,
     confirmSubmit: getConfirmOption(confirmSubmit, "确认提交", base.placement),
     confirmClose: getConfirmOption(confirmClose, "确认关闭", base.placement),
-    confirmCancel: getConfirmOption(confirmCancel, "确认" + base.cancelText, base.placement),
+    confirmCancel: getConfirmOption(confirmCancel, "确认" + base.cancelText, base.placement)
   });
 }
 function getConfirmOption(
@@ -183,7 +183,7 @@ function getConfirmOption(
         title: "提示",
         // placement,
         // getContainer: false,
-        content: expect$.is.str.filter(confirm) || defaultText,
+        content: expect$.is.str.filter(confirm) || defaultText
       }) as ConfirmOptions)
     : false;
 }
@@ -220,9 +220,9 @@ const staticOptions: Record<string, any> = {
     return {
       render(): any {
         return null;
-      },
+      }
     };
-  },
+  }
 };
 export interface ModalOptionsConfig extends BaseStaticOptions {}
 
@@ -259,14 +259,14 @@ let rootModalCaller: ModalManager;
 export class ModalManager implements IModalManager {
   static normalProps = {
     okButtonProps: {},
-    cancelButtonProps: {},
+    cancelButtonProps: {}
   };
   static spinningProps = {
     okButtonProps: {},
-    cancelButtonProps: {},
+    cancelButtonProps: {}
   };
   static viewProps = merge(cloneDeep(ModalManager.normalProps), {
-    okButtonProps: { style: { display: "none" } },
+    okButtonProps: { style: { display: "none" } }
   });
   static staticOptions = staticOptions;
 
@@ -396,7 +396,7 @@ export class ModalManager implements IModalManager {
         isSubmit
           ? {
               okButtonProps: other.okButtonProps,
-              cancelButtonProps: other.cancelButtonProps,
+              cancelButtonProps: other.cancelButtonProps
             }
           : { cancelButtonProps: other.cancelButtonProps },
         isSubmit ? normalProps : viewProps
@@ -405,23 +405,25 @@ export class ModalManager implements IModalManager {
 
     const contentLoader = getContentLoader<ICommonModalProps<SubmitData>>(
       {
-        loadData: async () => {
-          try {
-            // modal?.update({ loading: true });
-            const loaded = loadData && (await loadData());
-            return loaded;
-          } catch (error) {
-          } finally {
-            // modal?.update({ loading: false });
-          }
-        },
+        loadData:
+          loadData &&
+          (async () => {
+            try {
+              // modal?.update({ loading: true });
+              const loaded = await loadData();
+              return loaded;
+            } catch (error) {
+            } finally {
+              // modal?.update({ loading: false });
+            }
+          }),
         submitData,
         handleOnClose: () => context.modal.close(),
         forceUpdate(props) {
           // console.log(modal)
           context.modal?.update(props);
         },
-        ...formProps,
+        ...formProps
       },
       content
     );
@@ -463,7 +465,7 @@ export class ModalManager implements IModalManager {
         if (handle instanceof Promise) await handle;
         // contentLoader.getRef<SubmitData>().$destroy();
         return context.reject(new ModalEvent("close")), doClose && doClose();
-      },
+      }
     };
     // console.log("new config", config, formProps);
     return config;
@@ -493,7 +495,7 @@ export class ModalManager implements IModalManager {
             return context._modal;
           },
           resolve,
-          reject,
+          reject
         };
         context._modal = createProtalModal(
           this.convertOptions<SubmitData>(props, context),
@@ -509,7 +511,7 @@ export class ModalManager implements IModalManager {
           close() {
             context._modal.close();
             reject(new ModalEvent("close"));
-          },
+          }
         });
       });
       this.setVisible(false);

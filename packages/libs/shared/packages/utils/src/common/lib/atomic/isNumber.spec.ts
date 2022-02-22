@@ -34,6 +34,6 @@ function getExpectMap(allowNaN = false) {
     [NaN, allowNaN],
     [undefined, false],
     [null, false],
-    [Number(0), true],
+    [Number(0), true]
   ]);
 }

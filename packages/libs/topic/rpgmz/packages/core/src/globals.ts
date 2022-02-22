@@ -8,7 +8,7 @@ interface Array<T> {
 interface Math {
   /**
    * MZ内置方法，生成随机整数
-   * @param max
+   * @param max - 最大数值
    */
   randomInt(max: number): number;
 }

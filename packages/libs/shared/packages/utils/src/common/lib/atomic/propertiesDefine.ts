@@ -17,7 +17,7 @@ export function defineProperties<T, V>(
     descs[key] = {
       value: Object.freeze(values[key]),
       writable: false,
-      ...(options || {}),
+      ...(options || {})
     };
   }
   return Object.defineProperties(target, descs) as any;

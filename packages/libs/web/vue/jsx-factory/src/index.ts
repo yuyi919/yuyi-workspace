@@ -10,6 +10,7 @@ Vue.use(VueRef);
 if (isVue2) {
   Vue.directive("frag", frag);
 }
+// eslint-disable-next-line @typescript-eslint/naming-convention
 export interface ExtendIntrinsicAttributes {
   ["v-slot"]?: string;
   /**
@@ -50,7 +51,7 @@ const ON = "on";
 const NATIVEON = "nativeOn";
 
 type Element = string | VueConstructor<Vue>;
-export type Options = { [option: string]: any };
+type Options = Record<string, any>;
 
 export const getEventNames = (options: Options) =>
   Object.keys(options).filter((option) => option.startsWith("on"));
@@ -78,6 +79,7 @@ export const getAttributes = (options: Options, excluded: string[]) => {
 export const boxSlots = (slots: any) => {
   const result = {};
   if (slots) {
+    // eslint-disable-next-line guard-for-in
     for (const key in slots) {
       result[key] = () => slots[key];
     }
@@ -130,11 +132,11 @@ export const getJArgumentsWithOptions = (
       [ON]: mapEventNamesToHandlerPairs(options, eventNames),
       [MODEL]: vModel,
       domProps: domPropsInnerHTML && {
-        innerHTML: domPropsInnerHTML,
+        innerHTML: domPropsInnerHTML
       },
       key,
       directives: directives || [],
-      [elementIsAComponent ? PROPS : ATTRS]: props,
+      [elementIsAComponent ? PROPS : ATTRS]: props
     },
     { props: _props, attrs, nativeOn, on, scopedSlots: boxSlots(slots) },
     ...(_mergeJsxPropsArgs || [])
@@ -142,14 +144,17 @@ export const getJArgumentsWithOptions = (
   if (isVue2 && (useCallbackRef || useRefObj)) {
     data.directives[data.directives.length] = {
       name: "ref",
-      value: useCallbackRef ? ref : (el) => (ref.value = el),
+      value: useCallbackRef ? ref : (el) => (ref.value = el)
     };
   }
   return {
     data,
-    children: _children ? ({ 0: _children, 1: children } as any) : children,
+    children: _children ? ({ 0: _children, 1: children } as any) : children
   };
 };
+
+export const Fragment: Element = Symbol("Fragment") as any;
+const fragFunction = { directives: [{ name: "frag" }] };
 export function jsxEsbuild(
   element: Element,
   options: Options | null,
@@ -167,13 +172,12 @@ export function jsxEsbuild(
   }
   return h(element, children);
 }
-const fragFunction = { directives: [{ name: "frag" }] };
 export function jsx(element: Element, props: Options | null, key?: string) {
   if (props) {
     const { children, ...options } = props;
     const { data, children: renderChildren } = getJArgumentsWithOptions(
       element,
-      options,
+      Object.assign(options, { key }),
       children || []
     );
     if (element === Fragment) {
@@ -187,7 +191,6 @@ export function jsx(element: Element, props: Options | null, key?: string) {
   return h(element);
 }
 export const jsxs = jsx;
-export const Fragment: Element = Symbol("Fragment") as any;
 
 export * from "./mergeJsxPropsToVNode";
 export * from "./VNode";

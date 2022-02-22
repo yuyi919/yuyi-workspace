@@ -1,8 +1,9 @@
+/* eslint-disable guard-for-in */
 // @flow
 import warning from "tiny-warning";
 import { getDynamicStyles, StyleSheetFactoryOptions } from "jss";
 import type { StyleSheet } from "jss";
-import type { Context, DynamicRules, Styles } from "../types";
+import type { Context, DynamicRules, StyleItems } from "../types";
 import { getManager } from "./managers";
 import defaultJss from "../jss";
 import { addMeta, getMeta } from "./sheetsMeta";
@@ -13,7 +14,7 @@ interface Options<Theme> {
   theme: Theme;
   name?: string;
   index: number;
-  styles: Styles<Theme>;
+  styles: StyleItems<Theme>;
   sheetOptions: StyleSheetFactoryOptions;
 }
 
@@ -37,6 +38,7 @@ const getStyles = <Theme>(options: Options<Theme>) => {
 
 function getSheetOptions<Theme>(options: Options<Theme>, link: boolean) {
   let minify: boolean;
+  // eslint-disable-next-line eqeqeq
   if (options.context.id && options.context.id.minify != null) {
     minify = options.context.id.minify;
   }
@@ -57,7 +59,7 @@ function getSheetOptions<Theme>(options: Options<Theme>, link: boolean) {
     meta,
     classNamePrefix,
     link,
-    generateId: options.sheetOptions.generateId || options.context.generateId,
+    generateId: options.sheetOptions.generateId || options.context.generateId
   });
   return {
     ...options.sheetOptions,
@@ -66,7 +68,7 @@ function getSheetOptions<Theme>(options: Options<Theme>, link: boolean) {
     meta,
     classNamePrefix,
     link,
-    generateId: options.sheetOptions.generateId || options.context.generateId,
+    generateId: options.sheetOptions.generateId || options.context.generateId
   };
 }
 
@@ -89,7 +91,7 @@ export const createStyleSheet = <Theme extends Types.IObj>(options: Options<Them
 
   addMeta(sheet, {
     dynamicStyles,
-    styles,
+    styles
   });
 
   manager.add(options.theme, sheet);

@@ -75,7 +75,7 @@ class DebugInstance {
     Object.defineProperty(this, "JSON", {
       get() {
         return JSON.stringify(target);
-      },
+      }
     });
   }
 }
@@ -88,7 +88,7 @@ class Source {
       get() {
         console.log(target);
         return "loaded";
-      },
+      }
     });
   }
 }
@@ -120,7 +120,7 @@ export class Logger {
 
   constructor(public name: string = "Global", public option: LoggerOption = {}) {
     defaults(option, {
-      enabled: process.env.NODE_ENV === "development",
+      enabled: process.env.NODE_ENV === "development"
     });
     globalLoggerMap.set(name, this);
   }
@@ -137,15 +137,15 @@ export class Logger {
     error: {
       main: "color: red;", // 第一部分 main
       content: "color: red;", // 第二部分 默认content
-      other: "color: red;", // 第三部分 track
-    },
+      other: "color: red;" // 第三部分 track
+    }
   };
   static defaultOption: LoggerOption = {
     enabled: true,
     immediate: true,
     style: true,
     stackDeep: 5,
-    stack: false,
+    stack: false
   };
 
   get localOption() {
@@ -174,7 +174,7 @@ export class Logger {
       line: `${defaultStyle.line}; ${style.line}`,
       main: `${defaultStyle.main}; ${style.main}`,
       content: `${defaultStyle.content}; ${style.content}`,
-      other: `${defaultStyle.other}; ${style.other}`,
+      other: `${defaultStyle.other}; ${style.other}`
     };
     if (!hasError) return main;
     return {
@@ -183,7 +183,7 @@ export class Logger {
         this._processStyle(style.error, defaultStyle.error, false),
         main,
         false
-      ),
+      )
     };
   }
 
@@ -321,7 +321,7 @@ function formatter(
     `font-weight:bold;${style.line};${style.main}`, // 第一部分 main
     style.line, //重定义
     `${style.line};${style.content};`, // 第二部分 默认content
-    ...contentStyles.map(([selfStyle]) => `${style.line};${selfStyle}`), // 第三部分 content 各自处理
+    ...contentStyles.map(([selfStyle]) => `${style.line};${selfStyle}`) // 第三部分 content 各自处理
   ];
   const asyncStack = logger.localOption.stack === "async";
   const track = logger.localOption.stack && getTrack(logger, currentId);
@@ -343,7 +343,7 @@ function formatter(
       {},
     {
       result: logger.localOption.stack && !asyncStack ? [...result, track.result] : result,
-      hasSource,
+      hasSource
     }
   );
 }
@@ -359,7 +359,7 @@ function formatterOther(
     `font-weight: bold; ${style.line}; ${style.content}`,
     style.line, //重定义
     `${style.line}; ${style.other}`,
-    target,
+    target
   ];
 }
 // async function sourcemapCatch(logger: Logger, url: string, row: number, col: number) {
@@ -420,7 +420,7 @@ function getTrack(logger: Logger, currentId: number) {
       {},
       {
         result,
-        hasSource,
+        hasSource
       }
     );
   }

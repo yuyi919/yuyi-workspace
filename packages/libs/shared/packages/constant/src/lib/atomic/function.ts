@@ -65,7 +65,7 @@ export const OBJ_definePropertyNormal$ = function (
     [V]: value,
     [W]: true,
     [C]: true,
-    [E]: true,
+    [E]: true
   });
 };
 /**

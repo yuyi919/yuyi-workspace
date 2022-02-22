@@ -1,106 +1,12 @@
-import {
-  Container,
-  Sprite,
-  ParticleContainer,
-  Stage,
-  useApp,
-  _ReactPixi,
-} from "@inlet/react-pixi/animated";
-import { AnimatedDisplayObjectProps } from "@plugins/react-pixijs";
-import { Flex, FlexBox, FlexBoxRenderProps, FlexProps } from "@plugins/react-pixijs/components";
-import { animated, Spring, useSpring, to } from "@react-spring/web";
+import { Container, Sprite, Stage, useApp } from "@inlet/react-pixi/animated";
+import { Flex, FlexBoxRenderProps } from "@plugins/react-pixijs/components";
+import { animated, Spring, useSpring } from "@react-spring/web";
 import { CSSProperties } from "@yuyi919/shared-types";
-import { defaults } from "lodash";
 import React from "react";
-
-export const FlexContainer = React.forwardRef<
-  PIXI.Container,
-  React.PropsWithChildren<
-    AnimatedDisplayObjectProps<PIXI.Container> & { background?: boolean; flex?: FlexProps }
-  >
->(({ flex, children, x, y, scale, visible, background, ...props }, ref) => {
-  const flexProps = React.useMemo(() => {
-    const { width, height } = props;
-    return defaults(flex, { width, height });
-  }, [flex, props.width, props.height]);
-  return (
-    <FlexBox {...flexProps}>
-      {({ ready, ...renderer }) => {
-        ready && console.log(renderer, ref);
-        const xy = {
-          x: to(x ?? 0, (x) => x + renderer.x),
-          y: to(y ?? 0, (x) => x + renderer.y),
-        };
-        return (
-          <Container
-            ref={ref}
-            {...(ready
-              ? {
-                  ...renderer,
-                  ...xy,
-                  visible: visible ?? true,
-                }
-              : { visible: false })}
-            scale={(scale as _ReactPixi.PointLike) || 1}
-            {...props}
-          >
-            {background && (
-              <Sprite
-                texture={PIXI.Texture.WHITE}
-                tint={0xaddb67}
-                width={flexProps.width}
-                height={flexProps.height}
-                anchor={renderer.anchor}
-              />
-            )}
-            {children}
-          </Container>
-        );
-      }}
-    </FlexBox>
-  );
-});
-FlexContainer.displayName = "FlexContainer";
-
-export const FlexParticleContainer = React.forwardRef<
-  PIXI.ParticleContainer,
-  React.PropsWithChildren<
-    AnimatedDisplayObjectProps<PIXI.ParticleContainer> & { background?: boolean; flex?: FlexProps }
-  >
->(({ flex, children, scale, visible, background, ...props }, ref) => {
-  const flexProps = React.useMemo(() => {
-    const { width, height } = props;
-    return defaults(flex, { width, height });
-  }, [flex, props.width, props.height]);
-  return (
-    <FlexBox {...flexProps}>
-      {({ ready, width, height, ...renderer }) => {
-        ready && console.log(renderer, ref);
-        return (
-          <ParticleContainer
-            properties={{ position: true }}
-            ref={ref}
-            {...(ready ? { ...renderer, visible: visible ?? true } : { visible: false })}
-            scale={(scale as _ReactPixi.PointLike) || 1}
-            {...props}
-          >
-            {background && (
-              <Sprite
-                texture={PIXI.Texture.WHITE}
-                tint={0xaddb67}
-                width={flexProps.width}
-                height={flexProps.height}
-                anchor={renderer.anchor}
-              />
-            )}
-            {children}
-          </ParticleContainer>
-        );
-      }}
-    </FlexBox>
-  );
-});
-FlexParticleContainer.displayName = "FlexParticleContainer";
+import ReactDOM from "react-dom";
+import { FlexContainer } from "./FlexContainer";
+import Dialog from "./Dialog";
+import { MessageHub, AddFunction } from "./components";
 
 export const View = () => {
   const app = useApp();
@@ -124,7 +30,7 @@ export const View = () => {
       {...{
         flexDirection: "row",
         alignItems: "center",
-        justifyContent: "space-evenly",
+        justifyContent: "space-evenly"
       }}
     >
       <Spring
@@ -140,7 +46,7 @@ export const View = () => {
             flex={{
               flexDirection: "row",
               alignItems: "center",
-              justifyContent: "space-around",
+              justifyContent: "space-around"
             }}
             pivot={[0, 58]}
             scale={props.scaleY.to((y) => [1, y])}
@@ -148,7 +54,7 @@ export const View = () => {
           >
             <Container>
               <FlexContainer width={120} height={height} background>
-                <Sprite image={"/public/dialog_frame.png"} />
+                <Sprite texture={PIXI.Texture.WHITE} tint={0xaddb67} />
               </FlexContainer>
               <FlexContainer width={254} height={102} background>
                 <Spring
@@ -159,7 +65,8 @@ export const View = () => {
                 >
                   {({ scale, ...props }) => (
                     <Sprite
-                      image={"/public/dialog_back.png"}
+                      texture={PIXI.Texture.WHITE}
+                      tint={0xaddb67}
                       anchor={0.5}
                       position={{ x: 127, y: 51 }}
                       scale={scale.to((scale) => [scale, 1])}
@@ -170,7 +77,8 @@ export const View = () => {
               </FlexContainer>
               <FlexContainer width={120} height={116} background>
                 <Sprite
-                  image={"/public/dialog_frame.png"}
+                  texture={PIXI.Texture.WHITE}
+                  tint={0xaddb67}
                   scale={{ x: -1, y: 1 }}
                   position={{ x: 120, y: 0 }}
                 />
@@ -182,22 +90,55 @@ export const View = () => {
     </Flex>
   );
 };
-export const App = () => {
-  const width = 500;
-  const height = 500;
-  const [show, setShow] = React.useState(true);
-  const [num, update] = React.useState(1);
+
+function TestHub() {
+  const ref = React.useRef<null | AddFunction>(null);
+
+  const handleClick = React.useCallback(() => {
+    ref.current?.("test");
+  }, []);
+  const remote = React.useMemo<HTMLDivElement>(() => document.createElement("div"), []);
   React.useEffect(() => {
-    const handle = () => {
-      update((x) => x + 1);
-    };
-    window.addEventListener("click", handle);
-    return () => {
-      window.removeEventListener("click", handle);
-    };
-  });
+    document.body.appendChild(remote);
+    return () => remote.remove();
+  }, []);
   return (
     <div>
+      <button onClick={handleClick}>test</button>
+      {ReactDOM.createPortal(
+        <MessageHub
+          children={(add: AddFunction) => {
+            ref.current = add;
+          }}
+        />,
+        remote
+      )}
+    </div>
+  );
+}
+export const App = () => {
+  const width = 1280;
+  const height = 720;
+  const [show, setShow] = React.useState(true);
+  // const [num, update] = React.useState(1);
+  // React.useEffect(() => {
+  //   const handle = () => {
+  //     update((x) => x + 1);
+  //   };
+  //   window.addEventListener("click", handle);
+  //   return () => {
+  //     window.removeEventListener("click", handle);
+  //   };
+  // });
+  return (
+    <div
+      style={{
+        flexDirection: "column",
+        placeItems: "center",
+        display: "flex"
+      }}
+    >
+      <TestHub />
       {/* <Chestnut /> */}
       {/* <ContextBridge
         Context={AppContext}
@@ -214,14 +155,10 @@ export const App = () => {
       >
         <View></View>
       </ContextBridge> */}
-      <Stage
-        {...{ width, height }}
-        options={{
-          backgroundColor: 0xffffff,
-        }}
-        raf
-      >
-        <View></View>
+      <Stage {...{ width, height }} options={{}} raf>
+        {/* <Sprite image="/public/bg_1.jpg" /> */}
+        {/* <Dialog x={640} y={360}></Dialog> */}
+        {/* <View></View> */}
       </Stage>
       {/* <Box ready>
         <SNumber number={num} />
@@ -278,7 +215,7 @@ const Box: React.FC<Partial<FlexBoxRenderProps> & Omit<CSSProperties, keyof Flex
           top: y,
           background: "white",
           position: "absolute",
-          ...style,
+          ...style
         }}
       >
         {children}

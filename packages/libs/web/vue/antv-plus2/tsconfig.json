@@ -17,30 +17,6 @@
       "path": "../use"
     },
     {
-      "path": "../../../tools/build-tools"
-    },
-    {
-      "path": "./packages/helper"
-    },
-    {
-      "path": "./packages/theme"
-    },
-    {
-      "path": "./packages/shared"
-    },
-    {
-      "path": "./packages/table"
-    },
-    {
-      "path": "./packages/action"
-    },
-    {
-      "path": "./packages/modal"
-    },
-    {
-      "path": "./packages/form"
-    },
-    {
       "path": "./tsconfig.lib.json"
     },
     {

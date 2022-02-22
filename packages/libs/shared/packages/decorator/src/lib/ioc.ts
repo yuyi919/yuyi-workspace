@@ -4,7 +4,7 @@ import "reflect-metadata";
 export const T = {
   Config: Symbol("Config"),
   Plugin: Symbol("Plugin"),
-  NamedPlugin: Symbol("NamedPlugin"),
+  NamedPlugin: Symbol("NamedPlugin")
 };
 
 @Injectable()

@@ -3,7 +3,7 @@ import Vue, { ComponentOptions } from "vue";
 import { PropType } from "vue-demi";
 import { default as PropTypes, initDefaultProps } from "./prop-types";
 
-export interface TypedPropOptions<T, Required extends boolean> {
+export interface ITypedPropOptions<T, Required extends boolean> {
   type?: PropType<T> | null;
   required?: Required | null;
   default?: T | (() => T) | null;
@@ -22,7 +22,7 @@ export const UNSAFE_STORE_PROPS_KEY = "@props";
 const UNSAFE_WALKER = () => null;
 export function extractProps<T>(target: Types.Consturctor<T>): TypedPropsGroup<T> {
   if (target instanceof Vue) {
-    return ((target as any)["options"] as ComponentOptions<any, any, any, any, any>)["props"];
+    return ((target as any).options as ComponentOptions<any, any, any, any, any>).props;
   }
   // console.log(target.props);
   return target[UNSAFE_STORE_PROPS_KEY as unknown as string] ?? target.props;
@@ -30,7 +30,11 @@ export function extractProps<T>(target: Types.Consturctor<T>): TypedPropsGroup<T
 
 export type WalkHandler<T, R extends T> = (
   props: Partial<T>,
-  walker: (propName: keyof T, propValue: T[keyof T], options: TypedPropOptions<any, boolean>) => any
+  walker: (
+    propName: keyof T,
+    propValue: T[keyof T],
+    options: ITypedPropOptions<any, boolean>
+  ) => any
 ) => R;
 
 /**
@@ -40,9 +44,9 @@ export type WalkHandler<T, R extends T> = (
  *
  * 相对的，提供返回数组中第二个函数作为手动进行props处理的方法
  *
- * @param target 配置的PropsClass
+ * @param target - 配置的PropsClass
  *
- * @param configure 在处理完之后的hooks，传入props作为参数然后返回修改后的props
+ * @param configure - 在处理完之后的hooks，传入props作为参数然后返回修改后的props
  * @returns
  */
 export function extractUnsafeProps<T, R extends T>(
@@ -60,14 +64,26 @@ export function extractUnsafeProps<T, R extends T>(
       walker: (
         propName: keyof T,
         propValue: T[typeof propName] | undefined | null,
-        options: TypedPropOptions<any, boolean>
+        options: ITypedPropOptions<any, boolean>
       ) => any
     ) => {
       return extractor(props, walker) as R;
-    },
+    }
   ] as const;
 }
 
+/**
+ * 判断是否为简单类型
+ *
+ * 1.default不为factory类型
+ *
+ * 2.进行非空判断需要使用 `??` 而非 `||` 以便正确判断 (false/""/0)
+ * @param type -
+ */
+const _isSimpleType = (type: any): boolean => {
+  if (type instanceof Array && type.length > 0) return type.every(_isSimpleType);
+  return [Boolean, Number, String, Function, null, void 0, false].includes(type);
+};
 export function createPropExtractor<T, R extends T>(
   source: TypedPropsGroup<T>,
   configure?: (props: T) => R
@@ -77,13 +93,14 @@ export function createPropExtractor<T, R extends T>(
     walker: (
       propName: keyof T,
       propValue: T[typeof propName] | undefined | null,
-      options: TypedPropOptions<any, boolean>
+      options: ITypedPropOptions<any, boolean>
     ) => any
   ): R => {
     const p = {} as T;
+    // eslint-disable-next-line guard-for-in
     for (const key in source) {
       const options = ((source[key] instanceof Function ? { type: source[key] } : source[key]) ||
-        {}) as TypedPropOptions<any, boolean>;
+        {}) as ITypedPropOptions<any, boolean>;
       const resolve = walker(key, props[key]!, options);
       const isSimpleType = _isSimpleType(options.type);
       if (isSimpleType) {
@@ -95,18 +112,6 @@ export function createPropExtractor<T, R extends T>(
     return configure ? configure(p) : (p as unknown as R);
   };
 }
-/**
- * 判断是否为简单类型
- *
- * 1.default不为factory类型
- *
- * 2.进行非空判断需要使用 `??` 而非 `||` 以便正确判断 (false/""/0)
- * @param type
- */
-const _isSimpleType = (type: any): boolean => {
-  if (type instanceof Array && type.length > 0) return type.every(_isSimpleType);
-  return [Boolean, Number, String, Function, null, void 0, false].includes(type);
-};
 
 export function extractPropsWith<T>(
   target: Types.Consturctor<T>,
@@ -115,6 +120,7 @@ export function extractPropsWith<T>(
   const source: TypedPropsGroup<T> = target[UNSAFE_STORE_PROPS_KEY as unknown as string];
   if (!walker) return source;
   const p = {} as TypedPropsGroup<T>;
+  // eslint-disable-next-line guard-for-in
   for (const key in source) {
     p[key] = walker(source[key], key);
   }
@@ -123,7 +129,7 @@ export function extractPropsWith<T>(
 export function Prop<Required extends boolean>(
   options?:
     | null
-    | TypedPropOptions<any, Required>
+    | ITypedPropOptions<any, Required>
     | Types.Consturctor<any>[]
     | Types.Consturctor<any>
 ) {
@@ -152,17 +158,53 @@ export function Component(options?: any) {
         : Object.seal(props);
     }
     if (target instanceof Vue) {
-      console.log(target.sealedOptions.props);
+      console.debug(target.sealedOptions.props);
     }
     Object.defineProperty(target, "options", {
       get() {
         const { [UNSAFE_STORE_PROPS_KEY]: props, ...other } = target;
-        console.log("collect props", target?.name, props, target);
+        console.debug("collect props", target?.name, props, target);
         return { ...other, props };
       },
-      enumerable: false,
+      enumerable: false
     });
   };
 }
 
 export { PropTypes, initDefaultProps };
+
+/**
+ * @param ctorA -
+ */
+export function MergeProps<A>(ctorA: Types.ConstructorType<A>): Types.ConstructorType<A>;
+export function MergeProps<A, B>(
+  ctorA: Types.ConstructorType<A>,
+  ctorB: Types.ConstructorType<B>
+): Types.ConstructorType<A & B>;
+export function MergeProps<A, B, C>(
+  ctorA: Types.ConstructorType<A>,
+  ctorB: Types.ConstructorType<B>,
+  ctorC: Types.ConstructorType<C>
+): Types.ConstructorType<A & B & C>;
+export function MergeProps<A, B, C, D>(
+  ctorA: Types.ConstructorType<A>,
+  ctorB: Types.ConstructorType<B>,
+  ctorC: Types.ConstructorType<C>,
+  ctorD: Types.ConstructorType<D>
+): Types.ConstructorType<A & B & C & D>;
+export function MergeProps<A, B, C, D, E>(
+  ctorA: Types.ConstructorType<A>,
+  ctorB: Types.ConstructorType<B>,
+  ctorC: Types.ConstructorType<C>,
+  ctorD: Types.ConstructorType<D>,
+  ctorE: Types.ConstructorType<E>
+): Types.ConstructorType<A & B & C & D & E>;
+
+export function MergeProps(...ctors: Types.ConstructorType<any>[]) {
+  //@ts-ignore
+  return Vue.extend({
+    mixins: ctors.map((props) => {
+      return { props: extractProps(props) };
+    })
+  }) as any;
+}

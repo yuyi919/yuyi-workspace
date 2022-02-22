@@ -3,6 +3,7 @@ import { Utils } from "./utils";
 import { Video } from "./video";
 import { FPSCounter } from "./fpsCounter";
 
+type EffekseerContext = any;
 //-----------------------------------------------------------------------------
 /**
  * The static class that carries out graphics processing.
@@ -23,8 +24,17 @@ export class Graphics {
   static _app: PIXI.Application | null;
   static _effekseer: any;
   static _wasLoading: boolean;
+  /**
+   * The total frame count of the game screen.
+   */
   static frameCount: number;
+  /**
+   * The width of the window display area.
+   */
   static boxWidth: number;
+  /**
+   * The height of the window display area.
+   */
   static boxHeight: number;
 
   static FPSCounter = FPSCounter;
@@ -32,7 +42,7 @@ export class Graphics {
   /**
    * Initializes the graphics system.
    *
-   * @returns {boolean} True if the graphics system is available.
+   * @returns True if the graphics system is available.
    */
   static initialize(): boolean {
     this._width = 0;
@@ -49,28 +59,10 @@ export class Graphics {
     this._effekseer = null;
     this._wasLoading = false;
 
-    /**
-     * The total frame count of the game screen.
-     *
-     * @type number
-     * @name Graphics.frameCount
-     */
     this.frameCount = 0;
 
-    /**
-     * The width of the window display area.
-     *
-     * @type number
-     * @name Graphics.boxWidth
-     */
     this.boxWidth = this._width;
 
-    /**
-     * The height of the window display area.
-     *
-     * @type number
-     * @name Graphics.boxHeight
-     */
     this.boxHeight = this._height;
 
     this._updateRealScale();
@@ -87,8 +79,6 @@ export class Graphics {
    * The PIXI.Application object.
    *
    * @readonly
-   * @type PIXI.Application
-   * @name Graphics.app
    */
   static get app(): PIXI.Application | null {
     return this._app;
@@ -98,17 +88,15 @@ export class Graphics {
    * The context object of Effekseer.
    *
    * @readonly
-   * @type EffekseerContext
-   * @name Graphics.effekseer
    */
-  static get effekseer(): any {
+  static get effekseer(): EffekseerContext {
     return this._effekseer;
   }
 
   /**
    * 注册tick监听器
    *
-   * @param {function} handler - The listener function to be added for updates.
+   * @param handler - The listener function to be added for updates.
    */
   static setTickHandler(handler: (deltaTime: number) => void): void {
     this._tickHandler = handler;
@@ -135,7 +123,7 @@ export class Graphics {
   /**
    * Sets the stage to be rendered.
    *
-   * @param {Stage} stage - The stage object to be rendered.
+   * @param stage - The stage object to be rendered.
    */
   static setStage(stage: PIXI.Container | null): void {
     if (this._app) {
@@ -155,7 +143,7 @@ export class Graphics {
   /**
    * Erases the loading spinner.
    *
-   * @returns {boolean} True if the loading spinner was active.
+   * @returns True if the loading spinner was active.
    */
   static endLoading(): boolean {
     if (document.getElementById("loadingSpinner")) {
@@ -169,9 +157,9 @@ export class Graphics {
   /**
    * Displays the error text to the screen.
    *
-   * @param {string} name - The name of the error.
-   * @param {string} message - The message of the error.
-   * @param {Error} [error] - The error object.
+   * @param name - The name of the error.
+   * @param message - The message of the error.
+   * @param error - The error object.
    */
   static printError(name: string, message: string, error?: any): void {
     if (!this._errorPrinter) {
@@ -185,7 +173,7 @@ export class Graphics {
   /**
    * Displays a button to try to reload resources.
    *
-   * @param {function} retry - The callback function to be called when the button
+   * @param retry - The callback function to be called when the button
    *                           is pressed.
    */
   static showRetryButton(retry: () => void): void {
@@ -219,8 +207,8 @@ export class Graphics {
    * Converts an x coordinate on the page to the corresponding
    * x coordinate on the canvas area.
    *
-   * @param {number} x - The x coordinate on the page to be converted.
-   * @returns {number} The x coordinate on the canvas area.
+   * @param x - The x coordinate on the page to be converted.
+   * @returns The x coordinate on the canvas area.
    */
   static pageToCanvasX(x: number): number {
     if (this._canvas) {
@@ -235,8 +223,8 @@ export class Graphics {
    * Converts a y coordinate on the page to the corresponding
    * y coordinate on the canvas area.
    *
-   * @param {number} y - The y coordinate on the page to be converted.
-   * @returns {number} The y coordinate on the canvas area.
+   * @param y - The y coordinate on the page to be converted.
+   * @returns The y coordinate on the canvas area.
    */
   static pageToCanvasY(y: number): number {
     if (this._canvas) {
@@ -250,9 +238,9 @@ export class Graphics {
   /**
    * Checks whether the specified point is inside the game canvas area.
    *
-   * @param {number} x - The x coordinate on the canvas area.
-   * @param {number} y - The y coordinate on the canvas area.
-   * @returns {boolean} True if the specified point is inside the game canvas area.
+   * @param x - The x coordinate on the canvas area.
+   * @param y - The y coordinate on the canvas area.
+   * @returns True if the specified point is inside the game canvas area.
    */
   static isInsideCanvas(x: number, y: number): boolean {
     return x >= 0 && x < this._width && y >= 0 && y < this._height;
@@ -275,8 +263,8 @@ export class Graphics {
   /**
    * Changes the size of the game screen.
    *
-   * @param {number} width - The width of the game screen.
-   * @param {number} height - The height of the game screen.
+   * @param width - The width of the game screen.
+   * @param height - The height of the game screen.
    */
   static resize(width: number, height: number): void {
     this._width = width;
@@ -287,9 +275,6 @@ export class Graphics {
 
   /**
    * The width of the game screen.
-   *
-   * @type number
-   * @name Graphics.width
    */
   static get width(): number {
     return this._width;
@@ -303,9 +288,6 @@ export class Graphics {
 
   /**
    * The height of the game screen.
-   *
-   * @type number
-   * @name Graphics.height
    */
   static get height(): number {
     return this._height;
@@ -319,9 +301,6 @@ export class Graphics {
 
   /**
    * The default zoom scale of the game screen.
-   *
-   * @type number
-   * @name Graphics.defaultScale
    */
   static get defaultScale(): number {
     return this._defaultScale;
@@ -575,7 +554,7 @@ export class Graphics {
       // this._updateAllElements()
       this._app = new PIXI.Application({
         view: this._canvas,
-        autoStart: false,
+        autoStart: false
       });
       this._app.ticker.remove(this._app.render, this._app);
       this._app.ticker.add(this._onTick, this);

@@ -5,7 +5,7 @@ describe("test", () => {
       expect$.is.bool(true),
       expect$.is.bool(false),
       expect$.is.bool(Boolean("true")),
-      expect$.is.not.bool(Boolean("true")),
+      expect$.is.not.bool(Boolean("true"))
     ]).toMatchInlineSnapshot(`
       Array [
         true,
@@ -22,8 +22,8 @@ describe("test", () => {
       expect$({
         num(t) {
           return typeof t === "boolean";
-        },
-      }).bool.num.filter(Number("2") as any, void 0, false),
+        }
+      }).bool.num.filter(Number("2") as any, void 0, false)
     ]).toMatchInlineSnapshot(`
       Array [
         false,

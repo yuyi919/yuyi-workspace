@@ -49,14 +49,14 @@ function appendPipe(o: any, name: string, func: any, enumerable = true) {
     Object.defineProperty(o, name, {
       get: func,
       enumerable,
-      configurable: true,
+      configurable: true
     }),
     o
   );
 }
 function assignAppendPipe(o: any, target: any) {
   for (const name in target) {
-    Object.defineProperty(o, name, Object.getOwnPropertyDescriptor(target, name));
+    Object.defineProperty(o, name, Object.getOwnPropertyDescriptor(target, name)!);
   }
   return o;
 }
@@ -70,8 +70,8 @@ type Env = {
 const defaultEnv: Env = {
   // flag: null,
   not: false,
-  filter: null,
-  type: null,
+  filter: null!,
+  type: null!
 };
 
 function checkerExpect(env: Env, handle: Function, target: any) {
@@ -88,13 +88,13 @@ function configure(env: Env, name: string) {
 
 function filterRunner(env: Env, ...args: any[]) {
   const r = env.filter.apply(null, args);
-  env.filter = null;
+  env.filter = null!;
   Object.assign(env, defaultEnv);
   return r;
 }
 
 function createChecker(
-  env: Env = { ...defaultEnv, core: null as Checker<any> },
+  env: Env = { ...defaultEnv, core: null! as Checker<any> },
   options?: ExpectorOptions
 ): Checker<any> {
   let result = env.core;
@@ -128,6 +128,6 @@ function createChecker(
 export const expect$: GlobalExpector = Object.assign(
   (options?: ExpectorOptions) => createChecker(void 0, options),
   {
-    is: createChecker(),
+    is: createChecker()
   }
 );

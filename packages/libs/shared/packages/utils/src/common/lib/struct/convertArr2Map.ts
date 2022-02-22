@@ -40,6 +40,7 @@ export function getSafeMapOptions(
   options?: string[] | IKeyValueMap<boolean>,
   defaultValue?: IKeyValueMap<boolean>
 ): IKeyValueMap<boolean> {
+  // @ts-ignore
   return Constant$.IS_ARR(options)
     ? convertArr2Map(options as string[])
     : isObject(options)

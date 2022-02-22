@@ -22,31 +22,32 @@ export default defineViteConfig({
           "/src/": utils.pathResolve("./index.ts"),
           "@ant-design/icons/lib/dist": "@ant-design/icons/lib/index.es.js",
           "vue-demi": utils.pathResolve("./node_modules/vue-demi2", true),
-          "@yuyi919/vue-jsx-factory/jsx-runtime": "@yuyi919/vue-jsx-factory/jsx-runtime-es",
-        },
+          "~ant-design-vue": utils.pathResolve("./node_modules/ant-design-vue"),
+          "@yuyi919/vue-jsx-factory/jsx-runtime": "@yuyi919/vue-jsx-factory/jsx-runtime-es"
+        }
       },
       root: utils.pathResolve("./playground"),
       build: {
         minify: false,
-        sourcemap: true,
+        sourcemap: true
       },
       esbuild: {
         jsx: "transform",
         jsxFactory: "jsx_runtime.jsxEsbuild",
         jsxFragment: "jsx_runtime.Fragment",
-        jsxInject: "import * as jsx_runtime from '@yuyi919/vue-jsx-factory'",
+        jsxInject: "import * as jsx_runtime from '@yuyi919/vue-jsx-factory'"
       },
       plugins: [
         createVuePlugin({
           jsx: false,
-          vueTemplateOptions: {},
+          vueTemplateOptions: {}
         }) as any,
         {
           transform(code, id) {
             if (code && id.endsWith(".txt")) {
               return `export default \`${code.replace(/`/g, "\\`")}\``;
             }
-          },
+          }
         },
         vitePluginImp({
           libList: [
@@ -56,20 +57,20 @@ export default defineViteConfig({
               camel2DashComponentName: true,
               style: (name) => {
                 return false; //`ant-design-vue/es/${name}/style`;
-              },
-            },
-          ],
-        }) as any,
+              }
+            }
+          ]
+        }) as any
       ],
       optimizeDeps: {
         exclude: ["@vue/composition-api", "@yuyi919-vue/jss", "vue-demi", "vue-demi2"],
-        include: ["classnames", "tslib", "lodash-es", "vue", "ant-design-vue/es/style.js"],
+        include: ["classnames", "tslib", "lodash-es", "vue", "ant-design-vue/es/style.js"]
       },
       css: {
         modules: {
           scopeBehaviour: "global",
           exportGlobals: true,
-          localsConvention: "camelCaseOnly",
+          localsConvention: "camelCaseOnly"
         },
         preprocessorOptions: {
           less: {
@@ -85,20 +86,20 @@ export default defineViteConfig({
             javascriptEnabled: true,
             plugins: [
               new VariablesOutput({
-                filename: "variables.json",
-              }),
-            ],
-          },
-        },
-      },
+                filename: "variables.json"
+              })
+            ]
+          }
+        }
+      }
     };
-  },
+  }
 });
 
 function loadTsconfigPaths(tsconfigPath: string) {
   const loaded = readTsConfig(tsconfigPath) || {};
   const { paths, baseUrl } = loaded.options;
-  for (const key in paths) {
+  for (const key of Object.keys(paths)) {
     paths[key] = paths[key]?.map((path: string) => join(process.cwd(), baseUrl, path));
   }
   return paths;

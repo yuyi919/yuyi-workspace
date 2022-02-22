@@ -19,13 +19,13 @@ module.exports = {
     "**/*.d.ts",
     "**/*.spec.ts",
     "jest.preset.js",
-    "**/*.prisma",
+    "**/*.prisma"
   ],
   extends: [
     "@rushstack/eslint-config/profile/node",
     // "@rushstack/eslint-config/mixins/react",
     // "@rushstack/eslint-config/mixins/friendly-locals",
-    "@rushstack/eslint-config/mixins/tsdoc",
+    "@rushstack/eslint-config/mixins/tsdoc"
   ],
   rules: {},
   overrides: [
@@ -50,17 +50,18 @@ module.exports = {
         "@typescript-eslint/no-empty-interface": "off",
         "@typescript-eslint/no-explicit-any": "off",
         "@typescript-eslint/ban-types": "off",
-      },
+        "@typescript-eslint/no-unused-vars": "off"
+      }
     },
     {
       files: ["*.ts", "*.tsx"],
       extends: [],
-      rules: {},
+      rules: {}
     },
     {
       files: ["*.js", "*.jsx"],
       extends: [],
-      rules: {},
-    },
-  ],
+      rules: {}
+    }
+  ]
 };

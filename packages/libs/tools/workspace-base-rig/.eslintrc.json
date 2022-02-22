@@ -18,7 +18,6 @@
     "jest.preset.js",
     "**/*.prisma"
   ],
-  "plugins": ["@rushstack/eslint-config/profile/node"],
   "overrides": [
     {
       "files": ["*.ts", "*.tsx", "*.js", "*.jsx"],

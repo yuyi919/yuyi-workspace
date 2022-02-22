@@ -30,25 +30,24 @@ export type VueComponent2<
     Events,
     ScopedSlots
   >
-> &
-  //  & {
-  //   Type: TsxComponentInstance<
-  //     Vue & Props & Publics,
-  //     {
-  //       props?: Partial<Props>;
-  //       vModel?: any;
-  //     },
-  //     Props,
-  //     OnEvents<Events> & { [key: string]: any },
-  //     Events,
-  //     ScopedSlots
-  //   >;
-  // }
-  {
-    [K in keyof VueConstructorStaticMembers<Static>]: Static[K] extends VueConstructor<any>
-      ? VueComponent2<VCProps<InstanceType<Static[K]> & Vue, false>, {}, {}, {}, Static[K]>
-      : Static[K];
-  };
+> & //  & {
+//   Type: TsxComponentInstance<
+//     Vue & Props & Publics,
+//     {
+//       props?: Partial<Props>;
+//       vModel?: any;
+//     },
+//     Props,
+//     OnEvents<Events> & { [key: string]: any },
+//     Events,
+//     ScopedSlots
+//   >;
+// }
+{
+  [K in keyof VueConstructorStaticMembers<Static>]: Static[K] extends VueConstructor<any>
+    ? VueComponent2<VCProps<InstanceType<Static[K]> & Vue, false>, {}, {}, {}, Static[K]>
+    : Static[K];
+};
 
 export type ResolveSubModule<
   T extends new () => any,
@@ -62,10 +61,11 @@ export * from "./TsxTypeInfo";
 export * from "./slot";
 export * from "./transition";
 export * from "./KeyCode";
-export * as DomUtils from "./dom";
+import * as DomUtils from "./dom";
 
 import type * as base from "../types/base.d";
 import type * as builtin from "../types/builtin-components.d";
 import type * as dom from "../types/dom.d";
 export type { base, builtin, dom };
 export function noop() {}
+export { DomUtils };

@@ -34,13 +34,18 @@ export interface IPathEscapeConvert {
 }
 
 const base: IPathEscapeConvert = {
-  escapePath(path: string, splitStr: string = this._splitStr) {
+  escapePath(this: any, path: string, splitStr: string = this._splitStr) {
     return path.replace(/\./g, splitStr);
   },
-  extractPath(path: string, splitStr: string | RegExp = this._safeSplitStr) {
+  extractPath(this: any, path: string, splitStr: string | RegExp = this._safeSplitStr) {
     return path.replace(isRegExp(splitStr) ? splitStr : new RegExp(`(${splitStr})`, "g"), ".");
   },
-  extendsEscapedPath(path: string, extendsPath: string, splitStr: string = this._splitStr) {
+  extendsEscapedPath(
+    this: any,
+    path: string,
+    extendsPath: string,
+    splitStr: string = this._splitStr
+  ) {
     if (path.indexOf(splitStr) === 0) {
       const parent = extendsPath.split(splitStr);
       parent.length > 1 && parent.pop();
@@ -48,7 +53,7 @@ const base: IPathEscapeConvert = {
       return parent.join(splitStr) + path;
     }
     return path;
-  },
+  }
 };
 
 /**
@@ -66,7 +71,7 @@ function create(splitStr: string, extendable = false): IPathEscapeConvert {
         Object.assign(
           {
             _safeSplitStr,
-            _splitStr: splitStr,
+            _splitStr: splitStr
           },
           base
         )

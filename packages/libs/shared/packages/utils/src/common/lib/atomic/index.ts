@@ -9,8 +9,7 @@ export * from "./isObject";
 export * from "./lodash";
 export * from "./propertiesDefine";
 export * from "./toGetter";
-export { Setter };
 
 import * as Setter from "./setter";
 
-
+export { Setter };

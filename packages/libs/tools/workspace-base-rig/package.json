@@ -11,6 +11,7 @@
     "@typescript-eslint/eslint-plugin": "4.19.0",
     "@typescript-eslint/parser": "4.19.0",
     "@nrwl/eslint-plugin-nx": "12.5.8",
+    "@microsoft/rush-lib": "~5.62.4",
     "@nrwl/jest": "12.5.8",
     "@rushstack/heft": "^0.44.2",
     "@rushstack/heft-jest-plugin": "0.1.21",
@@ -25,9 +26,15 @@
   "devDependencies": {
     "@yuyi919/jest-extra": "workspace:0.0.1",
     "@types/node": "~16.7.2",
-    "@types/heft-jest": "1.0.2"
+    "@types/heft-jest": "1.0.2",
+    "@yuyi919/workspace-base-dev-rig": "workspace:@yuyi919/workspace-base-rig@1.2.8"
   },
   "scripts": {
-    "build": ""
+    "build": "heft build --clean",
+    "build:dev": "heft build",
+    "build:watch": "heft build --watch",
+    "dev": "heft build --watch",
+    "test": "heft test",
+    "test:watch": "heft test --watch"
   }
 }

@@ -28,7 +28,7 @@ type SplitInternal<
   ? Deep extends 0
     ? [...Result, T]
     : SplitInternal<Splited[1], SplitKeyword, Types.Number.Minus<Deep>, [...Result, Splited[0]]>
-  : Result;
+  : [...Result, T];
 
 /**
  * @beta

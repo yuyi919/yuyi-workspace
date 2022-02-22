@@ -5,18 +5,14 @@
     "rootDir": "./src",
     "baseUrl": ".",
     "allowSyntheticDefaultImports": true,
-    "types": ["node"],
+    "types": ["node", "vite/client"],
     "skipLibCheck": true,
+    "noEmit": true,
     "paths": {
       "@plugins/*": ["./node_modules/@yuyi919/rpgmz-plugins/src/*"]
     }
   },
-  "references": [
-    {
-      "path": "./packages/core"
-    },
-    {
-      "path": "./packages/plugin-transformer"
-    }
-  ]
+  "references": [],
+  "include": ["./src/**/*.ts", "./src/**/*.tsx"],
+  "exclude": ["node_modules"]
 }

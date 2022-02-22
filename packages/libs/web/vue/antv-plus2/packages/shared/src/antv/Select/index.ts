@@ -1,46 +1,46 @@
 /* eslint-disable no-redeclare */
-import { Select as AntSelect } from "ant-design-vue";
-import { VCProps, VueComponent2, getPropsClass } from "@antv-plus2/helper";
-import { SelectOption } from "./Option";
-import { SelectOptionGroup } from "./OptGroup";
+import { getPropsClass, TypeTsxProps, VCProps, VueComponent2 } from "@antv-plus2/helper";
 import { CSSProperties } from "@yuyi919/shared-types";
-
-export interface ISelectProps extends Omit<VCProps<AntSelect, false>, "blur" | "focus"> {
-  dropdownStyle?: CSSProperties;
-}
-
-export interface ISelectEvents {
-  change(value: any, option: any): void;
-  /**
-   * 失去焦点的时回调
-   */
-  blur: any;
-  focus: any;
-  search: undefined | string;
-  dropdownVisibleChange: boolean;
-  inputKeydown: KeyboardEvent;
-  popupScroll: any;
-  mouseenter: any;
-  mouseleave: any;
-  select(value: any, option: any): void;
-  deselect(value: any, option: any): void;
-}
-export interface ISelectScopedSlots {}
-export interface ISelectPublic extends Pick<AntSelect, "blur" | "focus"> {}
-export const Select = AntSelect as unknown as VueComponent2<
+import {
+  ISelectPublicMembers,
   ISelectProps,
   ISelectEvents,
   ISelectScopedSlots,
-  ISelectPublic,
-  typeof AntSelect & {
-    Option: typeof SelectOption;
-    OptGroup: typeof SelectOptionGroup;
+  Select as AntSelect
+} from "ant-design-vue";
+import "./Option";
+
+declare module "ant-design-vue/types/ant-design-vue.d" {
+  export interface ISelectProps extends VCProps<Omit<AntSelect, "blur" | "focus">, false> {
+    dropdownStyle?: CSSProperties;
   }
->;
-export interface Select extends InstanceType<typeof Select> {}
-export const AntSelectProps = getPropsClass(AntSelect);
+  export interface ISelectEvents {
+    change(value: any, option: any): void;
+    /**
+     * 失去焦点的时回调
+     */
+    blur: any;
+    focus: any;
+    search: undefined | string;
+    dropdownVisibleChange: boolean;
+    inputKeydown: KeyboardEvent;
+    popupScroll: any;
+    mouseenter: any;
+    mouseleave: any;
+    select(value: any, option: any): void;
+    deselect(value: any, option: any): void;
+  }
+  export interface ISelectScopedSlots {}
+  export interface ISelectPublicMembers extends Pick<AntSelect, "blur" | "focus"> {}
+}
+declare module "ant-design-vue/types/select/select.d" {
+  interface Select extends ISelectPublicMembers {
+    $props: TypeTsxProps<ISelectProps, ISelectEvents, ISelectScopedSlots>;
+  }
+}
 
-export { AntSelect };
+export const AntSelectProps = getPropsClass<ISelectProps, "value">(AntSelect);
 
-export * from "./Option";
 export * from "./OptGroup";
+export * from "./Option";
+export { AntSelect };

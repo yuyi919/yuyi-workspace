@@ -35,25 +35,26 @@ export default defineComponent({
       scrollBehavior: "outside",
       maskProps: {
         attrs: {
-          "data-key": 1,
-        },
+          "data-key": 1
+        }
       },
       afterClose() {
         // dialog.beforeUnmount();
         console.log("afterClose");
-      },
+      }
     });
     const dialogData = {
       on: {
         close() {
           console.log("close");
           store.visible = false;
-        },
-      },
+        }
+      }
     };
     onMounted(() => {
       // Modal.Dialog
       manager = Modal.ModalManager.getInstance(getCurrentInstance()!.proxy);
+      globalThis.manager = manager;
       // dialog.mounted();
       // setTimeout(() => {
       //   store.visible = true
@@ -67,7 +68,7 @@ export default defineComponent({
       { label: "default", value: { centered: false, scrollBehavior: "outside" } },
       { label: "default+inset", value: { centered: false, scrollBehavior: "inside" } },
       { label: "centered", value: { centered: true, scrollBehavior: "outside" } },
-      { label: "centered+inset", value: { centered: true, scrollBehavior: "inside" } },
+      { label: "centered+inset", value: { centered: true, scrollBehavior: "inside" } }
     ];
     const radio = ref<string>();
     watch(radio, (data) => {
@@ -126,7 +127,7 @@ export default defineComponent({
                           placement,
                           confirmSubmit: true,
                           confirmCancel: true,
-                          confirmClose: true,
+                          confirmClose: true
                         },
                         () => import("./readme.txt")
                       )
@@ -144,5 +145,5 @@ export default defineComponent({
         </>
       );
     };
-  },
+  }
 });

@@ -22,6 +22,6 @@ export function getListDifferent(listA: any[], listB: any[], deep = false) {
       listA,
       listB,
       deep ? (a, b) => isEqual(a, b) : ([] as unknown as Comparator2<any, any>)
-    ),
+    )
   };
 }

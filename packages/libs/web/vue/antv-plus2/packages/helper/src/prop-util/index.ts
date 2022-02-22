@@ -1,21 +1,22 @@
 import { getCurrentInstance, onUnmounted, reactive, SetupContext } from "vue-demi";
 import { Types } from "@yuyi919/shared-types";
 import type { TypedPropsGroup } from "@yuyi919/vue-shared-decorators";
+import { UNSAFE_STORE_PROPS_KEY } from "@yuyi919/vue-shared-decorators";
 import { cloneDeep, omit } from "lodash";
 import Vue from "vue";
 import { getFromVueComponent } from "../optionResolver";
 
 export * from "@yuyi919/vue-shared-decorators";
 export type {
-  TypedPropOptions,
+  ITypedPropOptions,
   TypedPropsGroup,
-  WalkHandler,
+  WalkHandler
 } from "@yuyi919/vue-shared-decorators";
 
-export type VModelDefine<K extends string = string> = {
+export interface IVModelDefine<K extends string = string> {
   prop?: K;
   event?: string;
-};
+}
 export function getPropsClass<
   T extends TPropProvider<Vue>,
   Props extends VCProps<InstanceType<T>, false>
@@ -23,7 +24,7 @@ export function getPropsClass<
   component: T,
   replaceInitProps?: Partial<VCProps<InstanceType<T>, false>>
 ): (new () => Props) & {
-  model: VModelDefine<Types.KeyOf<Props>>;
+  model: IVModelDefine<Types.KeyOf<Props>>;
   props: TypedPropsGroup<Props>;
 };
 export function getPropsClass<
@@ -36,7 +37,7 @@ export function getPropsClass<
   replaceInitProps?: VCProps<InstanceType<T>, false>,
   ...igronProps: PropKey[]
 ): (new () => Resolver) & {
-  model: VModelDefine<Exclude<Types.KeyOf<Props>, PropKey>>;
+  model: IVModelDefine<Exclude<Types.KeyOf<Props>, PropKey>>;
   props: TypedPropsGroup<Resolver>;
   // [UNSAFE_STORE_PROPS_KEY]: TypedPropsGroup<Resolver>;
 };
@@ -45,7 +46,7 @@ export function getPropsClass<Props extends Types.Recordable, PropKey extends Ty
   replaceInitProps?: Partial<Props>,
   ...igronProps: PropKey[]
 ): (new () => Props) & {
-  model: VModelDefine<PropKey>;
+  model: IVModelDefine<PropKey>;
   props: TypedPropsGroup<Props>;
   // [UNSAFE_STORE_PROPS_KEY]: TypedPropsGroup<Props>;
 };
@@ -64,7 +65,7 @@ export function getPropsClass<T extends Types.Recordable = any>(
   return Object.assign(Props, {
     props: nextProps,
     model: getFromVueComponent(component, "model"),
-    [UNSAFE_STORE_PROPS_KEY]: nextProps,
+    [UNSAFE_STORE_PROPS_KEY]: nextProps
   }) as any;
 }
 
@@ -76,7 +77,7 @@ function _getPropsClass1<T extends Record<string, any>>(props: T, replaceInitPro
         const isObject = replaceInitProps[key] instanceof Object;
         props[key as keyof T] = {
           ...propsOptions,
-          default: isObject ? () => replaceInitProps[key] : replaceInitProps[key],
+          default: isObject ? () => replaceInitProps[key] : replaceInitProps[key]
         };
         // (propsOptions.def && propsOptions.def(replaceInitProps[key])) || (propsOptions.default = replaceInitProps[key])
       }
@@ -142,12 +143,12 @@ export abstract class HookFactory<Props = Types.Recordable> {
 }
 
 export function useHookFactory<Props, F extends HookFactory<Props>, Args extends any[]>(
-  Factory: Types.ConstructorType<F, [context: SetupContext, props: Props, ...args: Args]>,
+  factory: Types.ConstructorType<F, [context: SetupContext, props: Props, ...args: Args]>,
   context: SetupContext,
   props: Props,
   ...args: Args
 ): F {
-  const store = reactive(new Factory(context, props, ...args)) as F;
+  const store = reactive(new factory(context, props, ...args)) as F;
   const disposer = store.$install?.(props);
   if (disposer && disposer instanceof Function) {
     onUnmounted(disposer);
@@ -155,37 +156,36 @@ export function useHookFactory<Props, F extends HookFactory<Props>, Args extends
   return store;
 }
 
-export const UNSAFE_STORE_PROPS_KEY = "@props";
 export abstract class PropProvider<T> {
   public static [UNSAFE_STORE_PROPS_KEY]: TypedPropsGroup<any>;
 }
 export type TPropProvider<T> = new () => T;
 
-export function PropsMixins<A>(CtorA: TPropProvider<A>): TPropProvider<A>;
+export function PropsMixins<A>(ctorA: TPropProvider<A>): TPropProvider<A>;
 export function PropsMixins<A, B>(
-  CtorA: TPropProvider<A>,
-  CtorB: TPropProvider<B>
+  ctorA: TPropProvider<A>,
+  ctorB: TPropProvider<B>
 ): TPropProvider<A & B>;
 export function PropsMixins<A, B, C>(
-  CtorA: TPropProvider<A>,
-  CtorB: TPropProvider<B>,
-  CtorC: TPropProvider<C>
+  ctorA: TPropProvider<A>,
+  ctorB: TPropProvider<B>,
+  ctorC: TPropProvider<C>
 ): TPropProvider<A & B & C>;
 export function PropsMixins<A, B, C, D>(
-  CtorA: TPropProvider<A>,
-  CtorB: TPropProvider<B>,
-  CtorC: TPropProvider<C>,
-  CtorD: TPropProvider<D>
+  ctorA: TPropProvider<A>,
+  ctorB: TPropProvider<B>,
+  ctorC: TPropProvider<C>,
+  ctorD: TPropProvider<D>
 ): TPropProvider<A & B & C & D>;
 export function PropsMixins<A, B, C, D, E>(
-  CtorA: TPropProvider<A>,
-  CtorB: TPropProvider<B>,
-  CtorC: TPropProvider<C>,
-  CtorD: TPropProvider<D>,
-  CtorE: TPropProvider<E>
+  ctorA: TPropProvider<A>,
+  ctorB: TPropProvider<B>,
+  ctorC: TPropProvider<C>,
+  ctorD: TPropProvider<D>,
+  ctorE: TPropProvider<E>
 ): TPropProvider<A & B & C & D & E>;
-export function PropsMixins<T>(...Ctors: TPropProvider<any>[]): TPropProvider<T>;
-export function PropsMixins(...Ctors: TPropProvider<any>[]) {
+export function PropsMixins<T>(...ctors: TPropProvider<any>[]): TPropProvider<T>;
+export function PropsMixins(...ctors: TPropProvider<any>[]) {
   //@ts-ignore
-  return Vue.extend({ mixins: Ctors }) as TPropProvider<T>;
+  return Vue.extend({ mixins: ctors }) as TPropProvider<T>;
 }

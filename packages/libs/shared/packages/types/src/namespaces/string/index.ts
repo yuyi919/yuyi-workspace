@@ -16,4 +16,14 @@ export type Length<K extends string, Deep extends number = 0> = K extends `${str
 
 export * from "./case";
 export * from "./split";
-// type test = Split<"update:app-s2-s3-c4-as-a6-sa-s3-c4-as-a6-sa-s3-c4-as-a6-sa", ":" | "-">;
+
+type test = Types.String.Split<"update:app-s2-s3-c4-as-a6-sa-s3-c4-as-a6-sa-s3-c4-as-a6-sa", "-">;
+
+/**
+ * @beta
+ */
+export type JoinWith<K, P, STR extends string = ""> = K extends string | number
+  ? P extends string | number
+    ? `${K}${"" extends P ? "" : STR}${P}`
+    : never
+  : never;

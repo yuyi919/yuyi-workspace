@@ -33,5 +33,5 @@ export {
   toString,
   trim,
   unset,
-  values,
+  values
 } from "lodash";

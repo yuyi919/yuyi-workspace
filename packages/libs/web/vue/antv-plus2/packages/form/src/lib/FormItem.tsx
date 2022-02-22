@@ -6,7 +6,7 @@ import { ComputedRef, computed, defineComponent } from "vue-demi";
 import { cls, usePrefixCls } from "../__builtins__";
 import { FormLayoutShallowContext, useFormLayout } from "./context";
 import { FormItemPropConfig, FormItemProps, useFormLayoutItemProps } from "./FormItemProps";
-import { VueComponent2 } from "@yuyi919/vue-antv-plus2-helper";
+import { VueComponent2 } from "@antv-plus2/helper";
 
 export function useFormItemLayout(props: FormItemProps): ComputedRef<FormItemProps> {
   const layoutRef = useFormLayout();

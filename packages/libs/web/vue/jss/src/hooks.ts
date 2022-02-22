@@ -6,12 +6,12 @@ import { ComputedRef } from "vue-demi";
 import {
   createUseStyles as _createUseStyles,
   CreateUseStylesOptions,
-  createUseStylesWithHook,
+  createUseStylesWithHook
 } from "./createUseStyles";
 import {
   CreateUseStylesHookOptions,
   createUseStylesHooks,
-  StyleHooks,
+  StyleHooks
 } from "./createUseStylesHook";
 import { BaseCreateStyle } from "./Factory";
 import { define } from "./helper/merge";
@@ -19,13 +19,13 @@ import { defineClasses, defineStyles, StyleObjectThemedCallback, Styles } from "
 import { Theming, createTheming } from "./theming";
 
 export class StylesApi<Role, P = any, N extends string = string> {
-  constructor(public role: Role, public styles: BaseCreateStyle<P> = {}, public name?: N) {
-    this.ref = `$${name}` as `$${N}`;
-  }
-  ref: `$${N}`;
   protected extend: BaseCreateStyle<P>[] = [];
   protected default: BaseCreateStyle<P>[] = [];
   protected composes: string[];
+  ref: `$${N}`;
+  constructor(public role: Role, public styles: BaseCreateStyle<P> = {}, public name?: N) {
+    this.ref = `$${name}` as `$${N}`;
+  }
   append<Props extends P>(style: BaseCreateStyle<Props>): StylesApi<Role, Props, N> {
     this.extend.push(style);
     return this;
@@ -61,7 +61,7 @@ export class StylesApi<Role, P = any, N extends string = string> {
       // console.log(themedExtends.map((e) => (e instanceof Function ? e(theme) : e)));
       const styles = define({
         extend: themedExtends.map((e) => (e instanceof Function ? e(theme) : e)),
-        ...result,
+        ...result
       });
       if (this.composes) {
         styles.composes = this.composes;
@@ -131,7 +131,7 @@ export function createHooksApi<ITheme>(
 ): IHooksApi<ITheme> {
   const ThemeContext = createTheming(themeName || defaultName + i++, defaultTheme);
   const context: HookContext<ITheme> = {
-    theme: void 0,
+    theme: void 0
   };
   function createUseStyles<Props extends Types.IObj, C extends string = string>(
     styles: Styles<ITheme, Props, C>,
@@ -159,16 +159,17 @@ export function createHooksApi<ITheme>(
     }
     const keyMap = {} as any;
     return createUseStylesHooks<ITheme, Extract<keyof R, string>, any>(
-      (_theme: ITheme) => {
-        context.theme = _theme;
+      (theme: ITheme) => {
+        context.theme = theme;
         const r: R = sheets || hooks.call(this);
         const result = {} as any;
+        // eslint-disable-next-line guard-for-in
         for (const key in r) {
           const api = r[key] as StylesApi<any>;
           const exported = api.export(context.useTheme);
           const realKey = api.name as keyof R;
           keyMap[realKey] = key;
-          result[realKey] = exported instanceof Function ? exported(_theme) : exported;
+          result[realKey] = exported instanceof Function ? exported(theme) : exported;
         }
         return result as ExtractStylesApi<R>;
       },
@@ -202,6 +203,6 @@ export function createHooksApi<ITheme>(
     createStylesHook,
     useBlock,
     useElement,
-    useTheme,
+    useTheme
   };
 }

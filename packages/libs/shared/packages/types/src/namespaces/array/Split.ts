@@ -43,7 +43,8 @@ export type RestOther<
     : RestOther<Other, [any, ...Cache, Item]>
   : never;
 
-// type R = Split<
-//   ["a", "?", "b", ",", "c", "?", "b", ",", "c", "?", "b", ",", "c", "?", "b", ",", "c"],
-//   "," | "?"
-// >;
+type R = Split<
+  ["a", "?", "b", ",", "c", "?", "b", ",", "c", "?", "b", ",", "c", "?", "b", ",", "c"],
+  "," | "?"
+>;
+type B = RestOther<[1, 2, 3]>;

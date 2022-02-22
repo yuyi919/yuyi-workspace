@@ -11,21 +11,21 @@ import { HintFlagProps } from "./props";
 const useStyles = createUseStyles({
   root: {
     "& span": {
-      verticalAlign: "top",
+      verticalAlign: "top"
     },
     "@global span": {
-      verticalAlign: "top",
+      verticalAlign: "top"
     },
     "& $labelContainer": {
       verticalAlign: "top",
       display: "inline-block",
       width: "100%",
       "&:not(.disabled)": {
-        width: "calc(100% - 20px)",
-      },
-    },
+        width: "calc(100% - 20px)"
+      }
+    }
   },
-  labelContainer: {},
+  labelContainer: {}
 });
 export function convertTextMuitiple(text: string) {
   return (
@@ -39,7 +39,7 @@ export const HintFlag = defineComponent({
     const state = reactive({
       get hintStr() {
         return convertTextMuitiple(props.hint || props.item?.hint!);
-      },
+      }
     });
     const classesRef = useStyles(props);
     const popoverRef = useNamedRef<Popover>("popover");
@@ -75,9 +75,9 @@ export const HintFlag = defineComponent({
       },
       renderHint: ({ icon, hint, slot }: { icon: any; hint: any; slot?: string }) => {
         const title = (
-          <>
+          <span>
             {icon}&nbsp;{props.title}
-          </>
+          </span>
         );
         // console.log("title", title);
         return (
@@ -92,7 +92,7 @@ export const HintFlag = defineComponent({
             <span>{props.icon}</span>
           </Popover>
         );
-      },
+      }
     };
     return {
       display() {
@@ -103,12 +103,12 @@ export const HintFlag = defineComponent({
       },
       renderer() {
         return (props.useRoll && methods.renderLabelAndHint()) || methods.renderNative();
-      },
+      }
     };
   },
   render() {
     return (this as any).renderer();
-  },
+  }
 });
 
 export interface HintFlag extends InstanceType<typeof HintFlag> {}

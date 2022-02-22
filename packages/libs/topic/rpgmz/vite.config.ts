@@ -7,6 +7,9 @@ import { defineConfig } from "vite";
 import html from "vite-plugin-html";
 import builtins from "rollup-plugin-node-builtins";
 import VitePluginReact from "@vitejs/plugin-react";
+import federation from "@originjs/vite-plugin-federation";
+import pkg from "./package.json";
+
 // import PurgeIcons from "vite-plugin-purge-icons";
 // import { modifyVars } from "./src/config/lessModifyVars";
 // import VitePluginFileSystem from "./vite-plugins/filesystem";
@@ -39,7 +42,7 @@ export function createProxy(list: ProxyList = [["/rpt", "http://10.100.156.251:8
       ws: true,
       rewrite: (path) => path.replace(new RegExp(`^${prefix}`), ""),
       // https is require secure=false
-      ...(isHttps ? { secure: false } : {}),
+      ...(isHttps ? { secure: false } : {})
     };
   }
   return ret;
@@ -58,11 +61,12 @@ export default defineConfig(({ command, mode }: ConfigEnv): UserConfig => {
         "@advscript": pathResolve("../advscript/src/index.ts"),
         "lodash/": "lodash-es/",
         "@plugins/": `${pathResolve("./packages/plugins/src")}/`,
-        "@lazarv/wasm-yoga": pathResolve("./packages/plugins/fix/yoga.js"),
-      },
+        "@lazarv/wasm-yoga": pathResolve("./packages/plugins/fix/yoga.js")
+      }
     },
     define: {
       "process.env.NODE_ENV": JSON.stringify(mode),
+      "global.": "globalThis."
     },
     esbuild: {
       // jsx: "transform",
@@ -81,12 +85,12 @@ export default defineConfig(({ command, mode }: ConfigEnv): UserConfig => {
             // hack: `true; @import (reference) "${resolve("src/App/design/config.less")}";`,
             // ...modifyVars,
           },
-          javascriptEnabled: true,
-        },
-      },
+          javascriptEnabled: true
+        }
+      }
     },
     server: {
-      port: 8080,
+      port: 8080
       // proxy: {
       //   ...createProxy([["/vro", "http://localhost:4090/api/v1"]]),
       // },
@@ -99,32 +103,62 @@ export default defineConfig(({ command, mode }: ConfigEnv): UserConfig => {
       emptyOutDir: true,
       rollupOptions: {
         output: { strict: false },
-        external: ["icon.png"],
+        external: ["icon.png"]
       },
+      commonjsOptions: {
+        include: [
+          "@lazarv/wasm-yoga",
+          /fix\/yoga\.js/,
+          // /@pixi\/polyfill/,
+          // /es6-promise-polyfill/,
+          // /object-assign/,
+          // /eventemitter3/,
+          /node_modules/
+        ]
+      }
     },
     plugins: [
+      federation({
+        name: "module-name",
+        filename: "remoteEntry.js",
+        remotes: {
+          foo: "remote_foo"
+        },
+        shared: {
+          react: {
+            singleton: true,
+            requiredVersion: pkg.devDependencies.react,
+            version: pkg.devDependencies.react
+          },
+          "react-dom": {
+            singleton: true,
+            requiredVersion: pkg.devDependencies["react-dom"],
+            version: pkg.devDependencies["react-dom"]
+          }
+        }
+      }),
       VitePluginReact({
         babel: {
-          configFile: false,
-        },
+          configFile: false
+        }
         // jsxRuntime: "classic",
         // fastRefresh: false
       }),
       {
         name: "builtins",
         enforce: "pre",
-        ...builtins({ crypto: true }),
+        ...builtins({ crypto: true })
       },
       html({
         minify: isBuild,
         inject: {
           injectData: {
             entry: "./src/main.ts",
-            title: VITE_GLOB_APP_TITLE,
+            title: VITE_GLOB_APP_TITLE
           },
-          tags: isBuild ? [] : [],
-        },
-      }),
+          tags: isBuild ? [] : []
+        }
+      })
     ],
     optimizeDeps: {
       include: [
@@ -140,12 +174,11 @@ export default defineConfig(({ command, mode }: ConfigEnv): UserConfig => {
         "react",
         "react-dom",
         "@inlet/react-pixi",
-        "pixi-flex",
         "vue",
         "pixi.js",
-        "@lazarv/wasm-yoga",
+        "@lazarv/wasm-yoga"
       ],
-      exclude: ["fs"],
-    },
+      exclude: ["fs"]
+    }
   };
 });

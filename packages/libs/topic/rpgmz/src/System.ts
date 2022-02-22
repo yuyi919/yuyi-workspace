@@ -9,10 +9,10 @@ import * as tslib from "tslib";
 const module_exports: Record<string, any> = {};
 const logger = console;
 
-type SystemModule = {
+interface SystemModule {
   setters?: ((module: typeof module_exports) => void)[];
   execute?: Function;
-};
+}
 
 const modules: Record<string, SystemModule> = {};
 const moduleLoaders: Record<string, Promise<SystemModule>> = {};
@@ -78,7 +78,7 @@ export const System = {
       logger.debug("Load Module:", name);
       moduleLoaders[name] = load();
     }
-  },
+  }
 };
 function loadEsModule(
   name: string,
@@ -103,45 +103,46 @@ declare global {
 System.register("@yuyi919/rpgmz-core", [], () => ({
   execute() {
     const exports = {
-      default: globalThis,
+      default: globalThis
     };
+    // eslint-disable-next-line guard-for-in
     for (const key in Core) {
       Object.defineProperty(exports, key, {
         get() {
           return globalThis[key];
-        },
+        }
       });
       Object.defineProperty(exports, "default", {
         get() {
           return globalThis;
-        },
+        }
       });
     }
     return exports;
-  },
+  }
 }));
 System.register("@yuyi919/rpgmz-plugin-transformer", [], () => ({
   execute() {
     return helper;
-  },
+  }
 }));
 System.register("class-transformer", [], () => ({
   execute() {
     return cls;
-  },
+  }
 }));
 System.register("mobx", [], () => ({
   execute() {
     return mobx;
-  },
+  }
 }));
 System.register("tslib", [], () => ({
   execute() {
     return tslib;
-  },
+  }
 }));
 System.register("pixi.js", [], () => ({
   execute() {
     return PIXI;
-  },
+  }
 }));

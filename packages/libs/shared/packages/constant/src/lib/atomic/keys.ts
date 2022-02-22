@@ -8,7 +8,7 @@ export enum DefPropDec$$ {
   V = "value",
   E = "enumerable",
   G = "get",
-  S = "set",
+  S = "set"
 }
 
 export const KEY_PREFIX_INJECT: "__$$_" = "__$$_";

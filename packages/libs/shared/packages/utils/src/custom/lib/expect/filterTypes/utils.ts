@@ -5,7 +5,7 @@ import {
   IsBaseType,
   IsClasses,
   IsObject,
-  IsUnknown,
+  IsUnknown
 } from "@yuyi919/shared-types";
 // function filterToExtra<Target>(expect: (target: any) => boolean, ...values: any[]): Target | undefined;
 // function filterToExtra<Target>(expect: (target: any) => boolean): Target | void {

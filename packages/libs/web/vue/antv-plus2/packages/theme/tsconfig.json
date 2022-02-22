@@ -1,7 +1,7 @@
 {
-  "extends": "../../tsconfig.json",
+  "extends": "./node_modules/@yuyi919/workspace-base-rig/profiles/default/tsconfig-base.json",
   "compilerOptions": {
-    "baseUrl": "../..",
+    "baseUrl": ".",
     "disableSolutionSearching": false,
     "esModuleInterop": true,
     "moduleResolution": "node",
@@ -17,12 +17,7 @@
     },
     {
       "path": "../../../jsx-factory"
-    },
-    {
-      "path": "./tsconfig.lib.json"
-    },
-    {
-      "path": "./tsconfig.cjs.json"
     }
-  ]
+  ],
+  "include": ["./src/**/*.ts", "./src/**/*.tsx"]
 }

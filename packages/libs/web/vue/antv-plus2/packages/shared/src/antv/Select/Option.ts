@@ -1,15 +1,25 @@
 /* eslint-disable no-redeclare */
-import { Select as AntSelect } from "ant-design-vue";
-import type { Option as AntSelectOption } from "ant-design-vue/types/select/option";
-import { VCProps, VueComponent2 } from "@antv-plus2/helper";
-
-export interface ISelectOptionProps extends VCProps<AntSelectOption, false> {}
-
-export const SelectOption = AntSelect.Option as unknown as VueComponent2<
+import { TypeTsxProps, VCProps } from "@antv-plus2/helper";
+import {
+  ISelectOptionEvents,
   ISelectOptionProps,
-  { change: any },
-  {},
-  {},
-  typeof AntSelectOption
->;
-export interface SelectOption extends InstanceType<typeof Option> {}
+  ISelectOptionPublicMembers,
+  ISelectOptionScopedSlots
+} from "ant-design-vue";
+import type { Option as AntSelectOption } from "ant-design-vue/types/select/option";
+
+declare module "ant-design-vue/types/ant-design-vue.d" {
+  export interface ISelectOptionProps extends VCProps<AntSelectOption, false> {}
+  export interface ISelectOptionEvents {
+    change: any;
+  }
+  export interface ISelectOptionScopedSlots {}
+  export interface ISelectOptionPublicMembers {}
+}
+declare module "ant-design-vue/types/select/option.d" {
+  interface SelectOption extends ISelectOptionPublicMembers {
+    $props: TypeTsxProps<ISelectOptionProps, ISelectOptionEvents, ISelectOptionScopedSlots>;
+  }
+}
+
+export type { AntSelectOption };

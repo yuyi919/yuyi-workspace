@@ -1,4 +1,5 @@
-export { createUseStyles } from "./createUseStyles";
+export * from "./createUseStyles";
+export * from "./createUseStylesHook";
 
 // TODO:
 export { default as JssProvider } from "./JssProvider";
@@ -8,6 +9,7 @@ export * from "./jss";
 export * from "./theming";
 export * from "./Factory";
 export * from "./hooks";
+export * from "./styles";
 export * from "./types";
 export * from "./theming";
 // import { default as jss } from "./jss";

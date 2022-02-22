@@ -11,5 +11,6 @@ export * from "./AutoSizer";
 export * from "./ScrollBar";
 export * from "./SmartGrid";
 
-export * as Antv from "./antv";
-export * as utils from "./share";
+import * as Antv from "./antv";
+import * as utils from "./share";
+export { Antv, utils };

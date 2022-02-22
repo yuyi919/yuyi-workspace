@@ -6,7 +6,7 @@ import {
   ErrorObserver,
   NextObserver,
   PartialObserver,
-  Subscription as Subscription2,
+  Subscription as Subscription2
 } from "rxjs";
 import { BehaviorSubject, Observable, OperatorFunction, ReplaySubject, Subject } from "rxjs/index";
 import { sleep } from "../common";
@@ -81,8 +81,8 @@ const { CREATE_PROMISE } = Constant$;
  */
 export class EventEmitter<T = any> {
   /** @internal */
-  protected $: Subject<T> = null;
-  protected sub: Subscription2 | null;
+  protected $: Subject<T> = null!;
+  protected sub!: Subscription2 | null;
   protected lastValue: { value?: T } | null = null;
 
   /**
@@ -120,7 +120,7 @@ export class EventEmitter<T = any> {
         this.sub = this.$.subscribe({
           next,
           error,
-          complete,
+          complete
         } as any);
       }
     }
@@ -291,7 +291,7 @@ export class EventEmitter<T = any> {
  */
 export class BehaviorEventEmitter<T = any> extends EventEmitter<T> {
   /** @internal @override */
-  protected $: BehaviorSubject<T> = null;
+  protected $: BehaviorSubject<T> = null!;
   constructor(public initialEvent?: T) {
     super();
   }
@@ -300,7 +300,7 @@ export class BehaviorEventEmitter<T = any> extends EventEmitter<T> {
    */
   public init(): BehaviorSubject<T> {
     if (!this.$) {
-      this.$ = new BehaviorSubject<T>(this.initialEvent);
+      this.$ = new BehaviorSubject<T>(this.initialEvent!);
     }
     return this.$;
   }
@@ -374,7 +374,7 @@ export class BehaviorEventEmitter<T = any> extends EventEmitter<T> {
  */
 export class ReplayEventEmitter<T = any> extends EventEmitter<T> {
   /** @internal @override */
-  protected $: ReplaySubject<T> = null;
+  protected $: ReplaySubject<T> = null!;
   constructor(public bufferSize: number = 1, public windowTime?: number) {
     super();
   }

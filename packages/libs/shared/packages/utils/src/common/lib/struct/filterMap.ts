@@ -14,7 +14,7 @@ export function filterMap<S = string, T = string>(
 ) {
   const r: T[] = [];
   let i = -1,
-    cr = null,
+    cr: T,
     j = -1;
   while (++j < arr.length) {
     /* istanbul ignore next */
@@ -55,7 +55,7 @@ export function filterKeys(
     keys = Object.keys(target),
     keysLength = keys.length,
     i = -1,
-    code = null;
+    code: string;
   while (++i < keysLength && (code = keys[i])) filter(code, target[code]) && (r[++length] = code);
   return r;
 }

@@ -13,6 +13,7 @@ function get<T, K extends keyof T>(target: T, key: K, defaultValue?: any): T[K] 
  * @alpha
  */
 export function toGetter<T, K extends keyof T>(target: T, key: K, defaultValue?: any): () => T[K] {
+  // @ts-ignore
   return get.bind(null, target, key, defaultValue);
 }
 

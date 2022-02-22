@@ -1,5 +1,5 @@
 import { Types } from ".";
-import { Properties as CSSProperties } from "csstype";
+import type { Properties as CSSProperties } from "csstype";
 import { OrAsync } from "./orType";
 
 /**
@@ -97,6 +97,32 @@ export type TKey = string | number | symbol;
  * @beta
  */
 export type Getter<T, Args extends [any?, any?, any?, any?] = []> = Types.Function.Base<Args, T>;
+/**
+ * @beta
+ */
+export type ToGetter<
+  Target extends Record<string, any>,
+  OtherArgs extends [any?, any?, any?, any?] = []
+> = {
+  [K in keyof Target]: Getter<Target[K], OtherArgs>;
+};
+
+/**
+ * @beta
+ */
+export type Setter<V, OtherArgs extends [any?, any?, any?, any?] = []> = Types.Function.Base<
+  [arg: V, ...others: OtherArgs]
+>;
+
+/**
+ * @beta
+ */
+export type ToSetter<
+  Target extends Record<string, any>,
+  OtherArgs extends [any?, any?, any?, any?] = []
+> = {
+  [K in keyof Target]: Setter<Target[K], OtherArgs>;
+};
 
 /**
  * @beta
@@ -169,7 +195,6 @@ export type WrapValue<T = any, GetterArgs extends any[] = []> =
   | undefined;
 
 /**
- * @deprecated 使用Re
  * @beta
  */
 export interface IObj<T = any> {
@@ -184,7 +209,6 @@ export type Nullable<T> = NonNullable<T> | null;
 
 /**
  * @beta
- * {@inheritDoc NonNullable}
  */
 export type NonNilable<T> = T extends null | undefined ? never : T;
 
@@ -309,6 +333,11 @@ export type ElRef<T extends HTMLElement = HTMLDivElement> = Nullable<T>;
  * @beta
  */
 export type IsSame<A, B, True = true, False = false> = A | B extends A & B ? True : False;
+
+/**
+ * @beta
+ */
+export type ExcludeNever<D, Then, With = never> = [D] extends [never] ? With : Then;
 
 export * from "./typecheck";
 export * from "./loop";

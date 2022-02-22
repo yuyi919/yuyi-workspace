@@ -20,21 +20,21 @@ export type OnEvents<On> = {
     : never;
 };
 
-export type TsxTypeInfoHook<
+export interface TsxTypeInfoHook<
   Props extends Record<string, any>,
   Events extends Record<string, any> = Record<string, any>,
   ScopedSlotArgs extends Record<string, any> = Record<string, any>
-> = {
+> {
   props: Props;
   on: EventHandlers<Events>;
   slots: InnerScopedSlots<ScopedSlotArgs>;
-};
+}
 
-export type TsxTypeInfo<
+export interface TsxTypeInfo<
   Props extends Record<string, any>,
   Events extends Record<string, any> = Record<string, any>,
   ScopedSlotArgs extends Record<string, any> = Record<string, any>
-> = {
+> {
   props: Props;
   events: Events;
   onEvents: {
@@ -47,7 +47,7 @@ export type TsxTypeInfo<
     props?: Partial<Props>;
     vModel?: any;
   };
-};
+}
 
 export interface TsxTypedComponents<
   Props extends Record<string, any>,
@@ -61,7 +61,7 @@ export type InnerScopedSlotReturnType = Vue["$scopedSlots"] extends {
 }
   ? T
   : never;
-export type EventHandler<E> = [E] extends [(...args: any[]) => any] ? E : (payload: E) => void;
+export type EventHandler<E> = [E] extends [(...args: any[]) => any] ? E : (payload: E) => any;
 export type EventHandlers<E> = { [K in keyof E]?: EventHandler<E[K]> | EventHandler<E[K]>[] };
 export type InnerScopedSlot<T> = (props: T) => InnerScopedSlotReturnType;
 export type InnerScopedSlots<T> = { [K in keyof T]: InnerScopedSlot<Exclude<T[K], undefined>> };

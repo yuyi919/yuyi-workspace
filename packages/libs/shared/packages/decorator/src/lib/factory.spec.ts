@@ -11,12 +11,12 @@ interface TestPropertyOption {
 const x = createStaticMetaDataDecorators("YARGS", {
   Config: {
     kind: "constructor",
-    config: (_, opt: Partial<TestOption> = {}) => opt as TestOption,
+    config: (_, opt: Partial<TestOption> = {}) => opt as TestOption
   },
   Option: {
     kind: "property",
-    config: (_, opt: Partial<TestPropertyOption> = {}) => opt as TestPropertyOption,
-  },
+    config: (_, opt: Partial<TestPropertyOption> = {}) => opt as TestPropertyOption
+  }
 });
 
 @x.Config({ cons: true })
