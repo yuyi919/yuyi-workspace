@@ -60,9 +60,9 @@ export function castArray<T = any>(value: T | T[], allowEmpty: boolean | "strict
  *```
  * @beta
  */
-export function castObject<T, K extends KeyOf<T> | string>(
+export function castObject<T, K extends KeyOf<T>>(
   target: T | BaseType,
-  keyInObject: K,
+  keyInObject: K | Types.DynamicString,
   checkRequired = false
 ): Exclude<T, BaseType> & {
   [Key in K]: T extends object ? (K extends KeyOf<T> ? T[K] : unknown) : unknown;

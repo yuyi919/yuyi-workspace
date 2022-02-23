@@ -1,3 +1,4 @@
+import Types from "..";
 import { DynamicString, Recordable } from "../namespaces/shared";
 
 const types = [
@@ -98,6 +99,12 @@ export function isStr(target: unknown): target is string {
  * @param target -
  * @public
  */
+export function isObj<T extends object>(target: unknown): target is T;
+/**
+ * {@inheritdoc (isObj:1)}
+ * @public
+ */
+export function isObj(target: unknown): target is object;
 export function isObj(target: unknown): target is object {
   return getType(target) === "object";
 }
@@ -115,9 +122,13 @@ export function isBool(target: unknown): target is boolean {
  * @param target -
  * @public
  */
-export function isFn<Func extends (...data: any) => any = (...data: any) => any>(
-  target: unknown
-): target is Func {
+export function isFn<Func extends Types.Fn = Types.Fn>(target: Func): target is Func;
+/**
+ * {@inheritdoc (isFn:1)}
+ * @public
+ */
+export function isFn<Func extends Types.Fn = Types.Fn>(target: unknown): target is Func;
+export function isFn<Func extends Types.Fn = Types.Fn>(target: unknown): target is Func {
   return typeof target === "function" && "call" in target;
 }
 

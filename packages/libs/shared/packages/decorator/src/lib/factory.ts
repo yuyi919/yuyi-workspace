@@ -7,7 +7,7 @@ export type MetaOption =
   | MethodMetaOption<any[], any>;
 export type MetaKinds = MetaOption["kind"];
 export interface ConfigureMetaOption<S extends any[], T> {
-  config?: (
+  config: (
     meta: {
       target: Types.ConstructorType<any>;
       propertyKey?: string;
@@ -53,7 +53,7 @@ function _defineMeta<T>(
     MetaKey,
     { name: propertyKey || target.name, meta, kind } as MetaConfig<T>,
     target,
-    propertyKey
+    propertyKey!
   );
 }
 

@@ -22,8 +22,8 @@ export class PluginB {
     console.log("B");
   }
 }
-decorate(tagged("tag", "A"), PluginB, 0);
-decorate(inject(T.Plugin), PluginB, 0);
+decorate(tagged("tag", "A") as MethodDecorator, PluginB, 0);
+decorate(inject(T.Plugin) as PropertyDecorator, PluginB, 0);
 decorate(Injectable(), PluginB);
 
 describe("basic", () => {

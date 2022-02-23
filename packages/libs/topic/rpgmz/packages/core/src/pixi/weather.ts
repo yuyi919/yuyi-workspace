@@ -12,12 +12,6 @@ class WeatherSprite extends Sprite {
   ay = 0;
 }
 
-declare module "pixi.js" {
-  interface Container {
-    // NOTE 不知为何缺失的定义
-    viewport: Bitmap;
-  }
-}
 //-----------------------------------------------------------------------------
 /**
  * The weather effect which displays rain, storm, or snow.
@@ -36,6 +30,7 @@ export class Weather extends PIXIContainer {
   type: WeatherType = "none";
   power = 0;
   origin = new Point();
+  viewport: Bitmap;
 
   constructor();
   constructor(thisClass: Constructable<Weather>);

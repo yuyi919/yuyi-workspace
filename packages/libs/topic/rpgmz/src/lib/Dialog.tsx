@@ -1,17 +1,21 @@
 import {
   Container,
   useApp,
-  PixiComponent,
+  Stage,
+  NineSlicePlane,
+  AppConsumer,
   applyDefaultProps,
+  Sprite,
+  TilingSprite,
   _ReactPixi
 } from "@inlet/react-pixi/animated";
 import { Flex, FlexBoxRenderProps } from "@plugins/react-pixijs/components";
-import { animated, Spring, useSpring } from "@react-spring/web";
+import { to, animated, Spring, useSpring } from "@react-spring/web";
 import { CSSProperties } from "@yuyi919/shared-types";
 import React from "react";
 import { FlexContainer } from "./FlexContainer";
-import { DisplayObjectProps } from "@plugins/react-pixijs";
-import { loadWithResource, ResourceIds } from "./SystemLoader";
+import { DisplayObjectProps, AnimatedDisplayObjectProps } from "@plugins/react-pixijs";
+import { SystemLoader, loadWithResource, ResourceIds } from "./SystemLoader";
 import Tween from "gsap";
 import * as gsapHelper from "gsap";
 import { CustomPixi } from "./utils";
@@ -42,7 +46,7 @@ declare module "@inlet/react-pixi/animated" {
   }
 }
 interface IDialogProps extends DisplayObjectProps<PIXI.Container> {}
-
+interface IInfoWindowProps extends AnimatedDisplayObjectProps<PIXI.Container> {}
 function toScale(target: any) {
   const point = new PIXI.Point(0, 1);
 }
@@ -231,7 +235,6 @@ export const BaseDialog = CustomPixi("Dialog", {
     { width: prevWidth, height: prevHeight, ...otherOldProps },
     { width, height, ...otherNewProps }
   ) {
-
     console.log(otherOldProps, otherNewProps);
     for (const { name, texture } of loadWithResource(ResourceIds.DialogJson)) {
       // console.log(name, texture);
@@ -286,7 +289,7 @@ export const BaseDialog = CustomPixi("Dialog", {
             //Create the sprite from the texture
             //Position the rocket sprite on the canvas
             rocket.x = partX;
-            rocket.y = partY;
+            rocket.y = partY + 6;
             rocket.width = partWidth;
             rocket.height = partHeight;
             rocket.scale.set(partScaleX, partScaleY);
@@ -339,7 +342,7 @@ export const BaseDialog = CustomPixi("Dialog", {
             //Create the sprite from the texture
             //Position the rocket sprite on the canvas
             rocket.x = partX;
-            rocket.y = partY - 6;
+            rocket.y = partY;
             rocket.width = w;
             rocket.height = partHeight;
             rocket.scale.set(partScaleX, partScaleY);
@@ -350,11 +353,45 @@ export const BaseDialog = CustomPixi("Dialog", {
     }
     container.updateSize(width, height);
     applyDefaultProps(container, otherOldProps, otherNewProps);
-    console.log(container.scale)
+    console.log(container.scale);
   }
 });
 
-const Dialog: React.FC<IDialogProps> = ({ x, y, width, height, ...other }) => {
+const img = "https://s3-us-west-2.amazonaws.com/s.cdpn.io/693612/speech_bubble.png";
+
+class Plane extends React.Component {
+  counter = 0;
+  state = { x: 4, y: 1 };
+
+  render() {
+    return (
+      <NineSlicePlane
+        image={img}
+        anchor={new PIXI.Point(200, 100)}
+        pivot={new PIXI.Point(200, 100)}
+        leftWidth={50}
+        topHeight={30}
+        rightWidth={60}
+        bottomHeight={120}
+        width={200 + 100 * this.state.x}
+        height={200 + 100 * this.state.y}
+        x={500 - 50 * this.state.x}
+        y={330 - 50 * this.state.y}
+      />
+    );
+  }
+}
+
+const Dialog: React.FC<IDialogProps> = ({
+  x,
+  y,
+  width,
+  height,
+  children,
+  ref,
+  mask,
+  ...other
+}) => {
   const app = useApp();
   const [loaded, setLoaded] = React.useState(true);
   const [localWidth, setWidth] = React.useState(width);
@@ -372,25 +409,56 @@ const Dialog: React.FC<IDialogProps> = ({ x, y, width, height, ...other }) => {
   return (
     <Container
       interactive
+      x={x}
+      y={y}
+      {...other}
       pointerup={() => {
         // setWidth((x) => x - 80);
         // setHeight((y) => y - 40);
         setScale((x) => x + 10);
       }}
       pointerout={() => {
-        // setLoaded(false);
+        setLoaded(false);
       }}
     >
+      {/* <Container x={-localWidth} y={-localHeight*2}>
+        <AppConsumer>{(app) => <Plane app={app} />}</AppConsumer>
+      </Container> */}
+      {false && (
+        <Sprite
+          anchor={0.5}
+          width={localWidth}
+          height={localHeight}
+          texture={PIXI.Texture.WHITE}
+          tint={0xaddb67}
+        />
+      )}
+      {/* 
       {loaded && (
         <BaseDialog
+          x={-localWidth}
+          y={0}
           pivot={poivot}
-          x={x - poivot.x}
-          y={y - poivot.y}
           scale={scale / 100}
           width={localWidth}
           height={localHeight}
         ></BaseDialog>
-      )}
+      )} */}
+      <BaseDialog
+        x={0}
+        y={0}
+        pivot={poivot}
+        scale={scale / 100}
+        width={localWidth}
+        height={localHeight}
+      ></BaseDialog>
+      {/* <Sprite
+        anchor={0.5}
+        width={localWidth}
+        height={localHeight}
+        texture={PIXI.Texture.WHITE}
+        tint={0xaddb67}
+      /> */}
     </Container>
   );
 };
@@ -399,5 +467,63 @@ Dialog.defaultProps = {
   y: 10,
   width: 330,
   height: 120
+};
+
+export const InfoWindow: React.FC<IInfoWindowProps> = ({
+  x,
+  y,
+  width,
+  height,
+  mask,
+  children,
+  ...other
+}) => {
+  const [localWidth, setWidth] = React.useState(width);
+  const [localHeight, setHeight] = React.useState(height);
+  const poivot = React.useMemo(
+    () =>
+      to([width, height], (width, height) => ({
+        x: width / 2,
+        y: height / 2
+      })),
+    [width, height]
+  );
+  return (
+    <Container interactive x={x} y={y} {...other}>
+      {/* <Sprite
+        anchor={0.5}
+        width={localWidth}
+        height={localHeight}
+        texture={PIXI.Texture.WHITE}
+        tint={0xaddb67}
+      /> */}
+      <NineSlicePlane
+        pivot={poivot}
+        width={localWidth}
+        height={localHeight}
+        leftWidth={11}
+        rightWidth={11}
+        topHeight={11}
+        bottomHeight={11}
+        texture={
+          SystemLoader.resources[ResourceIds.DialogJson].textures[ResourceIds.InfoWindowFrame]
+        }
+      >
+        <TilingSprite
+          x={10}
+          y={10}
+          tilePosition={to([localWidth, localHeight], (localWidth, localHeight) => [
+            (localWidth % 51) / 2,
+            1 + (localHeight % 51) / 2
+          ])}
+          width={to(localWidth, (localWidth) => localWidth - 20)}
+          height={to(localHeight, (localHeight) => localHeight - 20)}
+          texture={
+            SystemLoader.resources[ResourceIds.DialogJson].textures[ResourceIds.InfoWindowBack]
+          }
+        />
+      </NineSlicePlane>
+    </Container>
+  );
 };
 export default Dialog;

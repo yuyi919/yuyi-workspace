@@ -3,10 +3,7 @@
   "compilerOptions": {
     "jsx": "react-jsx",
     "jsxImportSource": "@yuyi919/vue-jsx-factory",
-    "rootDir": "./src",
-    "paths": {
-      "vue-demi": ["./node_modules/@vue/composition-api"]
-    }
+    "rootDir": "./src"
   },
   "references": [
     {
