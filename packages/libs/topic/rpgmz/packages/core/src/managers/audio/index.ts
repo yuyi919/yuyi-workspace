@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-use-before-define */
 import { WebAudio, Graphics, Utils } from "../../dom";
 import { MZ } from "../../MZ";
 
@@ -94,7 +95,7 @@ export class AudioManager {
       volume: bgm.volume,
       pitch: bgm.pitch,
       pan: bgm.pan,
-      pos: pos,
+      pos: pos
     };
   }
 
@@ -158,7 +159,7 @@ export class AudioManager {
       volume: bgs.volume,
       pitch: bgs.pitch,
       pan: bgs.pan,
-      pos: pos,
+      pos: pos
     };
   }
 
@@ -300,7 +301,7 @@ export class AudioManager {
         volume: bgm.volume,
         pitch: bgm.pitch,
         pan: bgm.pan,
-        pos: _this._bgmBuffer ? _this._bgmBuffer.seek() : 0,
+        pos: _this._bgmBuffer ? _this._bgmBuffer.seek() : 0
       };
     } else {
       return _this.makeEmptyAudioObject();
@@ -315,7 +316,7 @@ export class AudioManager {
         volume: bgs.volume,
         pitch: bgs.pitch,
         pan: bgs.pan,
-        pos: _this._bgsBuffer ? _this._bgsBuffer.seek() : 0,
+        pos: _this._bgsBuffer ? _this._bgsBuffer.seek() : 0
       };
     } else {
       return _this.makeEmptyAudioObject();
@@ -364,6 +365,7 @@ export class AudioManager {
 
   static throwLoadError(webAudio: WebAudio): void {
     const retry = webAudio.retry.bind(webAudio);
+    // eslint-disable-next-line no-throw-literal
     throw ["LoadError", webAudio.url, retry];
   }
 }

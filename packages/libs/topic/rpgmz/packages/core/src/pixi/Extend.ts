@@ -1,4 +1,4 @@
-import * as PIXI from "pixi.js";
+// import * as PIXI from "pixi.js";
 export function Extend<T extends Constructable<any>>(constructor: T) {
   function Constructor() {}
   Constructor.prototype = Object.create(constructor.prototype);

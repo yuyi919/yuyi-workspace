@@ -18,12 +18,13 @@ type FilterPropsKeys<T, U> = {
 type FixProps<T, U> = Pick<T, FilterPropsKeys<T, U>>;
 
 export type AnimatedDisplayObjectProps<
-  T extends PIXI.DisplayObject = PIXI.DisplayObject,
-  U = {}
+  T extends PIXI.DisplayObject,
+  U = {},
+  PickKeys extends keyof T = keyof T
 > = AnimatedProps<
   Partial<
     Omit<
-      FixProps<T, Types.Function.Base>,
+      FixProps<Pick<T, PickKeys>, Types.Function.Base>,
       "children" | _ReactPixi.P | _ReactPixi.ReadonlyKeys<T> | keyof U
     > &
       _ReactPixi.WithPointLike<_ReactPixi.P>
@@ -31,9 +32,14 @@ export type AnimatedDisplayObjectProps<
     U
 > &
   _ReactPixi.InteractionEvents & { ref?: React.Ref<T> };
-export type DisplayObjectProps<T extends PIXI.DisplayObject = PIXI.DisplayObject, U = {}> = Partial<
+
+export type DisplayObjectProps<
+  T extends PIXI.DisplayObject = PIXI.DisplayObject,
+  U = {},
+  PickKeys extends keyof T = keyof T
+> = Partial<
   Omit<
-    FixProps<T, Types.Function.Base>,
+    FixProps<Pick<T, PickKeys>, Types.Function.Base>,
     "children" | _ReactPixi.P | _ReactPixi.ReadonlyKeys<T> | keyof U
   > &
     _ReactPixi.WithPointLike<_ReactPixi.P>

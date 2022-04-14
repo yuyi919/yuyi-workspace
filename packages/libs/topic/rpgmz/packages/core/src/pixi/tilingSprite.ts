@@ -1,4 +1,4 @@
-import * as PIXI from "pixi.js";
+//import * as PIXI from "pixi.js";
 import { Rectangle } from ".";
 import { Point } from ".";
 import { Bitmap } from ".";
@@ -15,7 +15,7 @@ import { PIXITilingSprite } from "./Extend";
 export class TilingSprite extends PIXITilingSprite {
   static _emptyBaseTexture = new PIXI.BaseTexture(undefined, {
     width: 1,
-    height: 1,
+    height: 1
   });
 
   _bitmap?: Bitmap;

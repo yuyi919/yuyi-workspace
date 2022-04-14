@@ -1,4 +1,3 @@
-export * from "./core";
 export * from "./dom";
 export * from "./pixi";
 export * from "./managers";
@@ -6,6 +5,7 @@ export * from "./game";
 export * from "./scenes";
 export * from "./sprites";
 export * from "./windows";
+export * from "./MZ";
 // export * as ECS from "./ecs";
 
 export declare class PluginManagerEx {

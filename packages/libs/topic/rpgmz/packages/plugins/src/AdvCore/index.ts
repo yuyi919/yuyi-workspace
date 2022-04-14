@@ -6,16 +6,16 @@ import RMMZ, {
   Scene_Map,
   Scene_Message,
   Sprite,
-  TextState,
+  MZ,
   Window_Message,
-  Window_NameBox,
+  Window_NameBox
 } from "@yuyi919/rpgmz-core";
 import { createConstructor, logger, x } from "@yuyi919/rpgmz-plugin-transformer";
 import { computed, action, configure, observable } from "mobx";
 import { DiceCaller, DiceConfig, TextboxConfig, TextSeConfig } from "./structs";
 import { colors, getSpeaker, randomInt } from "./utils";
 configure({
-  enforceActions: "observed",
+  enforceActions: "observed"
 });
 
 /**
@@ -110,14 +110,14 @@ export class PluginAdvCore {
       {
         name: "Cursor1",
         volume: 90,
-        pitch: 100,
+        pitch: 100
       },
       {
         name: "Cursor2",
         volume: 75,
-        pitch: 125,
-      },
-    ],
+        pitch: 125
+      }
+    ]
   };
 
   /**
@@ -151,7 +151,7 @@ export class PluginAdvCore {
       typeof args.actorId === "string"
         ? {
             speakerName: BattleManager._target.name(),
-            speakerConfig: {},
+            speakerConfig: {}
           }
         : getSpeaker($dataActors[args.actorId]);
 
@@ -165,7 +165,7 @@ export class PluginAdvCore {
     }`;
     Yuyi919.EventCommand.callScriptCommandWith("VisuMZ_4_CombatLog", "CombatLogAddText", {
       Text,
-      Icon: 87,
+      Icon: 87
     });
     if (args.callMessage) {
       const event = Yuyi919.EventCommand.generateEvent();
@@ -184,7 +184,7 @@ export class PluginAdvCore {
         "VisuMZ_1_BattleCore",
         "ActSeq_BattleLog_AddText",
         {
-          Text,
+          Text
         }
       );
     }
@@ -482,7 +482,7 @@ const SuperWindowMessage = createConstructor(Window_Message, () => !!config.curr
 @SuperWindowMessage()
 export class Extract extends Window_Message {
   // 对话文本偏移量x
-  newLineX(textState: TextState) {
+  newLineX(textState: MZ.TextState) {
     const faceExists = RMMZ.$gameMessage.faceName() !== "";
     const spacing = 20;
     const faceWidth = ImageManager.faceWidth;
@@ -524,14 +524,14 @@ export class Extract extends Window_Message {
   }
 
   // 对话文本偏移量y
-  newPage(textState: TextState) {
+  newPage(textState: MZ.TextState) {
     SuperWindowMessage.newPage(textState);
     textState.y =
       config.currentTextboxConfig.对话文本偏移量y + config.currentTextboxConfig.windowYOffset;
   }
 
   // 对话文本偏移量y
-  processCharacter(textState: TextState) {
+  processCharacter(textState: MZ.TextState) {
     const textMaxWidth =
       config.currentTextboxConfig.textMaxWidth ||
       this.width -

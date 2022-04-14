@@ -2,7 +2,7 @@
 export type ID = number;
 export type DataID = ID;
 
-export type SelfSwitchData = [MZ.MapID, MZ.ID, MZ.SelfSwitchCh];
+export type SelfSwitchData = [MapID, ID, SelfSwitchCh];
 
 export type HexColorString = string; // #rrggbb
 export type RGBAColorString = string; // rgba(r, g, b, a)
@@ -231,16 +231,16 @@ export interface Trait {
   value: number;
 }
 
-export type EventCommand = {
+export interface EventCommand {
   code: number;
   indent: number;
   parameters: any[]; // TODO: typing
-};
-export type EventMoveCommand = {
+}
+export interface EventMoveCommand {
   code: number;
   indent: null;
   parameters?: any[]; // TODO: typing
-};
+}
 
 export interface TextState {
   text: string;
@@ -841,13 +841,13 @@ export interface MVTimingSE {
   volume: number;
 }
 
-export type SaveFileInfo = {
+export interface SaveFileInfo {
   title: string;
   characters: Array<[string, number]>;
   faces: Array<[string, number]>;
   playtime: string;
   timestamp: number;
-};
+}
 
 export type GoodsParam = [
   itemKind: 0 | 1 | 2,

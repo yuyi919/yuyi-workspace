@@ -82,11 +82,28 @@ export type IKeyValueMap<V = any> = Plain<string, V>;
 export type AnyConstructorType<A = IKeyValueMap> = new (...input: any[]) => A;
 
 /**
+ * 类型化构造函数
  * @beta
  */
 export type ConstructorType<T, Args extends any[] = [any?, any?, ...any[]]> = new (
   ...args: Args
 ) => T;
+
+/**
+ * 类型化构造函数
+ * @beta
+ */
+export type Consturctor<T, Args extends any[] = []> = {
+  new (...args: Args): T;
+} & {
+  [key in string | symbol]: any;
+};
+
+/**
+ * 取得构造函数的参数
+ * @beta
+ */
+export type ConstructorArgs<T> = T extends ConstructorType<any, infer Args> ? Args : [];
 
 /**
  * @beta
@@ -133,15 +150,6 @@ export type Factory<T, Args extends [any?, any?, any?, any?] = []> = T | Getter<
  * @beta
  */
 export type Fetcher<T, Args extends [] = []> = OrAsync<T> | Types.Function.Base<Args, OrAsync<T>>;
-
-/**
- * @beta
- */
-export type Consturctor<T, Args extends any[] = []> = {
-  new (...args: Args): T;
-} & {
-  [key in string | symbol]: any;
-};
 
 /**
  * @beta

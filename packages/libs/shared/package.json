@@ -2,6 +2,7 @@
   "name": "@yuyi919/shared",
   "version": "0.0.42",
   "description": "",
+  "homepage": "",
   "author": "",
   "license": "MIT",
   "main": "dist/index.js",

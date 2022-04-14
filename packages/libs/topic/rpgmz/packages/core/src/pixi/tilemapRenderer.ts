@@ -1,5 +1,5 @@
 /* eslint-disable no-var */
-import * as PIXI from "pixi.js";
+// import * as PIXI from "pixi.js";
 import { PIXIObjectRenderer } from "./Extend";
 import { MAX_GL_TEXTURES } from "./tilemapLayer";
 
@@ -103,7 +103,7 @@ export class TilemapRenderer extends PIXIObjectRenderer {
       uSampler0: 0,
       uSampler1: 0,
       uSampler2: 0,
-      uProjectionMatrix: new PIXI.Matrix(),
+      uProjectionMatrix: new PIXI.Matrix()
     });
   }
 

@@ -25,7 +25,6 @@ Math.randomInt = function (max: number) {
 Number.prototype.clamp = function (this: number, min: number, max: number): number {
   return Math.min(Math.max(this, min), max);
 };
-
 /**
  * Returns a modulo value which is always positive.
  *
@@ -89,3 +88,5 @@ for (const key in ArrayHack) {
     return ArrayHack[key](this, ...args);
   };
 }
+
+console.debug("register prototype");

@@ -1,4 +1,4 @@
-import * as PIXI from "pixi.js";
+// import * as PIXI from "pixi.js";
 import { Rectangle, Stage } from ".";
 import { Graphics, Utils } from "../dom";
 import { MZ } from "../MZ";
@@ -628,7 +628,7 @@ export class Bitmap {
   ): void {
     this._baseTexture = new PIXI.BaseTexture(source, {
       width: source.width,
-      height: source.height,
+      height: source.height
     });
     this._baseTexture.mipmap = PIXI.MIPMAP_MODES.OFF;
     this._updateScaleMode();

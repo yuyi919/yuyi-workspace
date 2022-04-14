@@ -1,3 +1,5 @@
+import { SoundManager, Sprite_Clickable, Window_Command } from "@yuyi919/rpgmz-core";
+import { createConstructor, proxyMethodAfter } from "@yuyi919/rpgmz-plugin-transformer";
 import { mockLoadedEsModule } from "./lib";
 
 // import * as Core from "@plugins/plugin.Core";
@@ -38,6 +40,43 @@ import { mockLoadedEsModule } from "./lib";
 //   };
 // });
 mockLoadedEsModule("yuyi919_react-pixijs.js", async () => {
+  const SuperWindowCommand = createConstructor(Window_Command as { new (): Window_Command });
+  @SuperWindowCommand()
+  class Extends extends Window_Command {
+    makeCommandList(): void {}
+
+    // eslint-disable-next-line @typescript-eslint/member-ordering
+    lastIndex = -1;
+    processCursorMove() {
+      SuperWindowCommand.processCursorMove();
+      if (this.isOpenAndActive() && this.isCursorMovable()) {
+        const lastIndex = this.lastIndex,
+          index = this.index();
+        if (lastIndex > -1 && index !== lastIndex) {
+          console.log("change selected", index);
+          // AudioManager.playStaticSe({ name: "bsd/SystemSE_Select", volume: 100, pitch: 100 })
+          globalThis.SoundManager.playCursor();
+        }
+        this.lastIndex = index;
+      }
+    }
+  }
+  // proxyMethodAfter(Window_Command as { new (): Window_Command }, "processCursorMove", (target) => {
+  //   if (target.isOpenAndActive() && target.isCursorMovable()) {
+  //     const lastIndex = target.__lastIndex,
+  //       index = target.index();
+  //     if (lastIndex > -1 && index !== lastIndex) {
+  //       console.log("lastIndex");
+  //       // AudioManager.playStaticSe({ name: "bsd/SystemSE_Select", volume: 100, pitch: 100 })
+  //       globalThis.SoundManager.playCursor();
+  //     }
+  //     target.__lastIndex = index;
+  //   }
+  // });
+  // proxyMethodAfter(Sprite_Clickable, "onMouseEnter", () => {
+  //   SoundManager.playCursor()
+  //   console.log("playCursor")
+  // })
   // await import("./lib/start")
   return {
     execute: () => null

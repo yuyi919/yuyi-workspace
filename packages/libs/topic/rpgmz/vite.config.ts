@@ -115,33 +115,33 @@ export default defineConfig(({ command, mode }: ConfigEnv): UserConfig => {
       }
     },
     plugins: [
-      federation({
-        name: "module-name",
-        filename: "remoteEntry.js",
-        // remotes: {
-        //   foo: "remote_foo"
-        // },
-        exposes: {
-          "./Dialog": "./src/Dialog.tsx"
-          // "/react": "react",
-          // "/react-dom": "react-dom",
-          // "/pixi-js": "pixi.js"
-        },
-        shared: ["react", "react-dom", "pixi.js"].reduce((r, name) => {
-          const version = (pkg.devDependencies[name] || pkg.dependencies[name]).replace(
-            /^.+?:/,
-            ""
-          );
-          return {
-            ...r,
-            [name]: {
-              singleton: true,
-              requiredVersion: version,
-              version: version
-            }
-          };
-        }, {})
-      }),
+      // federation({
+      //   name: "module-name",
+      //   filename: "remoteEntry.js",
+      //   // remotes: {
+      //   //   foo: "remote_foo"
+      //   // },
+      //   exposes: {
+      //     "./components": "./src/lib/components"
+      //     // "/react": "react",
+      //     // "/react-dom": "react-dom",
+      //     // "/pixi-js": "pixi.js"
+      //   },
+      //   shared: ["react", "react-dom", "pixi.js"].reduce((r, name) => {
+      //     const version = (pkg.devDependencies[name] || pkg.dependencies[name]).replace(
+      //       /^.+?:/,
+      //       ""
+      //     );
+      //     return {
+      //       ...r,
+      //       [name]: {
+      //         singleton: true,
+      //         requiredVersion: version,
+      //         version: version
+      //       }
+      //     };
+      //   }, {})
+      // }),
       VitePluginReact({
         babel: {
           configFile: false

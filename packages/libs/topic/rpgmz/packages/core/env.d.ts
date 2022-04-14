@@ -1,3 +1,4 @@
-import "./dist/globals.d";
-import "./src/MZ.d";
-import "./src/env.d";
+import "./dist/MZ";
+import "./dist/env";
+import "./src/MZ";
+import "./src/env";

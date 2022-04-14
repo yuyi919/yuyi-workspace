@@ -1,4 +1,4 @@
-import * as PIXI from "pixi.js";
+// import * as PIXI from "pixi.js";
 import { Graphics } from "../dom";
 import { TilemapLayer } from ".";
 import { TilemapRenderer } from ".";

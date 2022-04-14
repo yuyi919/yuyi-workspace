@@ -1,6 +1,6 @@
 import { Valid } from "@react-spring/core/dist/declarations/src/types/common";
 import { OneOrMore } from "@react-spring/types";
-import { animated, useTransition, UseTransitionProps } from "@react-spring/web";
+import { useTrail, animated, useTransition, UseTransitionProps } from "@react-spring/web";
 import { debounce } from "lodash";
 import React, { MouseEvent, useEffect, useMemo, useState } from "react";
 import { X } from "react-feather";
@@ -72,11 +72,15 @@ export function useMessageHub<T>({
         keys: (item) => item.key,
         enter: (item) => async (next, cancel) => {
           const remuseHandle = debounce(() => {
-            !item.canceled && next({ pause: false });
+            if (item.pause && !item.canceled) {
+              console.log("resume", { ...item });
+              next({ pause: (item.pause = false) });
+            }
           }, 500);
           cancelMap.set(item, {
             cancel() {
               item.canceled = true;
+              console.log("cancel", { ...item });
               return cancel().resume();
             },
             pause() {
@@ -84,8 +88,9 @@ export function useMessageHub<T>({
               remuseHandle.cancel();
             },
             resume() {
-              item.pause = false;
-              remuseHandle();
+              if (item.pause) {
+                remuseHandle();
+              }
             }
           });
           await next({
@@ -96,6 +101,8 @@ export function useMessageHub<T>({
           await next({ life: "0%" });
         },
         leave: (item) => async (next, cancel) => {
+          item.canceled = true;
+          console.log("leave", { ...item });
           // console.log(item);
           // await next({
           //   onResume() {
@@ -109,6 +116,8 @@ export function useMessageHub<T>({
           });
         },
         onRest: (result, ctrl, item) => {
+          console.log("onRest", { ...item });
+          item.canceled = true;
           setItems((state) =>
             state.filter((i) => {
               return i.key !== item.key;

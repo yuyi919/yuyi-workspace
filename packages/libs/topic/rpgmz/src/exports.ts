@@ -4,6 +4,7 @@ import * as mobx from "mobx";
 import "reflect-metadata";
 import * as tslib from "tslib";
 import { System } from "./lib/System";
+import * as PIXI from "pixi.js";
 // import { createLogger } from "@yuyi919/shared-logger";
 System.register("@yuyi919/rpgmz-plugin-transformer", [], () => ({
   execute() {
@@ -23,5 +24,12 @@ System.register("mobx", [], () => ({
 System.register("tslib", [], () => ({
   execute() {
     return tslib;
+  }
+}));
+
+globalThis.PIXI = PIXI;
+System.register("pixi.js", [], () => ({
+  execute() {
+    return PIXI;
   }
 }));

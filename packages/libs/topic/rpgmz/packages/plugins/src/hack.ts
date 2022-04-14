@@ -1,12 +1,11 @@
 import { Spriteset_Base } from "@yuyi919/rpgmz-core";
 
-//@ts-ignore
-export declare module "@yuyi919/rpgmz-core" {
-  export class BattleManager {
-    static _target: any;
-    static _autoBattle: boolean;
+declare module "@yuyi919/rpgmz-core" {
+  export namespace BattleManager {
+    const _target: any;
+    const _autoBattle: boolean;
   }
-  export class Sprite {
+  export interface Sprite {
     _baseY: number;
     _baseX: number;
     /**
@@ -19,22 +18,22 @@ export declare module "@yuyi919/rpgmz-core" {
     originY?: number;
   }
 
-  export class Game_Battler {
+  export interface Game_Battler {
     _stbExploited?: boolean | undefined;
     stbExploitedStates(): number[];
 
     name(): string;
   }
-  export class Game_Temp {
+  export interface Game_Temp {
     /**
      * 强制指定战斗为侧视/前视模式
      */
     _forcedTroopView?: "SV" | "FV";
   }
-  export class SceneManager {
-    static isSceneBattle(): boolean;
+  export namespace SceneManager {
+    function isSceneBattle(): boolean;
   }
-  export class Scene_Base {
+  export interface Scene_Base {
     _spriteset?: Spriteset_Base;
   }
   export interface DataSkill {

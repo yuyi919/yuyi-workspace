@@ -4,4 +4,7 @@ import "./preset";
 // import { start } from "./preset";
 // start();
 
-import "./lib/start";
+window.onload = async function () {
+  await import("./lib/start");
+  window.focus();
+};

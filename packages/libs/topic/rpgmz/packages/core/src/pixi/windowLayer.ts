@@ -1,4 +1,4 @@
-import * as PIXI from "pixi.js";
+//import * as PIXI from "pixi.js";
 import { Window } from "./window";
 import { SuperWindow } from "./windowSuper";
 

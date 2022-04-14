@@ -1,12 +1,20 @@
-import { Container, Sprite, Stage, useApp } from "@inlet/react-pixi/animated";
+import { withFilters, Container, Sprite, Stage, useApp } from "@inlet/react-pixi/animated";
 import { Flex, FlexBoxRenderProps } from "@plugins/react-pixijs/components";
-import { animated, Spring, useSpring } from "@react-spring/web";
+import {
+  Interpolation,
+  FrameValue,
+  animated,
+  Spring,
+  useSpring,
+  useTransition,
+  useSpringRef
+} from "@react-spring/web";
 import { CSSProperties } from "@yuyi919/shared-types";
 import React from "react";
 import ReactDOM from "react-dom";
-import { FlexContainer } from "./FlexContainer";
-import Dialog from "./Dialog";
+import { FlexContainer, Dialog, InfoWindow, SetupMenu } from "./pixi";
 import { MessageHub, AddFunction } from "./components";
+import { TColorOverlayFilter, TDisplacementFilter } from "./pixi/filters";
 
 export const View = () => {
   const app = useApp();
@@ -116,10 +124,60 @@ function TestHub() {
     </div>
   );
 }
+const Filters = withFilters(Container, {
+  blur: PIXI.filters.BlurFilter
+  // noise: PIXI.filters.NoiseFilter
+  // adjust: AdjustmentFilter
+});
+
+interface Manager<T> {
+  data: T[];
+  children: (data: T) => any;
+  pre?: boolean;
+}
+function SceneManager<T>({ children, data, pre }: Manager<T>) {
+  const [index, set] = React.useState(0);
+  const onClick = React.useCallback(() => set((state) => (state + 1) % data.length), [data.length]);
+  const transRef = useSpringRef();
+  const transitions = useTransition(index, {
+    ref: transRef,
+    initial: { level: 0.5, alpha: 0.5, config: { duration: 1000 } },
+    from: { level: 1, alpha: 0 },
+    enter: { level: 0, alpha: 1 },
+    leave: { level: 1, alpha: 0 },
+    config: { duration: 3000 }
+  });
+  React.useEffect(() => {
+    transRef.start();
+  }, [index]);
+  return (
+    <Container interactive pointerup={onClick}>
+      {transitions((props, i) => {
+        return (
+          <TColorOverlayFilter
+            color={0xffffff}
+            alpha={props.alpha.to({ range: [0, 0.5, 1], output: [1, 1, 0] })}
+          >
+            <Container alpha={props.alpha.to({ range: [0, 0.5, 1], output: [0, 1, 1] })}>
+              <TDisplacementFilter
+                x={props.level.to({ range: [0, 0.5, 1], output: [pre ? 1 : 0, 150, 150] })}
+                blur={150}
+              >
+                {children(data[i])}
+              </TDisplacementFilter>
+            </Container>
+          </TColorOverlayFilter>
+        );
+      })}
+    </Container>
+  );
+}
+
 export const App = () => {
   const width = 1280;
   const height = 720;
   const [show, setShow] = React.useState(true);
+  const stage = React.useRef<any>();
   // const [num, update] = React.useState(1);
   // React.useEffect(() => {
   //   const handle = () => {
@@ -130,6 +188,9 @@ export const App = () => {
   //     window.removeEventListener("click", handle);
   //   };
   // });
+  React.useEffect(() => {
+    console.log(stage.current.app.view?.click());
+  }, []);
   return (
     <div
       style={{
@@ -155,9 +216,45 @@ export const App = () => {
       >
         <View></View>
       </ContextBridge> */}
-      <Stage {...{ width, height }} options={{}} raf>
-        {/* <Sprite image="/public/bg_1.jpg" /> */}
-        <Dialog x={640} y={360}></Dialog>
+      <Stage
+        ref={stage}
+        {...{ width, height }}
+        options={{
+          autoStart: true,
+          autoDensity: true,
+          antialias: true
+        }}
+        raf={true}
+      >
+        <SceneManager data={[`/public/bg_1.jpg`, `/public/bg_2.jpg`, `/public/bg_3.jpg`]}>
+          {(data) => (
+            <Container>
+              {/* <Sprite x={0} texture={PIXI.Texture.WHITE} width={1280} height={720} alpha={1} /> */}
+
+              <Filters blur={{ blur: 4 }}>
+                <Sprite image={data} />
+              </Filters>
+              <Sprite x={250} scale={1} image="/public/HELL_NAOKI_0201NO_0001.png" />
+              {/* <Sprite x={250} scale={1} image="/public/HELL_MASA_0302Sk_0001.png" /> */}
+              {/* <Sprite x={250} scale={0.5} image="/public/空.png" /> */}
+            </Container>
+          )}
+        </SceneManager>
+
+        {/* <Spring to={{ scaleY: 0 }} from={{ scaleY: 400 }} config={{ duration: 3000 }}>
+          {(props) => {
+            return (
+              <TDisplacementFilter x={props.scaleY}>
+                <Filters blur={{ blur: 4 }}>
+                  <Sprite image="/public/bg_1.jpg" />
+                </Filters>
+              </TDisplacementFilter>
+            );
+          }}
+        </Spring> */}
+        {/* <Dialog x={640} y={360}></Dialog> */}
+        <SetupMenu></SetupMenu>
+        {/* <InfoWindow x={640} y={160} width={400} height={50}></InfoWindow> */}
         {/* <View></View> */}
       </Stage>
       {/* <Box ready>

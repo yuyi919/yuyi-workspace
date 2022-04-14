@@ -131,6 +131,10 @@
       "allowedCategories": [ "production" ]
     },
     {
+      "name": "@react-spring/shared",
+      "allowedCategories": [ "production" ]
+    },
+    {
       "name": "@react-spring/types",
       "allowedCategories": [ "production" ]
     },
@@ -643,6 +647,10 @@
       "allowedCategories": [ "production" ]
     },
     {
+      "name": "mobx-state-tree",
+      "allowedCategories": [ "production" ]
+    },
+    {
       "name": "mocha",
       "allowedCategories": [ "external" ]
     },
@@ -695,7 +703,15 @@
       "allowedCategories": [ "production" ]
     },
     {
+      "name": "pixi-filters",
+      "allowedCategories": [ "production" ]
+    },
+    {
       "name": "pixi-flex",
+      "allowedCategories": [ "production" ]
+    },
+    {
+      "name": "pixi-webfont-loader",
       "allowedCategories": [ "production" ]
     },
     {

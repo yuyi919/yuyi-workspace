@@ -1,18 +1,17 @@
 import "./index.less";
-import * as RMMZ from "./index";
-import * as PIXI from "pixi.js";
+import * as Core from "./index";
 import { System } from "./lib/System";
 
 globalThis.System = System;
-globalThis.PIXI = PIXI;
 
+type a = Core.MZ.Action;
 System.register("@yuyi919/rpgmz-core", [], () => ({
   execute() {
     const exports = {
       default: globalThis
     };
     // eslint-disable-next-line guard-for-in
-    for (const key in RMMZ) {
+    for (const key in Core) {
       Object.defineProperty(exports, key, {
         get() {
           return globalThis[key];
@@ -28,18 +27,13 @@ System.register("@yuyi919/rpgmz-core", [], () => ({
   }
 }));
 
-System.register("pixi.js", [], () => ({
-  execute() {
-    return PIXI;
-  }
-}));
-
-for (const k of Object.keys(RMMZ)) {
-  globalThis[k] = RMMZ[k];
+for (const k of Object.keys(Core)) {
+  globalThis[k] = Core[k];
 }
 
 export function start() {
-  const main = new RMMZ.Main();
+  const main = new Core.Main();
   main.run();
   return main;
 }
+// start();

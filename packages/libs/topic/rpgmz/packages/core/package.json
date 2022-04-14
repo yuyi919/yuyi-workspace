@@ -5,12 +5,13 @@
   "author": "",
   "main": "dist/index.js",
   "module": "lib/index.js",
-  "types": "dist/index.d.ts",
+  "types": "dist/rpgmz-core.d.ts",
   "scripts": {
-    "build": "tsc --build --force",
-    "build:dev": "tsc --build",
-    "build:watch": "tsc --build --watch",
-    "dev": "tsc --build --watch"
+    "build": "heft build --clean",
+    "build:dev": "heft build",
+    "build:watch": "heft build --watch",
+    "docs": "heft build && api-documenter markdown --input temp --output docs/api",
+    "dev": "heft build --watch"
   },
   "dependencies": {
     "@yuyi919/shared-utils": "workspace:0.0.40",

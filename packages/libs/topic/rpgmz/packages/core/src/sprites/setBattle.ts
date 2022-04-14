@@ -1,4 +1,4 @@
-import * as PIXI from "pixi.js";
+//import * as PIXI from "pixi.js";
 import { Graphics } from "../dom";
 import { Spriteset_Base } from ".";
 import { Sprite_Battleback } from ".";

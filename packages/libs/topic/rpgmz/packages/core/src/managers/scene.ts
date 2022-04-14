@@ -5,6 +5,7 @@ import { ImageManager } from "./image";
 import { EffectManager } from "./effect";
 import { AudioManager } from "./audio";
 import { PluginManager } from "./plugin";
+import { MZ } from "../MZ";
 
 export type LoadError = ["LoadError", string, () => void];
 

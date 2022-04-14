@@ -1,16 +1,35 @@
+import "./sound";
 import { is } from "@yuyi919/shared-types";
 import * as PIXI from "pixi.js";
+import { WebfontLoaderPlugin } from "pixi-webfont-loader";
+PIXI.Loader.registerPlugin(WebfontLoaderPlugin);
 
 export const SystemLoader = new PIXI.Loader("/public");
-
 export enum ResourceIds {
-  DialogJson = "dialog.json",
-  DialogFrame = "dialog_frame.png",
-  DialogBack = "dialog_back.png",
-  InfoWindowFrame1 = "frame_1.png",
-  InfoWindowFrame2 = "frame_2.png",
-  InfoWindowFrame = "window_frame.png",
-  InfoWindowBack = "window_back.png"
+  DialogJson = "system.json",
+  DialogFrame = "dialog/frame.png",
+  DialogBack = "dialog/back.png",
+  InfoWindowFrame1 = "infoWindow/frame_1.png",
+  InfoWindowFrame2 = "infoWindow/frame_2.png",
+  InfoWindowFrame = "infoWindow/frame.png",
+  InfoWindowBack = "infoWindow/back.png",
+  SetupMenuBarBack = "mainMenu/bar_back.png",
+  SetupMenuFlash = "mainMenu/flash.png",
+  SetupMenuMainBtn1 = "mainMenu/main_btn1.png",
+  SetupMenuMainBtn2 = "mainMenu/main_btn2.png",
+  SetupMenuMainBtn3 = "mainMenu/main_btn3.png",
+  SetupMenuMainBtn4 = "mainMenu/main_btn4.png",
+  SetupMenuMainBtn5 = "mainMenu/main_btn5.png",
+  SetupMenuMainBtn6 = "mainMenu/main_btn6.png"
+}
+
+export enum FontFamily {
+  Transistor = "Transistor",
+  ChakraPetch = "Chakra Petch",
+  ProFontForPowerline = "ProFont For Powerline"
+  // Transistor = "Transistor",
+  // Transistor = "Transistor",
+  // Transistor = "Transistor"
 }
 
 export interface Loaded {
@@ -51,20 +70,27 @@ function* _loadWithResource(res: PIXI.LoaderResource) {
     // console.log(res[resPath], PIXI.Texture.from(frames[frameName]));
   }
 }
-export async function* loadResources(...path: string[]) {
+export type LoadResource = { name: string; url: string };
+export async function* loadResources(..._path: (string | LoadResource)[]) {
+  const path = _path.map((o) =>
+    typeof o === "string" ? { name: o, url: o } : o
+  ) as LoadResource[];
   await new Promise<void>((resolve) => {
-    const load = path.filter((o) => !SystemLoader.resources[o]);
+    const load = path.filter((o) => !SystemLoader.resources[o.name]);
     if (load.length) {
       console.log("load", load);
-      SystemLoader.add(...load).load((r, res) => {
-        resolve();
-      });
+      load
+        .reduce((SystemLoader, load) => SystemLoader.add(load), SystemLoader)
+        .load((r, res) => {
+          resolve();
+        });
     } else resolve();
   });
-  for (const resPath of path) {
+  for (const { name: resPath } of path) {
     const l = SystemLoader.resources[resPath];
-    for (const { name, texture } of loadWithResource(l)) {
-      yield { name, texture, path: resPath, data: l.data.frames[name] } as Loaded;
-    }
+    if (l)
+      for (const { name, texture } of loadWithResource(l)) {
+        yield { name, texture, path: resPath, data: l.data.frames[name] } as Loaded;
+      }
   }
 }

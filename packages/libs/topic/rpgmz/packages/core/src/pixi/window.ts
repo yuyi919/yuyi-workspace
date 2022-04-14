@@ -1,4 +1,4 @@
-import * as PIXI from "pixi.js";
+//import * as PIXI from "pixi.js";
 import { Sprite } from "./sprite";
 import { TilingSprite } from "./tilingSprite";
 import { MZ } from "../MZ";

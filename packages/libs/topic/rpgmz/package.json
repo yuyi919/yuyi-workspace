@@ -8,7 +8,7 @@
   "types": "dist/index.d.ts",
   "scripts": {
     "start": "vite --port 37151",
-    "build": "vite build",
+    "build": "vite build --minify=false",
     "build:dev": "vite build --minify=false"
   },
   "dependencies": {
@@ -20,7 +20,11 @@
     "mobx": "6.0.4",
     "bitecs": "~0.3.21-6",
     "lodash": "4.17.21",
-    "lodash-es": "4.17.21"
+    "lodash-es": "4.17.21",
+    "pixi-webfont-loader": "~1.0.2",
+    "pixi-filters": "~4.1.6",
+    "@react-spring/shared": "~9.4.3",
+    "mobx-state-tree": "~5.1.3"
   },
   "devDependencies": {
     "@yuyi919/build-tools": "workspace:0.1.13",
