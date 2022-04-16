@@ -64,5 +64,6 @@ module.exports = {
       extends: [],
       rules: {}
     }
-  ]
+  ],
+  ignorePatterns: ["vite.config.ts", "/*.ts"]
 };

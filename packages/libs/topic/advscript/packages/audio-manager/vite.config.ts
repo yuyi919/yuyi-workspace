@@ -1,7 +1,4 @@
 /// <reference types="vitest" />
-import path, { join } from "path";
-import { readlinkSync } from "fs";
-import { escapeRegExp } from "lodash";
 import { defineConfig, UserConfigFn } from "vite";
 import dts from "vite-plugin-dts";
 
@@ -14,11 +11,9 @@ export default defineConfig(async ({ mode }) => {
     resolve: {},
     plugins: [
       dts({
-        insertTypesEntry: true,
-        outputDir: "types"
+        insertTypesEntry: true
       })
     ],
-    base: "/advscript-playground/",
     build: {
       assetsInlineLimit: 0,
       target: "esnext",

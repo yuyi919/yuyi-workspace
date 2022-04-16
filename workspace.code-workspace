@@ -39,6 +39,6 @@
   ],
   "settings": {
     "eslint.packageManager": "pnpm",
-    "typescript.tsdk": "packages\\node_modules\\typescript\\lib"
+    "typescript.tsdk": "✨ yuyi919\\packages\\node_modules\\typescript\\lib"
   }
 }

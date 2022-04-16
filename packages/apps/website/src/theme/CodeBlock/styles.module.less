@@ -1,0 +1,24 @@
+.arwesCodeBlock {
+  display: block;
+  :global(.arwes-code-block) {
+    :global(.arwes-text.arwes-code-block__content) {
+      > :global(.arwes-text__content) {
+        display: block;
+        > code {
+          width: calc(100% + 40px);
+        }
+        + span {
+          overflow: visible;
+          > code {
+            width: calc(100% + 40px);
+          }
+        }
+      }
+    }
+  }
+  .copyButton {
+    z-index: 9;
+    right: 0;
+    top: 0;
+  }
+}

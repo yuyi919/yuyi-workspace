@@ -1,0 +1,23 @@
+// 修复Arwes(baseline)对经典主题的覆盖
+button,
+[type="button"],
+[type="reset"],
+[type="submit"] {
+  // &.clean-btn {
+  //   display: none;
+  // }
+}
+//
+
+a[href]:not(.menu__link),
+code:not([class]),
+.menu__list-item > a.menu__link,
+.menu__list-item > .menu__list-item-collapsible {
+  outline: 200px solid transparent !important;
+  &:hover {
+    filter: url(#noise-link);
+    &::marker {
+      filter: url(#noise-link);
+    }
+  }
+}

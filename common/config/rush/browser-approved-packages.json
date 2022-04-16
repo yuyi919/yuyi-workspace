@@ -3,6 +3,18 @@
   "$schema": "https://developer.microsoft.com/json-schemas/rush/v5/approved-packages.schema.json",
   "packages": [
     {
+      "name": "@algolia/autocomplete-js",
+      "allowedCategories": [ "production" ]
+    },
+    {
+      "name": "@algolia/autocomplete-plugin-recent-searches",
+      "allowedCategories": [ "production" ]
+    },
+    {
+      "name": "@algolia/autocomplete-theme-classic",
+      "allowedCategories": [ "tools" ]
+    },
+    {
       "name": "@angular-devkit/architect",
       "allowedCategories": [ "production", "tools" ]
     },
@@ -51,8 +63,28 @@
       "allowedCategories": [ "production" ]
     },
     {
+      "name": "@arwes/animation",
+      "allowedCategories": [ "production" ]
+    },
+    {
+      "name": "@arwes/core",
+      "allowedCategories": [ "production" ]
+    },
+    {
+      "name": "@arwes/design",
+      "allowedCategories": [ "production" ]
+    },
+    {
+      "name": "@arwes/sounds",
+      "allowedCategories": [ "production" ]
+    },
+    {
       "name": "@chevrotain/types",
       "allowedCategories": [ "external" ]
+    },
+    {
+      "name": "@cmfcmf/docusaurus-search-local",
+      "allowedCategories": [ "production" ]
     },
     {
       "name": "@codingame/monaco-jsonrpc",
@@ -63,11 +95,51 @@
       "allowedCategories": [ "production" ]
     },
     {
+      "name": "@docusaurus/core",
+      "allowedCategories": [ "production" ]
+    },
+    {
+      "name": "@docusaurus/module-type-aliases",
+      "allowedCategories": [ "production" ]
+    },
+    {
+      "name": "@docusaurus/plugin-content-docs",
+      "allowedCategories": [ "production" ]
+    },
+    {
+      "name": "@docusaurus/plugin-pwa",
+      "allowedCategories": [ "production" ]
+    },
+    {
+      "name": "@docusaurus/preset-classic",
+      "allowedCategories": [ "production" ]
+    },
+    {
+      "name": "@docusaurus/theme-classic",
+      "allowedCategories": [ "production" ]
+    },
+    {
+      "name": "@docusaurus/theme-common",
+      "allowedCategories": [ "production" ]
+    },
+    {
+      "name": "@emotion/css",
+      "allowedCategories": [ "production" ]
+    },
+    {
+      "name": "@emotion/react",
+      "allowedCategories": [ "production" ]
+    },
+    {
       "name": "@inlet/react-pixi",
       "allowedCategories": [ "production" ]
     },
     {
       "name": "@lazarv/wasm-yoga",
+      "allowedCategories": [ "production" ]
+    },
+    {
+      "name": "@mdx-js/react",
       "allowedCategories": [ "production" ]
     },
     {
@@ -140,7 +212,7 @@
     },
     {
       "name": "@react-spring/web",
-      "allowedCategories": [ "production" ]
+      "allowedCategories": [ "production", "tools" ]
     },
     {
       "name": "@rollup/plugin-alias",
@@ -192,6 +264,10 @@
     },
     {
       "name": "@testing-library/react",
+      "allowedCategories": [ "production" ]
+    },
+    {
+      "name": "@tsconfig/docusaurus",
       "allowedCategories": [ "production" ]
     },
     {
@@ -363,6 +439,10 @@
       "allowedCategories": [ "production", "tools" ]
     },
     {
+      "name": "animejs",
+      "allowedCategories": [ "production" ]
+    },
+    {
       "name": "ansi-escapes",
       "allowedCategories": [ "tools" ]
     },
@@ -447,6 +527,10 @@
       "allowedCategories": [ "production" ]
     },
     {
+      "name": "clsx",
+      "allowedCategories": [ "production" ]
+    },
+    {
       "name": "cmake-js",
       "allowedCategories": [ "production" ]
     },
@@ -461,6 +545,10 @@
     {
       "name": "comment-json",
       "allowedCategories": [ "production" ]
+    },
+    {
+      "name": "copy-text-to-clipboard",
+      "allowedCategories": [ "tools" ]
     },
     {
       "name": "copyfiles",
@@ -488,6 +576,10 @@
     },
     {
       "name": "diff",
+      "allowedCategories": [ "production" ]
+    },
+    {
+      "name": "docusaurus-plugin-less",
       "allowedCategories": [ "production" ]
     },
     {
@@ -627,6 +719,10 @@
       "allowedCategories": [ "production" ]
     },
     {
+      "name": "less-loader",
+      "allowedCategories": [ "production" ]
+    },
+    {
       "name": "less-plugin-variables-output",
       "allowedCategories": [ "production" ]
     },
@@ -647,8 +743,20 @@
       "allowedCategories": [ "production" ]
     },
     {
+      "name": "lunr",
+      "allowedCategories": [ "production" ]
+    },
+    {
+      "name": "lunr-languages",
+      "allowedCategories": [ "tools" ]
+    },
+    {
       "name": "magic-string",
       "allowedCategories": [ "production" ]
+    },
+    {
+      "name": "mark.js",
+      "allowedCategories": [ "tools" ]
     },
     {
       "name": "minimatch",
@@ -680,6 +788,10 @@
     },
     {
       "name": "monaco-textmate",
+      "allowedCategories": [ "production" ]
+    },
+    {
+      "name": "nodejieba",
       "allowedCategories": [ "production" ]
     },
     {
@@ -739,8 +851,20 @@
       "allowedCategories": [ "production" ]
     },
     {
+      "name": "polished",
+      "allowedCategories": [ "production" ]
+    },
+    {
       "name": "prettier",
       "allowedCategories": [ "production", "tools" ]
+    },
+    {
+      "name": "prism-react-renderer",
+      "allowedCategories": [ "production" ]
+    },
+    {
+      "name": "prop-types",
+      "allowedCategories": [ "production" ]
     },
     {
       "name": "react",
@@ -752,6 +876,14 @@
     },
     {
       "name": "react-feather",
+      "allowedCategories": [ "production" ]
+    },
+    {
+      "name": "react-intersection-observer",
+      "allowedCategories": [ "production" ]
+    },
+    {
+      "name": "react-lazyload",
       "allowedCategories": [ "production" ]
     },
     {

@@ -11,7 +11,7 @@ export function createEditor(monaco: TMonaco, model: Monaco.editor.ITextModel) {
     useShadowDOM: true,
     glyphMargin: true,
     lightbulb: {
-      enabled: true,
+      enabled: true
     },
     linkedEditing: true,
     autoClosingDelete: "always",
@@ -55,11 +55,11 @@ export function createEditor(monaco: TMonaco, model: Monaco.editor.ITextModel) {
       showUnits: true,
       showUsers: true,
       showValues: true,
-      showVariables: true,
+      showVariables: true
     },
     inlineSuggest: {
       enabled: true,
-      mode: "subword",
+      mode: "subword"
     },
     comments: {},
     showDeprecated: true,
@@ -71,7 +71,7 @@ export function createEditor(monaco: TMonaco, model: Monaco.editor.ITextModel) {
       strings: true,
       other: true
     },
-    wordBasedSuggestions: false,
+    wordBasedSuggestions: false
     // tabCompletion: "on",
   });
 }

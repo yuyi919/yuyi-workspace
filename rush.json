@@ -484,6 +484,11 @@
       "projectFolder": "packages/libs/tools/ts-transformer/dev-utils",
       "reviewCategory": "production"
     },
+    {
+      "packageName": "website",
+      "projectFolder": "packages/apps/website",
+      "reviewCategory": "production"
+    },
     // {
     //   "packageName": "@yuyi919/monaco-languageclient",
     //   "projectFolder": "packages/libs/topic/advscript/packages/monaco-languageclient",

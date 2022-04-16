@@ -1,0 +1,18 @@
+{
+  "extends": "./node_modules/@yuyi919/workspace-base-rig/profiles/tsc/tsconfig-base.json",
+  "compilerOptions": {
+    "rootDir": "./src",
+    "types": ["node", "vitest/globals"],
+    "paths": {},
+    "jsx": "react-jsx",
+    "target": "esnext",
+    "noEmit": false,
+    "outDir": "dist",
+    "removeComments": true,
+    "esModuleInterop": true,
+    "module": "esnext",
+    "moduleResolution": "node",
+    "allowSyntheticDefaultImports": true
+  },
+  "include": ["./vite-plugins/*.ts"]
+}

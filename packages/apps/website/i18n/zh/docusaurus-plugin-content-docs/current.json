@@ -1,0 +1,26 @@
+{
+  "version.label": {
+    "message": "Next",
+    "description": "The label for version current"
+  },
+  "sidebar.tutorialSidebar.category.Tutorial - Basics": {
+    "message": "Tutorial - Basics",
+    "description": "The label for category Tutorial - Basics in sidebar tutorialSidebar"
+  },
+  "sidebar.tutorialSidebar.category.Tutorial - Extras": {
+    "message": "Tutorial - Extras",
+    "description": "The label for category Tutorial - Extras in sidebar tutorialSidebar"
+  },
+  "sidebar.tutorialSidebar.category.API": {
+    "message": "API",
+    "description": "The label for category API in sidebar tutorialSidebar"
+  },
+  "sidebar.tutorialSidebar.category.fresh-library": {
+    "message": "fresh-library",
+    "description": "The label for category fresh-library in sidebar tutorialSidebar"
+  },
+  "sidebar.tutorialSidebar.category.FreshLibrary": {
+    "message": "FreshLibrary",
+    "description": "The label for category FreshLibrary in sidebar tutorialSidebar"
+  }
+}
