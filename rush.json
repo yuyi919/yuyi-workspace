@@ -484,6 +484,18 @@
       "projectFolder": "packages/libs/tools/ts-transformer/dev-utils",
       "reviewCategory": "production"
     },
+    // {
+    //   "packageName": "@yuyi919/monaco-languageclient",
+    //   "projectFolder": "packages/libs/topic/advscript/packages/monaco-languageclient",
+    //   "reviewCategory": "production",
+    //   "versionPolicyName": "advscript"
+    // },
+    {
+      "packageName": "@yuyi919/audio-manager",
+      "projectFolder": "packages/libs/topic/advscript/packages/audio-manager",
+      "reviewCategory": "production",
+      "versionPolicyName": "advscript"
+    },
     {
       "packageName": "@yuyi919/advscript-editor",
       "projectFolder": "packages/libs/topic/advscript/packages/editor",

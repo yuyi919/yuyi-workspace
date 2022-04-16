@@ -3,9 +3,7 @@
   "tasks": [
     {
       "type": "shell",
-      "command": [
-        "cmd | pnpm dev"
-      ],
+      "command": ["pnpm dev"],
       "label": "pnpm: run dev - editor",
       "options": {
         "cwd": "packages/editor/"
@@ -14,9 +12,7 @@
     },
     {
       "type": "shell",
-      "command": [
-        "cmd | pnpm dev"
-      ],
+      "command": ["pnpm dev"],
       "label": "pnpm: run dev - parser",
       "options": {
         "cwd": "packages/parser/"

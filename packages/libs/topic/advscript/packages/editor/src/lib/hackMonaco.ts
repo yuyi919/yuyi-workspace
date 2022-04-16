@@ -1,4 +1,8 @@
-let hasGetWorkUrl = false //{} as Record<string, boolean>;
+let hasGetWorkUrl = false; //{} as Record<string, boolean>;
+
+declare namespace globalThis {
+   const MonacoEnvironment: monaco.Environment;
+}
 
 const g = window.MonacoEnvironment.getWorkerUrl;
 const g2 = window.MonacoEnvironment.getWorker;
@@ -16,12 +20,12 @@ window.MonacoEnvironment = {
   getWorker(_, label) {
     hasGetWorkUrl = true;
     console.debug("getWorker", _, label);
-    const url = window.MonacoEnvironment.getWorkerUrl(_, label)
-    if (typeof url === 'string') {
-      return g2(_, label)
+    const url = window.MonacoEnvironment.getWorkerUrl(_, label);
+    if (typeof url === "string") {
+      return g2(_, label);
     }
-    return url
-  },
+    return url;
+  }
 };
 
 const setupUrls: Record<string, string | Function> = {};

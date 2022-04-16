@@ -1,4 +1,8 @@
 export async function getMonaco() {
-  await import("./monaco.all");
-  return import("./monaco.export");;
+  // if (import.meta.env.PROD) {
+    await import("./monaco.all");
+    return import("./monaco.export");
+  // } else {
+  //   return import("./monaco.bundle");
+  // }
 }

@@ -1,0 +1,48 @@
+{
+  "name": "@yuyi919/audio-manager",
+  "version": "0.0.2",
+  "description": "",
+  "author": "",
+  "main": "dist/index.js",
+  "module": "lib/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc --build --force",
+    "build:dev": "tsc --build",
+    "build:watch": "tsc --build --watch",
+    "dev": "tsc --build --watch",
+    "test": "vitest",
+    "coverage": "vitest run --coverage"
+  },
+  "dependencies": {
+    "@types/howler": "^2.2.x",
+    "howler": "^2.2.x",
+    "rxjs": "~7.5.5"
+  },
+  "devDependencies": {
+    "@testing-library/react": "~13.1.1",
+    "@types/jest": "~27.0.1",
+    "@types/node": "~16.7.2",
+    "@types/react": "^18.0.0",
+    "@types/react-dom": "^18.0.0",
+    "@yuyi919/workspace-base-rig": "workspace:1.2.8",
+    "react": "^18.0.0",
+    "react-dom": "^18.0.0",
+    "tslib": "~2.3.1",
+    "typescript": "4.1.6",
+    "vite": "2.9.5",
+    "vitest": "~0.9.3"
+  },
+  "peerDependencies": {
+    "vite": ">= 2",
+    "react": ">= 17"
+  },
+  "files": [
+    "dist",
+    "lib",
+    "README.md"
+  ],
+  "publishConfig": {
+    "access": "public"
+  }
+}

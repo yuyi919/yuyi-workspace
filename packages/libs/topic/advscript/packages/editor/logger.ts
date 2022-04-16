@@ -4,7 +4,7 @@ import {
   MacroHandler,
   MacroContext,
   Babel,
-  MacroHelper,
+  MacroHelper
 } from "vite-plugin-macro";
 import { basename, join } from "path";
 import { upperFirst } from "lodash";
@@ -34,6 +34,7 @@ class MacroLogger {
       names.push(basename(ctx.filepath));
     }
     const [label, ...other] = callArgs;
+    // eslint-disable-next-line no-eval
     const labelText = eval(label);
     const result = template.statement.ast(
       `console.info(...render("## ${labelText}: time ##")),
@@ -79,14 +80,14 @@ export default defineMacroProvider({
   id: "logger",
   exports: {
     "@logger": {
-      macros: [log, time],
+      macros: [log, time]
     },
     "@logger-helper": {
       code: fs
         .readFileSync(join(__dirname, "./helper.ts"))
         .toString()
-        .replace(/:\s*\w+/g, ""),
-    },
+        .replace(/:\s*\w+/g, "")
+    }
   },
   hooks: {
     onStart: () => {
@@ -94,8 +95,8 @@ export default defineMacroProvider({
       // env.watcher?.on("change", (path) => {
       //   env.modules?.invalidateByTag(/^some/);
       // });
-    },
-  },
+    }
+  }
   // options: {
   //   parserPlugins: ["typescript"]
   // }

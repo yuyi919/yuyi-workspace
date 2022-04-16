@@ -4,26 +4,35 @@ import {
   DocumentLine,
   isStatmentArray,
   NodeTypeKind,
-  LogickStatmentKind,
+  LogickStatmentKind
 } from "@yuyi919/advscript-parser";
 import { bootstrap, LanguageInfo } from "./lib";
 import { EmbeddedTypescriptWorker } from "./lib/provider/setupTsMode";
 import file from "./logic.avs?raw";
 import { getMonaco } from "./lib/monaco.bootstrap";
-import { EditorExtensionsRegistry } from "monaco-editor/esm/vs/editor/browser/editorExtensions";
+// import { EditorExtensionsRegistry } from "monaco-editor/esm/vs/editor/browser/editorExtensions";
 import { createEditor } from "./editor";
 import { triggerCommand, COMMAND_ID } from "./utils";
+import _ from "lodash";
+import {
+  CustomPatternMatcherFunc,
+  IToken,
+  createToken,
+  createTokenInstance,
+  Lexer
+} from "chevrotain";
+import { Monaco, monaco } from "./lib/monaco.export";
 
-import * as Logger from "@logger";
+// import * as Logger from "@logger";
 
-Logger.log({ a: 1 });
-Logger.time("test", { b: 1 });
-class A {
-  de() {
-    Logger.log(class {}.toString());
-  }
-}
-new A().de();
+// Logger.log({ a: 1 });
+// Logger.time("test", { b: 1 });
+// class A {
+//   de() {
+//     Logger.log(class {}.toString());
+//   }
+// }
+// new A().de();
 import("@addLibs/*.avs").then((data) => console.log("workspaces", data.default));
 
 async function run() {
@@ -184,186 +193,176 @@ async function run() {
 }
 run();
 globalThis.triggerCommand = triggerCommand;
-const providers: Partial<LanguageInfo> = {
-  completionItemProvider: {
-    triggerCharacters: ["/", "|"],
-    provideCompletionItems: async function (model, position) {
-      const suggestions = [] as Monaco.languages.CompletionItem[];
-      const textUntilPosition = model.getValueInRange({
-        startLineNumber: position.lineNumber,
-        startColumn: 1,
-        endLineNumber: position.lineNumber,
-        endColumn: position.column,
-      });
-      const matchArr = textUntilPosition.match(/(\S+)$/);
-      // if (!matchArr) return [];
-      if (matchArr) {
-        const match = matchArr[0];
-        // mysqlLanguage.keywords.forEach((item) => {
-        //   if (item.indexOf(match) !== -1) {
-        //     suggestions.push({
-        //       label: item,
-        //       kind: monaco.languages.CompletionItemKind.Keyword,
-        //       insertText: item,
-        //     });
-        //   }
-        // });
-        // mysqlLanguage.operators.forEach((item) => {
-        //   if (item.indexOf(match) !== -1) {
-        //     suggestions.push({
-        //       label: item,
-        //       kind: monaco.languages.CompletionItemKind.Operator,
-        //       insertText: item,
-        //     });
-        //   }
-        // });
-        // mysqlLanguage.builtinFunctions.forEach((item) => {
-        //   if (item.indexOf(match) !== -1) {
-        //     suggestions.push({
-        //       label: item,
-        //       kind: monaco.languages.CompletionItemKind.Function,
-        //       insertText: item,
-        //     });
-        //   }
-        // });
-        if (match.startsWith("|")) {
-          suggestions.push({
-            label: "ifelse",
-            kind: monaco.languages.CompletionItemKind.Snippet,
-            insertText: ["if ${1:condition}", "$0", "|else", "", "|end"].join("\n"),
-            insertTextRules: monaco.languages.CompletionItemInsertTextRule.InsertAsSnippet,
-            documentation: "If-Else Statement",
-            range: void 0,
-          });
-        }
-      }
-      return {
-        suggestions,
-        incomplete: false,
-      };
-    },
-  },
-  highlightProvider: {
-    provideDocumentHighlights(model, position, token) {
-      console.log(model, position, token);
-      return Promise.resolve([]);
-    },
-  },
-  inlayHintsProvider: {
-    provideInlayHints(model, range, token) {
-      const tokens = [] as monaco.languages.InlayHint[];
-      const context = getParserContext(model.uri.toString());
-      if (!context) return tokens;
-      for (const {
-        text,
-        source: {
-          range: { line, lineEnd, col, colEnd },
-        },
-        mode,
-        offsetCol,
-      } of context.inlayHintTokens) {
-        const position = {
-          lineNumber: mode === "pre" ? line : lineEnd,
-          column: (mode === "pre" ? col : colEnd) + (offsetCol ? offsetCol : 0),
-        };
-        if (range.containsPosition(position)) {
-          tokens.push({ text, position, kind: monaco.languages.InlayHintKind.Type });
-        }
-      }
-      return tokens;
-    },
-  },
-  foldingRangeProvider: {
-    provideFoldingRanges(model, context, token) {
-      // console.log("context", context);
-      const ranges: monaco.languages.FoldingRange[] = [];
-      const parsedDocument = getParserContext(model.uri.toString());
-      if (!parsedDocument) return ranges;
-      console.log(parsedDocument);
-      // console.log(
-      //   "provideFoldingRanges",
-      //   model.getLineCount(),
-      //   model.id,
-      //   model,
-      //   context,
-      //   token
-      // );
-      const { statements } = parsedDocument;
-      for (let i = 0, length = statements.length; i < length; i++) {
-        //for each structToken, add a new range starting on the current structToken and ending on either the next one, or the last line of the document
-        addRange(statements[i], statements[i + 1], model.getLineCount());
-      }
-      return ranges;
-      function addRange(structItem: DocumentLine, nextStructItem: DocumentLine, lastline: number) {
-        if (isStatmentArray(structItem)) {
-          const { line, lineEnd } = structItem.sourceNode.range;
-          append(lineEnd, line);
-          structItem.value.forEach((line, i, list) => addRange(line, list[i + 1], lastline));
-        } else if (
-          structItem.type === NodeTypeKind.Logic &&
-          structItem.kind !== LogickStatmentKind.LET
-        ) {
-          const { line, lineEnd } = structItem.sourceNode.range;
-          if (structItem.kind === LogickStatmentKind.IF) {
-            structItem.blocks.forEach((line, i, list) => addRange(line, list[i + 1], lastline));
-            return;
-          }
-          append(lineEnd, line);
-        }
-        // if (nextStructItem)
-        //   //this is the last child, so the end of the folding range is the end of the parent
-        //   lastline = nextStructItem.range.start.line;
-        // ranges.push({
-        //   start: structItem.range.start.line,
-        //   end: lastline - 1,
-        // });
-        // if (structItem.children && structItem.children.length) {
-        //   //for each child of the structtoken, repeat this process recursively
-        //   for (let i = 0; i < structItem.children.length; i++) {
-        //     addRange(structItem.children[i], structItem.children[i + 1], lastline);
-        //   }
-        // }
-      }
-      function append(lineEnd: number, line: number) {
-        if (lineEnd - 1 > line) {
-          ranges.push({
-            start: line,
-            end: lineEnd - 1,
-          });
-        }
-      }
-    },
-  },
-  formatProvider: {
-    provideDocumentFormattingEdits(model, options, token) {
-      console.log(model.getValue(), options, model.getEOL(), token);
-      model.pushEditOperations(
-        [],
-        [
-          {
-            range: model.getFullModelRange(),
-            text: "",
-          },
-        ],
-        (r) => {
-          return [];
-        }
-      );
-      return [];
-    },
-  },
-};
+// const providers: Partial<LanguageInfo> = {
+//   completionItemProvider: {
+//     triggerCharacters: ["/", "|"],
+//     provideCompletionItems: async function (model, position) {
+//       const suggestions = [] as Monaco.languages.CompletionItem[];
+//       const textUntilPosition = model.getValueInRange({
+//         startLineNumber: position.lineNumber,
+//         startColumn: 1,
+//         endLineNumber: position.lineNumber,
+//         endColumn: position.column
+//       });
+//       const matchArr = textUntilPosition.match(/(\S+)$/);
+//       // if (!matchArr) return [];
+//       if (matchArr) {
+//         const match = matchArr[0];
+//         // mysqlLanguage.keywords.forEach((item) => {
+//         //   if (item.indexOf(match) !== -1) {
+//         //     suggestions.push({
+//         //       label: item,
+//         //       kind: monaco.languages.CompletionItemKind.Keyword,
+//         //       insertText: item,
+//         //     });
+//         //   }
+//         // });
+//         // mysqlLanguage.operators.forEach((item) => {
+//         //   if (item.indexOf(match) !== -1) {
+//         //     suggestions.push({
+//         //       label: item,
+//         //       kind: monaco.languages.CompletionItemKind.Operator,
+//         //       insertText: item,
+//         //     });
+//         //   }
+//         // });
+//         // mysqlLanguage.builtinFunctions.forEach((item) => {
+//         //   if (item.indexOf(match) !== -1) {
+//         //     suggestions.push({
+//         //       label: item,
+//         //       kind: monaco.languages.CompletionItemKind.Function,
+//         //       insertText: item,
+//         //     });
+//         //   }
+//         // });
+//         if (match.startsWith("|")) {
+//           suggestions.push({
+//             label: "ifelse",
+//             kind: monaco.languages.CompletionItemKind.Snippet,
+//             insertText: ["if ${1:condition}", "$0", "|else", "", "|end"].join("\n"),
+//             insertTextRules: monaco.languages.CompletionItemInsertTextRule.InsertAsSnippet,
+//             documentation: "If-Else Statement",
+//             range: void 0
+//           });
+//         }
+//       }
+//       return {
+//         suggestions,
+//         incomplete: false
+//       };
+//     }
+//   },
+//   highlightProvider: {
+//     provideDocumentHighlights(model, position, token) {
+//       console.log(model, position, token);
+//       return Promise.resolve([]);
+//     }
+//   },
+//   inlayHintsProvider: {
+//     provideInlayHints(model, range, token) {
+//       const tokens = [] as monaco.languages.InlayHint[];
+//       const context = getParserContext(model.uri.toString());
+//       if (!context) return tokens;
+//       for (const {
+//         text,
+//         source: {
+//           range: { line, lineEnd, col, colEnd }
+//         },
+//         mode,
+//         offsetCol
+//       } of context.inlayHintTokens) {
+//         const position = {
+//           lineNumber: mode === "pre" ? line : lineEnd,
+//           column: (mode === "pre" ? col : colEnd) + (offsetCol ? offsetCol : 0)
+//         };
+//         if (range.containsPosition(position)) {
+//           tokens.push({ text, position, kind: monaco.languages.InlayHintKind.Type });
+//         }
+//       }
+//       return tokens;
+//     }
+//   },
+//   foldingRangeProvider: {
+//     provideFoldingRanges(model, context, token) {
+//       // console.log("context", context);
+//       const ranges: monaco.languages.FoldingRange[] = [];
+//       const parsedDocument = getParserContext(model.uri.toString());
+//       if (!parsedDocument) return ranges;
+//       console.log(parsedDocument);
+//       // console.log(
+//       //   "provideFoldingRanges",
+//       //   model.getLineCount(),
+//       //   model.id,
+//       //   model,
+//       //   context,
+//       //   token
+//       // );
+//       const { statements } = parsedDocument;
+//       for (let i = 0, length = statements.length; i < length; i++) {
+//         //for each structToken, add a new range starting on the current structToken and ending on either the next one, or the last line of the document
+//         addRange(statements[i], statements[i + 1], model.getLineCount());
+//       }
+//       return ranges;
+//       function addRange(structItem: DocumentLine, nextStructItem: DocumentLine, lastline: number) {
+//         if (isStatmentArray(structItem)) {
+//           const { line, lineEnd } = structItem.sourceNode.range;
+//           append(lineEnd, line);
+//           structItem.value.forEach((line, i, list) => addRange(line, list[i + 1], lastline));
+//         } else if (
+//           structItem.type === NodeTypeKind.Logic &&
+//           structItem.kind !== LogickStatmentKind.LET
+//         ) {
+//           const { line, lineEnd } = structItem.sourceNode.range;
+//           if (structItem.kind === LogickStatmentKind.IF) {
+//             structItem.blocks.forEach((line, i, list) => addRange(line, list[i + 1], lastline));
+//             return;
+//           }
+//           append(lineEnd, line);
+//         }
+//         // if (nextStructItem)
+//         //   //this is the last child, so the end of the folding range is the end of the parent
+//         //   lastline = nextStructItem.range.start.line;
+//         // ranges.push({
+//         //   start: structItem.range.start.line,
+//         //   end: lastline - 1,
+//         // });
+//         // if (structItem.children && structItem.children.length) {
+//         //   //for each child of the structtoken, repeat this process recursively
+//         //   for (let i = 0; i < structItem.children.length; i++) {
+//         //     addRange(structItem.children[i], structItem.children[i + 1], lastline);
+//         //   }
+//         // }
+//       }
+//       function append(lineEnd: number, line: number) {
+//         if (lineEnd - 1 > line) {
+//           ranges.push({
+//             start: line,
+//             end: lineEnd - 1
+//           });
+//         }
+//       }
+//     }
+//   },
+//   formatProvider: {
+//     provideDocumentFormattingEdits(model, options, token) {
+//       console.log(model.getValue(), options, model.getEOL(), token);
+//       model.pushEditOperations(
+//         [],
+//         [
+//           {
+//             range: model.getFullModelRange(),
+//             text: ""
+//           }
+//         ],
+//         (r) => {
+//           return [];
+//         }
+//       );
+//       return [];
+//     }
+//   }
+// };
 
-import _ from "lodash";
-import {
-  CustomPatternMatcherFunc,
-  IToken,
-  createToken,
-  createTokenInstance,
-  Lexer,
-} from "chevrotain";
-import { MonacoLanguageClient } from "@codingame/monaco-languageclient/dist/amd";
-import { Monaco, monaco } from "./lib/monaco.export";
 // function returnTokens() {
 //   // State required for matching the indentations
 //   let indentStack = [0];

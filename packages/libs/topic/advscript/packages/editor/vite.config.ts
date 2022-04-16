@@ -1,3 +1,4 @@
+/// <reference types="vitest" />
 import path, { join } from "path";
 import { readlinkSync } from "fs";
 import { escapeRegExp } from "lodash";
@@ -10,15 +11,16 @@ import { VitePluginStoryScript } from "../parser/VitePluginStoryScript";
 import Provider from "./logger";
 import MonacoEditorNlsPlugin, {
   esbuildPluginMonacoEditorNls,
-  Languages,
+  Languages
 } from "./vitePluginMonacoEditorNls";
 
 const locale = Languages.zh_hans;
 const macroPlugin = vitePluginMacro({
   typesPath: join(__dirname, "./macros.d.ts"),
   name: "macros",
+  // eslint-disable-next-line @rushstack/security/no-unsafe-regexp
   include: [new RegExp(escapeRegExp(join(__dirname, "src").replace(/\\/g, "/")) + "/.+\\.ts")],
-  exclude: [/langium/, /languageclient/],
+  exclude: [/langium/, /languageclient/]
 })
   .use(Provider)
   .toPlugin();
@@ -47,6 +49,7 @@ function resolveLangium(...paths: string[]) {
 
 export default defineConfig(async ({ mode }) => {
   const isProd = mode === "production";
+  const isTest = mode === "test";
   const local = true;
   console.log("isProd:", isProd);
   return {
@@ -62,8 +65,8 @@ export default defineConfig(async ({ mode }) => {
         os: path.resolve("./src/os.ts"),
         "@yuyi919/advscript-parser": isProd
           ? path.resolve("./node_modules/@yuyi919/advscript-parser")
-          : path.resolve("../parser/src/index.ts"),
-      },
+          : path.resolve("../parser/src/index.ts")
+      }
     },
     plugins: [
       monacoEditorPlugin(),
@@ -73,10 +76,10 @@ export default defineConfig(async ({ mode }) => {
       {
         name: "builtins",
         enforce: "pre",
-        ...builtins({ crypto: true }),
+        ...builtins({ crypto: true })
       },
-      MonacoEditorNlsPlugin({ locale }),
-      macroPlugin,
+      MonacoEditorNlsPlugin({ locale })
+      // macroPlugin,
     ],
     // esbuild: {
     //   loader: "ts",
@@ -91,7 +94,7 @@ export default defineConfig(async ({ mode }) => {
       minify: isProd ? "terser" : false,
       commonjsOptions: {
         include: [/node_modules/, /vscode/],
-        exclude: ["loader.js"],
+        exclude: ["loader.js"]
       },
       outDir: "./dist/advscript-playground",
       rollupOptions: {
@@ -99,23 +102,23 @@ export default defineConfig(async ({ mode }) => {
           {
             name: "builtins",
             enforce: "pre",
-            ...builtins({ crypto: true }),
-          },
+            ...builtins({ crypto: true })
+          }
         ],
         output: {
           manualChunks: {
             // editor: ["monaco-editor"],
             parser: ["chevrotain", "@yuyi919/advscript-parser"],
             lsp: ["@yuyi919/advscript-language-services"],
-            vsc: ["./libs/vscode-languageclient/vscode-compatibility.js"],
+            vsc: ["./libs/vscode-languageclient/vscode-compatibility.js"]
           },
           chunkFileNames: (chunk) => {
             // console.log(chunk.isDynamicEntry, chunk.name)
             return `assets/${chunk.name === "_" ? "workspaces" : chunk.name}.[hash].js`;
-          },
-        },
+          }
+        }
         // external: ["os", "path"],
-      },
+      }
       // lib: {
       //   entry: path.resolve(__dirname, "src/index.ts"),
       //   fileName: "index",
@@ -131,14 +134,21 @@ export default defineConfig(async ({ mode }) => {
       //   external: ["ohm-js"],
       // },
     },
+    test: {
+      // includeSource: ["src/**/*.ts"],
+      // coverage: {
+      //   include: ['src/**/*'],
+      //   exclude: [],
+      // }
+    },
     optimizeDeps: {
       esbuildOptions: {
         plugins: [
           // macroPlugin as any,
           esbuildPluginMonacoEditorNls({
-            locale,
-          }),
-        ],
+            locale
+          })
+        ]
       },
       include: [
         "monaco-textmate",
@@ -150,31 +160,32 @@ export default defineConfig(async ({ mode }) => {
         "reconnecting-websocket",
         "monaco-editor/esm/vs/language/typescript/ts.worker.js",
         "monaco-editor/esm/vs/editor/editor.api.js",
+        "monaco-editor/esm/vs/editor/editor.main.js",
         "vscode-languageclient/lib/common/client",
         "vscode-languageserver-protocol/lib/common/utils/is",
         "vscode-uri",
+        "vscode",
+        // "jssm",
         "chevrotain",
         "regexp-to-ast",
         "@codingame/monaco-jsonrpc",
-        "vscode-languageserver-types",
+        "vscode-languageserver-types"
       ],
       exclude: [
-        "vscode",
         "path",
         "zora-reporters",
-        "monaco-editor",
-        "monaco-editor-core",
+        // "monaco-editor",
         "@addLibs",
         "@yuyi919/advscript-parser",
-        "@yuyi919/advscript-language-services",
-      ],
+        "@yuyi919/advscript-language-services"
+      ]
     },
     server: {
       // host: Configuration.defaults.development.host,
       port: 3000, // Configuration.defaults.development.port,
       fs: {
-        strict: false,
-      },
-    },
+        strict: false
+      }
+    }
   };
 }) as UserConfigFn;

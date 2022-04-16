@@ -191,6 +191,10 @@
       "allowedCategories": [ "production" ]
     },
     {
+      "name": "@testing-library/react",
+      "allowedCategories": [ "production" ]
+    },
+    {
       "name": "@typed-macro/core",
       "allowedCategories": [ "production" ]
     },
@@ -201,6 +205,10 @@
     {
       "name": "@typescript-eslint/parser",
       "allowedCategories": [ "external", "tools" ]
+    },
+    {
+      "name": "@vitest/ui",
+      "allowedCategories": [ "production" ]
     },
     {
       "name": "@vue/compiler-sfc",
@@ -548,6 +556,10 @@
     },
     {
       "name": "he",
+      "allowedCategories": [ "production" ]
+    },
+    {
+      "name": "howler",
       "allowedCategories": [ "production" ]
     },
     {
@@ -936,6 +948,10 @@
     },
     {
       "name": "vite-plugin-vue2",
+      "allowedCategories": [ "production" ]
+    },
+    {
+      "name": "vitest",
       "allowedCategories": [ "production" ]
     },
     {

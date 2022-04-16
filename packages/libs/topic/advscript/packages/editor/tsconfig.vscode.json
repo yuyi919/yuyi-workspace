@@ -4,9 +4,14 @@
     "module": "commonjs",
     "types": ["jest", "node"],
     "moduleResolution": "node",
+    "sourceMap": true,
     "rootDir": "./src/lib/languageclient",
     "target": "esnext"
   },
-  "exclude": ["src/lib/languageclient/**/*.spec.ts", "src/lib/languageclient/**/*.test.ts", "**/__test__/**"],
+  "exclude": [
+    "src/lib/languageclient/**/*.spec.ts",
+    "src/lib/languageclient/**/*.test.ts",
+    "**/__test__/**"
+  ],
   "files": ["./src/lib/languageclient/vscode-compatibility"]
 }
