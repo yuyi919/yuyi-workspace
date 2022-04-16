@@ -539,6 +539,7 @@ importers:
       tslib: ~2.3.1
       typescript: 4.1.6
       vite: 2.9.5
+      vite-plugin-dts: ~0.8.0
       vitest: ~0.9.3
     dependencies:
       '@types/howler': 2.2.7
@@ -556,6 +557,7 @@ importers:
       tslib: 2.3.1
       typescript: 4.1.6
       vite: 2.9.5
+      vite-plugin-dts: 0.8.3_vite@2.9.5
       vitest: 0.9.3
 
   ../../packages/libs/topic/advscript/packages/editor:
@@ -21424,6 +21426,18 @@ packages:
       fs-extra: 10.0.0
       ts-morph: 11.0.3
       vite: 2.8.3
+    dev: true
+
+  /vite-plugin-dts/0.8.3_vite@2.9.5:
+    resolution: {integrity: sha512-ChWyCb3Y4NbpHlgsxQevMbcvehvhQn9dEunjIvNIu0YN6sPkxROQJ6QEBRHrxgL5O9vf0dsCfIBLjGkOl0t2Xw==}
+    engines: {node: '>=12.0.0'}
+    peerDependencies:
+      vite: '>=2.4.4'
+    dependencies:
+      fast-glob: 3.2.11
+      fs-extra: 10.0.0
+      ts-morph: 11.0.3
+      vite: 2.9.5
     dev: true
 
   /vite-plugin-html/2.0.7_vite@2.4.4:

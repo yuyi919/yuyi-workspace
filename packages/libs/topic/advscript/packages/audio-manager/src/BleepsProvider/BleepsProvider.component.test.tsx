@@ -3,8 +3,8 @@
 import React, { FC, useContext } from "react";
 import { render, cleanup } from "@testing-library/react";
 
-import { makeErrorCatcher, ErrorCatcher } from "../../__testUtils__/makeErrorCatcher";
-import type { BleepsAudioSettings, BleepsSettings, BleepsSetup } from "../types";
+import { makeErrorCatcher, ErrorCatcher } from "../__testUtils__/makeErrorCatcher";
+import type { BleepsSettings, BleepsSetup } from "../types";
 import { BleepsContext } from "../BleepsContext";
 import { BleepsProvider } from "./BleepsProvider.component";
 import { vi as jest } from "vitest";
@@ -294,7 +294,7 @@ test("Should extend nested bleeps settings", () => {
 });
 
 test("Should throw error if audio categories are not valid", () => {
-  const audioSettings: BleepsAudioSettings = {
+  const audioSettings: any = {
     common: {
       volume: 0.7
     },

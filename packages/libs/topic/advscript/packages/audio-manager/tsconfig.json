@@ -1,0 +1,15 @@
+{
+  "extends": "./node_modules/@yuyi919/workspace-base-rig/profiles/tsc/tsconfig-base.json",
+  "compilerOptions": {
+    "rootDir": "./src",
+    "types": ["vitest/globals"],
+    "paths": {},
+    "jsx": "react-jsx",
+    "target": "esnext",
+    "noEmit": false,
+    "outDir": "dist",
+    "removeComments": true,
+    "esModuleInterop": true
+  },
+  "include": ["./node_modules/**/*.d.ts", "src/**/*.ts", "src/**/*.tsx", "./macros.d.ts"]
+}

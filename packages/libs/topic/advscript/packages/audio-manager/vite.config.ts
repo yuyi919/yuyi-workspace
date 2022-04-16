@@ -3,6 +3,7 @@ import path, { join } from "path";
 import { readlinkSync } from "fs";
 import { escapeRegExp } from "lodash";
 import { defineConfig, UserConfigFn } from "vite";
+import dts from "vite-plugin-dts";
 
 export default defineConfig(async ({ mode }) => {
   const isProd = mode === "production";
@@ -11,7 +12,12 @@ export default defineConfig(async ({ mode }) => {
   console.log("isProd:", isProd);
   return {
     resolve: {},
-    plugins: [],
+    plugins: [
+      dts({
+        insertTypesEntry: true,
+        outputDir: "types"
+      })
+    ],
     base: "/advscript-playground/",
     build: {
       assetsInlineLimit: 0,
@@ -20,6 +26,11 @@ export default defineConfig(async ({ mode }) => {
       commonjsOptions: {
         include: [/node_modules/, /vscode/],
         exclude: ["loader.js"]
+      },
+      lib: {
+        formats: ["es", "cjs"],
+        entry: "src/index.ts",
+        fileName: "index"
       }
     },
     test: {
