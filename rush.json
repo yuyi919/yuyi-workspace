@@ -475,6 +475,11 @@
   // }
   "projects": [
     {
+      "packageName": "yuyi919",
+      "projectFolder": ".",
+      "reviewCategory": "tools"
+    },
+    {
       "packageName": "@yuyi919-ts-transformer/ast-utils",
       "projectFolder": "packages/libs/tools/ts-transformer/ast-utils",
       "reviewCategory": "production"

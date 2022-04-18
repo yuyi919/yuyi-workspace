@@ -667,6 +667,10 @@
       "allowedCategories": [ "production" ]
     },
     {
+      "name": "immer",
+      "allowedCategories": [ "production" ]
+    },
+    {
       "name": "inversify",
       "allowedCategories": [ "production" ]
     },
@@ -857,6 +861,10 @@
     {
       "name": "prettier",
       "allowedCategories": [ "production", "tools" ]
+    },
+    {
+      "name": "prettier-plugin-packagejson",
+      "allowedCategories": [ "tools" ]
     },
     {
       "name": "prism-react-renderer",
