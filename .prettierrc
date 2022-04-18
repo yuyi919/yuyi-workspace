@@ -19,6 +19,7 @@
     {
       "files": ["package.json"],
       "options": {
+        "pluginSearchDirs": ["./common/autoinstallers/rush-prettier/node_modules"],
         "plugins": ["prettier-plugin-packagejson"]
       }
     }
