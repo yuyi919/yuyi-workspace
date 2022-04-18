@@ -1,4 +1,5 @@
 import type { BleepsAudioGroupSettings, BleepPlayerSettings, BleepGeneric } from "../../types";
+import { mergePercent } from "../mergePercent";
 
 const updateBleep = (
   bleep: BleepGeneric,
@@ -7,7 +8,9 @@ const updateBleep = (
 ): void => {
   const settings = {
     ...audioSettings,
-    ...playerSettings
+    ...playerSettings,
+    volume: mergePercent(audioSettings.volume, playerSettings.volume),
+    rate: mergePercent(audioSettings.rate, playerSettings.rate)
   };
   bleep._settings = settings;
 

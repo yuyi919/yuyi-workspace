@@ -11,17 +11,25 @@ import type {
 import { BLEEPS_CATEGORIES } from "../constants";
 import { BleepsContext } from "../BleepsContext";
 import { createOrUpdateBleeps } from "../utils/createOrUpdateBleeps";
+import { debounce } from "lodash";
+import immer from "immer";
+
+interface Settings {
+  audio?: BleepsAudioSettings;
+  players?: BleepsPlayersSettings;
+  bleeps?: BleepsSettings;
+}
 
 interface BleepsProviderProps {
-  settings: {
-    audio?: BleepsAudioSettings;
-    players?: BleepsPlayersSettings;
-    bleeps?: BleepsSettings;
-  };
+  settings: Settings;
   children: ReactNode;
 }
 
 const BleepsProvider = (props: BleepsProviderProps): ReactElement => {
+  const [settings, updateSettings] = React.useState<Settings>(props.settings);
+  React.useEffect(() => {
+    updateSettings(props.settings);
+  }, [props.settings]);
   const parentSetup = useContext(BleepsContext);
 
   // The bleeps object reference is always kept to properly unload/remove/update
@@ -29,11 +37,23 @@ const BleepsProvider = (props: BleepsProviderProps): ReactElement => {
   // Also, bleeps can not be extended in multiple providers to independently
   // manage them by each provider in the tree.
   const [bleepsGenerics] = useState<BleepsGenerics>({});
-
+  const actions = React.useMemo(
+    () => ({
+      updateVolume: debounce((volume: number, ca?: BleepCategoryName) => {
+        updateSettings((settings) => {
+          // console.log("updateSettings");
+          return immer(settings, ({ audio }) => {
+            (ca ? audio.categories[ca] : audio.common).volume = volume;
+          });
+        });
+      }, 5)
+    }),
+    []
+  );
   const bleepsSetup: BleepsSetup = useMemo(() => {
     const parentSetupSettings = parentSetup?.settings;
     const parentAudioCategories = parentSetupSettings?.audio.categories;
-    const localAudioCategories = props.settings?.audio?.categories;
+    const localAudioCategories = settings?.audio?.categories;
     const audioCategories = { ...parentAudioCategories };
 
     if (localAudioCategories) {
@@ -54,7 +74,7 @@ const BleepsProvider = (props: BleepsProviderProps): ReactElement => {
     const audioSettings: BleepsAudioSettings = {
       common: {
         ...parentSetupSettings?.audio.common,
-        ...props.settings.audio?.common
+        ...settings.audio?.common
       },
       categories: audioCategories
     };
@@ -62,11 +82,11 @@ const BleepsProvider = (props: BleepsProviderProps): ReactElement => {
     const parentPlayersSettings = parentSetupSettings?.players;
     const playersSettings: BleepsPlayersSettings = { ...parentPlayersSettings };
 
-    if (props.settings.players) {
-      Object.keys(props.settings.players).forEach((playerName) => {
+    if (settings.players) {
+      Object.keys(settings.players).forEach((playerName) => {
         playersSettings[playerName] = {
           ...playersSettings[playerName],
-          ...props.settings.players?.[playerName]
+          ...settings.players?.[playerName]
         };
       });
     }
@@ -74,25 +94,27 @@ const BleepsProvider = (props: BleepsProviderProps): ReactElement => {
     const parentBleepsSettings = parentSetupSettings?.bleeps;
     const bleepsSettings: BleepsSettings = {
       ...parentBleepsSettings,
-      ...props.settings.bleeps
+      ...settings.bleeps
     };
 
     createOrUpdateBleeps(bleepsGenerics, audioSettings, playersSettings, bleepsSettings);
-
+    console.log("createOrUpdateBleeps", settings, bleepsGenerics);
     return {
       settings: {
         audio: audioSettings,
         players: playersSettings,
         bleeps: bleepsSettings
       },
-      bleeps: bleepsGenerics
+      bleeps: bleepsGenerics,
+      actions
     };
-  }, [props.settings, parentSetup]);
-
+  }, [settings, parentSetup]);
+  // React.useEffect(() => {
+  //   console.log("update");
+  // }, [bleepsSetup]);
   // TODO: Review performance recommendations for the memo dependencies.
-
   return <BleepsContext.Provider value={bleepsSetup}>{props.children}</BleepsContext.Provider>;
 };
 
-export type { BleepsProviderProps };
+export type { BleepsProviderProps, Settings };
 export { BleepsProvider };

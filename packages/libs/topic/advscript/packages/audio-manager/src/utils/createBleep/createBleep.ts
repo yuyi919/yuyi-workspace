@@ -1,4 +1,5 @@
-import { Howler, Howl } from "howler";
+import { Howler } from "howler";
+import { HowlWrap } from "../../HowlWrap";
 
 import type {
   BleepsAudioGroupSettings,
@@ -6,6 +7,8 @@ import type {
   BleepGenericInstanceId,
   BleepGeneric
 } from "../../types";
+import { tryAutoPlay } from "../Beeps";
+import { mergePercent } from "../mergePercent";
 
 const createBleep = (
   audioSettings: BleepsAudioGroupSettings,
@@ -13,22 +16,17 @@ const createBleep = (
 ): BleepGeneric => {
   const { disabled, ...settings } = {
     ...audioSettings,
-    ...playerSettings
+    ...playerSettings,
+    volume: mergePercent(audioSettings.volume, playerSettings.volume),
+    rate: mergePercent(audioSettings.rate, playerSettings.rate)
   };
 
-  // TODO: The Howler API does not provide a public interface to know if
-  // the browser audio is locked or not. But it has a private flag.
-  // This could potentially break this library if it changes unexpectedly,
-  // but there is no proper way to know.
-  const isGlobalAudioLocked = !(Howler as any)._audioUnlocked;
-
-  let isLocked: boolean = isGlobalAudioLocked;
   let lastId: number | undefined;
-
-  const howl = new Howl({
-    ...settings,
-    onunlock: () => {
-      isLocked = false;
+  const howl = new HowlWrap(settings);
+  tryAutoPlay().then((unlock) => {
+    if (unlock) {
+      // console.log("autoplay")
+      howl.unlock();
     }
   });
 
@@ -44,14 +42,7 @@ const createBleep = (
     if (howl.state() === "unloaded") {
       howl.load();
     }
-
-    // If the browser audio is locked, if the audio is played, it will be queued
-    // until the browser audio is unlocked. But if in-between the audio is stopped,
-    // the play is still queued. It is also accumulated, regardless of passing down
-    // the same playback id.
-    if (isLocked) {
-      return;
-    }
+    console.log("play");
 
     sourcesAccount[instanceId] = true;
 

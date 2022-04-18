@@ -10,6 +10,7 @@ import { createBleep } from "../createBleep";
 import { updateBleep } from "../updateBleep";
 import { unloadBleep } from "../unloadBleep";
 import { unloadBleeps } from "../unloadBleeps";
+import { mergePercent } from "../mergePercent";
 
 const createOrUpdateBleeps = (
   providedBleeps: BleepsGenerics | undefined,
@@ -43,9 +44,13 @@ const createOrUpdateBleeps = (
     }
 
     const audioCategorySettings = audioSettings.categories?.[bleepCategory];
+    const { volume, rate } = audioSettings.common || {},
+      { volume: volume2, rate: rate2 } = audioCategorySettings || {};
     const processedAudioSettings = {
       ...audioSettings.common,
-      ...audioCategorySettings
+      ...audioCategorySettings,
+      volume: mergePercent(volume, volume2),
+      rate: mergePercent(rate, rate2)
     };
 
     if (processedAudioSettings.disabled) {
@@ -92,7 +97,8 @@ export { createOrUpdateBleeps };
 
 export function some(
   target: string | string[],
-  predicate: (value: string, index: number, array: string[]) => unknown
+  predicate: (value: string, index: number, array: string[]) => unknown,
+  thisArg?: any
 ) {
-  return target?.length > 0 && Array.prototype.some(predicate, target);
+  return target?.length > 0 && Array.prototype.some.call(target, predicate, thisArg);
 }

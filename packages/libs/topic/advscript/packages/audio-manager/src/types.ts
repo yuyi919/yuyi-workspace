@@ -1,4 +1,3 @@
-import type { Howl } from "howler";
 import { HowlOptions } from "howler";
 
 import {
@@ -7,6 +6,7 @@ import {
   BLEEPS_INTERACTION,
   BLEEPS_NOTIFICATION
 } from "./constants";
+import { HowlWrap } from "./HowlWrap";
 
 // Bleeps Audio Settings
 
@@ -74,7 +74,7 @@ export interface BleepGeneric {
   unload: () => void;
 
   _settings: BleepsAudioGroupSettings & BleepPlayerSettings;
-  _howl: Howl;
+  _howl: HowlWrap;
 }
 
 export type BleepsGenerics = Record<BleepName, BleepGeneric>;
@@ -100,4 +100,7 @@ export interface BleepsSetup {
     bleeps: BleepsSettings;
   };
   bleeps: BleepsGenerics;
+  actions: {
+    updateVolume(value: number, ca?: BleepCategoryName): void;
+  };
 }

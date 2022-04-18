@@ -1,6 +1,6 @@
 /* eslint-env jest */
 
-import type { BleepsSettings } from "../../types";
+import type { BleepsPlayersSettings, BleepsSettings } from "../../types";
 import { BLEEPS_TRANSITION, BLEEPS_INTERACTION } from "../../constants";
 import { createOrUpdateBleeps } from "./createOrUpdateBleeps";
 import { vi as jest } from "vitest";
@@ -17,8 +17,8 @@ test("Should create bleeps with common and category settings", () => {
       }
     }
   };
-  const playersSettings = {
-    click: { src: ["click.webm"] },
+  const playersSettings: BleepsPlayersSettings = {
+    click: { src: ["click.webm"], volume: 0.4 },
     hover: { src: ["hover.webm"] },
     type: { src: ["type.webm"], loop: true }
   };
@@ -30,13 +30,13 @@ test("Should create bleeps with common and category settings", () => {
   const bleeps = createOrUpdateBleeps({}, audioSettings, playersSettings, bleepsSettings);
   expect(Object.keys(bleeps)).toEqual(["click", "hover", "type"]);
   expect(bleeps.click).toMatchObject({
-    _settings: { volume: 0.9, src: ["click.webm"] }
+    _settings: { volume: 0.36, src: ["click.webm"] }
   });
   expect(bleeps.hover).toMatchObject({
-    _settings: { volume: 0.5, src: ["hover.webm"] }
+    _settings: { volume: 0.45, src: ["hover.webm"] }
   });
   expect(bleeps.type).toMatchObject({
-    _settings: { volume: 0.7, src: ["type.webm"], loop: true }
+    _settings: { volume: 0.63, src: ["type.webm"], loop: true }
   });
 });
 
@@ -64,7 +64,7 @@ test("Should create and update bleeps with common and category settings changes"
     _settings: { volume: 0.9, src: ["click.webm"] }
   });
   expect(bleeps.hover).toMatchObject({
-    _settings: { volume: 0.5, src: ["hover.webm"] }
+    _settings: { volume: 0.45, src: ["hover.webm"] }
   });
 
   const audioSettings2 = {

@@ -22,6 +22,7 @@ proxyMethodAfter(webaudio.WebAudioNodes, "cloneBufferSource", (target, result) =
 // @ts-ignore
 proxyMethod(webaudio.WebAudioMedia, "_decode", (target, source, buffer, callback) => {
   if (!target._source.dataView) {
+    // eslint-disable-next-line @typescript-eslint/no-use-before-define
     const view = new WebAudioDataView();
     view.readLoopComments(buffer);
     target._source.dataView = view;

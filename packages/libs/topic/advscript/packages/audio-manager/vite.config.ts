@@ -1,6 +1,7 @@
 /// <reference types="vitest" />
 import { defineConfig, UserConfigFn } from "vite";
 import dts from "vite-plugin-dts";
+import VitePluginReact from "@vitejs/plugin-react";
 
 export default defineConfig(async ({ mode }) => {
   const isProd = mode === "production";
@@ -12,7 +13,14 @@ export default defineConfig(async ({ mode }) => {
     plugins: [
       dts({
         insertTypesEntry: true
-      })
+      }),
+      VitePluginReact({
+        babel: {
+          configFile: false
+        }
+        // jsxRuntime: "classic",
+        // fastRefresh: false
+      }) as any
     ],
     build: {
       assetsInlineLimit: 0,
@@ -28,7 +36,7 @@ export default defineConfig(async ({ mode }) => {
         fileName: "index"
       },
       rollupOptions: {
-        external: ["react"]
+        external: ["react", "howler"]
       }
     },
     test: {

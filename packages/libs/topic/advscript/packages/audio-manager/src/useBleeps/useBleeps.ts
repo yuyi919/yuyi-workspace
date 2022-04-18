@@ -1,9 +1,8 @@
 import { useMemo } from "react";
+import { instanceIdStep } from "../HowlWrap";
 
 import type { BleepName, Bleep, Bleeps } from "../types";
 import { useBleepsSetup } from "../useBleepsSetup";
-
-let instanceIdCounter = 0;
 
 function useBleeps(): Bleeps {
   interface BleepItem {
@@ -13,7 +12,7 @@ function useBleeps(): Bleeps {
 
   const bleepsSetup = useBleepsSetup();
 
-  const instanceId = useMemo(() => instanceIdCounter++, []);
+  const instanceId = useMemo(instanceIdStep, []);
 
   const bleeps: Bleeps = useMemo(() => {
     if (!bleepsSetup) {

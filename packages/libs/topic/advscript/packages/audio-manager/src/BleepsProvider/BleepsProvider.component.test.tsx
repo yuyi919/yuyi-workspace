@@ -123,20 +123,20 @@ test("Should receive common and categories of audio settings, players settings, 
     click: {
       _settings: {
         src: ["click.webm"],
-        volume: 0.7
+        volume: 0.7 * 1
       }
     },
     typing: {
       _settings: {
         src: ["typing.webm"],
-        volume: 0.5,
+        volume: 0.7 * 0.5,
         loop: true
       }
     },
     notify: {
       _settings: {
         src: ["notify.webm"],
-        volume: 1
+        volume: 0.7 * 1
       }
     }
   });
