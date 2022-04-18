@@ -14,5 +14,13 @@
   "tabWidth": 2,
   "trailingComma": "none",
   "useTabs": false,
-  "vueIndentScriptAndStyle": false
+  "vueIndentScriptAndStyle": false,
+  "overrides": [
+    {
+      "files": ["package.json"],
+      "options": {
+        "plugins": ["prettier-plugin-packagejson"]
+      }
+    }
+  ]
 }
