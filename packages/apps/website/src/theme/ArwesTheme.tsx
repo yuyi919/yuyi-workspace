@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-use-before-define */
 import React from "react";
 import { ArwesThemeProvider, ArwesThemeProviderProps } from "@arwes/core";
 import { AnimatorGeneralProvider, AnimatorGeneralProviderProps } from "@arwes/animation";
@@ -11,16 +12,18 @@ const AudioLock = ({ children }) => {
     tryAutoPlay().then((allow) => {
       if (allow) {
         console.log("unlock");
-        for (const key in setup.bleepsGenerics) {
-          unlock(setup.bleepsGenerics[key]._howl);
+        // eslint-disable-next-line guard-for-in
+        for (const key in setup.bleeps) {
+          unlock(setup.bleeps[key]._howl);
         }
         setAllow(allow);
         console.log("tryAutoPlay", allow);
       }
     });
     return () => {
-      for (const key in setup.bleepsGenerics) {
-        setup.bleepsGenerics[key]._howl.stop();
+      // eslint-disable-next-line guard-for-in
+      for (const key in setup.bleeps) {
+        setup.bleeps[key]._howl.stop();
       }
     };
   }, []);
@@ -44,9 +47,11 @@ export function ArwesTheme({ children }) {
 export function ArwesPreset({ children }) {
   return (
     <BleepsProvider
-      audioSettings={audioSettings}
-      playersSettings={playersSettings}
-      bleepsSettings={bleepsSettings}
+      settings={{
+        audio: audioSettings,
+        players: playersSettings,
+        bleeps: bleepsSettings
+      }}
     >
       <AnimatorGeneralProvider animator={animatorGeneral}>{children}</AnimatorGeneralProvider>
     </BleepsProvider>
@@ -56,7 +61,7 @@ const FONT_FAMILY_ROOT = '"Titillium Web", sans-serif';
 const FONT_FAMILY_CODE = '"Source Code Pro", monospace';
 
 // Theme with default settings.
-let themeSettings: ArwesThemeProviderProps["themeSettings"] = {
+const themeSettings: ArwesThemeProviderProps["themeSettings"] = {
   palette: {
     text: {
       // link: "string;",
@@ -68,13 +73,9 @@ let themeSettings: ArwesThemeProviderProps["themeSettings"] = {
   }
 };
 
-const bsd = (name: string, ext = ".ogg") => "/assets/bsd/" + name + ext;
-const bsPlus = (name: string, ext = ".ogg") => "/assets/bs+/" + name + ext;
-declare module "@arwes/sounds" {
-  interface BleepPlayerSettings extends HowlOptions {}
-  interface BleepsAudioGroupSettings extends Partial<HowlOptions> {}
-}
-const audioSettings: BleepsProviderProps["audioSettings"] = {
+const bsd = (name: string, ext = ".ogg") => "/assets/se/bsd/" + name + ext;
+const bsPlus = (name: string, ext = ".ogg") => "/assets/se/bs+/" + name + ext;
+const audioSettings: BleepsProviderProps["settings"]["audio"] = {
   common: { volume: 0.5, preload: true },
   categories: {
     background: { volume: 1, preload: true },
@@ -83,7 +84,7 @@ const audioSettings: BleepsProviderProps["audioSettings"] = {
     notification: { volume: 1, preload: true }
   }
 };
-const playersSettings: BleepsProviderProps["playersSettings"] = {
+const playersSettings: BleepsProviderProps["settings"]["players"] = {
   type: { src: [bsd("DiveText")], loop: true },
   type2: { src: [bsd("ExitMessage")], loop: true },
   cursor: {
@@ -139,7 +140,7 @@ export enum SoundType {
   Start
 }
 
-const bleepsSettings: BleepsProviderProps["bleepsSettings"] = {
+const bleepsSettings: BleepsProviderProps["settings"]["bleeps"] = {
   [SoundType.type]: { player: "type" },
   [SoundType.click]: { player: "click", category: "interaction" },
   [SoundType.assemble]: { player: "GetItemOpen", category: "interaction" },

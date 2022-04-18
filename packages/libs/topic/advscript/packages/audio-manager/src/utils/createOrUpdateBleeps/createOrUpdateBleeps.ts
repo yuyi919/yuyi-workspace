@@ -68,10 +68,11 @@ const createOrUpdateBleeps = (
 
     // If a bleep has updated `src` or `format` settings, it should be re-created.
     // Otherwise it is updated to be fast and prevent more HTTP requests.
-    const hasBleepUpdatedSrc = !!bleeps[bleepName]?._settings.src.find(
+    const hasBleepUpdatedSrc = bleeps[bleepName]?._settings.src.some(
       (v, i) => v !== playerSettings.src[i]
     );
-    const hasBleepUpdatedFormat = !!bleeps[bleepName]?._settings.format?.find(
+    const hasBleepUpdatedFormat = some(
+      bleeps[bleepName]?._settings.format,
       (v, i) => v !== playerSettings.format?.[i]
     );
 
@@ -88,3 +89,10 @@ const createOrUpdateBleeps = (
 };
 
 export { createOrUpdateBleeps };
+
+export function some(
+  target: string | string[],
+  predicate: (value: string, index: number, array: string[]) => unknown
+) {
+  return target?.length > 0 && Array.prototype.some(predicate, target);
+}

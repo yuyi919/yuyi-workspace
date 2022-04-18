@@ -7,32 +7,34 @@
   "module": "dist/index.es.js",
   "types": "dist/index.d.ts",
   "scripts": {
-    "build": "tsc --build --force",
-    "build:dev": "tsc --build",
-    "build:watch": "tsc --build --watch",
-    "dev": "tsc --build --watch",
+    "build": "vite build",
+    "build:dev": "vite build",
+    "build:watch": "vite build --watch",
+    "dev": "vite build --watch",
     "test": "vitest",
     "coverage": "vitest run --coverage"
   },
   "dependencies": {
     "@types/howler": "^2.2.6",
     "howler": "^2.2.x",
-    "rxjs": "~7.5.5"
+    "rxjs": "~7.5.5",
+    "immer": "~9.0.12"
   },
   "devDependencies": {
-    "@testing-library/react": "~13.1.1",
+    "@testing-library/react": "^12.x",
     "@types/jest": "~27.0.1",
     "@types/node": "~16.7.2",
-    "@types/react": "^18.0.0",
-    "@types/react-dom": "^18.0.0",
+    "@types/react": "^17.0.0",
+    "@types/react-dom": "^17.0.0",
     "@yuyi919/workspace-base-rig": "workspace:1.2.8",
-    "react": "^18.0.0",
-    "react-dom": "^18.0.0",
+    "react": "^17.0.0",
+    "react-dom": "^17.0.0",
     "tslib": "~2.3.1",
     "typescript": "~4.6.2",
     "vite": "2.9.5",
     "vitest": "~0.9.3",
-    "vite-plugin-dts": "~0.8.0"
+    "vite-plugin-dts": "~0.8.0",
+    "@vitejs/plugin-react": "^1.0.7"
   },
   "peerDependencies": {
     "vite": ">= 2",

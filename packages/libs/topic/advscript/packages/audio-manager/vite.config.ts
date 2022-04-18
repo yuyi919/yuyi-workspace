@@ -26,6 +26,9 @@ export default defineConfig(async ({ mode }) => {
         formats: ["es", "cjs"],
         entry: "src/index.ts",
         fileName: "index"
+      },
+      rollupOptions: {
+        external: ["react"]
       }
     },
     test: {

@@ -16,8 +16,8 @@
     "coverage": "vitest run --coverage"
   },
   "dependencies": {
-    "chevrotain": "^9.1.0",
     "@yuyi919/advscript-parser": "workspace:0.0.2",
+    "chevrotain": "^9.1.0",
     "@yuyi919/advscript-language-services": "workspace:0.0.2"
   },
   "devDependencies": {

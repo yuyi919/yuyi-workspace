@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "prettier": "^2.3.1",
+    "prettier-plugin-packagejson": "^2.2.17",
     "pretty-quick": "^3.1.3"
   }
 }

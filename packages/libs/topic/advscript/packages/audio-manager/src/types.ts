@@ -1,4 +1,5 @@
 import type { Howl } from "howler";
+import { HowlOptions } from "howler";
 
 import {
   BLEEPS_BACKGROUND,
@@ -9,10 +10,9 @@ import {
 
 // Bleeps Audio Settings
 
-export interface BleepsAudioGroupSettings {
+export interface BleepsAudioGroupSettings extends Partial<HowlOptions> {
   volume?: number;
   rate?: number;
-  preload?: boolean;
   disabled?: boolean;
 }
 
@@ -35,9 +35,8 @@ export interface BleepsAudioSettings {
 
 export type BleepPlayerName = string;
 
-export interface BleepPlayerSettings {
+export interface BleepPlayerSettings extends Partial<HowlOptions> {
   src: string[];
-  format?: string[];
   loop?: boolean;
   rate?: number;
   disabled?: boolean;
