@@ -6,6 +6,11 @@
   "main": "jsx-runtime/index.js",
   "module": "jsx-runtime-es/index.js",
   "types": "jsx-runtime/index.d.ts",
+  "files": [
+    "dist",
+    "lib",
+    "README.md"
+  ],
   "scripts": {
     "build": "tsc --build --force",
     "build:dev": "tsc --build",
@@ -33,11 +38,6 @@
     "@vue/composition-api": "^1.0.0",
     "vue": "^2.0.0 || >=3.0.0"
   },
-  "files": [
-    "dist",
-    "lib",
-    "README.md"
-  ],
   "publishConfig": {
     "access": "public"
   }

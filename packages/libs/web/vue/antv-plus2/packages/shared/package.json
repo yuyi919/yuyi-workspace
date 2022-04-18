@@ -1,12 +1,17 @@
 {
   "name": "@yuyi919/vue-antv-plus2-shared",
-  "private": true,
   "version": "0.0.1",
+  "private": true,
   "description": "",
   "author": "",
   "main": "dist/index.js",
   "module": "lib/index.js",
   "types": "dist/index.d.ts",
+  "files": [
+    "dist",
+    "lib",
+    "README.md"
+  ],
   "scripts": {
     "build": "tsc --build --force",
     "build:dev": "tsc --build",
@@ -17,10 +22,10 @@
     "@yuyi919/shared-types": "workspace:0.0.8",
     "@yuyi919/shared-utils": "workspace:0.0.40",
     "@yuyi919/vue-antv-plus2-helper": "workspace:0.0.1",
-    "@yuyi919/vue-shared-decorators": "workspace:0.0.6",
     "@yuyi919/vue-antv-plus2-theme": "workspace:0.0.1",
     "@yuyi919/vue-jss": "workspace:0.0.3",
     "@yuyi919/vue-jsx-factory": "workspace:0.0.4",
+    "@yuyi919/vue-shared-decorators": "workspace:0.0.6",
     "@yuyi919/vue-use": "workspace:0.0.6",
     "lodash": "4.17.21",
     "lodash-es": "4.17.21",
@@ -40,11 +45,6 @@
     "@vue/composition-api": "^1.0.0",
     "vue": "^2.0.0 || >=3.0.0"
   },
-  "files": [
-    "dist",
-    "lib",
-    "README.md"
-  ],
   "publishConfig": {
     "access": "public"
   }

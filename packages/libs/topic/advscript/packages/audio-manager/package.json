@@ -6,19 +6,24 @@
   "main": "dist/index.cjs.js",
   "module": "dist/index.es.js",
   "types": "dist/index.d.ts",
+  "files": [
+    "dist",
+    "lib",
+    "README.md"
+  ],
   "scripts": {
     "build": "vite build",
     "build:dev": "vite build",
     "build:watch": "vite build --watch",
+    "coverage": "vitest run --coverage",
     "dev": "vite build --watch",
-    "test": "vitest",
-    "coverage": "vitest run --coverage"
+    "test": "vitest"
   },
   "dependencies": {
     "@types/howler": "^2.2.6",
     "howler": "^2.2.x",
-    "rxjs": "~7.5.5",
-    "immer": "~9.0.12"
+    "immer": "~9.0.12",
+    "rxjs": "~7.5.5"
   },
   "devDependencies": {
     "@testing-library/react": "^12.x",
@@ -26,25 +31,20 @@
     "@types/node": "~16.7.2",
     "@types/react": "^17.0.0",
     "@types/react-dom": "^17.0.0",
+    "@vitejs/plugin-react": "^1.0.7",
     "@yuyi919/workspace-base-rig": "workspace:1.2.8",
     "react": "^17.0.0",
     "react-dom": "^17.0.0",
     "tslib": "~2.3.1",
     "typescript": "~4.6.2",
     "vite": "2.9.5",
-    "vitest": "~0.9.3",
     "vite-plugin-dts": "~0.8.0",
-    "@vitejs/plugin-react": "^1.0.7"
+    "vitest": "~0.9.3"
   },
   "peerDependencies": {
-    "vite": ">= 2",
-    "react": ">= 17"
+    "react": ">= 17",
+    "vite": ">= 2"
   },
-  "files": [
-    "dist",
-    "lib",
-    "README.md"
-  ],
   "publishConfig": {
     "access": "public"
   }

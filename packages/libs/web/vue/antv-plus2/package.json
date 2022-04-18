@@ -6,6 +6,11 @@
   "main": "dist/index.js",
   "module": "lib/index.js",
   "types": "dist/index.d.ts",
+  "files": [
+    "dist",
+    "lib",
+    "README.md"
+  ],
   "scripts": {
     "build": "tsc --build --force",
     "build:dev": "tsc --build",
@@ -18,11 +23,11 @@
     "@ant-design/icons": "2.0.0",
     "@ant-design/icons-vue": "2.0.0",
     "@antv-plus2/action": "file:./packages/action",
-    "@antv-plus2/helper": "file:./packages/helper",
-    "@antv-plus2/shared": "file:./packages/shared",
-    "@antv-plus2/modal": "file:./packages/modal",
-    "@antv-plus2/table": "file:./packages/table",
     "@antv-plus2/form": "file:./packages/form",
+    "@antv-plus2/helper": "file:./packages/helper",
+    "@antv-plus2/modal": "file:./packages/modal",
+    "@antv-plus2/shared": "file:./packages/shared",
+    "@antv-plus2/table": "file:./packages/table",
     "@antv-plus2/theme": "file:./packages/theme",
     "@yuyi919/vue-antv-plus2-action": "workspace:0.0.1",
     "@yuyi919/vue-antv-plus2-form": "workspace:0.0.1",
@@ -43,6 +48,7 @@
     "@types/node": "~16.7.2",
     "@vue/composition-api": "~1.4.6",
     "@yuyi919/build-tools": "workspace:0.1.13",
+    "@yuyi919/vue-jss": "workspace:0.0.3",
     "@yuyi919/workspace-base-rig": "workspace:1.2.8",
     "ant-design-vue": "1.7.5",
     "babel-preset-vca-jsx": "^0.3.6",
@@ -55,14 +61,8 @@
     "vite-plugin-vue2": "^1.7.3",
     "vue": "2.6.14",
     "vue-demi2": "npm:vue-demi@0.11.3",
-    "vue-template-compiler": "2.6.14",
-    "@yuyi919/vue-jss": "workspace:0.0.3"
+    "vue-template-compiler": "2.6.14"
   },
-  "files": [
-    "dist",
-    "lib",
-    "README.md"
-  ],
   "publishConfig": {
     "access": "public"
   }

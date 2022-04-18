@@ -7,9 +7,11 @@ importers:
 
   ../..:
     specifiers:
+      prettier: ^2.3.1
       prettier-plugin-packagejson: ^2.2.17
     dependencies:
-      prettier-plugin-packagejson: 2.2.17
+      prettier: 2.5.1
+      prettier-plugin-packagejson: 2.2.17_prettier@2.5.1
 
   ../../packages:
     specifiers:
@@ -22607,11 +22609,12 @@ packages:
     dependencies:
       fast-diff: 1.2.0
 
-  /prettier-plugin-packagejson/2.2.17:
+  /prettier-plugin-packagejson/2.2.17_prettier@2.5.1:
     resolution: {integrity: sha512-Z1l3stIdkEzuv5w2ZyLl7mvl1Q/7vr2wjLAaKCQtafPHB7h09dir0tgXK/W5iEc/jP+C4XtvJl/HhiZBvPh4rQ==}
     peerDependencies:
       prettier: '>= 1.16.0'
     dependencies:
+      prettier: 2.5.1
       sort-package-json: 1.55.0
     dev: false
 

@@ -1,12 +1,17 @@
 {
   "name": "@yuyi919/vue-antv-plus2-theme",
-  "private": true,
   "version": "0.0.1",
+  "private": true,
   "description": "",
   "author": "",
   "main": "dist/index.js",
   "module": "lib/index.js",
   "types": "dist/index.d.ts",
+  "files": [
+    "dist",
+    "lib",
+    "README.md"
+  ],
   "scripts": {
     "build": "heft build --clean",
     "build:dev": "heft build",
@@ -47,11 +52,6 @@
     "@vue/composition-api": "^1.0.0",
     "vue": "^2.0.0 || >=3.0.0"
   },
-  "files": [
-    "dist",
-    "lib",
-    "README.md"
-  ],
   "publishConfig": {
     "access": "public"
   }

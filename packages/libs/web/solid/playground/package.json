@@ -6,47 +6,47 @@
   "main": "dist/index.js",
   "module": "dist/web-solid-playground.esm.js",
   "types": "dist/index.d.ts",
+  "files": [
+    "dist",
+    "lib",
+    "README.md"
+  ],
   "scripts": {
     "build2": "pnpm build:client",
-    "build:dev2": "pnpm build:client",
-    "build:watch": "pnpm build:client",
     "build:client": "cross-env IS_CLIENT=true vite build --outDir dist/client",
-    "build:server": "vite build --outDir dist/server --ssr src/server.tsx",
+    "build:dev2": "pnpm build:client",
     "build:full": "pnpm build:client && pnpm build:server",
+    "build:server": "vite build --outDir dist/server --ssr src/server.tsx",
+    "build:watch": "pnpm build:client",
     "dev": "tsdx watch --transpileOnly --onSuccess \"pnpm run types\"",
-    "serve:dev": "node server.js",
     "serve": "cross-env NODE_ENV=production node server.js",
+    "serve:dev": "node server.js",
     "types": "tsc --build --force",
     "types:dev": "tsc --build"
   },
   "dependencies": {
-    "solid-js": "^1.1.1",
-    "express": "~4.17.1",
-    "serve-static": "~1.14.1",
     "csstype": "^2.6.2",
-    "goober": "^2.0.41"
+    "express": "~4.17.1",
+    "goober": "^2.0.41",
+    "serve-static": "~1.14.1",
+    "solid-js": "^1.1.1"
   },
   "devDependencies": {
     "@types/jest": "~27.0.1",
     "@types/node": "~16.7.2",
     "@yuyi919/build-tools": "workspace:0.1.13",
     "@yuyi919/workspace-base-rig": "workspace:1.2.8",
-    "jest": "~27.1.0",
     "eslint": "~7.30.0",
     "eslint-plugin-solid": "~0.1.2",
     "eslint-utils": "3.0.0",
+    "jest": "~27.1.0",
     "tsdx": "^0.14.1",
     "tslib": "~2.3.1",
     "typescript": "4.5.5",
     "vite": "^2.5.1",
-    "vite-plugin-solid": "^2.0.3",
-    "vite-plugin-dts": "~0.8.0"
+    "vite-plugin-dts": "~0.8.0",
+    "vite-plugin-solid": "^2.0.3"
   },
-  "files": [
-    "dist",
-    "lib",
-    "README.md"
-  ],
   "publishConfig": {
     "access": "public"
   }

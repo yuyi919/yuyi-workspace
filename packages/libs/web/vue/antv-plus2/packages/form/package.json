@@ -1,12 +1,17 @@
 {
   "name": "@yuyi919/vue-antv-plus2-form",
-  "private": true,
   "version": "0.0.1",
+  "private": true,
   "description": "",
   "author": "",
   "main": "dist/index.js",
   "module": "lib/index.js",
   "types": "dist/index.d.ts",
+  "files": [
+    "dist",
+    "lib",
+    "README.md"
+  ],
   "scripts": {
     "build": "tsc --build --force",
     "build:dev": "tsc --build",
@@ -15,8 +20,8 @@
   },
   "dependencies": {
     "@yuyi919/shared-types": "workspace:0.0.8",
-    "@yuyi919/vue-use": "workspace:0.0.6",
     "@yuyi919/vue-shared-decorators": "workspace:0.0.6",
+    "@yuyi919/vue-use": "workspace:0.0.6",
     "lodash": "4.17.21",
     "lodash-es": "4.17.21",
     "vue-demi": "^0.11.3"
@@ -40,11 +45,6 @@
       "optional": true
     }
   },
-  "files": [
-    "dist",
-    "lib",
-    "README.md"
-  ],
   "publishConfig": {
     "access": "public"
   }

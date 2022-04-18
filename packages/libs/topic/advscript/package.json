@@ -6,12 +6,17 @@
   "main": "dist/index.js",
   "module": "lib/index.js",
   "types": "dist/index.d.ts",
+  "files": [
+    "dist",
+    "lib",
+    "README.md"
+  ],
   "scripts": {
-    "prepare": "yarn link \"langium-workspaces\"",
     "build": "tsc --build --force",
     "build:dev": "tsc --build",
     "build:watch": "tsc --build --watch",
-    "dev": "tsc --build --watch"
+    "dev": "tsc --build --watch",
+    "prepare": "yarn link \"langium-workspaces\""
   },
   "devDependencies": {
     "@types/jest": "~27.0.1",
@@ -21,11 +26,6 @@
     "tslib": "~2.3.1",
     "typescript": "~4.6.2"
   },
-  "files": [
-    "dist",
-    "lib",
-    "README.md"
-  ],
   "publishConfig": {
     "access": "public"
   }

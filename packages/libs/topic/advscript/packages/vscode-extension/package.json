@@ -1,83 +1,108 @@
 {
   "name": "vscode-advscript",
   "displayName": "Vscode-Advscript",
-  "description": "AdvScript support for VSCode",
-  "aiKey": "0c2689ab-4ce9-416d-a585-c9765b7f4c88.local",
   "version": "0.0.2",
-  "publisher": "yuyi919",
-  "capabilities": {
-    "untrustedWorkspaces": {
-      "supported": true
-    }
-  },
-  "scripts": {
-    "build:dev": "tsc --build",
-    "build:watch": "tsc --build --watch",
-    "dev": "node scripts/publish-local.js",
-    "build": "node scripts/syntaxes.js",
-    "build:webview": "vite build --config webviews/stats/vite.config.ts --emptyOutDir",
-    "build:preview": "vite build --config webviews/preview/vite.config.ts --emptyOutDir",
-    "build:assets": "copyfiles -u 2 webviews/out/* out/webviews && copyfiles -u 1 src/courierprime/*.ttf out && copyfiles -u 1 src/noisetexture.png out"
-  },
-  "engines": {
-    "vscode": "^1.6.0"
-  },
+  "description": "AdvScript support for VSCode",
   "categories": [
     "Programming Languages",
     "Other"
   ],
-  "activationEvents": [
-    "onLanguage:advscript",
-    "onCommand:advscript.livepreview",
-    "onCommand:advscript.exportpdf",
-    "onCommand:advscript:exporthtml",
-    "onCommand:advscript.exportpdfdebug",
-    "onCommand:advscript.exportpdfcustom",
-    "onWebviewPanel:advscriptPreview"
+  "publisher": "yuyi919",
+  "main": "./out/index",
+  "files": [
+    "dist",
+    "lib",
+    "README.md"
   ],
+  "scripts": {
+    "build": "node scripts/syntaxes.js",
+    "build:assets": "copyfiles -u 2 webviews/out/* out/webviews && copyfiles -u 1 src/courierprime/*.ttf out && copyfiles -u 1 src/noisetexture.png out",
+    "build:dev": "tsc --build",
+    "build:preview": "vite build --config webviews/preview/vite.config.ts --emptyOutDir",
+    "build:watch": "tsc --build --watch",
+    "build:webview": "vite build --config webviews/stats/vite.config.ts --emptyOutDir",
+    "dev": "node scripts/publish-local.js"
+  },
   "contributes": {
-    "configurationDefaults": {
-      "[advscript]": {
-        "editor.wordWrap": "on",
-        "editor.wordBasedSuggestions": false,
-        "editor.suggestSelection": "first"
+    "commands": [
+      {
+        "command": "advscript.outline.visibleitems",
+        "title": "Change items visible in the outline",
+        "icon": "$(eye)",
+        "category": "Advscript"
+      },
+      {
+        "command": "advscript.outline.reveal",
+        "title": "Reveal cursor position",
+        "category": "Advscript",
+        "icon": "$(remote)"
+      },
+      {
+        "command": "advscript.livepreview",
+        "title": "Show screenplay live preview (Dynamic switching)",
+        "category": "Advscript"
+      },
+      {
+        "command": "advscript.livepreviewstatic",
+        "title": "Show screenplay live preview (For the current document only)",
+        "category": "Advscript"
+      },
+      {
+        "command": "advscript.exportpdf",
+        "title": "Export screenplay PDF",
+        "category": "Advscript"
+      },
+      {
+        "command": "advscript.exporthtml",
+        "title": "Export screenplay HTML",
+        "category": "Advscript"
+      },
+      {
+        "command": "advscript.exportpdfdebug",
+        "title": "Export screenplay PDF with default name and open it",
+        "category": "Advscript"
+      },
+      {
+        "command": "advscript.exportpdfcustom",
+        "title": "Export screenplay PDF with highlighted characters",
+        "category": "Advscript"
+      },
+      {
+        "command": "advscript.jumpto",
+        "title": "Jump to line",
+        "category": "Advscript"
+      },
+      {
+        "command": "advscript.numberScenes",
+        "title": "Number all scenes (overwrites existing scene numbers)",
+        "category": "Advscript"
+      },
+      {
+        "command": "advscript.updateSceneNumbers",
+        "title": "Number all scenes (keep existing scene numbers, insert missing ones)",
+        "category": "Advscript"
+      },
+      {
+        "command": "advscript.statistics",
+        "title": "Calculate screenplay statistics",
+        "category": "Advscript"
+      },
+      {
+        "command": "advscript.debugtokens",
+        "title": "Debug parsed output",
+        "category": "Advscript"
+      },
+      {
+        "command": "advscript.shiftScenesUp",
+        "title": "Shift Scenes Up",
+        "category": "Advscript"
+      },
+      {
+        "command": "advscript.shiftScenesDown",
+        "title": "Shift Scenes Down",
+        "category": "Advscript"
       }
-    },
-    "viewsContainers": {
-      "activitybar": [
-        {
-          "id": "advscript-view",
-          "icon": "flaticon.svg",
-          "title": "AdvScript"
-        }
-      ]
-    },
-    "views": {
-      "advscript-view": [
-        {
-          "id": "advscript-outline",
-          "name": "Outline"
-        },
-        {
-          "id": "advscript-commands",
-          "name": "Commands"
-        }
-      ]
-    },
-    "menus": {
-      "view/title": [
-        {
-          "command": "advscript.outline.visibleitems",
-          "group": "navigation@1",
-          "when": "view == advscript-outline"
-        },
-        {
-          "command": "advscript.outline.reveal",
-          "group": "navigation@2",
-          "when": "view == advscript-outline"
-        }
-      ]
-    },
+    ],
     "configuration": [
       {
         "title": "Advscript General Settings",
@@ -276,107 +301,13 @@
         }
       }
     ],
-    "commands": [
-      {
-        "command": "advscript.outline.visibleitems",
-        "title": "Change items visible in the outline",
-        "icon": "$(eye)",
-        "category": "Advscript"
-      },
-      {
-        "command": "advscript.outline.reveal",
-        "title": "Reveal cursor position",
-        "category": "Advscript",
-        "icon": "$(remote)"
-      },
-      {
-        "command": "advscript.livepreview",
-        "title": "Show screenplay live preview (Dynamic switching)",
-        "category": "Advscript"
-      },
-      {
-        "command": "advscript.livepreviewstatic",
-        "title": "Show screenplay live preview (For the current document only)",
-        "category": "Advscript"
-      },
-      {
-        "command": "advscript.exportpdf",
-        "title": "Export screenplay PDF",
-        "category": "Advscript"
-      },
-      {
-        "command": "advscript.exporthtml",
-        "title": "Export screenplay HTML",
-        "category": "Advscript"
-      },
-      {
-        "command": "advscript.exportpdfdebug",
-        "title": "Export screenplay PDF with default name and open it",
-        "category": "Advscript"
-      },
-      {
-        "command": "advscript.exportpdfcustom",
-        "title": "Export screenplay PDF with highlighted characters",
-        "category": "Advscript"
-      },
-      {
-        "command": "advscript.jumpto",
-        "title": "Jump to line",
-        "category": "Advscript"
-      },
-      {
-        "command": "advscript.numberScenes",
-        "title": "Number all scenes (overwrites existing scene numbers)",
-        "category": "Advscript"
-      },
-      {
-        "command": "advscript.updateSceneNumbers",
-        "title": "Number all scenes (keep existing scene numbers, insert missing ones)",
-        "category": "Advscript"
-      },
-      {
-        "command": "advscript.statistics",
-        "title": "Calculate screenplay statistics",
-        "category": "Advscript"
-      },
-      {
-        "command": "advscript.debugtokens",
-        "title": "Debug parsed output",
-        "category": "Advscript"
-      },
-      {
-        "command": "advscript.shiftScenesUp",
-        "title": "Shift Scenes Up",
-        "category": "Advscript"
-      },
-      {
-        "command": "advscript.shiftScenesDown",
-        "title": "Shift Scenes Down",
-        "category": "Advscript"
+    "configurationDefaults": {
+      "[advscript]": {
+        "editor.wordWrap": "on",
+        "editor.wordBasedSuggestions": false,
+        "editor.suggestSelection": "first"
       }
-    ],
-    "languages": [
-      {
-        "id": "advscript",
-        "aliases": [
-          "AdvScript",
-          "advscript"
-        ],
-        "extensions": [
-          ".adv",
-          ".avs"
-        ],
-        "configuration": "./language-configuration.json"
-      },
-      {
-        "id": "fountain-script",
-        "extensions": [
-          ".adv",
-          ".avs"
-        ],
-        "configuration": "./language-configuration.json"
-      }
-    ],
+    },
     "grammars": [
       {
         "language": "fountain-script",
@@ -416,9 +347,74 @@
           "source.advscript": "advscript"
         }
       }
-    ]
+    ],
+    "languages": [
+      {
+        "id": "advscript",
+        "aliases": [
+          "AdvScript",
+          "advscript"
+        ],
+        "extensions": [
+          ".adv",
+          ".avs"
+        ],
+        "configuration": "./language-configuration.json"
+      },
+      {
+        "id": "fountain-script",
+        "extensions": [
+          ".adv",
+          ".avs"
+        ],
+        "configuration": "./language-configuration.json"
+      }
+    ],
+    "menus": {
+      "view/title": [
+        {
+          "command": "advscript.outline.visibleitems",
+          "group": "navigation@1",
+          "when": "view == advscript-outline"
+        },
+        {
+          "command": "advscript.outline.reveal",
+          "group": "navigation@2",
+          "when": "view == advscript-outline"
+        }
+      ]
+    },
+    "views": {
+      "advscript-view": [
+        {
+          "id": "advscript-outline",
+          "name": "Outline"
+        },
+        {
+          "id": "advscript-commands",
+          "name": "Commands"
+        }
+      ]
+    },
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "advscript-view",
+          "icon": "flaticon.svg",
+          "title": "AdvScript"
+        }
+      ]
+    }
   },
-  "main": "./out/index",
+  "activationEvents": [
+    "onLanguage:advscript",
+    "onCommand:advscript.livepreview",
+    "onCommand:advscript.exportpdf",
+    "onCommand:advscript:exporthtml",
+    "onCommand:advscript.exportpdfdebug",
+    "onCommand:advscript.exportpdfcustom",
+    "onWebviewPanel:advscriptPreview"
+  ],
   "dependencies": {
     "blob": "0.1.0",
     "diff": "^5.0.0",
@@ -432,8 +428,8 @@
   },
   "devDependencies": {
     "@types/d3": "^5.16.4",
-    "@types/jquery": "^3.5.6",
     "@types/jest": "~27.0.1",
+    "@types/jquery": "^3.5.6",
     "@types/node": "~16.7.2",
     "@types/vscode": "~1.61.0",
     "@yuyi919/workspace-base-rig": "workspace:1.2.8",
@@ -443,19 +439,23 @@
     "datatables.net-dt": "1.10.25",
     "jest": "~27.1.0",
     "jquery": "^3.6.0",
+    "plist2": "~1.1.2",
     "tslib": "~2.3.1",
     "typescript": "~4.6.2",
     "vite": "2.4.4",
     "vscode-codicons": "0.0.17",
-    "vscode-test": "^1.6.1",
-    "plist2": "~1.1.2"
+    "vscode-test": "^1.6.1"
   },
-  "files": [
-    "dist",
-    "lib",
-    "README.md"
-  ],
+  "engines": {
+    "vscode": "^1.6.0"
+  },
   "publishConfig": {
     "access": "public"
+  },
+  "aiKey": "0c2689ab-4ce9-416d-a585-c9765b7f4c88.local",
+  "capabilities": {
+    "untrustedWorkspaces": {
+      "supported": true
+    }
   }
 }

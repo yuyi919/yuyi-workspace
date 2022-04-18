@@ -6,17 +6,64 @@
   "main": "dist/index.cjs.js",
   "module": "dist/index.es.js",
   "types": "dist/index.d.ts",
+  "bin": {
+    "ebyroid": "./index.js"
+  },
+  "files": [
+    "dist",
+    "lib",
+    "README.md"
+  ],
   "scripts": {
     "build": "vite build",
     "build:watch": "vite build",
     "dev": "vite",
-    "pack:pkg": "pkg --options max-http-header-size=65536 --targets node12.18.1-win-x64 --out-path pack .",
     "ohm:generate": "ohm generateBundles --withTypes ohm/adv.ohm",
+    "pack:pkg": "pkg --options max-http-header-size=65536 --targets node12.18.1-win-x64 --out-path pack .",
     "prettier": "prettier -cw ./src/**"
   },
   "dependencies": {
     "chevrotain": "^9.1.0",
     "ohm-js": "^16.0.0"
+  },
+  "devDependencies": {
+    "@ohm-js/cli": "~1.0.0",
+    "@types/jest": "~27.0.1",
+    "@types/node": "~16.7.2",
+    "@types/vscode": "~1.61.0",
+    "@types/ws": "~8.2.0",
+    "@yuyi919/advscript-vite-plugin": "workspace:0.0.2",
+    "@yuyi919/workspace-base-rig": "workspace:1.2.8",
+    "glob": "~7.2.0",
+    "jest": "~27.1.0",
+    "magic-string": "^0.25.7",
+    "pkg": "4.4.6",
+    "prettier": "^2.3.1",
+    "tslib": "~2.3.1",
+    "typescript": "~4.6.2",
+    "vite": "2.9.5",
+    "vite-plugin-dts": "~0.8.0",
+    "vscode-advscript": "workspace:0.0.2",
+    "ws": "~8.2.3",
+    "zora": "~5.0.0",
+    "zora-reporters": "~1.3.0"
+  },
+  "engines": {
+    "node": ">=12.14.0"
+  },
+  "os": [
+    "win32"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "arch": [
+    "ia32"
+  ],
+  "cmake-js": {
+    "runtime": "node",
+    "runtimeVersion": "12.14.0",
+    "arch": "ia32"
   },
   "pkg": {
     "scripts": "dist/**/*.js",
@@ -27,52 +74,5 @@
       "node12-win-x86"
     ],
     "outputPath": "pack"
-  },
-  "devDependencies": {
-    "@types/jest": "~27.0.1",
-    "@types/node": "~16.7.2",
-    "@types/vscode": "~1.61.0",
-    "@yuyi919/workspace-base-rig": "workspace:1.2.8",
-    "@yuyi919/advscript-vite-plugin": "workspace:0.0.2",
-    "@types/ws": "~8.2.0",
-    "@ohm-js/cli": "~1.0.0",
-    "magic-string": "^0.25.7",
-    "vscode-advscript": "workspace:0.0.2",
-    "vite": "2.9.5",
-    "glob": "~7.2.0",
-    "vite-plugin-dts": "~0.8.0",
-    "jest": "~27.1.0",
-    "pkg": "4.4.6",
-    "tslib": "~2.3.1",
-    "typescript": "~4.6.2",
-    "zora": "~5.0.0",
-    "zora-reporters": "~1.3.0",
-    "prettier": "^2.3.1",
-    "ws": "~8.2.3"
-  },
-  "engines": {
-    "node": ">=12.14.0"
-  },
-  "os": [
-    "win32"
-  ],
-  "arch": [
-    "ia32"
-  ],
-  "cmake-js": {
-    "runtime": "node",
-    "runtimeVersion": "12.14.0",
-    "arch": "ia32"
-  },
-  "bin": {
-    "ebyroid": "./index.js"
-  },
-  "files": [
-    "dist",
-    "lib",
-    "README.md"
-  ],
-  "publishConfig": {
-    "access": "public"
   }
 }

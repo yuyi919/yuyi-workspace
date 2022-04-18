@@ -2,19 +2,24 @@
   "name": "@yuyi919/shared-utils",
   "version": "0.0.40",
   "description": "",
-  "author": "",
   "license": "MIT",
+  "author": "",
   "main": "dist/index.js",
   "module": "lib/index.js",
   "types": "dist/index.d.ts",
+  "files": [
+    "dist",
+    "lib",
+    "README.md"
+  ],
   "scripts": {
-    "build2": "tsc --build --force",
     "build": "heft build --clean",
+    "build2": "tsc --build --force",
     "build:dev": "heft build",
     "build:watch": "heft build --watch",
-    "docs": "heft build && api-documenter markdown --input temp --output docs/api",
     "clean": "heft clean",
     "dev": "heft build --watch",
+    "docs": "heft build && api-documenter markdown --input temp --output docs/api",
     "nx:format": "nx run shared-utils:command:format",
     "test": "heft test",
     "test:watch": "heft test --watch"
@@ -32,19 +37,14 @@
     "@types/heft-jest": "1.0.2",
     "@types/node": "~16.7.2",
     "@yuyi919/workspace-base-rig": "workspace:1.2.8",
-    "ts-import-plugin": "~2.0.0",
-    "ts-patch": "~2.0.1",
     "jest": "~27.1.0",
+    "ts-import-plugin": "~2.0.0",
     "ts-jest": "~27.0.5",
-    "typescript": "4.5.5",
-    "tslib": "~2.3.1"
+    "ts-patch": "~2.0.1",
+    "tslib": "~2.3.1",
+    "typescript": "4.5.5"
   },
   "peerDependencies": {},
-  "files": [
-    "dist",
-    "lib",
-    "README.md"
-  ],
   "publishConfig": {
     "access": "public"
   }

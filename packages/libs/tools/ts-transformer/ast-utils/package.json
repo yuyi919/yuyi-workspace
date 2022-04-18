@@ -1,9 +1,8 @@
 {
   "name": "@yuyi919-ts-transformer/ast-utils",
-  "private": true,
   "version": "0.0.2",
+  "private": true,
   "description": "",
-  "author": "",
   "keywords": [
     "internal",
     "internal-internal-ts-internal-internal-ts-transformer-ast",
@@ -13,10 +12,15 @@
     "yuyi919"
   ],
   "license": "MIT",
+  "author": "",
   "main": "dist/index.js",
   "module": "lib/index.js",
   "types": "dist/index.d.ts",
-  "sideEffect": false,
+  "files": [
+    "dist",
+    "lib",
+    "README.md"
+  ],
   "scripts": {
     "build": "heft build --clean",
     "build:dev": "heft build",
@@ -50,12 +54,8 @@
     "ts-node": "~9.1.1",
     "ts-patch": "^1.4.1"
   },
-  "files": [
-    "dist",
-    "lib",
-    "README.md"
-  ],
   "publishConfig": {
     "access": "public"
-  }
+  },
+  "sideEffect": false
 }

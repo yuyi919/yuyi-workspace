@@ -2,33 +2,11 @@
   "name": "@yuyi919/workspace-base-rig",
   "version": "1.2.8",
   "description": "A rig package for Node.js projects that build using Heft",
-  "license": "MIT",
   "repository": {
     "type": "git",
     "url": "https://github.com/microsoft/rushstack/tree/master/rigs/heft-node-rig"
   },
-  "dependencies": {
-    "@typescript-eslint/eslint-plugin": "4.19.0",
-    "@typescript-eslint/parser": "4.19.0",
-    "@nrwl/eslint-plugin-nx": "12.5.8",
-    "@microsoft/rush-lib": "~5.62.4",
-    "@nrwl/jest": "12.5.8",
-    "@rushstack/heft": "^0.44.2",
-    "@rushstack/heft-jest-plugin": "0.1.21",
-    "@rushstack/eslint-config": "~2.5.1",
-    "@microsoft/api-extractor": "7.19.4",
-    "eslint-config-prettier": "8.1.0",
-    "prettier": "^2.3.1",
-    "typescript": "4.5.5",
-    "jest": "~27.1.0",
-    "ts-jest": "~27.0.5"
-  },
-  "devDependencies": {
-    "@yuyi919/jest-extra": "workspace:0.0.1",
-    "@types/node": "~16.7.2",
-    "@types/heft-jest": "1.0.2",
-    "@yuyi919/workspace-base-dev-rig": "workspace:@yuyi919/workspace-base-rig@1.2.8"
-  },
+  "license": "MIT",
   "scripts": {
     "build": "heft build --clean",
     "build:dev": "heft build",
@@ -36,5 +14,27 @@
     "dev": "heft build --watch",
     "test": "heft test",
     "test:watch": "heft test --watch"
+  },
+  "dependencies": {
+    "@microsoft/api-extractor": "7.19.4",
+    "@microsoft/rush-lib": "~5.62.4",
+    "@nrwl/eslint-plugin-nx": "12.5.8",
+    "@nrwl/jest": "12.5.8",
+    "@rushstack/eslint-config": "~2.5.1",
+    "@rushstack/heft": "^0.44.2",
+    "@rushstack/heft-jest-plugin": "0.1.21",
+    "@typescript-eslint/eslint-plugin": "4.19.0",
+    "@typescript-eslint/parser": "4.19.0",
+    "eslint-config-prettier": "8.1.0",
+    "jest": "~27.1.0",
+    "prettier": "^2.3.1",
+    "ts-jest": "~27.0.5",
+    "typescript": "4.5.5"
+  },
+  "devDependencies": {
+    "@types/heft-jest": "1.0.2",
+    "@types/node": "~16.7.2",
+    "@yuyi919/jest-extra": "workspace:0.0.1",
+    "@yuyi919/workspace-base-dev-rig": "workspace:@yuyi919/workspace-base-rig@1.2.8"
   }
 }

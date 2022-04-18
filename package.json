@@ -63,6 +63,7 @@
     "workspace:types_node": "rush add --all --dev -p @types/node"
   },
   "dependencies": {
+    "prettier": "^2.3.1",
     "prettier-plugin-packagejson": "^2.2.17"
   },
   "prisma": {

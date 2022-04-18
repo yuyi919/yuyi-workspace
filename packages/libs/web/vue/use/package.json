@@ -1,12 +1,17 @@
 {
   "name": "@yuyi919/vue-use",
-  "private": true,
   "version": "0.0.6",
+  "private": true,
   "description": "",
   "author": "",
   "main": "dist/index.js",
   "module": "lib/index.js",
   "types": "dist/index.d.ts",
+  "files": [
+    "dist",
+    "lib",
+    "README.md"
+  ],
   "scripts": {
     "build": "tsc --build --force",
     "build:dev": "tsc --build",
@@ -38,11 +43,6 @@
     "@vue/composition-api": "^1.0.0",
     "vue": "^2.0.0 || >=3.0.0"
   },
-  "files": [
-    "dist",
-    "lib",
-    "README.md"
-  ],
   "peerDependenciesMeta": {
     "@vue/composition-api": {
       "optional": true
