@@ -12,7 +12,6 @@
     "@angular-devkit/schematics": "^12.1.1",
     "@nrwl/cli": "12.5.8",
     "@nrwl/devkit": "12.5.8",
-    "@nrwl/eslint-plugin-nx": "12.5.8",
     "@nrwl/node": "12.5.8",
     "@nrwl/nx-plugin": "12.5.8",
     "@nrwl/tao": "12.5.8",

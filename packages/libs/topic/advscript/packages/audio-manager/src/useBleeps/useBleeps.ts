@@ -22,13 +22,21 @@ function useBleeps(): Bleeps {
     return Object.keys(bleepsSetup.bleeps)
       .map((bleepName) => {
         const bleepGeneric = bleepsSetup.bleeps[bleepName];
-
+        let playingOrPrepare = false;
         const bleepItem: BleepItem = {
           name: bleepName,
           bleep: {
             ...bleepGeneric,
-            play: () => bleepGeneric.play(instanceId),
-            stop: () => bleepGeneric.stop(instanceId)
+            play: () => {
+              if (!bleepGeneric.getIsPlaying() && !playingOrPrepare) {
+                playingOrPrepare = true;
+                return bleepGeneric.play(instanceId);
+              }
+            },
+            stop: () => {
+              playingOrPrepare = false;
+              bleepGeneric.stop(instanceId);
+            }
           }
         };
 

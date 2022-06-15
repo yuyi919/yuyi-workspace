@@ -1,16 +1,14 @@
-import { HowlOptions } from "howler";
-
 import {
   BLEEPS_BACKGROUND,
   BLEEPS_TRANSITION,
   BLEEPS_INTERACTION,
   BLEEPS_NOTIFICATION
 } from "./constants";
-import { HowlWrap } from "./HowlWrap";
+import { HowlWrap, HowlWrapOptions } from "./HowlWrap";
 
 // Bleeps Audio Settings
 
-export interface BleepsAudioGroupSettings extends Partial<HowlOptions> {
+export interface BleepsAudioGroupSettings extends Partial<HowlWrapOptions> {
   volume?: number;
   rate?: number;
   disabled?: boolean;
@@ -35,9 +33,8 @@ export interface BleepsAudioSettings {
 
 export type BleepPlayerName = string;
 
-export interface BleepPlayerSettings extends Partial<HowlOptions> {
+export interface BleepPlayerSettings extends Partial<HowlWrapOptions> {
   src: string[];
-  loop?: boolean;
   rate?: number;
   disabled?: boolean;
 }

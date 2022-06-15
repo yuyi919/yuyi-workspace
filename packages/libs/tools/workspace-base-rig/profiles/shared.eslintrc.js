@@ -19,7 +19,8 @@ module.exports = {
     "**/*.d.ts",
     "**/*.spec.ts",
     "jest.preset.js",
-    "**/*.prisma"
+    "**/*.prisma",
+    "vite.config.ts"
   ],
   extends: [
     "@rushstack/eslint-config/profile/node",
@@ -64,6 +65,5 @@ module.exports = {
       extends: [],
       rules: {}
     }
-  ],
-  ignorePatterns: ["vite.config.ts", "/*.ts"]
+  ]
 };

@@ -32,7 +32,6 @@
     "@types/heft-jest": "1.0.2",
     "@types/node": "~16.7.2",
     "@yuyi919/workspace-base-rig": "workspace:1.2.8",
-    "eslint": "~7.30.0",
     "jest": "~27.1.0",
     "ts-jest": "~27.0.5",
     "tslib": "~2.3.1",

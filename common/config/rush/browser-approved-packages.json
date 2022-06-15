@@ -243,6 +243,10 @@
       "allowedCategories": [ "tools" ]
     },
     {
+      "name": "@rushstack/eslint-patch",
+      "allowedCategories": [ "tools" ]
+    },
+    {
       "name": "@rushstack/heft",
       "allowedCategories": [ "production", "tools" ]
     },
@@ -341,6 +345,10 @@
     {
       "name": "@yuyi919/nx-plugin-workspace-helper",
       "allowedCategories": [ "tools" ]
+    },
+    {
+      "name": "@yuyi919/psdtool-renderer",
+      "allowedCategories": [ "production" ]
     },
     {
       "name": "@yuyi919/rpgmz-core",
@@ -583,6 +591,10 @@
       "allowedCategories": [ "production" ]
     },
     {
+      "name": "downscaler",
+      "allowedCategories": [ "production" ]
+    },
+    {
       "name": "ecs-framework",
       "allowedCategories": [ "production" ]
     },
@@ -728,6 +740,10 @@
     },
     {
       "name": "less-plugin-variables-output",
+      "allowedCategories": [ "production" ]
+    },
+    {
+      "name": "lit",
       "allowedCategories": [ "production" ]
     },
     {
@@ -935,6 +951,10 @@
       "allowedCategories": [ "tools" ]
     },
     {
+      "name": "rollup-plugin-minify-html-literals",
+      "allowedCategories": [ "production" ]
+    },
+    {
       "name": "rollup-plugin-multi-input",
       "allowedCategories": [ "production" ]
     },
@@ -1088,6 +1108,10 @@
     },
     {
       "name": "vite-plugin-vue2",
+      "allowedCategories": [ "production" ]
+    },
+    {
+      "name": "vite-tsconfig-paths",
       "allowedCategories": [ "production" ]
     },
     {

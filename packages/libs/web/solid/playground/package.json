@@ -36,7 +36,6 @@
     "@types/node": "~16.7.2",
     "@yuyi919/build-tools": "workspace:0.1.13",
     "@yuyi919/workspace-base-rig": "workspace:1.2.8",
-    "eslint": "~7.30.0",
     "eslint-plugin-solid": "~0.1.2",
     "eslint-utils": "3.0.0",
     "jest": "~27.1.0",

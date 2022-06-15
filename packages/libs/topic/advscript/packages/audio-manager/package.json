@@ -16,7 +16,7 @@
     "build:dev": "vite build",
     "build:watch": "vite build --watch",
     "coverage": "vitest run --coverage",
-    "dev": "vite build --watch",
+    "dev": "vite",
     "test": "vitest"
   },
   "dependencies": {

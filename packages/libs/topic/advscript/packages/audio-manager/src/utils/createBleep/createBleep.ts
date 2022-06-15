@@ -40,9 +40,10 @@ const createBleep = (
     // Even if the audio is set up to be preloaded, sometimes the file
     // is not loaded, probably because the browser has locked the playback.
     if (howl.state() === "unloaded") {
+      // console.log("load")
       howl.load();
     }
-    console.log("play");
+    // console.log("play");
 
     sourcesAccount[instanceId] = true;
 

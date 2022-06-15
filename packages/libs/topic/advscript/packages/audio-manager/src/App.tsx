@@ -7,23 +7,9 @@ import { useBleeps } from "./useBleeps";
 import { Bleep, BleepCategoryName } from "./types";
 import { debounce } from "lodash";
 import { HowlWrap } from "./HowlWrap";
+import { WebAudioDataView } from "./WebAudioDataView";
+import { Howler } from "howler";
 
-// const beep = createOrUpdateBleeps(
-//   {},
-//   {
-//     common: {
-//       volume: 0.5
-//     }
-//   },
-//   { test: { src: ["/test.ogg"], autoplay: true, preload: true, volume: 0.5 } },
-//   {
-//     test: {
-//       player: "test",
-//       category: "background"
-//     }
-//   }
-// );
-// beep.test._howl.play();
 export const container = document.createElement("div");
 document.body.appendChild(container);
 const Manager: React.FC<{ children: any }> = React.memo(({ children }) => {
@@ -46,12 +32,13 @@ const Manager: React.FC<{ children: any }> = React.memo(({ children }) => {
     },
     players: {
       test: {
-        html5: true,
+        // html5: true,
         src: ["/test.ogg"],
         preload: true,
         volume: 0.5,
-        onplay() {
-          // console.log("onplay", this);
+        loop: {
+          start: 544924,
+          length: 4217949
         }
       }
     }
@@ -94,6 +81,8 @@ export const Voice = () => {
   const { test } = useBleeps();
   React.useEffect(() => {
     test.play();
+    // console.log(test.getIsPlaying())
+    // console.log(test)
   }, [test]);
   return (
     <div>
@@ -110,21 +99,45 @@ export const Voice = () => {
 };
 const Progress: React.FC<{ player: Bleep }> = ({ player }) => {
   const [progress, setProgress] = React.useState(player._howl.seek());
+  const [dragging, setDragging] = React.useState<boolean | null>(null);
   const [duration, setDuration] = React.useState(() => player.getDuration());
   React.useEffect(() => {
-    player._howl.on("load", () => {
+    const load = () => {
       setDuration(player.getDuration());
-    });
-    let id: number;
-    function update() {
-      setProgress(player._howl.seek());
-      id = requestAnimationFrame(update);
-    }
-    id = requestAnimationFrame(update);
+    };
+    player._howl.on("load", load);
     return () => {
-      cancelAnimationFrame(id);
+      player._howl.off("load", load);
     };
   }, [player]);
+  const progressRef = React.useRef(progress);
+  React.useEffect(() => {
+    progressRef.current = progress;
+  }, [progress]);
+  const draggingRef = React.useRef(dragging);
+  React.useEffect(() => {
+    draggingRef.current = dragging;
+  }, [dragging]);
+  React.useEffect(() => {
+    if (!dragging) {
+      let id: number;
+      function update() {
+        if (!draggingRef.current) {
+          setProgress(player._howl.seek());
+          id = requestAnimationFrame(update);
+        }
+      }
+      update();
+      return () => {
+        cancelAnimationFrame(id);
+      };
+    }
+  }, [dragging, player]);
+  React.useEffect(() => {
+    if (dragging === false) {
+      player._howl.seek(progressRef.current);
+    }
+  }, [dragging]);
   return (
     <input
       type="range"
@@ -134,7 +147,12 @@ const Progress: React.FC<{ player: Bleep }> = ({ player }) => {
       value={progress}
       onChange={(e) => {
         setProgress(parseFloat(e.target.value));
-        player._howl.seek(parseFloat(e.target.value));
+      }}
+      onMouseDown={() => {
+        setDragging(true);
+      }}
+      onMouseUp={() => {
+        setDragging(false);
       }}
     />
   );
@@ -155,11 +173,11 @@ const ControlPanel = () => {
 
 export const App = () => {
   return (
-    <React.StrictMode>
-      <Manager>
-        <Voice />
-        <ControlPanel />
-      </Manager>
-    </React.StrictMode>
+    // <React.StrictMode>
+    <Manager>
+      <Voice />
+      <ControlPanel />
+    </Manager>
+    // </React.StrictMode>
   );
 };

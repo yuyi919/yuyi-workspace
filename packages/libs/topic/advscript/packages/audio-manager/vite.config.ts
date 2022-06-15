@@ -14,13 +14,7 @@ export default defineConfig(async ({ mode }) => {
       dts({
         insertTypesEntry: true
       }),
-      VitePluginReact({
-        babel: {
-          configFile: false
-        }
-        // jsxRuntime: "classic",
-        // fastRefresh: false
-      }) as any
+      VitePluginReact({}) as any
     ],
     build: {
       assetsInlineLimit: 0,
