@@ -130,5 +130,10 @@
     "policyName": "vue",
     "definitionName": "individualVersion",
     "lockedMajor": 0
+  },
+  {
+    "policyName": "vue2-shared",
+    "definitionName": "individualVersion",
+    "lockedMajor": 0
   }
 ]

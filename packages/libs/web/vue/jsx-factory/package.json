@@ -7,8 +7,8 @@
   "module": "jsx-runtime-es/index.js",
   "types": "jsx-runtime/index.d.ts",
   "files": [
-    "dist",
-    "lib",
+    "jsx-runtime",
+    "jsx-runtime-es",
     "README.md"
   ],
   "scripts": {

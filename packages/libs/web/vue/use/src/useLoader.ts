@@ -58,7 +58,7 @@ export function useLoader<T>(loader: () => Promise<T>, initialValues?: T, defaul
     loading,
     load,
     loadStatus,
-    data,
+    data
   };
 }
 
