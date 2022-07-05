@@ -20,7 +20,7 @@
     "watch": "vite build --watch"
   },
   "dependencies": {
-    "downscaler": "git+https://github.com/oov/downscaler-ts.git#master",
+    "downscaler": "github:oov/downscaler-ts#master",
     "rollup-plugin-minify-html-literals": "^1.2.6"
   },
   "devDependencies": {

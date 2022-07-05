@@ -21,6 +21,11 @@ import { createLangiumServices, ILSPModuleContext } from "./module";
 import { ServiceMockConnectionWrapper } from "./ServiceMockConnection";
 import { createRequest } from "./_utils";
 
+globalThis.setImmediate = (<TArgs extends any[]>(
+  callback: (...args: TArgs) => void,
+  ...args: TArgs
+) => globalThis.setTimeout(callback, 5, ...args)) as any;
+
 export abstract class AdvScriptService {
   static serviceId = 0;
   protected m2p: MonacoToProtocolConverter;

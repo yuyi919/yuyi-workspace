@@ -43,10 +43,6 @@ export class MonacoServiceWrapper extends MonacoEditorRegisterAdapter {
 
   async initialize(model?: Monaco.editor.ITextModel) {
     if (!this._initializeResult) {
-      globalThis.setImmediate = (<TArgs extends any[]>(
-        callback: (...args: TArgs) => void,
-        ...args: TArgs
-      ) => globalThis.setTimeout(callback, 5, ...args)) as any;
       this._initializeResult = await this.service.doInitialize();
       this.addDocumentsHandler();
       this.addCompletionHandler();

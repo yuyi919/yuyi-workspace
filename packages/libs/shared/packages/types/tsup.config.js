@@ -4,7 +4,7 @@ import { defineConfig } from "tsup";
 export default defineConfig({
   ...tsupConfig,
   // minifyIdentifiers: true,
-  minifySyntax: true,
+  minifySyntax: true
   // minifyWhitespace: true,
-  treeshake: true
+  // treeshake: true
 });
