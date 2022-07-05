@@ -15,7 +15,3 @@ jobs:
 
       - name: Rush Install
         uses: advancedcsg-open/actions-rush
-
-      - run: |
-          rush build --to shared
-          rush docs
