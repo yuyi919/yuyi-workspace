@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+
+<head></head>
+
+<body>
+  <script type="module">
+    // import { createLogger } from "https://unpkg.com/@yuyi919/shared-logger@0.0.20/dist/index.esm.js";
+    import { createLogger } from "./dist/index.esm.js";
+
+    var err = new Error("foo-bar");
+
+    var logger = createLogger("foo");
+    logger.groupCollapsed("bar:%o", { foo: "bar" });
+    logger.banner("bar!");
+    logger.log("bar!");
+    logger.info("bar!");
+    logger.warn("bar!");
+    logger.begin("bar!");
+    logger.end("bar!");
+    logger.error("bar!");
+    logger.success("bar!");
+    logger.debug("bar!");
+    logger.trace("bar!");
+    logger.errorTrack(err);
+    logger.groupEnd()();
+
+    logger.count()();
+    logger.count(1)();
+    logger.count()();
+    logger.countReset()();
+    logger.count()();
+    logger.properties({
+      mode: "production",
+      code: -0
+    })("dir");
+
+    logger = createLogger("Foo", { tagStyle: "fill", timestamp: true });
+    logger.groupCollapsed("bar:%o", { foo: "bar" });
+    logger.banner("bar!");
+    logger.log("bar!");
+    logger.info("bar!");
+    logger.warn("bar!");
+    logger.begin("bar!");
+    logger.end("bar!");
+    logger.error("bar!");
+    logger.success("bar!");
+    logger.debug("bar!");
+    logger.trace("bar!");
+    logger.errorTrack(err);
+    logger.groupEnd()();
+    logger.properties({
+      mode: "production",
+      code: -0
+    })("dir");
+    logger.properties([
+      {
+        mode: "production",
+        code: 1
+      },
+      {
+        mode: "development",
+        code: 2
+      }
+    ])("dir");
+    logger.properties(
+      new Map([
+        [
+          {
+            key: "object"
+          },
+          {
+            value: "any"
+          }
+        ],
+        [
+          {
+            key: "object"
+          },
+          {
+            value: "any"
+          }
+        ],
+        [
+          {
+            key: "object"
+          },
+          {
+            value: "any"
+          }
+        ],
+        [
+          {
+            key: "object"
+          },
+          {
+            value: "any"
+          }
+        ],
+        [
+          {
+            key: "object"
+          },
+          {
+            value: "any"
+          }
+        ],
+        [
+          {
+            key: "object"
+          },
+          {
+            value: "any"
+          }
+        ],
+        [
+          {
+            key: "object"
+          },
+          {
+            value: "any"
+          }
+        ],
+        [
+          {
+            key: "object"
+          },
+          {
+            value: "any"
+          }
+        ],
+        [
+          {
+            key: "object"
+          },
+          {
+            value: "any"
+          }
+        ],
+        [
+          {
+            key: "object"
+          },
+          {
+            value: "any"
+          }
+        ],
+        [
+          {
+            key: "object"
+          },
+          {
+            value: "any"
+          }
+        ]
+      ]),
+      { index: true }
+    )("map");
+  </script>
+</body>

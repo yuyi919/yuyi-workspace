@@ -1,8 +1,7 @@
-import { Constant$ } from "@yuyi919/shared-constant";
-import { isNotEmptyValue } from "../atomic";
+import { OBJECT, IS_ARR, OBJ_KEYS, OBJ_ASSIGN } from "@yuyi919/shared-constant";
+import { FILTER, isNotEmptyValue, REDUCE } from "../atomic";
 import { pipe } from "./pipe";
 import { IKeyValueMap } from "@yuyi919/shared-types";
-// import _ from 'lodash'
 
 /**
  * 压缩数据结构，清除所有空值
@@ -30,28 +29,16 @@ export function zipEmptyData<T = any>(
   isRemoveRepeat = true
 ): IKeyValueMap<T> | T[] {
   return (
-    (target instanceof Constant$.OBJECT &&
-      (Constant$.IS_ARR(target)
-        ? pipe(Constant$.FILTER<any>(target, isNotEmptyValue), (list: any[]) =>
+    (target instanceof OBJECT &&
+      (IS_ARR(target)
+        ? pipe(FILTER<any>(target, isNotEmptyValue), (list: any[]) =>
             isRemoveRepeat ? Array.from(new Set(list)) : list
           )
-        : Constant$.REDUCE<any, any>(
-            Constant$.FILTER<any>(Constant$.OBJ_KEYS(target), (k) => isNotEmptyValue(target[k])),
-            (o, key) => Constant$.OBJ_ASSIGN(o, { [key]: target[key] }),
+        : REDUCE<any, any>(
+            FILTER<any>(OBJ_KEYS(target), (k) => isNotEmptyValue(target[k])),
+            (o, key) => OBJ_ASSIGN(o, { [key]: target[key] }),
             {}
           ))) ||
     target
   );
 }
-
-// export function zipEmptyData2<T = any>(target: Array<T | undefined | null>, isRemoveRepeat?: boolean): T[];
-
-// export function zipEmptyData2<T = any>(target: IKeyValueMap<T | undefined | null>, isRemoveRepeat?: boolean): IKeyValueMap<T>;
-
-// export function zipEmptyData2<T = any>(target: IKeyValueMap<T | undefined | null> | Array<T | undefined | null>, isRemoveRepeat = true): IKeyValueMap<T> | T[] {
-//   return target instanceof Constant$.OBJECT && (
-//     Constant$.IS_ARR(target)
-//       ? pipe(Constant$.FILTER<any>(target, isNotEmptyValue), (list: any[]) => isRemoveRepeat ? Array.from(new Set(list)) : list)
-//       : Constant$.REDUCE<any, any>(Constant$.FILTER<any>(Constant$.OBJ_KEYS(target), (k) => isNotEmptyValue(target[k])), (o, key) => Constant$.OBJ_ASSIGN(o, { [key]: target[key] }), {})
-//   ) || target;
-// }

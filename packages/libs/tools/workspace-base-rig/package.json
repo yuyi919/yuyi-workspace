@@ -1,14 +1,26 @@
 {
   "name": "@yuyi919/workspace-base-rig",
-  "version": "1.2.8",
+  "version": "1.2.11",
   "description": "A rig package for Node.js projects that build using Heft",
   "repository": {
     "type": "git",
     "url": "https://github.com/microsoft/rushstack/tree/master/rigs/heft-node-rig"
   },
   "license": "MIT",
+  "main": "dist/index.js",
+  "module": "lib/index.js",
+  "types": "lib/index.d.ts",
+  "files": [
+    "profiles",
+    "tsdoc.json",
+    "jest.preset.js",
+    "lib",
+    "dist",
+    "README"
+  ],
   "scripts": {
-    "build": "heft build --clean",
+    "_phase:build": "heft build",
+    "build": "heft build",
     "build:dev": "heft build",
     "build:watch": "heft build --watch",
     "dev": "heft build --watch",
@@ -16,22 +28,25 @@
     "test:watch": "heft test --watch"
   },
   "dependencies": {
-    "@microsoft/api-extractor": "7.19.4",
+    "@microsoft/api-extractor": "~7.28.2",
     "@microsoft/rush-lib": "~5.62.4",
     "@nrwl/jest": "12.5.8",
     "@rushstack/eslint-config": "~2.6.0",
     "@rushstack/heft": "^0.44.2",
     "@rushstack/heft-jest-plugin": "0.1.21",
+    "@yuyi919/jest-extra": "workspace:1.0.1",
+    "esbuild-plugin-alias": "~0.2.1",
     "eslint-config-prettier": "8.1.0",
     "jest": "~27.1.0",
+    "lodash-es": "4.17.21",
     "prettier": "^2.3.1",
     "ts-jest": "~27.0.5",
+    "tsup": "~6.1.2",
     "typescript": "~4.6.2"
   },
   "devDependencies": {
     "@types/heft-jest": "1.0.2",
     "@types/node": "~16.7.2",
-    "@yuyi919/jest-extra": "workspace:0.0.1",
-    "@yuyi919/workspace-base-dev-rig": "workspace:@yuyi919/workspace-base-rig@1.2.8"
+    "@yuyi919/workspace-base-dev-rig": "workspace:@yuyi919/workspace-base-rig@*"
   }
 }

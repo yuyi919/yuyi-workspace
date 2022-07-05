@@ -1,0 +1,23 @@
+{
+  "name": "@yuyi919/jest-extra",
+  "entries": [
+    {
+      "version": "1.0.1",
+      "tag": "@yuyi919/jest-extra_v1.0.1",
+      "date": "Wed, 29 Jun 2022 08:58:23 GMT",
+      "comments": {
+        "patch": [
+          {
+            "comment": "auto-bump"
+          }
+        ]
+      }
+    },
+    {
+      "version": "1.0.0",
+      "tag": "@yuyi919/jest-extra_v1.0.0",
+      "date": "Wed, 29 Jun 2022 08:37:47 GMT",
+      "comments": {}
+    }
+  ]
+}

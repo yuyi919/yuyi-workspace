@@ -1,12 +1,4 @@
 {
-  "extends": "./node_modules/@yuyi919/workspace-base-rig/profiles/tsc/tsconfig-base.json",
-  "compilerOptions": {},
-  "references": [
-    {
-      "path": "./tsconfig.lib.json"
-    },
-    {
-      "path": "./tsconfig.cjs.json"
-    }
-  ]
+  "extends": "./node_modules/@yuyi919/workspace-base-rig/profiles/esbuild/tsconfig-base.json",
+  "compilerOptions": {}
 }

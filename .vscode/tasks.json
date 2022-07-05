@@ -19,6 +19,22 @@
     },
     {
       "type": "shell",
+      "command": [
+        "rush publish --include-all --version-policy vue2-shared --set-access-level public -p --pack --release-folder ${workspaceFolder}/common/temp/dry-publish-cache"
+      ],
+      "label": "尝试 rush: publish Vue2 Shared packages",
+      "detail": "rush publish --apply --include-all --set-access-level public --publish --version-policy vue2-shared"
+    },
+    {
+      "type": "shell",
+      "command": [
+        "rush publish -a --include-all --version-policy vue2-shared --set-access-level public -p"
+      ],
+      "label": "rush: publish Vue2 Shared packages",
+      "detail": "rush publish --apply --include-all --set-access-level public --publish --version-policy vue2-shared"
+    },
+    {
+      "type": "shell",
       "command": ["rush version --bump --version-policy shared"],
       "label": "rush: bump shared packages",
       "detail": "rush version --bump --version-policy shared"

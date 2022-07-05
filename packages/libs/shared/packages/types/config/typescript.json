@@ -3,6 +3,6 @@
  */
 {
   "$schema": "https://developer.microsoft.com/zh-cn/json-schemas/heft/typescript.schema.json",
-  "extends": "@yuyi919/workspace-base-rig/profiles/default/config/typescript.json",
+  "extends": "@yuyi919/workspace-base-rig/profiles/esbuild/config/typescript.json",
   "emitFolderNameForTests": "dist"
 }

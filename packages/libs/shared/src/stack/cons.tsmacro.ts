@@ -1,10 +1,8 @@
-/* eslint-disable @nrwl/nx/enforce-module-boundaries */
-
-export const cons = (function cons<T>(x: T, y: Cons<T>): Cons<T> {
+export const cons = function cons<T>(x: T, y: Cons<T>): Cons<T> {
   return function (lambda: ConsItem<T> | ConsStack<T>) {
     return lambda(x, y);
   } as Cons<T>;
-});
+};
 export function returnItem<T>(i: T): T {
   return i;
 }

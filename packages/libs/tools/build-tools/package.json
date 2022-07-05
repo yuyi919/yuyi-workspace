@@ -1,8 +1,8 @@
 {
   "name": "@yuyi919/build-tools",
-  "version": "0.1.13",
+  "version": "0.1.16",
   "description": "",
-  "author": "",
+  "author": "yuyiRai",
   "main": "dist/index.js",
   "module": "lib/index.js",
   "types": "dist/index.d.ts",
@@ -15,7 +15,8 @@
     "build": "tsc --build --force",
     "build:dev": "tsc --build",
     "build:watch": "tsc --build --watch",
-    "dev": "tsc --build --watch"
+    "dev": "tsc --build --watch",
+    "test": "$env:NPM_TOKEN=\"6d7df54e-a928-4e3d-8c7d-08be61db928f\" && npm publish"
   },
   "dependencies": {
     "@babel/core": "^7.0.0",
@@ -57,7 +58,7 @@
     "@types/jest": "~27.0.1",
     "@types/node": "~16.7.2",
     "@vue/compiler-sfc": "^3.0.0",
-    "@yuyi919/workspace-base-rig": "workspace:1.2.8",
+    "@yuyi919/workspace-base-rig": "workspace:1.2.11",
     "jest": "~27.1.0",
     "rollup-plugin-vue": "^6.0.0-beta.10",
     "tslib": "~2.3.1",

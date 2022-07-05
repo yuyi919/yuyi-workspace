@@ -1,9 +1,4 @@
 {
-  "extends": "./node_modules/@yuyi919/workspace-base-rig/profiles/default/tsconfig-base.json",
-  "compilerOptions": {},
-  "references": [
-    {
-      "path": "../types"
-    }
-  ]
+  "extends": "./node_modules/@yuyi919/workspace-base-rig/profiles/esbuild/tsconfig-base.json",
+  "compilerOptions": {}
 }

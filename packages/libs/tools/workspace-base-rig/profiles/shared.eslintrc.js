@@ -12,6 +12,7 @@ module.exports = {
     "scripts",
     "**/dist/**/*",
     "**/lib/**/*",
+    "!src/**/lib/**/*",
     "**/jest.config.js",
     "**/gulpfile.js",
     "**/rollup.config.js",
@@ -20,7 +21,7 @@ module.exports = {
     "**/*.spec.ts",
     "jest.preset.js",
     "**/*.prisma",
-    "vite.config.ts"
+    "*.config.ts"
   ],
   extends: [
     "@rushstack/eslint-config/profile/node",

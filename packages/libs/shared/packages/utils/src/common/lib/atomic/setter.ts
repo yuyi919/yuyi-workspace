@@ -1,5 +1,4 @@
 import { TKey } from "@yuyi919/shared-types";
-
 /**
  * 设置目标map或对象属性并返回目标自身
  * @param target -

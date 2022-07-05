@@ -1,4 +1,7 @@
-import { getType, isNumNaN, isEmpty, isArr, isNull, isUndefined, isNil } from "./checker";
+import { isEsModule, isEsModuleWithDefaultExport } from "../checker";
+import { hasOwnKey } from "../namespaces/object";
+import { getType, isArr, isEmpty, isNaN, isNil, isNull, isUndefined } from "./checker";
+import * as Module from "./esmodule_with";
 describe("getType", () => {
   it("toBeTruthy", () => {
     // @ts-expect-error
@@ -14,19 +17,23 @@ describe("getType", () => {
       length2 = 10;
     }
     expect(getType(new Array2())).toBe("array");
-    expect(getType(new Int16Array())).toBe("typedArray");
+    expect(getType(new Int16Array())).toBe("TypedArray");
+    expect(getType(BigInt(123))).toBe("bigint");
+    expect(getType(/regexp/)).toBe("RegExp");
+    expect(getType(new Date())).toBe("Date");
+    expect(getType(new Error())).toBe("Error");
     expect(isArr(new Array2())).toBe(true);
   });
 });
-describe("isNumNaN", () => {
+describe("isNaN", () => {
   it("toBeTruthy", () => {
     // @ts-expect-error
-    expect(isNumNaN({} / 1)).toBeTruthy();
-    expect(isNumNaN(NaN)).toBeTruthy();
+    expect(isNaN({} / 1)).toBeTruthy();
+    expect(isNaN(NaN)).toBeTruthy();
   });
   it("toBeFalsy", () => {
-    expect(isNumNaN(undefined)).toBeFalsy();
-    expect(isNumNaN({})).toBeFalsy();
+    expect(isNaN(undefined)).toBeFalsy();
+    expect(isNaN({})).toBeFalsy();
   });
 });
 
@@ -65,5 +72,17 @@ describe("isNil(null/undefined)", () => {
     expect(isNull(0)).toBeFalsy();
     expect(isUndefined(0)).toBeFalsy();
     expect(isNil(0)).toBeFalsy();
+  });
+});
+
+describe("isEsModule", () => {
+  it("hasOwnKey", () => {
+    expect(hasOwnKey(Module, "default")).toBeTruthy();
+  });
+  it("test", () => {
+    expect(isEsModule(Module)).toBeTruthy();
+  });
+  it("test default export", () => {
+    expect(isEsModuleWithDefaultExport(Module)).toBeTruthy();
   });
 });

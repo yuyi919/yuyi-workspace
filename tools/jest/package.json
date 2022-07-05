@@ -1,8 +1,13 @@
 {
   "name": "@yuyi919/jest-extra",
-  "version": "0.0.1",
-  "main": "dist/index.js",
-  "types": "./index.d.ts",
+  "version": "1.0.1",
+  "main": "index.js",
+  "types": "index.d.ts",
+  "files": [
+    "README",
+    "index.js",
+    "index.d.ts"
+  ],
   "scripts": {},
   "dependencies": {},
   "devDependencies": {

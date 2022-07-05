@@ -1,4 +1,7 @@
 {
   "extends": "./node_modules/@yuyi919/workspace-base-dev-rig/profiles/default/tsconfig-base.json",
-  "compilerOptions": {}
+  "compilerOptions": {
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true
+  }
 }

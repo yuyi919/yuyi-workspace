@@ -18,13 +18,13 @@
     "lunr": "^2.3.9"
   },
   "devDependencies": {
-    "@yuyi919/workspace-base-rig": "workspace:1.2.8",
+    "@yuyi919/workspace-base-rig": "workspace:1.2.11",
     "@algolia/autocomplete-plugin-recent-searches": "^1.5.3",
     "@algolia/autocomplete-js": "~1.5.3",
     "@arwes/animation": "^1.0.0-alpha.19",
     "@arwes/core": "^1.0.0-alpha.19",
     "@arwes/design": "^1.0.0-alpha.19",
-    "@arwes/sounds": "workspace:@yuyi919/audio-manager@0.0.2",
+    "@arwes/sounds": "workspace:@yuyi919/audio-manager@*",
     "@cmfcmf/docusaurus-search-local": "^0.10.0",
     "@docusaurus/core": "2.0.0-beta.18",
     "@docusaurus/module-type-aliases": "2.0.0-beta.18",

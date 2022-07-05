@@ -1,11 +1,5 @@
-/* eslint-disable @typescript-eslint/no-empty-function */
-/* eslint-disable @typescript-eslint/no-use-before-define */
-/**
- * @module LodashExtraUtils
- */
-
 import { stubArray, stubFalse, stubTrue, stubString, stubObject } from "lodash";
-import { Constant$ } from "@yuyi919/shared-constant";
+import { EMPTY_OBJECT } from "@yuyi919/shared-constant";
 
 /**
  * 一个静态函数
@@ -96,7 +90,7 @@ export function stubObjectReturn(args: any) {
  * 一个静态的不可变空对象
  * @beta
  */
-export const emptyObject: object = Constant$.EMPTY_OBJECT;
+export const emptyObject: object = EMPTY_OBJECT;
 
 /**
  * 一个静态函数，返回一个对象
@@ -108,9 +102,9 @@ export const emptyObject: object = Constant$.EMPTY_OBJECT;
  *```
  * @beta
  */
-export function stubObjectStatic(...args: any[]): typeof Constant$.EMPTY_OBJECT;
+export function stubObjectStatic(...args: any[]): typeof EMPTY_OBJECT;
 export function stubObjectStatic() {
-  return Constant$.EMPTY_OBJECT;
+  return EMPTY_OBJECT;
 }
 
 export { stubObject, stubArray, stubFalse, stubTrue, stubString };

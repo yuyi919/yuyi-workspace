@@ -1,4 +1,4 @@
 {
-  "extends": "@yuyi919/workspace-base-rig/profiles/default/config/jest.config.json",
+  "extends": "@yuyi919/workspace-base-rig/profiles/esbuild/config/jest.config.json",
   "collectCoverage": true
 }

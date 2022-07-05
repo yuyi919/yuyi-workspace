@@ -1,6 +1,6 @@
 {
   "name": "@yuyi919/advscript-editor",
-  "version": "0.0.2",
+  "version": "0.0.6",
   "description": "",
   "author": "",
   "main": "dist/index.js",
@@ -21,8 +21,8 @@
     "types": "tsc --build --force"
   },
   "dependencies": {
-    "@yuyi919/advscript-language-services": "workspace:0.0.2",
-    "@yuyi919/advscript-parser": "workspace:0.0.2",
+    "@yuyi919/advscript-language-services": "workspace:0.0.6",
+    "@yuyi919/advscript-parser": "workspace:0.0.6",
     "chevrotain": "^9.1.0"
   },
   "devDependencies": {
@@ -34,7 +34,7 @@
     "@types/vscode": "~1.61.0",
     "@types/ws": "~8.2.0",
     "@vitest/ui": "~0.9.3",
-    "@yuyi919/workspace-base-rig": "workspace:1.2.8",
+    "@yuyi919/workspace-base-rig": "workspace:1.2.11",
     "glob": "~7.2.0",
     "glob-to-regexp": "~0.4.1",
     "jest": "~27.1.0",
@@ -45,16 +45,14 @@
     "onigasm": "^2.0.0",
     "reconnecting-websocket": "^3.2.2",
     "regexp-to-ast": "~0.5.0",
-    "rollup-plugin-node-builtins": "~2.1.2",
     "tsdx": "^0.14.1",
     "tslib": "~2.3.1",
     "typescript": "~4.6.2",
     "vite": "2.9.5",
-    "vite-plugin-macro": "~0.2.0",
     "vite-plugin-monaco-editor": "~1.0.6",
     "vite-plugin-monaco-editor-nls": "~1.0.8",
     "vitest": "~0.9.3",
-    "vscode-advscript": "workspace:0.0.2",
+    "vscode-advscript": "workspace:0.0.6",
     "vscode-jsonrpc": "~6.0.0",
     "vscode-languageclient": "~7.0.0",
     "vscode-languageserver": "7.0.0",

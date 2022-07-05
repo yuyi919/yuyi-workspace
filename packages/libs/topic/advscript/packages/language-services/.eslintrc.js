@@ -1,5 +1,5 @@
 module.exports = {
-  extends: ["./node_modules/@yuyi919/workspace-base-rig/profiles/shared.eslintrc"],
+  extends: ["../../.eslintrc"],
   parserOptions: { tsconfigRootDir: __dirname },
   overrides: [
     {

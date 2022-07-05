@@ -1,7 +1,7 @@
 import { isFunction } from "lodash";
-import { Constant$ } from "@yuyi919/shared-constant";
 import { castComputedPipe } from "./castUtils";
 import Types from "@yuyi919/shared-types";
+import { REDUCE } from "../atomic";
 
 /**
  * 管道函数，将一组函数组合成管道，像流水线一样让原始值流过。
@@ -20,7 +20,7 @@ import Types from "@yuyi919/shared-types";
  */
 export function pipe<T, R>(initialValue: T, ...funcArr: ((v: T | R) => R)[]): R {
   return funcArr.length > 0
-    ? Constant$.REDUCE(funcArr, (value, func) => castComputedPipe(func, value), initialValue as any)
+    ? REDUCE(funcArr, (value, func) => castComputedPipe(func, value), initialValue as any)
     : initialValue;
 }
 
@@ -42,7 +42,7 @@ export function pipe<T, R>(initialValue: T, ...funcArr: ((v: T | R) => R)[]): R 
 export function pipeTrack<T, R>(initialValue: T, ...funcArr: ((v: T | R) => R)[]): [T, ...R[]] {
   let last: any;
   return funcArr.length > 0
-    ? Constant$.REDUCE(
+    ? REDUCE(
         funcArr,
         (track, func) => {
           last = track[track.length - 1];

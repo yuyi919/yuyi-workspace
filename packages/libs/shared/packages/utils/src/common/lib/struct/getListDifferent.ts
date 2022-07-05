@@ -1,6 +1,3 @@
-/**
- * @module CustomUtils
- */
 import { differenceWith, isEqual } from "../atomic";
 import { Comparator2 } from "lodash";
 

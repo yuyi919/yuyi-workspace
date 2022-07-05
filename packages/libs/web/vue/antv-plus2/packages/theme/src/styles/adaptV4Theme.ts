@@ -3,7 +3,7 @@ import {
   ShapeOptions,
   SpacingOptions,
   createBreakpoints,
-  createSpacing,
+  createSpacing
 } from "./system";
 import { MixinsOptions } from "./createMixins";
 import { Palette, PaletteOptions } from "./createPalette";
@@ -38,7 +38,7 @@ export interface DeprecatedThemeOptions {
 /**
  * Generate a theme base on the V4 theme options received.
  * @deprecated Follow the upgrade guide on https://material-ui.com/r/migration-v4#theme
- * @param options Takes an incomplete theme object and adds the missing parts.
+ * @param options - Takes an incomplete theme object and adds the missing parts.
  * @returns A complete, ready to use theme object.
  */
 export function adaptV4Theme(inputTheme?: DeprecatedThemeOptions): Theme {
@@ -46,7 +46,7 @@ export function adaptV4Theme(inputTheme?: DeprecatedThemeOptions): Theme {
     console.warn(
       [
         "Material-UI: adaptV4Theme() is deprecated.",
-        "Follow the upgrade guide on https://material-ui.com/r/migration-v4#theme.",
+        "Follow the upgrade guide on https://material-ui.com/r/migration-v4#theme."
       ].join("\n")
     );
   }
@@ -62,7 +62,7 @@ export function adaptV4Theme(inputTheme?: DeprecatedThemeOptions): Theme {
   } = inputTheme || ({} as any);
   const theme = {
     ...other,
-    components: {},
+    components: {}
   };
 
   // default props
@@ -107,11 +107,11 @@ export function adaptV4Theme(inputTheme?: DeprecatedThemeOptions): Theme {
         [breakpoints.up("sm")]: {
           paddingLeft: spacing(3),
           paddingRight: spacing(3),
-          ...styles[breakpoints.up("sm") as any],
-        },
+          ...styles[breakpoints.up("sm") as any]
+        }
       };
     },
-    ...mixins,
+    ...mixins
   };
 
   const { type: typeInput, mode: modeInput, ...paletteRest } = palette;
@@ -121,11 +121,11 @@ export function adaptV4Theme(inputTheme?: DeprecatedThemeOptions): Theme {
   theme.palette = {
     // theme.palette.text.hint
     text: {
-      hint: finalMode === "dark" ? "rgba(255, 255, 255, 0.5)" : "rgba(0, 0, 0, 0.38)",
+      hint: finalMode === "dark" ? "rgba(255, 255, 255, 0.5)" : "rgba(0, 0, 0, 0.38)"
     },
     mode: finalMode,
     type: finalMode,
-    ...paletteRest,
+    ...paletteRest
   };
 
   return theme;

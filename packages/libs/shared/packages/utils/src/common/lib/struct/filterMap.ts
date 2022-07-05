@@ -1,4 +1,4 @@
-import { Constant$ } from "@yuyi919/shared-constant";
+import { createObjectIs } from "../atomic";
 
 /**
  *
@@ -35,7 +35,7 @@ export function filterMapWith<S = string, T = string>(
   igronValue: any,
   formatter?: (k: S) => T
 ) {
-  return filterMap(arr, Constant$.CREATE_OBJECT_IS(igronValue), formatter);
+  return filterMap(arr, createObjectIs(igronValue), formatter);
 }
 
 /**
@@ -53,6 +53,7 @@ export function filterKeys(
     length = -1,
     // eslint-disable-next-line prefer-const
     keys = Object.keys(target),
+    // eslint-disable-next-line prefer-const
     keysLength = keys.length,
     i = -1,
     code: string;

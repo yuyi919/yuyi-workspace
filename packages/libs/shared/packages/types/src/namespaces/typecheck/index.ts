@@ -73,10 +73,10 @@ export type IsClasses<T = unknown, TRUE = true, FALSE = false> = IsObject<
   IsEmptyObj<T, FALSE, IsBaseType<T, FALSE, T extends InstanceType<any> ? TRUE : FALSE>>,
   FALSE
 >;
-/**
- * @internal
- */
-export type t = IsClasses<any>;
+// /**
+//  * @internal
+//  */
+// export type t = IsClasses<any>;
 /**
  * @beta
  */

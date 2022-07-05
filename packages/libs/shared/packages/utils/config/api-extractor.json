@@ -3,5 +3,5 @@
  */
 {
   "$schema": "https://developer.microsoft.com/json-schemas/api-extractor/v7/api-extractor.schema.json",
-  "extends": "@yuyi919/workspace-base-rig/profiles/default/api-extractor-packages-lib.json"
+  "extends": "@yuyi919/workspace-base-rig/profiles/esbuild/api-extractor-packages-sub.json"
 }

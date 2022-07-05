@@ -85,4 +85,4 @@ function create(splitStr: string, extendable = false): IPathEscapeConvert {
  */
 export const PathEscapeConvert: IPathEscapeConvert & {
   create(splitStr: string): IPathEscapeConvert;
-} = create("$_$", true) as any;
+} = /* @__PURE__ */ create("$_$", true) as any;

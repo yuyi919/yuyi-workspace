@@ -20,7 +20,7 @@ export type IObject2Array<T> = (target: any, targetKey?: string, arr?: T[]) => T
  * - 字符串返回自己
  * - 对象返回key值(value值不为null/false/undefined/0的情况)
  *
- * @examples
+ * @example
  * ```ts
  * convertArrayProps(12)
  * // [12]

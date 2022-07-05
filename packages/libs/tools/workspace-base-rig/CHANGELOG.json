@@ -2,6 +2,47 @@
   "name": "@yuyi919/workspace-base-rig",
   "entries": [
     {
+      "version": "1.2.11",
+      "tag": "@yuyi919/workspace-base-rig_v1.2.11",
+      "date": "Wed, 29 Jun 2022 08:58:23 GMT",
+      "comments": {
+        "patch": [
+          {
+            "comment": "auto-bump"
+          }
+        ],
+        "dependency": [
+          {
+            "comment": "Updating dependency \"@yuyi919/jest-extra\" from `1.0.0` to `1.0.1`"
+          }
+        ]
+      }
+    },
+    {
+      "version": "1.2.10",
+      "tag": "@yuyi919/workspace-base-rig_v1.2.10",
+      "date": "Wed, 29 Jun 2022 08:37:47 GMT",
+      "comments": {
+        "dependency": [
+          {
+            "comment": "Dependency @yuyi919/jest-extra version bump from workspace:0.0.1 to workspace:1.0.0."
+          }
+        ]
+      }
+    },
+    {
+      "version": "1.2.9",
+      "tag": "@yuyi919/workspace-base-rig_v1.2.9",
+      "date": "Thu, 16 Jun 2022 08:39:00 GMT",
+      "comments": {
+        "patch": [
+          {
+            "comment": "auto-bump"
+          }
+        ]
+      }
+    },
+    {
       "version": "1.2.8",
       "tag": "@yuyi919/workspace-base-rig_v1.2.8",
       "date": "Thu, 17 Feb 2022 11:11:32 GMT",

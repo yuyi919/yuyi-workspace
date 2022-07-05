@@ -1,6 +1,4 @@
-import { Constant$ } from "@yuyi919/shared-constant";
-
-const { KEY_NUM } = Constant$;
+import { KEY_NUM } from "@yuyi919/shared-constant";
 
 /**
  * 检查一个值是否为数字

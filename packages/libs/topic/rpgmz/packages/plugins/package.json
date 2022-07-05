@@ -1,6 +1,6 @@
 {
   "name": "@yuyi919/rpgmz-plugins",
-  "version": "0.0.3",
+  "version": "0.0.7",
   "description": "",
   "author": "yuyi919",
   "main": "dist/index.js",
@@ -20,7 +20,7 @@
   "dependencies": {
     "@inlet/react-pixi": "^6.6.5",
     "@lazarv/wasm-yoga": "~1.1.0",
-    "@yuyi919/rpgmz-core": "workspace:0.0.3",
+    "@yuyi919/rpgmz-core": "workspace:0.0.7",
     "lodash": "4.17.21",
     "lodash-es": "4.17.21",
     "mobx": "6.0.4",
@@ -36,8 +36,8 @@
     "@types/lodash-es": "~4.17.6",
     "@types/node": "~16.7.2",
     "@types/react": "^17.0.33",
-    "@yuyi919/rpgmz-plugin-transformer": "workspace:0.0.3",
-    "@yuyi919/workspace-base-rig": "workspace:1.2.8",
+    "@yuyi919/rpgmz-plugin-transformer": "workspace:0.0.7",
+    "@yuyi919/workspace-base-rig": "workspace:1.2.11",
     "babel-plugin-transform-typescript-metadata": "^0.3.2",
     "gulp": "^4.0.2",
     "jest": "~27.1.0",

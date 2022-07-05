@@ -1,7 +1,7 @@
 import { BaseType, Types, KeyOf } from "@yuyi919/shared-types";
-import { Constant$ } from "@yuyi919/shared-constant";
+import { KEY_STRICT } from "@yuyi919/shared-constant";
 import { castArray as castArrayLodash, cloneDeep, toString } from "lodash";
-import { isFunction, isNotEmptyValue, isNotNil, isObject } from "../atomic";
+import { FILTER, isFunction, isNotEmptyValue, isNotNil, isObject } from "../atomic";
 import { stubReturn } from "./stub";
 
 /**
@@ -33,10 +33,7 @@ import { stubReturn } from "./stub";
 export function castArray<T = any>(value: T | T[], allowEmpty: boolean | "strict" = true): T[] {
   return allowEmpty === true
     ? castArrayLodash(value)
-    : Constant$.FILTER(
-        castArrayLodash(value),
-        allowEmpty === Constant$.KEY_STRICT ? isNotEmptyValue : isNotNil
-      );
+    : FILTER(castArrayLodash(value), allowEmpty === KEY_STRICT ? isNotEmptyValue : isNotNil);
 }
 
 /**
@@ -157,10 +154,10 @@ export function castString(target: any): string {
 //  * @param allowEmpty
 //  */
 // export function castObjectArray(objOrArr: any[], allowEmpty = true): any[] {
-//   return Constant$.IS_ARR(
+//   return IS_ARR(
 //     objOrArr
 //   ) ? objOrArr : (
-//       (allowEmpty ? isObject(objOrArr) : Constant$.OBJ_KEYS(objOrArr).length) && [objOrArr] || []
+//       (allowEmpty ? isObject(objOrArr) : OBJ_KEYS(objOrArr).length) && [objOrArr] || []
 //     )
 // }
 

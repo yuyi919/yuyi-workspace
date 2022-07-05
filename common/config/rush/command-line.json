@@ -19,6 +19,14 @@
       "shellCommand": "rush publish --include-all --set-access-level public -p --pack --release-folder ./common/temp/dry-publish-cache"
     },
     {
+      "name": "pub",
+      "commandKind": "global",
+      "summary": "发布",
+      "safeForSimultaneousRushProcesses": true,
+      // This will invoke common/autoinstallers/rush-prettier/node_modules/.bin/pretty-quick
+      "shellCommand": "rush publish -a --include-all --set-access-level public -p"
+    },
+    {
       /**
        * (Required) Determines the type of custom command.
        * Rush's "bulk" commands are invoked separately for each project.  Rush will look in
@@ -68,6 +76,18 @@
       "description": "build"
     },
     {
+      "commandKind": "phased",
+      "name": "build2",
+      "summary": "build2",
+      "phases": [
+        "_phase:build",
+        "_phase:build-dts"
+      ],
+      "incremental": true,
+      "enableParallelism": true,
+      "description": "build"
+    },
+    {
       /**
        * (Required) Determines the type of custom command.
        * Rush's "bulk" commands are invoked separately for each project.  Rush will look in
@@ -106,15 +126,22 @@
       "longName": "--version-policy",
       "description": "版本名称",
       "shortName": "-p",
-      "associatedCommands": ["drypub"],
+      "associatedCommands": [
+        "drypub",
+        "pub"
+      ],
       "alternatives": [
         {
           "name": "shared",
           "description": "各领域共享工具包"
         },
         {
-          "name": "config",
+          "name": "rig",
           "description": "各领域共享配置包"
+        },
+        {
+          "name": "vue2-shared",
+          "description": "vue2共享包"
         }
       ]
     }
@@ -165,5 +192,30 @@
     //     }
     //   ]
     // }
+  ],
+  "phases": [
+    {
+      "name": "_phase:build",
+      "dependencies": {
+        "upstream": [
+          "_phase:build"
+        ]
+      },
+      "ignoreMissingScript": true,
+      "allowWarningsOnSuccess": false
+    },
+    {
+      "name": "_phase:build-dts",
+      "dependencies": {
+        "upstream": [
+          "_phase:build-dts"
+        ],
+        "self": [
+          "_phase:build"
+        ]
+      },
+      "ignoreMissingScript": true,
+      "allowWarningsOnSuccess": false
+    }
   ]
 }

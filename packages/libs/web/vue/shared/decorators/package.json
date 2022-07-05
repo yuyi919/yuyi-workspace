@@ -1,6 +1,6 @@
 {
   "name": "@yuyi919/vue-shared-decorators",
-  "version": "0.0.6",
+  "version": "0.0.9",
   "description": "",
   "author": "",
   "main": "dist/index.js",
@@ -12,13 +12,17 @@
     "README.md"
   ],
   "scripts": {
-    "build": "tsc --build --force",
-    "build:dev": "tsc --build",
-    "build:watch": "tsc --build --watch",
-    "dev": "tsc --build --watch"
+    "build": "heft clean && tsup && heft build",
+    "build:dev": "tsup",
+    "build:docs": "heft build && api-documenter markdown --input temp --output docs/api",
+    "build:watch": "tsup --watch",
+    "clean": "heft clean",
+    "dev": "tsup --watch",
+    "test": "heft test",
+    "test:watch": "heft test --watch"
   },
   "dependencies": {
-    "@yuyi919/shared-types": "workspace:0.0.8",
+    "@yuyi919/shared-types": "workspace:0.0.11",
     "lodash": "4.17.21",
     "lodash-es": "4.17.21",
     "tslib": "~2.3.1",
@@ -28,7 +32,7 @@
   "devDependencies": {
     "@types/jest": "~27.0.1",
     "@types/node": "~16.7.2",
-    "@yuyi919/workspace-base-rig": "workspace:1.2.8",
+    "@yuyi919/workspace-base-rig": "workspace:1.2.11",
     "jest": "~27.1.0",
     "tslib": "~2.3.1",
     "typescript": "4.5.5",
