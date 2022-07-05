@@ -2,16 +2,24 @@
 name: Rush Install
 
 on:
+  workflow_dispatch:
   push:
-    branches:
-      - main
 
 jobs:
   build:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [14.x]
     steps:
       - name: Checkout Code
         uses: actions/checkout@v2
-
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v2
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: "pnpm"
       - name: Rush Install
         uses: advancedcsg-open/actions-rush@v1.4.5
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
