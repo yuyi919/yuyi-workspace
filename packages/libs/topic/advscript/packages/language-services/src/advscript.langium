@@ -1,8 +1,8 @@
 grammar Advscript
-import "./expression";
+import './expression';
 
 entry Document:
-  EOL* header=TitlePage content=DocumentContents;
+  EOL* header=TitlePage  content=DocumentContents;
 
 TitlePage:
   EOL* (Token_YAML? (defines+=Declare+ | EOL)* Token_YAML)?;

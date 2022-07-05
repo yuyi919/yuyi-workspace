@@ -16,7 +16,7 @@
     "build:dev": "vite build",
     "build:watch": "vite build --watch",
     "dev": "vite",
-    "prepare": "yarn link \"langium-workspaces\""
+    "prepare2": "yarn link \"langium-workspaces\""
   },
   "devDependencies": {
     "@types/jest": "~27.0.1",
