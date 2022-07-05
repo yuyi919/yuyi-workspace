@@ -19,7 +19,7 @@ jobs:
         with:
           repo: "yuyi919/shared"
           path: "packages/libs/shared"
-          deploy_key: ${{ secrets.GITHUB_TOKEN }}
+          deploy_key: ${{ secrets.SHARED_GITHUB_DEPLOY_KEY }}
           force: true # will force push to the downstream repository
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v2
