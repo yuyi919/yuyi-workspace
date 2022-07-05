@@ -14,12 +14,14 @@ jobs:
     steps:
       - name: Checkout Code
         uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
       - name: Subtree deploy
         uses: nxtlvlsoftware/git-subtree-action@1.1
         with:
           repo: "yuyi919/shared"
           path: "packages/libs/shared"
-          deploy_key: ${{ secrets.SHARED_GITHUB_DEPLOY_KEY }}
+          deploy_key: ${{ secrets.DEVELOP_SHARED }}
           force: true # will force push to the downstream repository
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v2
