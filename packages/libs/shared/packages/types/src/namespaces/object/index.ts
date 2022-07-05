@@ -1,82 +1,29 @@
+import { OBJECT } from "@yuyi919/shared-constant";
 import { Types } from "..";
 
 /**
- * @beta
- */
-export type Paths<T, D extends number = 10> = Types.ExcludeNever<
-  D,
-  T extends object
-    ? {
-        [K in keyof T]-?: K extends string | number
-          ? `${K}` | Types.String.JoinWith<K, Paths<T[K], Types.Number.Minus<D>>, ".">
-          : never;
-      }[keyof T]
-    : ""
->;
-
-/**
- * @beta
- */
-export type LeafPaths<T, D extends number = 10> = Types.ExcludeNever<
-  D,
-  T extends object
-    ? T extends Types.Fn // object 无法区别function类型，所以单独做一个判断
-      ? ""
-      : {
-          [K in keyof T]-?: Types.String.JoinWith<K, LeafPaths<T[K], Types.Number.Minus<D>>, ".">;
-        }[keyof T]
-    : ""
->;
-/**
- * @beta
- */
-export type ParentPaths<T, D extends number = 10> = Types.ExcludeNever<
-  D,
-  T extends object
-    ? {
-        [K in keyof T]-?: T[K] extends Record<string, any>
-          ? K extends string
-            ? `${K}` | Types.String.JoinWith<K, ParentPaths<T[K], Types.Number.Minus<D>>, ".">
-            : never
-          : never;
-      }[keyof T]
-    : ""
->;
-
-// type NestedObjectType = {
-//   a: string;
-//   b: string;
-//   nest: {
-//     c: string;
-//   };
-//   otherNest: {
-//     c: string;
-//   };
-// };
-
-// type NestedObjectPaths = Paths<NestedObjectType>;
-// // type NestedObjectPaths = "a" | "b" | "nest" | "otherNest" | "nest.c" | "otherNest.c"
-// type NestedObjectLeaves = LeafPaths<NestedObjectType>;
-// // type NestedObjectLeaves = "a" | "b" | "nest.c" | "otherNest.c"
-
-const s = Object.create({});
-/**
  *
- * @param target
- * @param key
+ * 等价于
  * ```ts
- * // 等价于
  * Object.prototype.hasOwnProperty.call(target, key)
  * ```
- */
-/**
- * @beta
+ * @param target -
+ * @param key -
+ * @example
+ * ```ts
+ * const o = new Object();
+ * o.prop = "exists";
+ * o.hasOwnProperty("prop");             // 返回 true
+ * o.hasOwnProperty("toString");         // 返回 false
+ * o.hasOwnProperty("hasOwnProperty");   // 返回 false
+ * ```
+ * @public
  */
 export function hasOwnKey<Key extends string | symbol, T = any>(
   target: any,
   key: Key
 ): target is Types.RecordWithKey<Key, T> {
-  return Object.prototype.hasOwnProperty.call(target || s, key);
+  return !!target && OBJECT.prototype.hasOwnProperty.call(target, key);
 }
 
 type DeepResolveWith<D, K extends string[]> = K extends [infer B, ...infer other]
@@ -105,3 +52,38 @@ export type DeepResolve<D, K extends string> = DeepResolveWith<D, Types.String.S
 // type Result2 = DeepResolve<target, "a.c">; // => { d: 2 };
 // type Result3 = DeepResolve<target, "a.c.f">; // => never;
 // type Result4 = DeepResolve<target, "a.cd"> // => never;
+
+/**
+ * 交换对象的key和value类型
+ * @beta
+ * @example
+ * ```ts
+ * type Source = {
+ *  A: string;
+ *  B: 2;
+ * };
+ * type Result = TReverseKV<Source>; // => { 1: "A"; 2: "B"; }
+ * ```
+ */
+export type ReverseKV<
+  Source extends Record<string, any>,
+  Keys extends keyof Source = keyof Source
+> = {
+  [ValueKey in Source[Keys]]: Extract<
+    { [Key in Keys]: [Source[Key], Key] }[Keys],
+    [ValueKey, any]
+  >[1];
+};
+
+/**
+ * 测试
+ */
+// type Source = {
+//   A: string;
+//   B: 2;
+// };
+// type Result = ReverseKV<Source>; // { 1: "A"; 2: "B"; }
+
+import type * as DeepPath from "./Path";
+
+export type { DeepPath };

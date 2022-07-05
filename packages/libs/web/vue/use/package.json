@@ -1,6 +1,6 @@
 {
   "name": "@yuyi919/vue-use",
-  "version": "0.0.6",
+  "version": "0.0.9",
   "private": true,
   "description": "",
   "author": "",
@@ -19,7 +19,7 @@
     "dev": "tsc --build --watch"
   },
   "dependencies": {
-    "@yuyi919/shared-types": "workspace:0.0.8",
+    "@yuyi919/shared-types": "workspace:0.0.11",
     "rxjs": "~6.6.3",
     "tslib": "~2.3.1",
     "vue-demi": "^0.11.3"
@@ -30,8 +30,8 @@
     "@types/jest": "~27.0.1",
     "@types/node": "~16.7.2",
     "@vue/composition-api": "~1.4.6",
-    "@yuyi919/build-tools": "workspace:0.1.13",
-    "@yuyi919/workspace-base-rig": "workspace:1.2.8",
+    "@yuyi919/build-tools": "workspace:0.1.16",
+    "@yuyi919/workspace-base-rig": "workspace:1.2.11",
     "jest": "~27.1.0",
     "lodash": "4.17.21",
     "lodash-es": "4.17.21",

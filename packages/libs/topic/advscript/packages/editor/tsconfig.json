@@ -4,7 +4,7 @@
     "emitDeclarationOnly": true,
     "outDir": "./dist",
     "rootDir": "./src",
-    "target": "ESNext",
+    "target": "es2020",
     "module": "ESNext",
     "moduleResolution": "node",
     "allowSyntheticDefaultImports": true,
@@ -12,10 +12,10 @@
     "types": ["vite/client"],
     "tsBuildInfoFile": "./node_modules/@yuyi919/workspace-base-rig/.tsBuildInfo/topic-advscript-packages-editor.json",
     "paths": {
-      "langium": ["../langium/packages/langium/src/index.ts"],
-      "langium/lib/*": ["../langium/packages/langium/src/*"]
+      "langium": ["../../node_modules/langium-workspaces/packages/langium"],
+      "langium/lib/*": ["../../node_modules/langium-workspaces/packages/langium/lib/*"]
     }
   },
   "exclude": ["src/**/*.spec.ts", "src/**/*.test.ts", "**/__test__/**"],
-  "include": ["./node_modules/**/*.d.ts", "src/**/*.ts", "./macros.d.ts"]
+  "include": ["src/**/*.ts", "./macros.d.ts"]
 }

@@ -1,4 +1,3 @@
-export * from "@yuyi919/shared-types";
 export * from "./custom-is";
 export * from "./getRealLength";
 export * from "./isEqual";
@@ -9,7 +8,56 @@ export * from "./isObject";
 export * from "./lodash";
 export * from "./propertiesDefine";
 export * from "./toGetter";
+export * from "./helper";
 
-import * as Setter from "./setter";
+import {
+  setTrue$$,
+  setValue$$,
+  setWith$$,
+  setWithEntries$$,
+  setWithEntriesReverse$$,
+  setWithKeyValue$$,
+  setWithLabelValue$$,
+  setWithValueLabel$$
+} from "./setter";
 
-export { Setter };
+/**
+ * @internal
+ */
+export const Setter = {
+  setTrue$$,
+  setValue$$,
+  setWith$$,
+  setWithEntries$$,
+  setWithEntriesReverse$$,
+  setWithKeyValue$$,
+  setWithLabelValue$$,
+  setWithValueLabel$$
+};
+
+export {
+  is,
+  isStr,
+  isNil,
+  isRegExp,
+  isArguments,
+  isArr,
+  isBigInt,
+  isBool,
+  isDate,
+  isEmpty,
+  isError,
+  isEsModule,
+  isEsModuleWithDefaultExport,
+  isFn,
+  isNull,
+  isNum,
+  isNaN,
+  isObj,
+  isPrimitive,
+  isPromise,
+  isSymbol,
+  isThenable,
+  isUndefined,
+  hasOwnKey
+} from "@yuyi919/shared-types";

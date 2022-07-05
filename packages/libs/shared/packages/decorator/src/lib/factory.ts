@@ -1,106 +1,170 @@
-import type { Types } from "@yuyi919/shared-types";
+import type { ConstructorType as New, InstanceKey, Recordable, Types } from "@yuyi919/shared-types";
 import "reflect-metadata";
 
+/**
+ * @public
+ */
 export type MetaOption =
-  | ConstructorMetaOption<any[], any>
-  | PropertyMetaOption<any[], any>
-  | MethodMetaOption<any[], any>;
-export type MetaKinds = MetaOption["kind"];
-export interface ConfigureMetaOption<S extends any[], T> {
+  | IConstructorMetaOption<any[], any>
+  | IPropertyMetaOption<any[], any>
+  | IMethodMetaOption<any[], any>;
+
+type MetaKind = MetaOption["kind"];
+
+/**
+ * @public
+ */
+export interface IConfigureMetaOption<S extends any[], T> {
   config: (
     meta: {
-      target: Types.ConstructorType<any>;
+      target: New<any>;
       propertyKey?: string;
       descriptor?: TypedPropertyDescriptor<any>;
     },
     ...param: S
   ) => T;
 }
-export interface ConstructorMetaOption<S extends any[], T> extends ConfigureMetaOption<S, T> {
+
+/**
+ * @public
+ */
+export interface IConstructorMetaOption<S extends any[], T> extends IConfigureMetaOption<S, T> {
   kind: "constructor";
   children?: string;
 }
-export interface PropertyMetaOption<S extends any[], T> extends ConfigureMetaOption<S, T> {
+/**
+ * @public
+ */
+export interface IPropertyMetaOption<S extends any[], T> extends IConfigureMetaOption<S, T> {
   kind: "property";
 }
-export interface MethodMetaOption<S extends any[], T> extends ConfigureMetaOption<S, T> {
+/**
+ * @public
+ */
+export interface IMethodMetaOption<S extends any[], T> extends IConfigureMetaOption<S, T> {
   kind: "method";
 }
-export type MetaConfig<T, Name extends string = string, Kind extends MetaKinds = MetaKinds> = {
+/**
+ * @public
+ */
+export interface IMetaConfig<T, Name extends string = string, Kind extends MetaKind = MetaKind> {
   name: Name;
   meta: T;
   kind: Kind;
-};
+}
 function _appendMeta<T>(
-  MetaKey: any,
-  target: Types.Recordable,
-  kind: MetaKinds,
+  metaKey: any,
+  target: Recordable,
+  kind: MetaKind,
   meta: T,
   propertyKey: string
 ) {
-  const arr: MetaConfig<T>[] = _getMeta(MetaKey, target) || [];
+  const arr: IMetaConfig<T>[] = _getMeta(metaKey, target) || [];
   arr.push({ name: propertyKey, meta, kind });
-  Reflect.defineMetadata(MetaKey, arr, target);
+  Reflect.defineMetadata(metaKey, arr, target);
 }
 function _defineMeta<T>(
-  MetaKey: any,
-  target: Types.ConstructorType<any>,
+  metaKey: any,
+  target: New<any>,
   meta: T,
-  kind: MetaKinds,
+  kind: MetaKind,
   propertyKey?: string
 ): void {
   Reflect.defineMetadata(
-    MetaKey,
-    { name: propertyKey || target.name, meta, kind } as MetaConfig<T>,
+    metaKey,
+    { name: propertyKey || target.name, meta, kind } as IMetaConfig<T>,
     target,
     propertyKey!
   );
 }
 
-function _getMeta(MetaKey: any, target: Types.Recordable, propertyKey?: string): any {
+function _getMeta(metaKey: any, target: Recordable, propertyKey?: string): any {
   if (propertyKey) {
-    return (Reflect.getMetadata(MetaKey, target) as MetaConfig<any>[])?.find(
+    return (Reflect.getMetadata(metaKey, target) as IMetaConfig<any>[])?.find(
       (o) => o.name === propertyKey
     );
   }
-  return Reflect.getMetadata(MetaKey, target);
+  return Reflect.getMetadata(metaKey, target);
 }
 
 /**
- * 创建一组静态元数据的装饰器
- * @param configure 配置项集合
- * @returns
+ * @public
  */
-export function createStaticMetaDataDecorators<
-  Namespace extends string,
-  Config extends Record<string, MetaOption>
->(namespace: Namespace, configure: Config) {
-  const metaKeys = {} as Record<keyof Config, symbol>;
-  const decorators = {} as {
-    [K in keyof Config]: Config[K] extends ConstructorMetaOption<infer S, any>
-      ? (...options: S) => ClassDecorator
-      : Config[K] extends PropertyMetaOption<infer S, any>
-      ? (...options: S) => PropertyDecorator
-      : PropertyDecorator;
-  };
-  function getMeta<K extends keyof Config, Target extends Types.ConstructorType<any>>(
+export interface IStaticMetaDecoratorHelper<Config extends Recordable<MetaOption>> {
+  getMeta<K extends keyof Config, Target extends New<any>>(
     key: K,
     target: Target
-  ): Config[K] extends ConfigureMetaOption<any[], infer T>
-    ? Config[K] extends ConstructorMetaOption<any, any> // 根据装饰器类型
-      ? MetaConfig<T, string, Config[K]["kind"]>
-      : MetaConfig<T, Types.KeyOf<InstanceType<Target>>, Config[K]["kind"]>[]
+  ): Config[K] extends IConfigureMetaOption<any[], infer T>
+    ? Config[K] extends IConstructorMetaOption<any, any> // 根据装饰器类型
+      ? IMetaConfig<T, string, Config[K]["kind"]>
+      : IMetaConfig<T, Types.KeyOf<InstanceType<Target>>, Config[K]["kind"]>[]
+    : void;
+  getMeta<K extends keyof Config, Target extends New<any>, PropertyKey extends InstanceKey<Target>>(
+    key: K,
+    target: Target,
+    propertyKey: PropertyKey
+  ): Config[K] extends IConfigureMetaOption<any[], infer T>
+    ? IMetaConfig<T, PropertyKey & string, Config[K]["kind"]>
+    : void;
+  metaKeys: Record<keyof Config, symbol>;
+  transform<T extends unknown>(plain: any, Target: New<T>): T;
+}
+
+/**
+ * @public
+ */
+export type MetaDataDecorator<
+  Config extends Recordable<MetaOption>,
+  K extends keyof Config
+> = Config[K] extends IConstructorMetaOption<infer S, any>
+  ? (...options: S) => ClassDecorator
+  : Config[K] extends IPropertyMetaOption<infer S, any>
+  ? (...options: S) => PropertyDecorator
+  : PropertyDecorator;
+
+/**
+ * @public
+ */
+export type MetaDataDecorators<Config extends Recordable<MetaOption>> = {
+  [K in keyof Config]: MetaDataDecorator<Config, K>;
+};
+
+/**
+ * @public
+ */
+export type StaticMetaDataDecorators<Config extends Recordable<MetaOption>> =
+  MetaDataDecorators<Config> & IStaticMetaDecoratorHelper<Config>;
+
+/**
+ * 创建一组静态元数据的装饰器
+ * @param namespace - 命名空间
+ * @param configure - 配置项集合
+ * @public
+ */
+export function createStaticMetaDataDecorators<Config extends Recordable<MetaOption>>(
+  namespace: string,
+  configure: Config
+): StaticMetaDataDecorators<Config> {
+  const metaKeys = {} as Record<keyof Config, symbol>;
+  const decorators = {} as MetaDataDecorators<Config>;
+  function getMeta<K extends keyof Config, Target extends New<any>>(
+    key: K,
+    target: Target
+  ): Config[K] extends IConfigureMetaOption<any[], infer T>
+    ? Config[K] extends IConstructorMetaOption<any, any> // 根据装饰器类型
+      ? IMetaConfig<T, string, Config[K]["kind"]>
+      : IMetaConfig<T, Types.KeyOf<InstanceType<Target>>, Config[K]["kind"]>[]
     : void;
   function getMeta<
     K extends keyof Config,
-    Target extends Types.ConstructorType<any>,
+    Target extends New<any>,
     PropertyKey extends keyof InstanceType<Target>
   >(
     key: K,
     target: Target,
     propertyKey: PropertyKey
-  ): Config[K] extends ConfigureMetaOption<any[], infer T>
-    ? MetaConfig<T, PropertyKey & string, Config[K]["kind"]>
+  ): Config[K] extends IConfigureMetaOption<any[], infer T>
+    ? IMetaConfig<T, PropertyKey & string, Config[K]["kind"]>
     : void;
   function getMeta(key: keyof Config, target: any, propertyKey?: string): any {
     return _getMeta(metaKeys[key], target, propertyKey);
@@ -116,7 +180,7 @@ export function createStaticMetaDataDecorators<
       decorators[key] = function (...args: any[]) {
         return function (target, propertyKey: string) {
           const propertyOpts = meta.config(
-            { target: target.constructor as Types.ConstructorType<any>, propertyKey },
+            { target: target.constructor as New<any>, propertyKey },
             ...args
           );
           _appendMeta(metaKey, target.constructor, kind, propertyOpts, propertyKey);
@@ -124,7 +188,7 @@ export function createStaticMetaDataDecorators<
       } as any;
     } else if (kind === "constructor") {
       decorators[key] = function (...args: any[]) {
-        return function (target: Types.ConstructorType<any>) {
+        return function (target: New<any>) {
           const propertyOpts = meta.config({ target }, ...args);
           _defineMeta(metaKey, target, propertyOpts, kind);
         } as ClassDecorator;
@@ -136,7 +200,7 @@ export function createStaticMetaDataDecorators<
     ...helpers,
     metaKeys,
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    transform<T extends any>(plain: any, Target: Types.ConstructorType<T>) {
+    transform<T extends any>(plain: any, Target: New<T>) {
       const result = { ...plain } as T;
       // for (const $Target of [Target].concat(Targets)) {
       // const keys = Object.getOwnPropertyNames($Target.prototype);

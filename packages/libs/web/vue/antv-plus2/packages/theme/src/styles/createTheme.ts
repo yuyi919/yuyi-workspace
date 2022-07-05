@@ -43,8 +43,8 @@ export interface Theme extends BaseTheme {
 export function createTheme(options?: ThemeOptions): Theme;
 /**
  * Generate a theme base on the options received.
- * @param options Takes an incomplete theme object and adds the missing parts.
- * @param args Deep merge the arguments with the about to be returned theme.
+ * @param options - Takes an incomplete theme object and adds the missing parts.
+ * @param args - Deep merge the arguments with the about to be returned theme.
  * @returns A complete, ready to use theme object.
  */
 export function createTheme<MergeOptions extends Types.Recordable>(
@@ -52,8 +52,8 @@ export function createTheme<MergeOptions extends Types.Recordable>(
 ): Theme & MergeOptions;
 /**
  * Generate a theme base on the options received.
- * @param options Takes an incomplete theme object and adds the missing parts.
- * @param args Deep merge the arguments with the about to be returned theme.
+ * @param options - Takes an incomplete theme object and adds the missing parts.
+ * @param args - Deep merge the arguments with the about to be returned theme.
  * @returns A complete, ready to use theme object.
  */
 export function createTheme<
@@ -94,7 +94,7 @@ export function createTheme<
     typography: createTypography(palette, typographyInput),
     components: componentsInput || {},
     transitions: createTransitions(transitionsInput),
-    zIndex: { ...zIndex },
+    zIndex: { ...zIndex }
   });
 
   muiTheme = deepmerge(muiTheme, other);
@@ -123,7 +123,7 @@ function productCheck<
     "focused",
     "focusVisible",
     "required",
-    "selected",
+    "selected"
   ];
 
   const traverse = (styleOverrides: any, component: string) => {
@@ -146,14 +146,14 @@ function productCheck<
               JSON.stringify(
                 {
                   root: {
-                    [`&.${stateClass}`]: child,
-                  },
+                    [`&.${stateClass}`]: child
+                  }
                 },
                 null,
                 2
               ),
               "",
-              "https://material-ui.com/r/state-classes-guide",
+              "https://material-ui.com/r/state-classes-guide"
             ].join("\n")
           );
         }
@@ -186,7 +186,7 @@ export function createMuiTheme(...args: [object?, ...object[]]): Theme {
         [
           "Material-UI: the createMuiTheme function was renamed to createTheme.",
           "",
-          "You should use `import { createTheme } from '@material-ui/core/styles'`",
+          "You should use `import { createTheme } from '@material-ui/core/styles'`"
         ].join("\n")
       );
     }
@@ -214,10 +214,10 @@ export function createMuiStrictModeTheme<
     (options
       ? {
           ...options,
-          unstable_strictMode: true,
+          unstable_strictMode: true
         }
       : {
-          unstable_strictMode: true,
+          unstable_strictMode: true
         }) as MergeOptions & ThemeOptions,
     ...args
   );

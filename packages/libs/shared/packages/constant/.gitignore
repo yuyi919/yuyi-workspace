@@ -6,3 +6,5 @@
 /.heft
 /.rush
 *.log
+/docs
+/etc

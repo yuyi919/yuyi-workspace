@@ -1,6 +1,6 @@
 {
   "name": "@yuyi919/audio-manager",
-  "version": "0.0.2",
+  "version": "0.0.6",
   "description": "",
   "author": "",
   "main": "dist/index.cjs.js",
@@ -32,7 +32,7 @@
     "@types/react": "^17.0.0",
     "@types/react-dom": "^17.0.0",
     "@vitejs/plugin-react": "^1.0.7",
-    "@yuyi919/workspace-base-rig": "workspace:1.2.8",
+    "@yuyi919/workspace-base-rig": "workspace:1.2.11",
     "react": "^17.0.0",
     "react-dom": "^17.0.0",
     "tslib": "~2.3.1",

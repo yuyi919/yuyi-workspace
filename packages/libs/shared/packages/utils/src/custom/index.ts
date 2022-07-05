@@ -1,6 +1,9 @@
-export * from "./lib/changeKeys";
-export * from "./lib/expect";
-export * from "./lib/uuid";
+export * from "./changeKeys";
+export * from "./expect";
+export * from "./uuid";
+export * from "./proxyMethod";
+export * from "./reverseKeyAndValue";
+export * from "./hex";
 
 /**
  *

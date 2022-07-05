@@ -1,7 +1,7 @@
 {
   "name": "vscode-advscript",
   "displayName": "Vscode-Advscript",
-  "version": "0.0.2",
+  "version": "0.0.6",
   "description": "AdvScript support for VSCode",
   "categories": [
     "Programming Languages",
@@ -432,7 +432,7 @@
     "@types/jquery": "^3.5.6",
     "@types/node": "~16.7.2",
     "@types/vscode": "~1.61.0",
-    "@yuyi919/workspace-base-rig": "workspace:1.2.8",
+    "@yuyi919/workspace-base-rig": "workspace:1.2.11",
     "copyfiles": "^2.4.1",
     "d3": "^5.16.0",
     "datatables.net": "1.10.25",

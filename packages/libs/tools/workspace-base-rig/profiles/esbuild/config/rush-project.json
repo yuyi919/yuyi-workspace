@@ -1,0 +1,31 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/rush/v5/rush-project.schema.json",
+  "incrementalBuildIgnoredGlobs": [
+    "**/*.*",
+    "!src/**/*.*",
+    "!tsconfig.json",
+    "!tsconfig.*.json",
+    "!tsup.config.js"
+  ],
+  // Let's eliminate the "buildCacheOptions" section, since now we seem to
+  // only need one setting in that category
+  "disableBuildCacheForProject": false,
+  "operationSettings": [
+    {
+      "operationName": "_phase:build-dts",
+      "outputFolderNames": ["dist", "temp"]
+    },
+    {
+      "operationName": "_phase:build",
+      "outputFolderNames": []
+    },
+    {
+      "operationName": "build:dev",
+      "outputFolderNames": ["dist"]
+    },
+    {
+      "operationName": "build",
+      "outputFolderNames": ["dist"]
+    }
+  ]
+}

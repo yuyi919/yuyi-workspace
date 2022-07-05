@@ -32,6 +32,7 @@
     "format": "nx format:write",
     "format:check": "nx format:check",
     "format:write": "nx format:write",
+    "git:add": "git add **/CHANGELOG.* **/package.json **/.eslintrc.* **/tsconfig.*.json **/tsconfig.json",
     "help": "nx help",
     "langium:add": "git subtree add --prefix=externals/langium langium main --squash",
     "langium:pull": "git subtree pull --prefix=externals/langium langium main --squash",

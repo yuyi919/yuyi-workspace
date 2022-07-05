@@ -106,24 +106,25 @@
   },
   {
     "definitionName": "individualVersion",
-    "policyName": "config"
+    "policyName": "rig",
+    "lockedMajor": 1
   },
   {
     "policyName": "internal",
     "definitionName": "lockStepVersion",
-    "version": "0.1.1",
+    "version": "0.1.5",
     "nextBump": "patch"
   },
   {
     "policyName": "advscript",
     "definitionName": "lockStepVersion",
-    "version": "0.0.2",
+    "version": "0.0.6",
     "nextBump": "patch"
   },
   {
     "policyName": "rpgmz",
     "definitionName": "lockStepVersion",
-    "version": "0.0.3",
+    "version": "0.0.7",
     "nextBump": "patch"
   },
   {

@@ -2,6 +2,9 @@
 /dist
 /temp
 /node_modules
+# Heft
+/.heft
 /.rush
 *.log
-.tsBuildInfo
+/docs
+/etc

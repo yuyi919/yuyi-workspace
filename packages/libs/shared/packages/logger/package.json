@@ -1,32 +1,45 @@
 {
   "name": "@yuyi919/shared-logger",
-  "version": "0.0.17",
+  "version": "0.0.20",
   "description": "",
+  "license": "MIT",
   "author": "",
   "main": "dist/index.js",
-  "module": "lib/index.js",
+  "module": "dist/index.esm.js",
   "types": "dist/index.d.ts",
   "files": [
     "dist",
+    "!**/*.{spec,test}.*",
+    "!**/*.d.ts.map",
+    "!**/__{spec,test}__/**",
     "lib",
     "README.md"
   ],
   "scripts": {
-    "build": "tsc --build --force",
-    "build:dev": "tsc --build",
-    "build:watch": "tsc --build --watch",
-    "dev": "tsc --build --watch"
+    "_phase:build": "tsup",
+    "_phase:build-dts": "heft build",
+    "build": "heft clean && tsup && heft build",
+    "build:dev": "tsup",
+    "build:watch": "tsup --watch",
+    "clean": "heft clean",
+    "dev": "tsup --watch",
+    "test": "heft test",
+    "test:watch": "heft test --watch"
   },
   "dependencies": {
+    "@yuyi919/shared-constant": "workspace:0.0.9",
+    "@yuyi919/shared-types": "workspace:0.0.11",
+    "@yuyi919/shared-utils": "workspace:0.0.43",
     "lodash": "4.17.21",
     "lodash-es": "4.17.21"
   },
   "devDependencies": {
     "@types/jest": "~27.0.1",
     "@types/node": "~16.7.2",
-    "@yuyi919/workspace-base-rig": "workspace:1.2.8",
+    "@yuyi919/workspace-base-rig": "workspace:1.2.11",
     "jest": "~27.1.0",
     "tslib": "~2.3.1",
+    "tsup": "~6.1.2",
     "typescript": "4.5.5"
   },
   "peerDependencies": {},

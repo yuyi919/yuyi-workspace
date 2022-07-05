@@ -1,17 +1,18 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import * as Array2 from "./array";
-import * as Object2 from "./object";
-import * as String2 from "./string";
-import * as Number2 from "./number";
-import * as Function2 from "./function";
-import * as Module2 from "./module";
-export * from "./shared";
+import type * as _Array from "./array";
+import type * as _Object from "./object";
+import type * as _String from "./string";
+import type * as _Number from "./number";
+import type * as _Function from "./function";
+import type * as _Module from "./module";
 
 export {
-  Array2 as Array,
-  Object2 as Object,
-  String2 as String,
-  Number2 as Number,
-  Function2 as Function,
-  Module2 as Module
+  _Array as Array,
+  _Object as Object,
+  _String as String,
+  _Number as Number,
+  _Function as Function,
+  _Module as Module
 };
+
+export * from "./shared";

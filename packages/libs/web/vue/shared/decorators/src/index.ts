@@ -32,7 +32,7 @@ export type WalkHandler<T, R extends T> = (
   props: Partial<T>,
   walker: (
     propName: keyof T,
-    propValue: T[keyof T],
+    propValue: T[keyof T] | undefined | null,
     options: ITypedPropOptions<any, boolean>
   ) => any
 ) => R;
@@ -69,7 +69,7 @@ export function extractUnsafeProps<T, R extends T>(
     ) => {
       return extractor(props, walker) as R;
     }
-  ] as const;
+  ];
 }
 
 /**

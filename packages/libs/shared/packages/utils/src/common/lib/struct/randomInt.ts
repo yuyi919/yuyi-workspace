@@ -2,7 +2,7 @@ function rnd(next = rnd.seed) {
   rnd.seed = (next * 9301 + 49297) % 233280;
   return rnd.seed / 233280.0;
 }
-rnd.seed = new Date().getTime();
+rnd.seed = Date.now();
 rnd.start = rnd.seed;
 
 /**

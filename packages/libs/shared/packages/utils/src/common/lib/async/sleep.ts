@@ -1,6 +1,55 @@
-import { Constant$ } from "@yuyi919/shared-constant";
+import { CREATE_NEW, PROMISE } from "@yuyi919/shared-constant";
 
-const { CREATE_PROMISE, delay$$ } = Constant$;
+/**
+ * 类型统一的setTimeout
+ * @param handle -
+ * @param sec -
+ * @param args -
+ * @beta
+ */
+export const delay: <P extends any[]>(
+  handle: (...args: P) => void,
+  sec: number,
+  ...args: P
+) => number = setTimeout as any;
+
+/**
+ * `new Promise(...)`的函数版
+ * @param executor - 参照new Promise
+ * @returns 返回一个Promise
+ * @public
+ */
+export function createPromise<T, E = any>(
+  executor: (resolve: (value?: T) => any, reject: (reason?: E) => any) => any
+): Promise<T> {
+  return new PROMISE(executor) as Promise<T>;
+}
+
+/**
+ * 返回只有一个then函数（参照Promise来理解）的对象
+ * @param executor - 参照new Promise
+ * @returns 返回一个PromiseLike
+ * @public
+ */
+export function createPromiseLike<T, E = any>(
+  executor: (resolve: (v: T) => any, reject: (e: E) => any) => any
+): PromiseLike<T> {
+  return {
+    then(onf, onr) {
+      return executor(onf!, onr!);
+    }
+  };
+}
+
+/**
+ * 为提供的值创建一个新的已完成Promise
+ * @param value -
+ * @returns 一个内部状态与提供的 值/PromiseLike 匹配的 Promise
+ * @beta
+ */
+export function toPromise<T = any>(value: T | PromiseLike<T>) {
+  return PROMISE.resolve(value);
+}
 
 /**
  * 异步等候
@@ -13,11 +62,11 @@ const { CREATE_PROMISE, delay$$ } = Constant$;
  */
 export function sleep<V = void>(time: number, emitValue?: V, isError = false): Promise<V> {
   return isError
-    ? CREATE_PROMISE<V>(function (_, reject) {
-        delay$$(reject, time, emitValue);
+    ? createPromise<V>((_, reject) => {
+        delay(reject, time, emitValue);
       })
-    : CREATE_PROMISE(function (resolve) {
-        delay$$(resolve, time, emitValue);
+    : createPromise((resolve) => {
+        delay(resolve, time, emitValue);
       });
 }
 
@@ -31,8 +80,8 @@ export function waitingPromise<V = void>(
   emitValue?: V,
   isError?: boolean
 ): Promise<V>;
-export function waitingPromise(a, b, c) {
-  return sleep(a, b, c);
+export function waitingPromise() {
+  return sleep.call(null, arguments as any);
 }
 
 /* istanbul ignore next */
@@ -42,7 +91,7 @@ export function waitingPromise(a, b, c) {
  * @beta
  */
 export function nextTick(): Promise<void> {
-  return CREATE_PROMISE(function (resolve) {
-    delay$$(resolve, 0);
+  return createPromise((resolve) => {
+    delay(resolve, 0);
   });
 }

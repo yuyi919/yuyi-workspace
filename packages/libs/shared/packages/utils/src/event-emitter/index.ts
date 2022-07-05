@@ -1,22 +1,26 @@
 // /* eslint-disable @typescript-eslint/no-explicit-any */
 // /* eslint-disable @typescript-eslint/no-namespace */
-import { Constant$ } from "@yuyi919/shared-constant";
-import {
+import type {
   CompletionObserver,
   ErrorObserver,
   NextObserver,
   PartialObserver,
-  Subscription as Subscription2
+  Subscription,
+  OperatorFunction
 } from "rxjs";
-import { BehaviorSubject, Observable, OperatorFunction, ReplaySubject, Subject } from "rxjs/index";
-import { sleep } from "../common";
+import { BehaviorSubject, Observable, ReplaySubject, Subject } from "rxjs";
+// import { BehaviorSubject } from "rxjs/internal/BehaviorSubject";
+// import { Observable } from "rxjs/internal/Observable";
+// import { ReplaySubject } from "rxjs/internal/ReplaySubject";
+// import { Subject } from "rxjs/internal/Subject";
+import { createPromise, sleep } from "../common";
 
 // import { endWith } from 'rxjs/operators';
 // import { of } from 'rxjs';
 
 // console.log(of, endWith);
 
-export { PartialObserver, NextObserver, ErrorObserver, CompletionObserver, Subscription2 };
+export { PartialObserver, NextObserver, ErrorObserver, CompletionObserver, Subscription };
 
 /**
  * 订阅
@@ -31,13 +35,13 @@ export function subscribe$$<T>(
   next?: (value: T) => void,
   error?: (error: any) => void,
   complete?: () => void
-): Subscription2;
+): Subscription;
 /**
  * @param observer -
  * @beta
  * {@inheritDoc (subscribe$$:1)}
  */
-export function subscribe$$<T>(source: Observable<T>, observer?: PartialObserver<T>): Subscription2;
+export function subscribe$$<T>(source: Observable<T>, observer?: PartialObserver<T>): Subscription;
 
 export function subscribe$$<T>(source: Observable<T>, ...observer: any[]) {
   return source.subscribe(...observer);
@@ -47,11 +51,9 @@ export function subscribe$$<T>(source: Observable<T>, ...observer: any[]) {
  * @param source -
  * @internal
  */
-export function unsubscribe$$(source: Subscription2) {
+export function unsubscribe$$(source: Subscription) {
   source.unsubscribe();
 }
-
-const { CREATE_PROMISE } = Constant$;
 
 /**
  * 事件发射器
@@ -82,7 +84,7 @@ const { CREATE_PROMISE } = Constant$;
 export class EventEmitter<T = any> {
   /** @internal */
   protected $: Subject<T> = null!;
-  protected sub!: Subscription2 | null;
+  protected sub!: Subscription | null;
   protected lastValue: { value?: T } | null = null;
 
   /**
@@ -135,7 +137,7 @@ export class EventEmitter<T = any> {
    * @param complete - 完成的回调
    */
   //@ts-ignore
-  subscribe(observer?: PartialObserver<T>): Subscription2;
+  subscribe(observer?: PartialObserver<T>): Subscription;
   /**
    * {@inheritDoc EventEmitter.(subscribe:1)}
    */
@@ -144,7 +146,7 @@ export class EventEmitter<T = any> {
     next?: (value: T) => void,
     error?: (error: any) => void,
     complete?: () => void
-  ): Subscription2;
+  ): Subscription;
   // @ts-ignore
   public subscribe(...args: any[]) {
     this.init();
@@ -231,8 +233,8 @@ export class EventEmitter<T = any> {
    */
   public toPromise() {
     this.init();
-    return CREATE_PROMISE<T>((r) => {
-      const sub = subscribe$$(this.$, (data) => {
+    return createPromise<T>((r) => {
+      const sub = subscribe$$(this.$, (data: T) => {
         r(data);
         unsubscribe$$(sub);
       });

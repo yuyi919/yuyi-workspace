@@ -75,7 +75,7 @@ export function deepmergeCls<T extends Record<string, any>, R extends Record<str
         // Since `output` is a clone of `target` and we have narrowed `target` in this block we can cast to the same type.
         (output as Record<keyof any, unknown>)[key] = deepmergeCls(target[key], source[key], {
           ...options,
-          root: false,
+          root: false
         });
       } else {
         (output as Record<keyof any, unknown>)[key] = source[key];

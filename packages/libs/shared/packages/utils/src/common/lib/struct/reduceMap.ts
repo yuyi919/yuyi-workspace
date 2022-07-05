@@ -1,9 +1,7 @@
-/**
- * @module LodashExtraUtils
- */
-import { Constant$ } from "@yuyi919/shared-constant";
+import { OBJ_ASSIGN } from "@yuyi919/shared-constant";
 import { IKeyValueMap } from "@yuyi919/shared-types";
 import { List } from "lodash";
+import { REDUCE } from "../atomic";
 
 /**
  *
@@ -66,9 +64,9 @@ export function reduceMap<
   accumulator?: TResult
 ): TResult;
 export function reduceMap(a: any, b: any, c?: any): any {
-  return Constant$.REDUCE(
+  return REDUCE(
     a,
-    (obj, v, key, list) => Constant$.OBJ_ASSIGN(obj, b(v, key, list, obj)),
+    (obj, v, key, list) => OBJ_ASSIGN(obj, b(v, key, list, obj)),
     c || {}
   );
 }

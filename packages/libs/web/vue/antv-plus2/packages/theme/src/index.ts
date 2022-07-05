@@ -1,7 +1,6 @@
-import { Classes, createHooksApi } from "@yuyi919/vue-jss";
+import { createHooksApi } from "@yuyi919/vue-jss";
 import { createTheme } from "./styles";
 import { ThemeUtils } from "./theme/utils";
-import type { IObj } from "@yuyi919/shared-types";
 
 export * from "./classes";
 export * from "./color";

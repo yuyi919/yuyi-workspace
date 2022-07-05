@@ -451,6 +451,10 @@
       "allowedCategories": [ "production" ]
     },
     {
+      "name": "ansi-colors",
+      "allowedCategories": [ "production" ]
+    },
+    {
       "name": "ansi-escapes",
       "allowedCategories": [ "tools" ]
     },
@@ -504,6 +508,10 @@
     },
     {
       "name": "babel-preset-vca-jsx",
+      "allowedCategories": [ "production" ]
+    },
+    {
+      "name": "benchmark",
       "allowedCategories": [ "production" ]
     },
     {
@@ -600,6 +608,10 @@
     },
     {
       "name": "enquirer",
+      "allowedCategories": [ "production", "tools" ]
+    },
+    {
+      "name": "esbuild-plugin-alias",
       "allowedCategories": [ "production", "tools" ]
     },
     {
@@ -1056,6 +1068,10 @@
     },
     {
       "name": "tslib",
+      "allowedCategories": [ "production", "tools" ]
+    },
+    {
+      "name": "tsup",
       "allowedCategories": [ "production", "tools" ]
     },
     {

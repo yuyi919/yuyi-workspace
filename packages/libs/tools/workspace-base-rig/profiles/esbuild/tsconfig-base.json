@@ -1,0 +1,13 @@
+{
+  "extends": "../tsconfig.base.json",
+  "compilerOptions": {
+    "rootDir": "../../../../../src",
+    "outDir": "../../../../../dist",
+    "target": "es2020",
+    "module": "esnext",
+    "tsBuildInfoFile": "../../../../../temp/.tsbuildinfo",
+    "emitDeclarationOnly": true,
+    "types": ["heft-jest", "node"]
+  },
+  "include": ["../../../../../src/**/*.ts", "../../../../../src/**/*.tsx"]
+}

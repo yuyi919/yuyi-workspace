@@ -1,0 +1,53 @@
+/**
+ * Configures the TypeScript plugin for Heft.  This plugin also manages linting.
+ */
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/heft/typescript.schema.json",
+  /**
+   * If set to "true", the TSlint task will not be invoked.
+   */
+  "disableTslint": true,
+  "emitFolderNameForTests": "dist",
+  "staticAssetsToCopy": {
+    /**
+     * File extensions that should be copied from the src folder to the destination folder(s).
+     */
+    "fileExtensions": [
+      ".aac",
+      ".css",
+      ".eot",
+      ".gif",
+      ".jpeg",
+      ".jpg",
+      ".json",
+      ".m4a",
+      ".mp3",
+      ".mp4",
+      ".oga",
+      ".otf",
+      ".png",
+      ".scss",
+      ".svg",
+      ".ttf",
+      ".wav",
+      ".webm",
+      ".webp",
+      ".woff",
+      ".woff2",
+      ".d.ts"
+    ],
+    /**
+     * Glob patterns that should be explicitly included.
+     */
+    "includeGlobs": ["src/**/*.d.ts"],
+    /**
+     * Glob patterns that should be explicitly excluded. This takes precedence over globs listed
+     * in "includeGlobs" and files that match the file extensions provided in "fileExtensions".
+     */
+    "excludeGlobs": ["src/env.d.ts"]
+  }
+  /**
+   * 通过此方式禁用typecript
+   */
+  // "project": "./_$tsconfig$.json"
+}

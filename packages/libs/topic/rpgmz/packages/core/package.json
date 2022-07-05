@@ -1,6 +1,6 @@
 {
   "name": "@yuyi919/rpgmz-core",
-  "version": "0.0.3",
+  "version": "0.0.7",
   "description": "",
   "author": "",
   "main": "dist/index.js",
@@ -16,13 +16,13 @@
     "build:dev": "heft build",
     "build:watch": "heft build --watch",
     "dev": "heft build --watch",
-    "docs": "heft build && api-documenter markdown --input temp --output docs/api"
+    "docs2": "heft build && api-documenter markdown --input temp --output docs/api"
   },
   "dependencies": {
-    "@yuyi919/shared-types": "workspace:0.0.8",
-    "@yuyi919/shared-utils": "workspace:0.0.40",
-    "@yuyi919/vue-shared-decorators": "workspace:0.0.6",
-    "@yuyi919/vue-use": "workspace:0.0.6",
+    "@yuyi919/shared-types": "workspace:0.0.11",
+    "@yuyi919/shared-utils": "workspace:0.0.43",
+    "@yuyi919/vue-shared-decorators": "workspace:0.0.9",
+    "@yuyi919/vue-use": "workspace:0.0.9",
     "lodash": "4.17.21",
     "lodash-es": "4.17.21",
     "vue-pixi-wrapper": "1.1.5"
@@ -32,7 +32,7 @@
     "@types/node": "~16.7.2",
     "@types/nw.js": "^0.13.9",
     "@vue/composition-api": "~1.4.6",
-    "@yuyi919/workspace-base-rig": "workspace:1.2.8",
+    "@yuyi919/workspace-base-rig": "workspace:1.2.11",
     "jest": "~27.1.0",
     "localforage": "1.9.0",
     "pako": "1.0.11",

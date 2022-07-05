@@ -1,8 +1,7 @@
 import { IKeyValueMap, TKey } from "@yuyi919/shared-types";
-import { Constant$ } from "@yuyi919/shared-constant";
-import { isObject, map, Setter } from "../atomic";
+import { IS_ARR } from "@yuyi919/shared-constant";
+import { isObject, map, REDUCE, Setter } from "../atomic";
 
-const { REDUCE } = Constant$;
 
 /**
  * @param obj -
@@ -23,6 +22,7 @@ export function convertMap2UnieqArray<
 } & { [key: string]: any })[] {
   return obj instanceof Array ? obj : map(obj, (r, key) => Setter.setValue$$(r, defineKey, key));
 }
+
 /**
  * @param stringArray -
  * @beta
@@ -41,7 +41,7 @@ export function getSafeMapOptions(
   defaultValue?: IKeyValueMap<boolean>
 ): IKeyValueMap<boolean> {
   // @ts-ignore
-  return Constant$.IS_ARR(options)
+  return IS_ARR(options)
     ? convertArr2Map(options as string[])
     : isObject(options)
     ? (options as IKeyValueMap<boolean>)

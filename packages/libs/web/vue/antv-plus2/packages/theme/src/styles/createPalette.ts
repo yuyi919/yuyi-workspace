@@ -75,10 +75,10 @@ export interface TypeObject {
 }
 
 export type PaletteTonalOffset = number | PaletteTonalOffsetObject;
-export type PaletteTonalOffsetObject = {
+export interface PaletteTonalOffsetObject {
   light: number;
   dark: number;
-};
+}
 
 export interface PaletteAugmentColorOptions {
   color: PaletteColorOptions;
@@ -97,7 +97,7 @@ export const light: TypeObject = {
     // Secondary text.
     secondary: "rgba(0, 0, 0, 0.6)",
     // Disabled text have even lower visual prominence.
-    disabled: "rgba(0, 0, 0, 0.38)",
+    disabled: "rgba(0, 0, 0, 0.38)"
   },
   // The color used to divide different elements.
   divider: "rgba(0, 0, 0, 0.12)",
@@ -105,7 +105,7 @@ export const light: TypeObject = {
   // Consistency between these values is important.
   background: {
     paper: common.white,
-    default: common.white,
+    default: common.white
   },
   // The colors used to style the action elements.
   action: {
@@ -124,8 +124,8 @@ export const light: TypeObject = {
     disabledOpacity: 0.38,
     focus: "rgba(0, 0, 0, 0.12)",
     focusOpacity: 0.12,
-    activatedOpacity: 0.12,
-  },
+    activatedOpacity: 0.12
+  }
 };
 
 export const dark: TypeObject = {
@@ -133,12 +133,12 @@ export const dark: TypeObject = {
     primary: common.white,
     secondary: "rgba(255, 255, 255, 0.7)",
     disabled: "rgba(255, 255, 255, 0.5)",
-    icon: "rgba(255, 255, 255, 0.5)",
+    icon: "rgba(255, 255, 255, 0.5)"
   },
   divider: "rgba(255, 255, 255, 0.12)",
   background: {
     paper: "#121212",
-    default: "#121212",
+    default: "#121212"
   },
   action: {
     active: common.white,
@@ -151,8 +151,8 @@ export const dark: TypeObject = {
     disabledOpacity: 0.38,
     focus: "rgba(255, 255, 255, 0.12)",
     focusOpacity: 0.12,
-    activatedOpacity: 0.24,
-  },
+    activatedOpacity: 0.24
+  }
 };
 const modes = { dark, light };
 
@@ -183,13 +183,13 @@ function getDefaultPrimary(mode = "light"): PaletteColorOptions {
     return {
       main: blue[200],
       light: blue[50],
-      dark: blue[400],
+      dark: blue[400]
     };
   }
   return {
     main: blue[700],
     light: blue[400],
-    dark: blue[800],
+    dark: blue[800]
   };
 }
 
@@ -198,13 +198,13 @@ function getDefaultSecondary(mode = "light"): PaletteColorOptions {
     return {
       main: purple[200],
       light: purple[50],
-      dark: purple[400],
+      dark: purple[400]
     };
   }
   return {
     main: purple[500],
     light: purple[300],
-    dark: purple[700],
+    dark: purple[700]
   };
 }
 
@@ -213,13 +213,13 @@ function getDefaultError(mode = "light"): PaletteColorOptions {
     return {
       main: red[500],
       light: red[300],
-      dark: red[700],
+      dark: red[700]
     };
   }
   return {
     main: red[700],
     light: red[400],
-    dark: red[800],
+    dark: red[800]
   };
 }
 
@@ -228,13 +228,13 @@ function getDefaultInfo(mode = "light"): PaletteColorOptions {
     return {
       main: lightBlue[400],
       light: lightBlue[300],
-      dark: lightBlue[700],
+      dark: lightBlue[700]
     };
   }
   return {
     main: lightBlue[700],
     light: lightBlue[500],
-    dark: lightBlue[900],
+    dark: lightBlue[900]
   };
 }
 
@@ -243,13 +243,13 @@ function getDefaultSuccess(mode = "light"): PaletteColorOptions {
     return {
       main: green[400],
       light: green[300],
-      dark: green[700],
+      dark: green[700]
     };
   }
   return {
     main: green[800],
     light: green[500],
-    dark: green[900],
+    dark: green[900]
   };
 }
 
@@ -258,13 +258,13 @@ function getDefaultWarning(mode = "light"): PaletteColorOptions {
     return {
       main: orange[400],
       light: orange[300],
-      dark: orange[700],
+      dark: orange[700]
     };
   }
   return {
     main: "#ED6C02", // closest to orange[800] that pass 3:1.
     light: orange[500],
-    dark: orange[900],
+    dark: orange[900]
   };
 }
 
@@ -318,7 +318,7 @@ export class Palette {
     name: "secondary",
     mainShade: "A400",
     lightShade: "A200",
-    darkShade: "A700",
+    darkShade: "A700"
   });
   error: PaletteColor = this.augmentColor({ color: this._error, name: "error" });
   warning: PaletteColor = this.augmentColor({ color: this._warning, name: "warning" });
@@ -336,7 +336,7 @@ export class Palette {
       mainShade = 500,
       lightShade = 300,
       darkShade = 700,
-      color: { ...color },
+      color: { ...color }
     } = options;
     if (isSimple(color) && inOptions(color, mainShade)) {
       color.main = color[mainShade]!;
@@ -394,7 +394,7 @@ export class Palette {
           [
             `Material-UI: The contrast ratio of ${contrast}:1 for ${contrastText} on ${background}`,
             "falls below the WCAG recommended absolute minimum contrast ratio of 3:1.",
-            "https://www.w3.org/TR/2008/REC-WCAG20-20081211/#visual-audio-contrast-contrast",
+            "https://www.w3.org/TR/2008/REC-WCAG20-20081211/#visual-audio-contrast-contrast"
           ].join("\n")
         );
       }
@@ -463,8 +463,9 @@ export function createPalette(options: PaletteOptions) {
   return new Palette(options);
 }
 /**
- * @deprecated
- * @param options 
+ * @deprecated unsafe
+ * @param options -
+ * @internal
  */
 export function unsafe_createPalette(options: PaletteOptions): Palette {
   const { mode = "light", contrastThreshold = 3, tonalOffset = 0.2, ...other } = options;
@@ -492,7 +493,7 @@ export function unsafe_createPalette(options: PaletteOptions): Palette {
           [
             `Material-UI: The contrast ratio of ${contrast}:1 for ${contrastText} on ${background}`,
             "falls below the WCAG recommended absolute minimum contrast ratio of 3:1.",
-            "https://www.w3.org/TR/2008/REC-WCAG20-20081211/#visual-audio-contrast-contrast",
+            "https://www.w3.org/TR/2008/REC-WCAG20-20081211/#visual-audio-contrast-contrast"
           ].join("\n")
         );
       }
@@ -506,7 +507,7 @@ export function unsafe_createPalette(options: PaletteOptions): Palette {
     name,
     mainShade = 500,
     lightShade = 300,
-    darkShade = 700,
+    darkShade = 700
   }: PaletteAugmentColorOptions) => {
     color = { ...color };
     if (isSimple(color) && inOptions(color, mainShade)) {
@@ -572,7 +573,7 @@ export function unsafe_createPalette(options: PaletteOptions): Palette {
         name: "secondary",
         mainShade: "A400",
         lightShade: "A200",
-        darkShade: "A700",
+        darkShade: "A700"
       }),
       // The colors used to represent interface elements that the user should be made aware of.
       error: augmentColor({ color: error, name: "error" }),
@@ -596,10 +597,9 @@ export function unsafe_createPalette(options: PaletteOptions): Palette {
       // E.g., shift from Red 500 to Red 300 or Red 700.
       tonalOffset,
       // The light and dark mode object.
-      ...modes[mode],
+      ...modes[mode]
     },
     other
   ) as Palette;
   return paletteOutput;
 }
-

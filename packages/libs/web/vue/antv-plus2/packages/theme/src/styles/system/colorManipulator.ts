@@ -4,16 +4,24 @@ import { MuiError } from "../../MuiError";
 /* eslint-disable @typescript-eslint/no-use-before-define */
 export type ColorFormat = "rgb" | "rgba" | "hsl" | "hsla" | "color";
 export interface ColorObject {
+  /**
+   *
+   * One of: 'rgb', 'rgba', 'hsl', 'hsla'
+   */
   type: ColorFormat;
+  /**
+   *
+   * [n,n,n] or [n,n,n,n]
+   */
   values: [number, number, number] | [number, number, number, number];
   colorSpace?: "srgb" | "display-p3" | "a98-rgb" | "prophoto-rgb" | "rec-2020";
 }
 /**
  * Returns a number whose value is limited to the given range.
- * @param {number} value The value to be clamped
- * @param {number} min The lower boundary of the output range
- * @param {number} max The upper boundary of the output range
- * @returns {number} A number in the range [min, max]
+ * @param value - The value to be clamped
+ * @param min - The lower boundary of the output range
+ * @param max - The upper boundary of the output range
+ * @returns A number in the range [min, max]
  */
 function clamp(value: number, min: number = 0, max: number = 1): number {
   if (process.env.NODE_ENV !== "production") {
@@ -27,8 +35,8 @@ function clamp(value: number, min: number = 0, max: number = 1): number {
 
 /**
  * Converts a color from CSS hex format to CSS rgb format.
- * @param {string} color - Hex color, i.e. #nnn or #nnnnnn
- * @returns {string} A CSS rgb color string
+ * @param color - Hex color, i.e. #nnn or #nnnnnn
+ * @returns A CSS rgb color string
  */
 export function hexToRgb(color: string): string {
   color = color.substr(1);
@@ -56,8 +64,8 @@ function intToHex(int: number) {
 
 /**
  * Converts a color from CSS rgb format to CSS hex format.
- * @param {string} color - RGB color, i.e. rgb(n, n, n)
- * @returns {string} A CSS rgb color string, i.e. #nnnnnn
+ * @param color - RGB color, i.e. rgb(n, n, n)
+ * @returns A CSS rgb color string, i.e. #nnnnnn
  */
 export function rgbToHex(color: string): string {
   // Idempotent
@@ -71,8 +79,8 @@ export function rgbToHex(color: string): string {
 
 /**
  * Converts a color from hsl format to rgb format.
- * @param {string} color - HSL color values
- * @returns {string} rgb color values
+ * @param color - HSL color values
+ * @returns rgb color values
  */
 export function hslToRgb(color: string | ColorObject): string {
   // Idempotent
@@ -99,8 +107,8 @@ export function hslToRgb(color: string | ColorObject): string {
  * Returns an object with the type and values of a color.
  *
  * Note: Does not support rgb % values.
- * @param {string} color - CSS color, i.e. one of: #nnn, #nnnnnn, rgb(), rgba(), hsl(), hsla()
- * @returns {object} - A MUI color object: {type: string, values: number[]}
+ * @param color - CSS color, i.e. one of: #nnn, #nnnnnn, rgb(), rgba(), hsl(), hsla()
+ * @returns - A MUI color object: `{type: string, values: number[]}`
  */
 export function decomposeColor(color: string | ColorObject): ColorObject {
   // Idempotent
@@ -117,42 +125,43 @@ export function decomposeColor(color: string | ColorObject): ColorObject {
 
   if (["rgb", "rgba", "hsl", "hsla", "color"].indexOf(type) === -1) {
     throw new MuiError(
-      'Material-UI: Unsupported `%s` color.\n' +
-        'The following formats are supported: #nnn, #nnnnnn, rgb(), rgba(), hsl(), hsla(), color().',
-      color,
+      "Material-UI: Unsupported `%s` color.\n" +
+        "The following formats are supported: #nnn, #nnnnnn, rgb(), rgba(), hsl(), hsla(), color().",
+      color
     );
   }
 
-  let values: string | string[] | ColorObject['values'] = color.substring(marker + 1, color.length - 1);
-  let colorSpace: ColorObject['colorSpace'];
+  let values: string | string[] | ColorObject["values"] = color.substring(
+    marker + 1,
+    color.length - 1
+  );
+  let colorSpace: ColorObject["colorSpace"];
 
   if (type === "color") {
     values = values.split(" ");
-    colorSpace = values.shift() as ColorObject['colorSpace'];
+    colorSpace = values.shift() as ColorObject["colorSpace"];
     if (values.length === 4 && values[3].charAt(0) === "/") {
       values[3] = values[3].substr(1);
     }
     if (["srgb", "display-p3", "a98-rgb", "prophoto-rgb", "rec-2020"].indexOf(colorSpace!) === -1) {
       throw new MuiError(
-        'Material-UI: unsupported `%s` color space.\n' +
-          'The following color spaces are supported: srgb, display-p3, a98-rgb, prophoto-rgb, rec-2020.',
-        colorSpace,
+        "Material-UI: unsupported `%s` color space.\n" +
+          "The following color spaces are supported: srgb, display-p3, a98-rgb, prophoto-rgb, rec-2020.",
+        colorSpace
       );
     }
   } else {
     values = values.split(",");
   }
-  values = values.map((value) => parseFloat(value)) as ColorObject['values'];
+  values = values.map((value) => parseFloat(value)) as ColorObject["values"];
 
   return { type, values, colorSpace };
 }
 
 /**
  * Converts a color object with type and values to a string.
- * @param {object} color - Decomposed color
- * @param {string} color.type - One of: 'rgb', 'rgba', 'hsl', 'hsla'
- * @param {array} color.values - [n,n,n] or [n,n,n,n]
- * @returns {string} A CSS color string
+ * @param color - Decomposed color
+ * @returns A CSS color string
  */
 export function recomposeColor(color: ColorObject): string {
   const { type, colorSpace } = color;
@@ -178,9 +187,9 @@ export function recomposeColor(color: ColorObject): string {
  * Calculates the contrast ratio between two colors.
  *
  * Formula: https://www.w3.org/TR/WCAG20-TECHS/G17.html#G17-tests
- * @param {string} foreground - CSS color, i.e. one of: #nnn, #nnnnnn, rgb(), rgba(), hsl(), hsla()
- * @param {string} background - CSS color, i.e. one of: #nnn, #nnnnnn, rgb(), rgba(), hsl(), hsla()
- * @returns {number} A contrast ratio value in the range 0 - 21.
+ * @param foreground - CSS color, i.e. one of: #nnn, #nnnnnn, rgb(), rgba(), hsl(), hsla()
+ * @param background - CSS color, i.e. one of: #nnn, #nnnnnn, rgb(), rgba(), hsl(), hsla()
+ * @returns A contrast ratio value in the range 0 - 21.
  */
 export function getContrastRatio(foreground: string, background: string): number {
   const lumA = getLuminance(foreground);
@@ -193,8 +202,8 @@ export function getContrastRatio(foreground: string, background: string): number
  * normalized to 0 for darkest black and 1 for lightest white.
  *
  * Formula: https://www.w3.org/TR/WCAG20-TECHS/G17.html#G17-tests
- * @param {string} color - CSS color, i.e. one of: #nnn, #nnnnnn, rgb(), rgba(), hsl(), hsla(), color()
- * @returns {number} The relative brightness of the color in the range 0 - 1
+ * @param color - CSS color, i.e. one of: #nnn, #nnnnnn, rgb(), rgba(), hsl(), hsla(), color()
+ * @returns The relative brightness of the color in the range 0 - 1
  */
 export function getLuminance(color: string): number {
   color = decomposeColor(color);
@@ -214,9 +223,9 @@ export function getLuminance(color: string): number {
 /**
  * Darken or lighten a color, depending on its luminance.
  * Light colors are darkened, dark colors are lightened.
- * @param {string} color - CSS color, i.e. one of: #nnn, #nnnnnn, rgb(), rgba(), hsl(), hsla(), color()
- * @param {number} coefficient=0.15 - multiplier in the range 0 - 1
- * @returns {string} A CSS color string. Hex input values are returned as rgb
+ * @param color - CSS color, i.e. one of: #nnn, #nnnnnn, rgb(), rgba(), hsl(), hsla(), color()
+ * @param coefficient - (=0.15) multiplier in the range 0 - 1
+ * @returns A CSS color string. Hex input values are returned as rgb
  */
 export function emphasize(color: string, coefficient: number = 0.15): string {
   return getLuminance(color) > 0.5 ? darken(color, coefficient) : lighten(color, coefficient);
@@ -225,9 +234,9 @@ export function emphasize(color: string, coefficient: number = 0.15): string {
 /**
  * Sets the absolute transparency of a color.
  * Any existing alpha values are overwritten.
- * @param {string} color - CSS color, i.e. one of: #nnn, #nnnnnn, rgb(), rgba(), hsl(), hsla(), color()
- * @param {number} value - value to set the alpha channel to in the range 0 - 1
- * @returns {string} A CSS color string. Hex input values are returned as rgb
+ * @param color - CSS color, i.e. one of: #nnn, #nnnnnn, rgb(), rgba(), hsl(), hsla(), color()
+ * @param value - value to set the alpha channel to in the range 0 - 1
+ * @returns A CSS color string. Hex input values are returned as rgb
  */
 export function alpha(color: string, value: number): string {
   color = decomposeColor(color);
@@ -247,9 +256,9 @@ export function alpha(color: string, value: number): string {
 
 /**
  * Darkens a color.
- * @param {string} color - CSS color, i.e. one of: #nnn, #nnnnnn, rgb(), rgba(), hsl(), hsla(), color()
- * @param {number} coefficient - multiplier in the range 0 - 1
- * @returns {string} A CSS color string. Hex input values are returned as rgb
+ * @param color - CSS color, i.e. one of: #nnn, #nnnnnn, rgb(), rgba(), hsl(), hsla(), color()
+ * @param coefficient - multiplier in the range 0 - 1
+ * @returns A CSS color string. Hex input values are returned as rgb
  */
 export function darken(color: string, coefficient: number): string {
   color = decomposeColor(color);
@@ -267,9 +276,9 @@ export function darken(color: string, coefficient: number): string {
 
 /**
  * Lightens a color.
- * @param {string} color - CSS color, i.e. one of: #nnn, #nnnnnn, rgb(), rgba(), hsl(), hsla(), color()
- * @param {number} coefficient - multiplier in the range 0 - 1
- * @returns {string} A CSS color string. Hex input values are returned as rgb
+ * @param color - CSS color, i.e. one of: #nnn, #nnnnnn, rgb(), rgba(), hsl(), hsla(), color()
+ * @param coefficient - multiplier in the range 0 - 1
+ * @returns A CSS color string. Hex input values are returned as rgb
  */
 export function lighten(color: string, coefficient: number): string {
   color = decomposeColor(color);

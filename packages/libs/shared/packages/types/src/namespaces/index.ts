@@ -1,5 +1,6 @@
-import * as Types from "./namespaces";
+import type * as Types from "./namespaces";
 
-export { isEsModuleWithDefaultExport, isEsModule } from "./module";
 export { hasOwnKey } from "./object";
-export { Types };
+export * from "./shared";
+
+export type { Types };

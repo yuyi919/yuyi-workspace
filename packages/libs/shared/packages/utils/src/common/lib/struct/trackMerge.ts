@@ -1,6 +1,6 @@
 /* eslint-disable */
 import { Types, IKeyValueMap, TKey } from "@yuyi919/shared-types";
-import { Constant$ } from "@yuyi919/shared-constant";
+import { EMPTY_OBJECT, IS_ARR } from "@yuyi919/shared-constant";
 import {
   isArray,
   isNull,
@@ -10,7 +10,7 @@ import {
   MergeWithCustomizer,
   List
 } from "lodash";
-import { isFunction } from "../atomic";
+import { APPLY, ARR_CONCAT, isFunction } from "../atomic";
 import { convertArr2Map } from "./convertArr2Map";
 import { pipe } from "./pipe";
 // import 'typescript-transform-macros'
@@ -38,10 +38,10 @@ const enum CustomizerAdapterType {
   ObjWithObj = Type.OBJECT * 10 + Type.OBJECT
 }
 
-const IGRONE = Constant$.EMPTY_OBJECT;
+const IGRONE = EMPTY_OBJECT;
 const ReturnIgrone = stubObjectStatic;
 const match: [any, any, boolean?][] = [
-  [Constant$.IS_ARR, Type.ARRAY],
+  [IS_ARR, Type.ARRAY],
   [isFunction, Type.FUNCTION],
   [isPlainObject, Type.OBJECT],
   // [expect$.isNil.not, Type.NOTNIL],
@@ -83,7 +83,7 @@ export function mergeFuncPipe(funcA: any, funcB: any) {
     res = Object.assign(funcA, merged, { __track });
   } else {
     const trackFunction: any = function (arg: any) {
-      return Constant$.APPLY(pipe, [arg].concat(trackFunction.__track));
+      return APPLY(pipe, [arg].concat(trackFunction.__track) as [any, ...any[]]);
     };
     trackFunction.__track = current.concat(trackB);
     res = Object.assign(trackFunction, merged);
@@ -176,9 +176,9 @@ export const trackMergeTo: MergeWithCustomizer = (value, srcValue, key?, object?
 };
 
 const TrackAdapter: { [key: string]: MergeWithCustomizer } = {
-  [CustomizerAdapterType.BaseWithArr]: Constant$.ARR_CONCAT,
-  [CustomizerAdapterType.ArrWithBase]: Constant$.ARR_CONCAT,
-  [CustomizerAdapterType.ArrWithArr]: Constant$.ARR_CONCAT,
+  [CustomizerAdapterType.BaseWithArr]: ARR_CONCAT,
+  [CustomizerAdapterType.ArrWithBase]: ARR_CONCAT,
+  [CustomizerAdapterType.ArrWithArr]: ARR_CONCAT,
   [CustomizerAdapterType.FuncWithObj]: mergeFuncPipe,
   [CustomizerAdapterType.FuncWithFunc]: mergeFuncPipe,
   [CustomizerAdapterType.ObjWithFunc]: (obj, func) => mergeFuncPipe(func, obj)

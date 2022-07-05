@@ -30,7 +30,7 @@ export const easing: Easing = {
   // Objects leave the screen at full velocity. They do not decelerate when off-screen.
   easeIn: "cubic-bezier(0.4, 0, 1, 1)",
   // The sharp curve is used by objects that may return to the screen at any time.
-  sharp: "cubic-bezier(0.4, 0, 0.6, 1)",
+  sharp: "cubic-bezier(0.4, 0, 0.6, 1)"
 };
 
 // Follow https://material.io/guidelines/motion/duration-easing.html#duration-easing-common-durations
@@ -46,7 +46,7 @@ export const duration: Duration = {
   // recommended when something is entering screen
   enteringScreen: 225,
   // recommended when something is leaving screen
-  leavingScreen: 195,
+  leavingScreen: 195
 };
 
 export interface TransitionsOptions {
@@ -68,7 +68,7 @@ function formatMs(milliseconds: number) {
 
 /**
  * @internal
- * @param height
+ * @param height -
  */
 function getAutoHeightDuration(height?: number): number {
   if (!height) {
@@ -83,8 +83,8 @@ function getAutoHeightDuration(height?: number): number {
 
 /**
  * @internal
- * @param props
- * @param options
+ * @param props -
+ * @param options -
  */
 export declare function create(
   props: string | string[],
@@ -92,8 +92,8 @@ export declare function create(
 ): string;
 /**
  * @internal
- * @param props
- * @param options
+ * @param props -
+ * @param options -
  */
 export declare function createJs(
   props: string | string[],
@@ -116,19 +116,19 @@ export interface TransitionsOptions {
     options?: Partial<{ duration: number | string; easing: string; delay: number | string }>
   ) => string;
   getAutoHeightDuration?: (height: number) => number;
-  [key: string]: any
+  [key: string]: any;
 }
 export function createTransitions<O extends Types.Recordable>(
   inputTransitions: O & TransitionsOptions
 ): O & Transitions {
   const mergedEasing = {
     ...easing,
-    ...inputTransitions.easing,
+    ...inputTransitions.easing
   };
 
   const mergedDuration = {
     ...duration,
-    ...inputTransitions.duration,
+    ...inputTransitions.duration
   };
 
   const createJs = (
@@ -236,6 +236,6 @@ export function createTransitions<O extends Types.Recordable>(
     createJs,
     ...inputTransitions,
     easing: mergedEasing,
-    duration: mergedDuration,
+    duration: mergedDuration
   };
 }

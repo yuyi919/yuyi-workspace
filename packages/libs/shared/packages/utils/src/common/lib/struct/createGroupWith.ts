@@ -1,10 +1,7 @@
-/**
- * @module LodashExtraUtils
- */
-import { Constant$ } from "@yuyi919/shared-constant";
+import { ARRAY, IS_ARR } from "@yuyi919/shared-constant";
 import { IKeyValueMap } from "@yuyi919/shared-types";
 import { isString } from "lodash";
-import { isFunction } from "../atomic";
+import { ARR_PUSH, isFunction, REDUCE } from "../atomic";
 
 /**
  * 根据条件将一个数组拆分为多个数组
@@ -21,8 +18,8 @@ export function createGroupWith<T extends object = any>(
   list: T[],
   keyOrWith: string | ((item: T) => string)
 ): IKeyValueMap<T[]> {
-  if (list instanceof Constant$.ARRAY && list.length > 0) {
-    return Constant$.REDUCE(
+  if (list instanceof ARRAY && list.length > 0) {
+    return REDUCE(
       list,
       function (map, item) {
         const mapKey = isString(keyOrWith)
@@ -30,8 +27,8 @@ export function createGroupWith<T extends object = any>(
           : isFunction(keyOrWith)
           ? keyOrWith(item)
           : "default";
-        Constant$.IS_ARR(map[mapKey])
-          ? Constant$.ARR_PUSH(map[mapKey], item)
+        IS_ARR(map[mapKey])
+          ? ARR_PUSH(map[mapKey], item)
           : (map[mapKey] = [item]);
         return map;
       },

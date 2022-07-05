@@ -1,0 +1,5 @@
+loglevel: debug
+bot:
+  config: ./config/el
+  master: asa
+  account: as

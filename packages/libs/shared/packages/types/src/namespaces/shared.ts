@@ -3,19 +3,15 @@ import type { Properties as CSSProperties } from "csstype";
 import { OrAsync } from "./orType";
 
 /**
- * @beta
- */
-export type Key = string | number;
-/**
  * 取得对象的所有值类型，相对于Keyof
  */
 /**
- * @beta
+ * @public
  */
 export type ValueOf<T> = T[keyof T];
 
 /**
- * @beta
+ * @public
  */
 export type Type<T> = {
   [K in keyof T]: T[K];
@@ -24,42 +20,39 @@ export type Type<T> = {
  * 参照关键字keyof，可以排除指定类型，默认排除number和symbol
  */
 /**
- * @beta
+ * @public
  */
 export type KeyOf<T, ExcludeType = symbol | number> = Exclude<keyof T, ExcludeType>;
 
 /**
- * @beta
+ * @public
  */
 export type DynamicString = string & {};
+
 /**
- * @beta
+ * @public
  */
 export type DynamicNumber = number & {};
+
+/**
+ * @public
+ */
+export type Primitive = NotNilPrimitive | null | undefined;
+
+/**
+ * @public
+ */
+export type NotNilPrimitive = string | number | boolean | symbol;
+
 /**
  * @beta
  */
-export type Awesome =
-  | string
-  | Record<TKey, any>
-  | number
-  | boolean
-  | Types.Function.Base
-  | any[]
-  | symbol;
+export type Awesome = Record<TKey, any> | Types.Function.Base | any[] | NotNilPrimitive;
+
 /**
  * @beta
  */
-export type FullTypes =
-  | string
-  | Record<TKey, any>
-  | number
-  | boolean
-  | Types.Function.Base
-  | any[]
-  | symbol
-  | null
-  | undefined;
+export type FullTypes = Record<TKey, any> | Types.Function.Base | any[] | Primitive;
 
 /**
  * @beta
@@ -83,7 +76,7 @@ export type AnyConstructorType<A = IKeyValueMap> = new (...input: any[]) => A;
 
 /**
  * 类型化构造函数
- * @beta
+ * @public
  */
 export type ConstructorType<T, Args extends any[] = [any?, any?, ...any[]]> = new (
   ...args: Args
@@ -91,7 +84,13 @@ export type ConstructorType<T, Args extends any[] = [any?, any?, ...any[]]> = ne
 
 /**
  * 类型化构造函数
- * @beta
+ * @public
+ */
+export type InstanceKey<T extends ConstructorType<any>> = keyof InstanceType<T>;
+
+/**
+ * 带构造函数的对象
+ * @public
  */
 export type Consturctor<T, Args extends any[] = []> = {
   new (...args: Args): T;
@@ -101,12 +100,12 @@ export type Consturctor<T, Args extends any[] = []> = {
 
 /**
  * 取得构造函数的参数
- * @beta
+ * @public
  */
 export type ConstructorArgs<T> = T extends ConstructorType<any, infer Args> ? Args : [];
 
 /**
- * @beta
+ * @public
  */
 export type TKey = string | number | symbol;
 
@@ -114,6 +113,7 @@ export type TKey = string | number | symbol;
  * @beta
  */
 export type Getter<T, Args extends [any?, any?, any?, any?] = []> = Types.Function.Base<Args, T>;
+
 /**
  * @beta
  */
@@ -127,7 +127,7 @@ export type ToGetter<
 /**
  * @beta
  */
-export type Setter<V, OtherArgs extends [any?, any?, any?, any?] = []> = Types.Function.Base<
+export type TSetter<V, OtherArgs extends [any?, any?, any?, any?] = []> = Types.Function.Base<
   [arg: V, ...others: OtherArgs]
 >;
 
@@ -138,7 +138,7 @@ export type ToSetter<
   Target extends Record<string, any>,
   OtherArgs extends [any?, any?, any?, any?] = []
 > = {
-  [K in keyof Target]: Setter<Target[K], OtherArgs>;
+  [K in keyof Target]: TSetter<Target[K], OtherArgs>;
 };
 
 /**
@@ -343,12 +343,22 @@ export type ElRef<T extends HTMLElement = HTMLDivElement> = Nullable<T>;
 export type IsSame<A, B, True = true, False = false> = A | B extends A & B ? True : False;
 
 /**
- * @beta
+ * 排除never类型
+ * @typeParam T - 目标类型
+ * @typeParam Then - 不为never时返回的类型
+ * @typeParam Catch - 为never时返回的类型
+ * @public
  */
-export type ExcludeNever<D, Then, With = never> = [D] extends [never] ? With : Then;
+export type ExcludeNever<T, Then, Catch = never> = [T] extends [never] ? Catch : Then;
 
 export * from "./typecheck";
 export * from "./loop";
 export * from "./orType";
 
 export type { CSSProperties };
+
+/**
+ * 参照Array.prototype.sort的入参
+ * @public
+ */
+export type CompareFn<T = any, T2 = T> = (a: T, b: T2) => number;

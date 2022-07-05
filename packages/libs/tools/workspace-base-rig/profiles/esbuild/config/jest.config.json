@@ -1,0 +1,21 @@
+{
+  "extends": "@rushstack/heft-jest-plugin/includes/jest-shared.config.json",
+  "testMatch": ["<rootDir>/src/**/*.{test,spec}.{ts,tsx}"],
+  "testPathIgnorePatterns": ["/node_modules/"],
+  // Code coverage tracking is disabled by default; set this to true to enable it
+  "collectCoverage": false,
+
+  "coverageDirectory": "<rootDir>/temp/coverage",
+
+  "collectCoverageFrom": [
+    "src/**/*.{ts,tsx}",
+    "!src/index.ts",
+    "!src/**/*.d.ts",
+    "!src/**/*.test.{ts,tsx}",
+    "!src/**/test/**",
+    "!src/**/__tests__/**",
+    "!src/**/__fixtures__/**",
+    "!src/**/__mocks__/**"
+  ],
+  "setupFilesAfterEnv": ["../jest-global-setup.js"]
+}

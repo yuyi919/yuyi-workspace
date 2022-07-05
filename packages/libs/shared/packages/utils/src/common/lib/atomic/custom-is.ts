@@ -1,5 +1,5 @@
-import { Constant$ } from "@yuyi919/shared-constant";
 import { isEmpty } from "@yuyi919/shared-types";
+import { FILTER } from "./helper";
 import { isNotEmptyValue } from "./isNil";
 import { checkNumber } from "./isNumber";
 import { isPureObj } from "./isObject";
@@ -39,7 +39,7 @@ export function isNotEmptyArray<T>(value: any): value is T[] {
  * @public
  */
 export function isNotEmptyArrayStrict<T>(value: any): value is T[] {
-  return isArray(value) && Constant$.FILTER(value, (i) => isNotEmptyValue(i)).length > 0;
+  return isArray(value) && FILTER(value, (i) => isNotEmptyValue(i)).length > 0;
 }
 /**
  * 严格判断是否是空数组
@@ -49,7 +49,7 @@ export function isNotEmptyArrayStrict<T>(value: any): value is T[] {
  * @public
  */
 export function isEmptyArrayStrict(value: any): value is any[] {
-  return isArray(value) && Constant$.FILTER(value, (i) => isNotEmptyValue(i)).length === 0;
+  return isArray(value) && FILTER(value, (i) => isNotEmptyValue(i)).length === 0;
 }
 
 /**
@@ -84,7 +84,7 @@ export function isNotEmptyData(value: any): boolean {
 export function isEmptyObject(value: any, checkValue: boolean = false): value is {} {
   return (
     isPureObj(value) &&
-    (checkValue ? Constant$.FILTER(values(value), isNotEmptyData).length === 0 : isEmpty(value))
+    (checkValue ? FILTER(values(value), isNotEmptyData).length === 0 : isEmpty(value))
   );
 }
 /**

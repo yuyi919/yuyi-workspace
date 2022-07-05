@@ -35,7 +35,7 @@ PropTypes.extend([
   {
     name: "VNodeChild",
     getter: true,
-    type: null
+    type: void 0
   }
 ]);
 

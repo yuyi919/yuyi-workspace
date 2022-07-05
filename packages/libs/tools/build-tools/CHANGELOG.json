@@ -2,6 +2,52 @@
   "name": "@yuyi919/build-tools",
   "entries": [
     {
+      "version": "0.1.16",
+      "tag": "@yuyi919/build-tools_v0.1.16",
+      "date": "Wed, 29 Jun 2022 08:58:23 GMT",
+      "comments": {
+        "patch": [
+          {
+            "comment": "auto-bump"
+          }
+        ],
+        "dependency": [
+          {
+            "comment": "Updating dependency \"@yuyi919/workspace-base-rig\" from `1.2.10` to `1.2.11`"
+          }
+        ]
+      }
+    },
+    {
+      "version": "0.1.15",
+      "tag": "@yuyi919/build-tools_v0.1.15",
+      "date": "Wed, 29 Jun 2022 08:37:47 GMT",
+      "comments": {
+        "dependency": [
+          {
+            "comment": "Updating dependency \"@yuyi919/workspace-base-rig\" from `1.2.9` to `1.2.10`"
+          }
+        ]
+      }
+    },
+    {
+      "version": "0.1.14",
+      "tag": "@yuyi919/build-tools_v0.1.14",
+      "date": "Thu, 16 Jun 2022 08:39:00 GMT",
+      "comments": {
+        "patch": [
+          {
+            "comment": "auto-bump"
+          }
+        ],
+        "dependency": [
+          {
+            "comment": "Updating dependency \"@yuyi919/workspace-base-rig\" from `1.2.8` to `1.2.9`"
+          }
+        ]
+      }
+    },
+    {
       "version": "0.1.13",
       "tag": "@yuyi919/build-tools_v0.1.13",
       "date": "Thu, 17 Feb 2022 11:11:32 GMT",

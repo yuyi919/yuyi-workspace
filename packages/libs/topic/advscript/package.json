@@ -1,6 +1,6 @@
 {
   "name": "@yuyi919/topic-advscript",
-  "version": "0.0.2",
+  "version": "0.0.6",
   "description": "",
   "author": "",
   "main": "dist/index.js",
@@ -12,19 +12,30 @@
     "README.md"
   ],
   "scripts": {
-    "build": "tsc --build --force",
-    "build:dev": "tsc --build",
-    "build:watch": "tsc --build --watch",
-    "dev": "tsc --build --watch",
+    "build": "vite build",
+    "build:dev": "vite build",
+    "build:watch": "vite build --watch",
+    "dev": "vite",
     "prepare": "yarn link \"langium-workspaces\""
   },
   "devDependencies": {
     "@types/jest": "~27.0.1",
+    "@types/jquery": "^3.5.6",
     "@types/node": "~16.7.2",
-    "@yuyi919/workspace-base-rig": "workspace:1.2.8",
+    "@yuyi919/advscript-language-services": "workspace:0.0.6",
+    "@yuyi919/psdtool-renderer": "workspace:*",
+    "@yuyi919/shared-types": "workspace:0.0.11",
+    "@yuyi919/shared-utils": "workspace:0.0.43",
+    "@yuyi919/workspace-base-rig": "workspace:1.2.11",
     "jest": "~27.1.0",
+    "rollup-plugin-minify-html-literals": "^1.2.6",
+    "rollup-plugin-node-builtins": "~2.1.2",
     "tslib": "~2.3.1",
-    "typescript": "~4.6.2"
+    "typescript": "~4.6.2",
+    "vite": "2.9.5",
+    "vite-plugin-macro": "~0.2.0",
+    "vite-tsconfig-paths": "^3.4.1",
+    "vitest": "~0.9.3"
   },
   "publishConfig": {
     "access": "public"

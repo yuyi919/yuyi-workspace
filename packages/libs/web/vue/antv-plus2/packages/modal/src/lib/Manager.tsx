@@ -1,6 +1,7 @@
 /* eslint-disable no-empty */
 /* eslint-disable no-async-promise-executor */
 import Types from "@yuyi919/shared-types";
+import { isEsModuleWithDefaultExport } from "@yuyi919/shared-types";
 import { castComputed, castObject, expect$ } from "@yuyi919/shared-utils";
 import { cloneDeep, defaults, defaultsDeep, merge } from "lodash";
 import Vue, { VNode, VNodeChildren, VueConstructor } from "vue";
@@ -23,7 +24,7 @@ async function loadComponent<T extends VueConstructor>(target?: RendererOrCallba
   if (typeof target === "function") {
     const loadResult = await target();
     return loadComponent(
-      Types.Module.isEsModuleWithDefaultExport<T>(loadResult) ? loadResult.default : loadResult
+      isEsModuleWithDefaultExport<T>(loadResult) ? loadResult.default : loadResult
     );
   }
   // 如果不为Function

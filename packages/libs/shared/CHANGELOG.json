@@ -2,6 +2,94 @@
   "name": "@yuyi919/shared",
   "entries": [
     {
+      "version": "0.0.45",
+      "tag": "@yuyi919/shared_v0.0.45",
+      "date": "Wed, 29 Jun 2022 08:58:23 GMT",
+      "comments": {
+        "patch": [
+          {
+            "comment": "auto-bump"
+          }
+        ],
+        "dependency": [
+          {
+            "comment": "Updating dependency \"@yuyi919/shared-constant\" from `0.0.8` to `0.0.9`"
+          },
+          {
+            "comment": "Updating dependency \"@yuyi919/shared-decorator\" from `0.0.7` to `0.0.8`"
+          },
+          {
+            "comment": "Updating dependency \"@yuyi919/shared-logger\" from `0.0.19` to `0.0.20`"
+          },
+          {
+            "comment": "Updating dependency \"@yuyi919/shared-types\" from `0.0.10` to `0.0.11`"
+          },
+          {
+            "comment": "Updating dependency \"@yuyi919/shared-utils\" from `0.0.42` to `0.0.43`"
+          },
+          {
+            "comment": "Updating dependency \"@yuyi919/workspace-base-rig\" from `1.2.10` to `1.2.11`"
+          }
+        ]
+      }
+    },
+    {
+      "version": "0.0.44",
+      "tag": "@yuyi919/shared_v0.0.44",
+      "date": "Wed, 29 Jun 2022 08:37:47 GMT",
+      "comments": {
+        "dependency": [
+          {
+            "comment": "Updating dependency \"@yuyi919/shared-constant\" from `0.0.7` to `0.0.8`"
+          },
+          {
+            "comment": "Updating dependency \"@yuyi919/shared-decorator\" from `0.0.6` to `0.0.7`"
+          },
+          {
+            "comment": "Updating dependency \"@yuyi919/shared-logger\" from `0.0.18` to `0.0.19`"
+          },
+          {
+            "comment": "Updating dependency \"@yuyi919/shared-types\" from `0.0.9` to `0.0.10`"
+          },
+          {
+            "comment": "Updating dependency \"@yuyi919/shared-utils\" from `0.0.41` to `0.0.42`"
+          },
+          {
+            "comment": "Updating dependency \"@yuyi919/workspace-base-rig\" from `1.2.9` to `1.2.10`"
+          }
+        ]
+      }
+    },
+    {
+      "version": "0.0.43",
+      "tag": "@yuyi919/shared_v0.0.43",
+      "date": "Thu, 16 Jun 2022 08:39:00 GMT",
+      "comments": {
+        "patch": [
+          {
+            "comment": "auto-bump"
+          }
+        ],
+        "dependency": [
+          {
+            "comment": "Updating dependency \"@yuyi919/shared-constant\" from `0.0.6` to `0.0.7`"
+          },
+          {
+            "comment": "Updating dependency \"@yuyi919/shared-decorator\" from `0.0.5` to `0.0.6`"
+          },
+          {
+            "comment": "Updating dependency \"@yuyi919/shared-types\" from `0.0.8` to `0.0.9`"
+          },
+          {
+            "comment": "Updating dependency \"@yuyi919/shared-utils\" from `0.0.40` to `0.0.41`"
+          },
+          {
+            "comment": "Updating dependency \"@yuyi919/workspace-base-rig\" from `1.2.8` to `1.2.9`"
+          }
+        ]
+      }
+    },
+    {
       "version": "0.0.42",
       "tag": "@yuyi919/shared_v0.0.42",
       "date": "Thu, 17 Feb 2022 11:11:32 GMT",
