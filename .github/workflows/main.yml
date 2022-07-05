@@ -19,7 +19,7 @@ jobs:
       - name: Subtree deploy
         uses: nxtlvlsoftware/git-subtree-action@1.1
         with:
-          repo: "yuyi919/shared"
+          repo: "yuyi919/shared-packages"
           path: "packages/libs/shared"
           deploy_key: ${{ secrets.DEVELOP_SHARED }}
           force: true # will force push to the downstream repository
