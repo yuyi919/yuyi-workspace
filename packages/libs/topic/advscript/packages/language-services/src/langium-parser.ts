@@ -1,11 +1,20 @@
+/* eslint-disable @typescript-eslint/member-ordering */
+/* eslint-disable @typescript-eslint/consistent-type-definitions */
+/* eslint-disable @typescript-eslint/naming-convention */
 import {
+  defaultParserErrorProvider,
+  DSLMethodOpts,
   EmbeddedActionsParser,
   ILexingError,
+  IMultiModeLexerDefinition,
   IOrAlt,
+  IParserErrorMessageProvider,
   IRecognitionException,
   IToken,
   Lexer,
   TokenType,
+  TokenTypeDictionary,
+  TokenVocabulary
 } from "chevrotain";
 import {
   AbstractElement,
@@ -14,24 +23,25 @@ import {
   AstNode,
   CompositeCstNode,
   CstNode,
+  DatatypeSymbol,
   getContainerOfType,
   IParserConfig,
   isAssignment,
   isCrossReference,
-  LangiumDocument,
+  isKeyword,
+  LangiumServices,
   LeafCstNode,
-  tokenToRange,
-  DatatypeSymbol,
+  linkContentToContainer,
+  tokenToRange
 } from "langium";
 import {
   CompositeCstNodeImpl,
   CstNodeBuilder,
   LeafCstNodeImpl,
-  RootCstNodeImpl,
+  RootCstNodeImpl
 } from "langium/lib/parser/cst-node-builder";
 import { ValueConverter } from "langium/lib/parser/value-converter";
 import { Linker } from "langium/lib/references/linker";
-import { AdvScriptServices } from "./advscript-module";
 
 export type ParseResult<T = AstNode> = {
   value: T;
@@ -39,7 +49,25 @@ export type ParseResult<T = AstNode> = {
   lexerErrors: ILexingError[];
 };
 
+interface DataTypeNode {
+  $cstNode: CompositeCstNode;
+  /** Instead of a string, this node is uniquely identified by the `Datatype` symbol */
+  $type: symbol;
+  /** Used as a storage for all parsed terminals, keywords and sub-datatype rules */
+  value: string;
+}
+
+function isDataTypeNode(node: { $type: string | symbol | undefined }): node is DataTypeNode {
+  return node.$type === DatatypeSymbol;
+}
+
 type RuleResult = () => any;
+
+type Args = Record<string, boolean>;
+
+type RuleImpl = (args: Args) => any;
+
+type Alternatives = Array<IOrAlt<any>>;
 
 interface AssignmentElement {
   assignment?: Assignment;
@@ -59,64 +87,67 @@ export class LangiumParser {
   private get current(): any {
     return this.stack[this.stack.length - 1];
   }
+  readonly _wrapper: ChevrotainWrapper;
+  readonly _lexer: Lexer;
 
-  constructor(services: AdvScriptServices, tokens: TokenType[], public _lexer: Lexer) {
-    this.wrapper = new ChevrotainWrapper(tokens, services.parser.ParserConfig);
+  constructor(
+    services: LangiumServices,
+    tokens: TokenVocabulary,
+    tokenMap?: Record<string, TokenType>
+  ) {
+    // eslint-disable-next-line @typescript-eslint/no-use-before-define
     this.linker = services.references.Linker;
     this.converter = services.parser.ValueConverter;
-    this.lexer = _lexer;
+    this.lexer = new Lexer(isTokenTypeDictionary(tokens) ? Object.values(tokens) : tokens, {
+      skipValidations: true
+    });
+    this.wrapper = new ChevrotainWrapper(tokenMap, services.parser.ParserConfig);
+    // console.log(this.wrapper, services.parser.ParserConfig)
     this._wrapper = this.wrapper;
+    this._lexer = this.lexer;
   }
-  readonly _wrapper: ChevrotainWrapper;
 
-  MAIN_RULE(
-    name: string,
-    type: string | symbol | undefined,
-    implementation: () => unknown
-  ): () => unknown {
+  MAIN_RULE(name: string, type: string | symbol | undefined, implementation: RuleImpl): RuleResult {
     return (this.mainRule = this.DEFINE_RULE(name, type, implementation));
   }
 
   DEFINE_RULE(
     name: string,
     type: string | symbol | undefined,
-    implementation: () => unknown
-  ): () => unknown {
+    implementation: RuleImpl
+  ): RuleResult {
     return this.wrapper.DEFINE_RULE(
       name,
       this.startImplementation(type, implementation).bind(this)
     );
   }
 
-  parse<T extends AstNode = AstNode>(input: string | LangiumDocument<T>): ParseResult<T> {
-    const text = typeof input === "string" ? input : input.textDocument.getText();
-    this.nodeBuilder.buildRootNode(text);
-    const lexerResult = this.lexer.tokenize(text);
+  parse<T extends AstNode = AstNode>(input: string): ParseResult<T> {
+    this.nodeBuilder.buildRootNode(input);
+    const lexerResult = this.lexer.tokenize(input);
     this.wrapper.input = lexerResult.tokens;
     const result = this.mainRule.call(this.wrapper);
     this.addHiddenTokens(result.$cstNode, lexerResult.groups.hidden);
-    if (typeof input !== "string") {
-      result.$document = input;
-    }
     return {
       value: result,
       lexerErrors: lexerResult.errors,
-      parserErrors: this.wrapper.errors,
+      parserErrors: this.wrapper.errors
     };
   }
 
-  private addHiddenTokens(node: RootCstNodeImpl, tokens: IToken[]): void {
-    for (const token of tokens) {
-      const hiddenNode = new LeafCstNodeImpl(
-        token.startOffset,
-        token.image.length,
-        tokenToRange(token),
-        token.tokenType,
-        true
-      );
-      hiddenNode.payload = token.payload;
-      hiddenNode.root = node;
-      this.addHiddenToken(node, hiddenNode);
+  private addHiddenTokens(node: RootCstNodeImpl, tokens?: IToken[]): void {
+    if (tokens) {
+      for (const token of tokens) {
+        const hiddenNode = new LeafCstNodeImpl(
+          token.startOffset,
+          token.image.length,
+          tokenToRange(token),
+          token.tokenType,
+          true
+        );
+        hiddenNode.root = node;
+        this.addHiddenToken(node, hiddenNode);
+      }
     }
   }
 
@@ -144,17 +175,20 @@ export class LangiumParser {
 
   private startImplementation(
     $type: string | symbol | undefined,
-    implementation: () => unknown
-  ): () => unknown {
-    return () => {
+    implementation: RuleImpl
+  ): RuleImpl {
+    return (args) => {
       if (!this.wrapper.IS_RECORDING) {
-        this.stack.push({ $type });
+        const node: any = { $type };
+        this.stack.push(node);
+        if ($type === DatatypeSymbol) {
+          node.value = "";
+        }
       }
       let result: unknown;
       try {
-        result = implementation();
+        result = implementation(args);
       } catch (err) {
-        console.log("Parser exception thrown!", err);
         result = undefined;
       }
       if (!this.wrapper.IS_RECORDING && result === undefined) {
@@ -164,19 +198,19 @@ export class LangiumParser {
     };
   }
 
-  alternatives(idx: number, choices: Array<() => void>): void {
+  alternatives(idx: number, choices: Alternatives): void {
     this.wrapper.wrapOr(idx, choices);
   }
 
-  optional(idx: number, callback: () => void): void {
+  optional(idx: number, callback: DSLMethodOpts<unknown>): void {
     this.wrapper.wrapOption(idx, callback);
   }
 
-  many(idx: number, callback: () => void): void {
+  many(idx: number, callback: DSLMethodOpts<unknown>): void {
     this.wrapper.wrapMany(idx, callback);
   }
 
-  atLeastOne(idx: number, callback: () => void): void {
+  atLeastOne(idx: number, callback: DSLMethodOpts<unknown>): void {
     this.wrapper.wrapAtLeastOne(idx, callback);
   }
 
@@ -185,36 +219,51 @@ export class LangiumParser {
     if (!this.wrapper.IS_RECORDING) {
       const leafNode = this.nodeBuilder.buildLeafNode(token, feature);
       const { assignment, crossRef } = this.getAssignment(feature);
+      const current = this.current;
       if (assignment) {
         let crossRefId: string | undefined;
         if (crossRef) {
-          crossRefId = `${this.current.$type}:${assignment.feature}`;
+          crossRefId = `${current.$type}:${assignment.feature}`;
         }
-        this.assign(assignment, token.image, leafNode, crossRefId);
+        const convertedValue = isKeyword(feature)
+          ? token.image
+          : this.converter.convert(token.image, leafNode);
+        this.assign(assignment.operator, assignment.feature, convertedValue, leafNode, crossRefId);
+      } else if (isDataTypeNode(current)) {
+        let text = token.image;
+        if (!isKeyword(feature)) {
+          text = this.converter.convert(text, leafNode).toString();
+        }
+        current.value += text;
       }
     }
   }
 
-  unassignedSubrule(idx: number, rule: RuleResult, feature: AbstractElement): void {
-    const result = this.subrule(idx, rule, feature);
+  unassignedSubrule(idx: number, rule: RuleResult, feature: AbstractElement, args: Args): void {
+    const result = this.subrule(idx, rule, feature, args);
     if (!this.wrapper.IS_RECORDING) {
-      const resultKind = result.$type;
-      const object = this.assignWithoutOverride(result, this.current);
-      if (resultKind) {
-        object.$type = resultKind;
+      const current = this.current;
+      if (isDataTypeNode(current)) {
+        current.value += result.toString();
+      } else {
+        const resultKind = result.$type;
+        const object = this.assignWithoutOverride(result, current);
+        if (resultKind) {
+          object.$type = resultKind;
+        }
+        const newItem = object;
+        this.stack.pop();
+        this.stack.push(newItem);
       }
-      const newItem = object;
-      this.stack.pop();
-      this.stack.push(newItem);
     }
   }
 
-  subrule(idx: number, rule: RuleResult, feature: AbstractElement): any {
+  subrule(idx: number, rule: RuleResult, feature: AbstractElement, args: Args): any {
     let cstNode: CompositeCstNode | undefined;
     if (!this.wrapper.IS_RECORDING) {
       cstNode = this.nodeBuilder.buildCompositeNode(feature);
     }
-    const subruleResult = this.wrapper.wrapSubrule(idx, rule);
+    const subruleResult = this.wrapper.wrapSubrule(idx, rule, args);
     if (!this.wrapper.IS_RECORDING) {
       const { assignment, crossRef } = this.getAssignment(feature);
       if (assignment && cstNode) {
@@ -222,7 +271,7 @@ export class LangiumParser {
         if (crossRef) {
           crossRefId = `${this.current.$type}:${assignment.feature}`;
         }
-        this.assign(assignment, subruleResult, cstNode, crossRefId);
+        this.assign(assignment.operator, assignment.feature, subruleResult, cstNode, crossRefId);
       }
     }
     return subruleResult;
@@ -243,7 +292,7 @@ export class LangiumParser {
       this.stack.pop();
       this.stack.push(newItem);
       if (action.feature && action.operator) {
-        this.assign(action, last, last.$cstNode);
+        this.assign(action.operator, action.feature, last, last.$cstNode);
       }
     }
   }
@@ -267,26 +316,13 @@ export class LangiumParser {
       return undefined;
     }
     const obj = this.current;
-    for (const [name, value] of Object.entries(obj)) {
-      if (!name.startsWith("$")) {
-        if (Array.isArray(value)) {
-          for (const item of value) {
-            if (item !== null && typeof item === "object") {
-              item.$container = obj;
-            }
-          }
-        } else if (obj !== null && typeof value === "object") {
-          (<any>value).$container = obj;
-        }
-      }
-    }
+    linkContentToContainer(obj);
     this.nodeBuilder.construct(obj);
     if (pop) {
       this.stack.pop();
     }
-    if (obj.$type === DatatypeSymbol) {
-      const node = obj.$cstNode;
-      return node.text;
+    if (isDataTypeNode(obj)) {
+      return this.converter.convert(obj.value, obj.$cstNode);
     }
     return obj;
   }
@@ -296,29 +332,27 @@ export class LangiumParser {
       const assignment = getContainerOfType(feature, isAssignment);
       this.assignmentMap.set(feature, {
         assignment: assignment,
-        crossRef: assignment ? isCrossReference(assignment.terminal) : false,
+        crossRef: assignment ? isCrossReference(assignment.terminal) : false
       });
     }
     return this.assignmentMap.get(feature)!;
   }
 
   private assign(
-    assignment: { operator: string; feature: string },
+    operator: string,
+    feature: string,
     value: unknown,
     cstNode: CstNode,
     crossRefId?: string
   ): void {
     const obj = this.current;
-    const feature = assignment.feature.replace(/\^/g, "");
     let item: unknown;
     if (crossRefId && typeof value === "string") {
       item = this.linker.buildReference(obj, cstNode, crossRefId, value);
-    } else if (cstNode && typeof value === "string") {
-      item = this.converter.convert(value, cstNode);
     } else {
       item = value;
     }
-    switch (assignment.operator) {
+    switch (operator) {
       case "=": {
         obj[feature] = item;
         break;
@@ -348,24 +382,95 @@ export class LangiumParser {
   finalize(): void {
     this.wrapper.wrapSelfAnalysis();
   }
+
+  get definitionErrors(): IParserDefinitionError[] {
+    return this.wrapper.definitionErrors;
+  }
+}
+
+export interface IParserDefinitionError {
+  message: string;
+  type: number;
+  ruleName?: string;
+}
+
+export class LangiumParserErrorMessageProvider implements IParserErrorMessageProvider {
+  buildMismatchTokenMessage({
+    expected,
+    actual,
+    previous,
+    ruleName
+  }: {
+    expected: TokenType;
+    actual: IToken;
+    previous: IToken;
+    ruleName: string;
+  }): string {
+    const expectedMsg = expected.LABEL
+      ? "`" + expected.LABEL + "`"
+      : expected.name.endsWith(":KW")
+      ? `keyword '${expected.name.substring(0, expected.name.length - 3)}'`
+      : `token of type '${expected.name}'`;
+    // console.error({
+    //   expected,
+    //   actual,
+    //   previous,
+    //   ruleName
+    // });
+    return `Expecting ${expectedMsg} but found \`${actual.tokenType.name}\`.`;
+  }
+
+  buildNotAllInputParsedMessage({
+    firstRedundant
+  }: {
+    firstRedundant: IToken;
+    ruleName: string;
+  }): string {
+    return `Expecting end of file but found \`${firstRedundant.tokenType.name}\`.`;
+  }
+
+  buildNoViableAltMessage(options: {
+    expectedPathsPerAlt: TokenType[][][];
+    actual: IToken[];
+    previous: IToken;
+    customUserDescription: string;
+    ruleName: string;
+  }): string {
+    return defaultParserErrorProvider.buildNoViableAltMessage(options);
+  }
+
+  buildEarlyExitMessage(options: {
+    expectedIterationPaths: TokenType[][];
+    actual: IToken[];
+    previous: IToken;
+    customUserDescription: string;
+    ruleName: string;
+  }): string {
+    return defaultParserErrorProvider.buildEarlyExitMessage(options);
+  }
 }
 
 const defaultConfig: IParserConfig = {
   recoveryEnabled: true,
   nodeLocationTracking: "full",
   skipValidations: true,
+  maxLookahead: 5,
+  errorMessageProvider: new LangiumParserErrorMessageProvider()
 };
 
 /**
  * This class wraps the embedded actions parser of chevrotain and exposes protected methods.
  * This way, we can build the `LangiumParser` as a composition.
  */
-export class ChevrotainWrapper extends EmbeddedActionsParser {
-  constructor(tokens: TokenType[], config?: IParserConfig) {
+class ChevrotainWrapper extends EmbeddedActionsParser {
+  // This array is set in the base implementation of Chevrotain.
+  definitionErrors: IParserDefinitionError[];
+
+  constructor(tokens: TokenVocabulary, config?: IParserConfig) {
     super(tokens, {
       ...defaultConfig,
       ...config,
-      maxLookahead: 5,
+      maxLookahead: 5
     });
   }
 
@@ -373,16 +478,16 @@ export class ChevrotainWrapper extends EmbeddedActionsParser {
     return this.RECORDING_PHASE;
   }
 
-  DEFINE_RULE(name: string, impl: () => unknown): () => unknown {
-    const data = this.RULE(name, impl, {
+  DEFINE_RULE(name: string, impl: RuleImpl): RuleResult {
+    return this.RULE(name, impl, {
+      resyncEnabled: true,
       recoveryValueFunc() {
-        console.log(name, "recoveryValueFunc")
+        console.log(name, "recoveryValueFunc");
         return {
           recoveryValueFunc: name
         };
-      },
+      }
     });
-    return data
   }
 
   wrapSelfAnalysis(): void {
@@ -390,37 +495,55 @@ export class ChevrotainWrapper extends EmbeddedActionsParser {
   }
 
   wrapConsume(idx: number, tokenType: TokenType): IToken {
-    try {
-      return this.consume(idx, tokenType);
-    } catch (error) {
-      // console.error(tokenType, error);
-      if (this.canTokenTypeBeInsertedInRecovery(tokenType)) {
-        return this.getTokenToInsert(tokenType);
-      }
-      throw error;
-    }
+    return this.consume(idx, tokenType);
   }
 
-  wrapSubrule(idx: number, rule: RuleResult): unknown {
-    return this.subrule(idx, rule);
+  wrapSubrule(idx: number, rule: RuleResult, args: Args): unknown {
+    return this.subrule(idx, rule, {
+      ARGS: [args]
+    });
   }
 
-  wrapOr(idx: number, choices: Array<() => void>): void {
-    this.or(
-      idx,
-      choices.map((e) => <IOrAlt<any>>{ ALT: e })
-    );
+  wrapOr(idx: number, choices: Alternatives): void {
+    this.or(idx, choices);
   }
 
-  wrapOption(idx: number, callback: () => void): void {
+  wrapOption(idx: number, callback: DSLMethodOpts<unknown>): void {
     this.option(idx, callback);
   }
 
-  wrapMany(idx: number, callback: () => void): void {
+  wrapMany(idx: number, callback: DSLMethodOpts<unknown>): void {
     this.many(idx, callback);
   }
 
-  wrapAtLeastOne(idx: number, callback: () => void): void {
+  wrapAtLeastOne(idx: number, callback: DSLMethodOpts<unknown>): void {
     this.atLeastOne(idx, callback);
   }
+}
+
+/**
+ * Returns a check whether the given TokenVocabulary is TokenType array
+ */
+export function isTokenTypeArray(tokenVocabulary: TokenVocabulary): tokenVocabulary is TokenType[] {
+  return (
+    Array.isArray(tokenVocabulary) && (tokenVocabulary.length === 0 || "name" in tokenVocabulary[0])
+  );
+}
+
+/**
+ * Returns a check whether the given TokenVocabulary is IMultiModeLexerDefinition
+ */
+export function isIMultiModeLexerDefinition(
+  tokenVocabulary: TokenVocabulary
+): tokenVocabulary is IMultiModeLexerDefinition {
+  return tokenVocabulary && "modes" in tokenVocabulary && "defaultMode" in tokenVocabulary;
+}
+
+/**
+ * Returns a check whether the given TokenVocabulary is TokenTypeDictionary
+ */
+export function isTokenTypeDictionary(
+  tokenVocabulary: TokenVocabulary
+): tokenVocabulary is TokenTypeDictionary {
+  return !isTokenTypeArray(tokenVocabulary) && !isIMultiModeLexerDefinition(tokenVocabulary);
 }

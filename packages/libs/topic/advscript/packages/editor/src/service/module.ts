@@ -11,7 +11,7 @@ import {
   LangiumSharedServices,
   Module,
   createDefaultSharedModule,
-  DefaultSharedModuleContext as SharedModuleContext,
+  DefaultSharedModuleContext as SharedModuleContext
 } from "langium";
 import { CancellationToken, Diagnostic, TextDocuments } from "vscode-languageserver";
 import { TextDocument } from "vscode-languageserver-textdocument";
@@ -67,42 +67,43 @@ export function createLangiumServices(_monaco: typeof Monaco, context?: ILSPModu
     }
   }
   class DocumentBuilder extends DefaultDocumentBuilder {
-    async validate(
-      document: LangiumDocument,
-      cancelToken = CancellationToken.None
-    ): Promise<Diagnostic[]> {
-      let diagnostics: Diagnostic[] = [];
-      const validator = this.serviceRegistry.getServices(document.uri).validation.DocumentValidator;
-      diagnostics = await validator.validateDocument(document, cancelToken);
-      // console.log(this.connection);
-      if (this.connection) {
+    async validate(document: LangiumDocument, cancelToken = CancellationToken.None) {
+      const service = this.serviceRegistry.getServices(document.uri);
+      const validator = service.validation.DocumentValidator;
+      const diagnostics = await validator.validateDocument(document, cancelToken);
+      document.diagnostics = diagnostics;
+      document.state = DocumentState.Validated;
+      console.log();
+      if (service.shared.lsp.Connection) {
         console.log("diagnostics", document, diagnostics);
         // Send the computed diagnostics to VS Code.
-        this.connection.sendDiagnostics({ uri: document.textDocument.uri, diagnostics });
+        service.shared.lsp.Connection.sendDiagnostics({
+          uri: document.textDocument.uri,
+          diagnostics
+        });
       }
-      document.state = DocumentState.Validated;
-      return diagnostics;
+      // document.state = DocumentState.Validated;
     }
 
-    protected async buildDocuments(
-      documents: LangiumDocument[],
-      cancelToken: CancellationToken
-    ): Promise<void> {
-      await this.indexManager.update(
-        documents.filter((e) => e.state < DocumentState.Indexed),
-        cancelToken
-      );
-      await this.runCancelable(documents, DocumentState.Processed, cancelToken, (doc) =>
-        this.process(doc, cancelToken)
-      );
-      await this.runCancelable(documents, DocumentState.Linked, cancelToken, (doc) => {
-        const linker = this.serviceRegistry.getServices(doc.uri).references.Linker;
-        return linker.link(doc, cancelToken);
-      });
-      await this.runCancelable(documents, DocumentState.Validated, cancelToken, (doc) =>
-        this.validate(doc, cancelToken)
-      );
-    }
+    // protected async buildDocuments(
+    //   documents: LangiumDocument[],
+    //   cancelToken: CancellationToken
+    // ): Promise<void> {
+    //   await this.indexManager.update(
+    //     documents.filter((e) => e.state < DocumentState.Indexed),
+    //     cancelToken
+    //   );
+    //   await this.runCancelable(documents, DocumentState.Processed, cancelToken, (doc) =>
+    //     this.process(doc, cancelToken)
+    //   );
+    //   await this.runCancelable(documents, DocumentState.Linked, cancelToken, (doc) => {
+    //     const linker = this.serviceRegistry.getServices(doc.uri).references.Linker;
+    //     return linker.link(doc, cancelToken);
+    //   });
+    //   await this.runCancelable(documents, DocumentState.Validated, cancelToken, (doc) =>
+    //     this.validate(doc, cancelToken)
+    //   );
+    // }
   }
   const services = createBrowerServices(
     {
@@ -110,8 +111,8 @@ export function createLangiumServices(_monaco: typeof Monaco, context?: ILSPModu
         TextDocumentFactory: (injector) => new TextDocumentFactory(injector),
         DocumentBuilder: (injector) => new DocumentBuilder(injector),
         TextDocuments: () => new TextDocuments(OhmDcocument),
-        LangiumDocumentFactory: (injector) => new IncrementLangiumDocumentFactory(injector),
-      },
+        LangiumDocumentFactory: (injector) => new IncrementLangiumDocumentFactory(injector)
+      }
     },
     context
   );

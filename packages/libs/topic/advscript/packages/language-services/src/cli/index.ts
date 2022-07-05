@@ -15,11 +15,7 @@ import { write } from "./generator";
 
 export const generateAction = async (fileName: string, opts: GenerateOptions): Promise<void> => {
   const services = createStatemachineServices().statemachine;
-  await extractAstNode<Statemachine>(
-    fileName,
-    StatemachineLanguageMetaData.fileExtensions,
-    services
-  );
+  const model = await extractAstNode<Statemachine>(fileName, services);
   const text = services.shared.workspace.TextDocuments.get(fileName)?.getText();
   const ctx = generateNode(text, fileName, opts);
   const generatedFilePath = write(ctx);
@@ -28,17 +24,12 @@ export const generateAction = async (fileName: string, opts: GenerateOptions): P
 
 export default function (): void {
   const program = new Command();
-
-  // program
-  //     // eslint-disable-next-line @typescript-eslint/no-var-requires
-  //     .version(require('../../package.json').version);
-
+  const fileExtensions = StatemachineLanguageMetaData.fileExtensions.join(", ");
   program
+    // eslint-disable-next-line @typescript-eslint/no-var-requires
+    // .version(require("../../package.json").version)
     .command("generate")
-    .argument(
-      "<file>",
-      `possible file extensions: ${StatemachineLanguageMetaData.fileExtensions.join(", ")}`
-    )
+    .argument("<file>", `possible file extensions: ${fileExtensions}`)
     .option("-d, --destination <dir>", "destination directory of generating")
     .description("generates a C++ CLI to walk over states")
     .action(generateAction);

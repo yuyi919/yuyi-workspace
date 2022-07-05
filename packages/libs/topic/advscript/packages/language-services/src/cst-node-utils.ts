@@ -1,17 +1,18 @@
+/* eslint-disable no-unmodified-loop-condition */
 /* eslint-disable prefer-const */
 import { TokenType } from "chevrotain";
 import * as langium from "langium";
 import {
   CompositeCstNodeImpl,
   LeafCstNodeImpl,
-  RootCstNodeImpl,
+  RootCstNodeImpl
 } from "langium/lib/parser/cst-node-builder";
 import * as ast from "./ast-utils";
 import { toConstMap } from "./_utils";
 
 const enum GeneratorType {
   Leaf,
-  Composite,
+  Composite
 }
 
 function markMismatchTokenNode(node: langium.LeafCstNode) {
@@ -113,7 +114,7 @@ export function* createCstGenerator(node: langium.CstNode): Generator<
           },
           get prev() {
             return findPrevTokenNode(this, true);
-          },
+          }
         })
       );
       yield Object.assign(item, { indexInRoot: ++index });
@@ -187,7 +188,7 @@ export function* flattenCstGen(
       node.children.length > 1 &&
       langium.isRuleCall(node.feature) &&
       langium.isParserRule(node.feature.rule.ref) &&
-      node.feature.rule.ref.type === "string"
+      node.feature.rule.ref.$type === "string"
     ) {
       yield node;
     } else {
@@ -490,8 +491,8 @@ export function* searchNextTokenNode(
 
 /**
  * 严格查找叶子节点
- * @param node
- * @param offset
+ * @param node -
+ * @param offset -
  */
 export function findLeafNodeAtStrictOffset(node: langium.CstNode, offset: number) {
   const result = langium.findLeafNodeAtOffset(node, offset);
@@ -526,16 +527,16 @@ export function findLeafNodeAtStrictOffset(node: langium.CstNode, offset: number
 }
 /**
  * 严格查找叶子节点
- * @param node
- * @param offset
+ * @param node -
+ * @param offset -
  */
 export function filterTokenNodeRange(node: langium.CstNode, offset: number, end: number) {
   return [...searchTokenNodeRange(node, offset, end)];
 }
 /**
  * 严格查找叶子节点
- * @param node
- * @param offset
+ * @param node -
+ * @param offset -
  */
 export function* searchTokenNodeRange(node: langium.CstNode, offset: number, end: number) {
   const result = findLeafNodeAtStrictOffset(node, offset);
@@ -558,14 +559,14 @@ export function testSearchPrevTokenNode(node: langium.CstNode) {
   }
 }
 
-globalThis.testSearchNextTokenNode = testSearchNextTokenNode;
-globalThis.testSearchPrevTokenNode = testSearchPrevTokenNode;
-globalThis.flattenCstGen = flattenCstGen;
+// globalThis.testSearchNextTokenNode = testSearchNextTokenNode;
+// globalThis.testSearchPrevTokenNode = testSearchPrevTokenNode;
+// globalThis.flattenCstGen = flattenCstGen;
 
 export const SpaceMap = toConstMap([ast.WS, ast.Indent, ast.Outdent, ast.CommonIndent]);
 export const WhiteSpaceMap = {
   ...toConstMap([ast.EOL]),
-  ...SpaceMap,
+  ...SpaceMap
 };
 
 export function isWhiteSpaceNode(node: langium.CstNode, offset?: number) {

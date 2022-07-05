@@ -6,3 +6,4 @@
 *.log
 .tsBuildInfo
 ./packages/langium
+/public

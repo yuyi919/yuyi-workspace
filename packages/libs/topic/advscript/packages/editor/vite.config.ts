@@ -8,7 +8,7 @@ import { defineMacroPlugin, vitePluginMacro } from "vite-plugin-macro";
 import monacoEditorPlugin from "vite-plugin-monaco-editor";
 import { RawWorkspacePlugin } from "../parser/OhmPlugin";
 import { VitePluginStoryScript } from "../parser/VitePluginStoryScript";
-import Provider from "./logger";
+import Provider from "../../logger";
 import MonacoEditorNlsPlugin, {
   esbuildPluginMonacoEditorNls,
   Languages

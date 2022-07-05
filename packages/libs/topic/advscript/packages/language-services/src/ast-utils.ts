@@ -1,12 +1,5 @@
 export * from "./ast";
-import langium, {
-  Group,
-  isDataTypeRule,
-  isTerminalRule,
-  Keyword,
-  ParserRule,
-  RuleCall,
-} from "langium";
+import * as langium from "langium";
 import * as ast from "./ast";
 import { toConstMap } from "./_utils";
 
@@ -97,7 +90,7 @@ const REQUIRED_RULENAME = toConstMap([
   ast.Character,
   ast.Macro,
   ast.Declare,
-  ast.Space,
+  ast.Space
 ]);
 const BLOCKED_RULENAME = toConstMap([
   ast.Pipe,
@@ -120,9 +113,9 @@ const BLOCKED_RULENAME = toConstMap([
 ]);
 const BLOCKED_RULENAME_SCOPED = {
   [ast.DialogCall]: toConstMap([
-    ast.Pipe,
+    ast.Pipe
     // ast.MacroParam,
-  ]),
+  ])
 };
 export function allowDeepResolveRuleCall(element: langium.RuleCall, root?: langium.AbstractRule) {
   return element.rule && allowRuleResolve(element.rule.ref as langium.ParserRule, root);
@@ -130,11 +123,11 @@ export function allowDeepResolveRuleCall(element: langium.RuleCall, root?: langi
 export function allowRuleResolve(element: langium.AbstractRule, root?: langium.AbstractRule) {
   return (
     isKeyword((element as langium.ParserRule).alternatives) ||
-    isTerminalRule((element as langium.ParserRule).alternatives) ||
-    (!isDataTypeRule(element as langium.ParserRule) &&
+    langium.isTerminalRule((element as langium.ParserRule).alternatives) ||
+    (!langium.isDataTypeRule(element as langium.ParserRule) &&
       (!root || !BLOCKED_RULENAME_SCOPED[root.name]?.[element.name]) &&
       !BLOCKED_RULENAME[element.name] &&
-      element.type !== "string" &&
+      element.$type !== "string" &&
       !isExpressionNodeKind(element.name))
   );
 }
@@ -150,7 +143,7 @@ export function isRequiredRuleCall(target: langium.RuleCall | langium.TerminalRu
 export function isRuleCall(target: unknown, name?: string | Record<string, true>) {
   return (
     target &&
-    (target as langium.AbstractElement).$type === RuleCall &&
+    (target as langium.AbstractElement).$type === langium.RuleCall &&
     (!name || typeof name === "string"
       ? (target as langium.RuleCall).rule.$refText === name
       : name[(target as langium.RuleCall).rule.$refText])
@@ -158,8 +151,8 @@ export function isRuleCall(target: unknown, name?: string | Record<string, true>
 }
 /**
  * 判断ParserRuleCall
- * @param target
- * @param source
+ * @param target -
+ * @param source -
  */
 export function isParserRuleCall(
   target: unknown,
@@ -169,26 +162,37 @@ export function isParserRuleCall(
 }
 
 export function isRequiredFeature(target: langium.AbstractElement) {
-  return target.$type === RuleCall
+  return target.$type === langium.RuleCall
     ? isRequiredRuleCall(target as langium.RuleCall)
-    : target.$type === Group
+    : target.$type === langium.Group
     ? false
     : false;
 }
 
 export function isKeyword(target: unknown, keyword?: string) {
   return (
-    (target as langium.AstNode)?.$type === Keyword &&
+    (target as langium.AstNode)?.$type === langium.Keyword &&
     (!keyword || (target as langium.Keyword).value === keyword)
   );
 }
 
 export function isKeywordRuleCall(target: unknown, keyword?: string) {
   return (
-    (target as langium.AstNode)?.$type === RuleCall &&
-    ((target as langium.RuleCall).rule.ref as ParserRule)?.alternatives?.$type === Keyword &&
+    (target as langium.AstNode)?.$type === langium.RuleCall &&
+    ((target as langium.RuleCall).rule.ref as langium.ParserRule)?.alternatives?.$type ===
+      langium.Keyword &&
     (!keyword ||
-      (((target as langium.RuleCall).rule.ref as ParserRule)?.alternatives as Keyword).value ===
-        keyword)
+      (
+        ((target as langium.RuleCall).rule.ref as langium.ParserRule)
+          ?.alternatives as langium.Keyword
+      ).value === keyword)
   );
+}
+
+export function getRuleType(rule: langium.AbstractRule): string | undefined {
+  if (!rule) return;
+  if (langium.isParserRule(rule)) {
+    return rule.returnType?.$refText || rule.dataType;
+  }
+  return (rule as langium.TerminalRule).type?.name;
 }

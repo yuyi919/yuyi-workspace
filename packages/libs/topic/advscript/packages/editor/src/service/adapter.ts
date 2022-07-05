@@ -7,12 +7,12 @@ import {
   LangiumDocumentFactory,
   LangiumServices,
   LangiumSharedServices,
-  ServiceRegistry,
+  ServiceRegistry
 } from "langium";
 import { Position, TextDocumentContentChangeEvent } from "vscode-languageserver-protocol";
 import { TextDocument } from "vscode-languageserver-textdocument";
 import { URI } from "vscode-uri";
-import { AbstractLangiumParser, ParseResult } from "./interface";
+import { AbstractLangiumParser, IParseResult } from "./interface";
 
 export class IncrementLangiumDocumentFactory implements LangiumDocumentFactory {
   protected readonly serviceRegistry: ServiceRegistry;
@@ -23,14 +23,17 @@ export class IncrementLangiumDocumentFactory implements LangiumDocumentFactory {
   }
 
   fromString<T extends AstNode = AstNode>(text: string, uri: URI): LangiumDocument<T> {
-      return this.create<T>(undefined, text, undefined, uri);
+    return this.create<T>(undefined, text, undefined, uri);
   }
 
   fromModel<T extends AstNode = AstNode>(model: T, uri: URI): LangiumDocument<T> {
-      return this.create<T>(undefined, undefined, model, uri);
+    return this.create<T>(undefined, undefined, model, uri);
   }
 
-  fromTextDocument<T extends AstNode = AstNode>(textDocument: TextDocument, uri?: URI): LangiumDocument<T> {
+  fromTextDocument<T extends AstNode = AstNode>(
+    textDocument: TextDocument,
+    uri?: URI
+  ): LangiumDocument<T> {
     return this.create<T>(textDocument, undefined, undefined, uri);
     // const services = this.serviceRegistry.getServices(URI.parse(textDocument.uri));
     // // const doc = this.prev
@@ -46,31 +49,41 @@ export class IncrementLangiumDocumentFactory implements LangiumDocumentFactory {
     // ) as LangiumDocument<any>
   }
 
-  protected create<T extends AstNode>(textDocument: TextDocument | undefined, text: string | undefined, model: T | undefined, uri: URI | undefined): LangiumDocument<T> {
-      if (uri === undefined) {
-          uri = URI.parse(textDocument!.uri);
-      }
-      const services = this.serviceRegistry.getServices(uri);
-      if (textDocument === undefined) {
-          textDocument = TextDocument.create(uri.toString(), services.LanguageMetaData.languageId, 0, text ?? '');
-      }
-      let parseResult: ParseResult<T>;
-      if (model === undefined) {
-          parseResult = services.parser.LangiumParser.parse<T>(textDocument.getText());
-      } else {
-          parseResult = { value: model, parserErrors: [], lexerErrors: [] };
-      }
-      return documentFromText<T>(textDocument, parseResult, uri);
+  protected create<T extends AstNode>(
+    textDocument: TextDocument | undefined,
+    text: string | undefined,
+    model: T | undefined,
+    uri: URI | undefined
+  ): LangiumDocument<T> {
+    if (uri === undefined) {
+      uri = URI.parse(textDocument!.uri);
+    }
+    const services = this.serviceRegistry.getServices(uri);
+    if (textDocument === undefined) {
+      textDocument = TextDocument.create(
+        uri.toString(),
+        services.LanguageMetaData.languageId,
+        0,
+        text ?? ""
+      );
+    }
+    let parseResult: IParseResult<T>;
+    if (model === undefined) {
+      parseResult = services.parser.LangiumParser.parse<T>(textDocument.getText());
+    } else {
+      parseResult = { value: model, parserErrors: [], lexerErrors: [] };
+    }
+    return documentFromText<T>(textDocument, parseResult, uri);
   }
 }
 
-function createParserResult<T extends AstNode = AstNode>(): ParseResult<T> {
+function createParserResult<T extends AstNode = AstNode>(): IParseResult<T> {
   return {
     value: {
-      $type: "Main",
+      $type: "Main"
     } as T,
     parserErrors: [],
-    lexerErrors: [],
+    lexerErrors: []
   };
 }
 
@@ -81,7 +94,7 @@ export class OhmParser extends AbstractLangiumParser {
     super(services);
   }
   prevTextDocument: TextDocument;
-  parse<T extends AstNode = AstNode>(input: LangiumDocument<T>): ParseResult<T> {
+  parse<T extends AstNode = AstNode>(input: LangiumDocument<T>): IParseResult<T> {
     const text = input.textDocument.getText();
     const changed = fireChange(input);
     console.log("OhmParser", input);
@@ -94,7 +107,7 @@ export class OhmParser extends AbstractLangiumParser {
             startIdx: startIndex,
             endIdx: endIndex,
             range: changed.range,
-            content: changed.text,
+            content: changed.text
           };
         }
       })
@@ -108,10 +121,10 @@ export class OhmParser extends AbstractLangiumParser {
           text,
           ranges.length > 0 ? ranges : void 0
         ) as any,
-        elements: [],
+        elements: []
       } as any as T,
       parserErrors: [],
-      lexerErrors: [],
+      lexerErrors: []
     };
   }
 }

@@ -8,8 +8,8 @@ export * as pipe from "./pipeable";
 
 const runner = new SuffixAutomatonRunner();
 // runner.main();
-Object.assign(globalThis, {
-  SuffixAutomaton,
-  SuffixAutomatonRunner: runner,
-  SuffixAutomatonReader,
-});
+// Object.assign(globalThis, {
+//   SuffixAutomaton,
+//   SuffixAutomatonRunner: runner,
+//   SuffixAutomatonReader,
+// });

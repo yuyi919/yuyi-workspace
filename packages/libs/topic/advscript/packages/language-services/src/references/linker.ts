@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/member-ordering */
 import {
   AstNode,
   AstNodeDescription,
@@ -13,7 +14,7 @@ import {
   ReferenceInfo,
   streamReferences,
   streamAllContents,
-  interruptAndCheck,
+  interruptAndCheck
 } from "langium";
 import { memoize } from "lodash";
 import { AdvScriptServices } from "../advscript-module";
@@ -26,7 +27,7 @@ import { CancellationToken } from "vscode-languageserver-protocol";
 
 export class Linker extends DefaultLinker {
   protected declare readonly scopeProvider: ScopeProvider;
-  protected readonly reflection: ast.AdvScriptAstReflection;
+  protected declare readonly reflection: ast.AdvScriptAstReflection;
   protected readonly nameProvider: NameProvider;
   constructor(protected services: AdvScriptServices) {
     super(services);
@@ -52,23 +53,27 @@ export class Linker extends DefaultLinker {
       // console.log("getCandidate", this.getCandidate.cache);
       return (
         description ??
-        this.createLinkingError({
-          container,
-          property: getReferenceProperty(refId),
-          reference,
-        }, refId)
+        this.createLinkingError(
+          {
+            container,
+            property: getReferenceProperty(refId),
+            reference
+          },
+          refId
+        )
       );
     },
+    // eslint-disable-next-line @typescript-eslint/naming-convention
     (_, _2, ref) => ref.$refNode
   );
 
-  protected getLinkedNode(
-    container: AstNode,
-    refId: string,
-    reference: Reference
-  ): AstNode | LinkingError {
-    return super.getLinkedNode(container, refId, reference);
-  }
+  // protected getLinkedNode(
+  //   container: AstNode,
+  //   refId: string,
+  //   reference: Reference
+  // ): AstNode | LinkingError {
+  //   return super.getLinkedNode(container, refId, reference);
+  // }
 
   async link(document: LangiumDocument, cancelToken = CancellationToken.None): Promise<void> {
     const process = (node: AstNode) => {
@@ -78,9 +83,9 @@ export class Linker extends DefaultLinker {
     };
     const rootNode = document.parseResult.value;
     process(rootNode);
-    await interruptAndCheck(cancelToken)
-    for (const content of streamAllContents(rootNode)) {
-      process(content.node)
+    await interruptAndCheck(cancelToken);
+    for (const node of streamAllContents(rootNode)) {
+      process(node);
     }
   }
 
@@ -120,7 +125,7 @@ export class Linker extends DefaultLinker {
         return desc.name === queryName;
       });
       const descList = description.toArray();
-      const result = this.sortDescriptionList(descList, container)[0];
+      const result = this._sortDescriptionList(descList, container)[0];
       // console.timeEnd("getDescription");
       return result;
     }
@@ -129,10 +134,10 @@ export class Linker extends DefaultLinker {
 
   /**
    * 对结果进行排序，同一个文档的优先，其次定义在当前节点前的优先(根据offset)，然后从中优先最近的一个节点(先判断行最近，然后判断列最远)
-   * @param descList
-   * @param node
+   * @param descList -
+   * @param node -
    */
-  private sortDescriptionList(descList: AstNodeDescription[], node: AstNode) {
+  private _sortDescriptionList(descList: AstNodeDescription[], node: AstNode) {
     const currentOffset = node.$cstNode?.offset;
     const docUri = getDocument(node).uri.toString();
     return descList.sort((a, b) => {

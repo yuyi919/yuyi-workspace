@@ -7,7 +7,7 @@ import {
   ErrorAction,
   MessageConnection,
   MonacoLanguageClient,
-  MonacoServices,
+  MonacoServices
 } from "./lib/languageclient";
 import { getWorker } from "./lib/worker";
 import { MonacoServiceWrapper } from "./MonacoServiceAdapter";
@@ -24,15 +24,15 @@ export function startClient() {
         // disable the default error handler
         errorHandler: {
           error: () => ErrorAction.Continue,
-          closed: () => CloseAction.DoNotRestart,
-        },
+          closed: () => CloseAction.DoNotRestart
+        }
       },
       // create a language client connection from the JSON RPC connection on demand
       connectionProvider: {
         get: (errorHandler, closeHandler) => {
           return Promise.resolve(createConnection(connection, errorHandler, closeHandler));
-        },
-      },
+        }
+      }
     });
   }
   function createUrl(path: string): string {
@@ -50,7 +50,7 @@ export function startClient() {
         reconnectionDelayGrowFactor: 1.3,
         connectionTimeout: 10000,
         maxRetries: Infinity,
-        debug: false,
+        debug: false
       })
     );
   }
@@ -67,13 +67,13 @@ export function startClient() {
       const languageClient = createLanguageClient(connection);
       const disposable = languageClient.start();
       connection.onClose(() => disposable.dispose());
-    },
+    }
   });
 }
 
 export async function startClientService(_monaco: typeof Monaco) {
-  const service = new AvsLanguageService({ monaco: _monaco }); // await getWorker();
-  // const service = await getWorker();
+  // const service = new AvsLanguageService({ monaco: _monaco }); // await getWorker();
+  const service = await getWorker();
 
   // create the HTML Text
   // service.getSerializedGastProductions().then((generate) => {

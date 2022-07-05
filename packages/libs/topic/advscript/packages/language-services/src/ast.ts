@@ -1,11 +1,12 @@
+/* eslint-disable @typescript-eslint/naming-convention */
 export * from "./generated/ast";
 
 export const CommonIndent = "CommonIndent";
 export const LabelContent = "LabelContent";
 export const Token_Comma = "Token_Comma";
-export const DialogCall = "DialogCall"
+export const DialogCall = "DialogCall";
 
-export const VariableList = "VariableList"
+export const VariableList = "VariableList";
 export const DeclareItem_Character = "DeclareItem_Character";
 
 export const EOL = "EOL";
@@ -26,4 +27,6 @@ export const STRING = "STRING";
 export const Indent = "Indent";
 export const Outdent = "Outdent";
 
-export const HIDDEN_INDENT = "HIDDEN_INDENT"
+export const HIDDEN_INDENT = "HIDDEN_INDENT";
+
+export const TopExpression = "TopExpression";

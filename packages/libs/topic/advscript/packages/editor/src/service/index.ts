@@ -3,14 +3,14 @@ import {
   AdvScriptServices,
   CompletionItemType,
   Document,
-  ISerializedGast,
+  ISerializedGast
 } from "@yuyi919/advscript-language-services";
 import {
   AstNode,
   findLeafNodeAtOffset,
   LangiumDocument,
   LangiumSharedServices,
-  OperationCancelled,
+  OperationCancelled
 } from "langium";
 import { debounce } from "lodash";
 import type * as Lsp from "vscode-languageserver-protocol";
@@ -64,7 +64,7 @@ export abstract class AdvScriptService {
     const contentChanges = changes.map(({ range, rangeLength, text }) => ({
       range: this.m2p.asRange(range),
       rangeLength,
-      text,
+      text
     }));
     // console.log("doDidChangeContent", contentChanges);
     ServiceMockConnectionWrapper.didChangeTextDocument(this.connection, {
@@ -72,7 +72,7 @@ export abstract class AdvScriptService {
         uri,
         version
       ),
-      contentChanges,
+      contentChanges
     });
     this.doDiagnostics(uri);
     return this.getDiagnostics(uri);
@@ -97,7 +97,7 @@ export abstract class AdvScriptService {
         this.languageId,
         version,
         content
-      ),
+      )
     });
     return this.getDiagnostics(uri);
   }
@@ -106,10 +106,11 @@ export abstract class AdvScriptService {
     this.connection.sendDiagnostics({
       uri,
       diagnostics: [],
-      version: this._getScriptVersion(uri),
+      version: this._getScriptVersion(uri)
     });
   }
 
+  // eslint-disable-next-line @typescript-eslint/member-ordering
   diagnosticsRequest = createRequest(async (uri) => {
     const document = this.getDocumentWithUri(uri).textDocument;
     const text = document.getText();
@@ -236,7 +237,7 @@ export abstract class AdvScriptService {
     if (text) {
       return {
         range,
-        text,
+        text
       };
     }
   }
@@ -260,15 +261,15 @@ export abstract class AdvScriptService {
 
   async doProvideDocumentFormattingEdits(params: Lsp.DocumentFormattingParams) {
     const document = this.getDocumentWithParams(params);
-    return this.services.lsp.DocumentFormattingEdits.formattingTextEdits(document, params)
+    return this.services.lsp.DocumentFormattingEdits.formattingTextEdits(document, params);
   }
   async doProvideOnTypeFormattingEdits(params: Lsp.DocumentOnTypeFormattingParams) {
     const document = this.getDocumentWithParams(params);
-    return this.services.lsp.DocumentFormattingEdits.formattingTextEdits(document, params)
+    return this.services.lsp.DocumentFormattingEdits.formattingTextEdits(document, params);
   }
   async doProvideDocumentRangeFormattingEdits(params: Lsp.DocumentRangeFormattingParams) {
     const document = this.getDocumentWithParams(params);
-    return this.services.lsp.DocumentFormattingEdits.formattingTextEdits(document, params)
+    return this.services.lsp.DocumentFormattingEdits.formattingTextEdits(document, params);
   }
   private getDocumentWithUri(uri: string) {
     return this.sharedServices.workspace.LangiumDocuments.getOrCreateDocument(
@@ -309,18 +310,18 @@ export abstract class AdvScriptService {
         foldingRangeProvider: {},
         hoverProvider: {},
         renameProvider: {
-          prepareProvider: true,
+          prepareProvider: true
         },
         semanticTokensProvider: {
-          legend: this.services.lsp.DocumentSemanticProvider?.tokenLegend as any,
-        },
-      },
+          legend: this.services.lsp.DocumentSemanticProvider?.tokenLegend as any
+        }
+      }
     };
     if (hasWorkspaceFolder) {
       result.capabilities.workspace = {
         workspaceFolders: {
-          supported: true,
-        },
+          supported: true
+        }
       };
     }
 
@@ -342,6 +343,19 @@ export interface IAvsLanguageOptions {
   monaco?: TMonaco;
 }
 export class AvsLanguageService extends AdvScriptService {
+  _loading: Monaco.Emitter<void>;
+  _preLoaded = [] as string[];
+  loading = false;
+
+  private _doDocumentLoaded = debounce(() => {
+    const documents = this._preLoaded
+      .splice(0, this._preLoaded.length)
+      .map((uri) => this._monaco.Uri.parse(uri));
+    console.debug("loadDocuments", this._preLoaded);
+    this._loading.fire();
+    this.sharedServices.workspace.DocumentBuilder.update(documents, []);
+  }, 20);
+
   constructor(public options: IAvsLanguageOptions) {
     super(options.monaco, (context) => createLangiumServices(options.monaco, context));
     const { monaco: _monaco } = options;
@@ -352,17 +366,6 @@ export class AvsLanguageService extends AdvScriptService {
     });
     this._loading = new _monaco.Emitter();
   }
-  _loading: monaco.Emitter<void>;
-  _preLoaded = [] as string[];
-  loading = false;
-  private _doDocumentLoaded = debounce(() => {
-    const documents = this._preLoaded
-      .splice(0, this._preLoaded.length)
-      .map((uri) => this._monaco.Uri.parse(uri));
-    console.debug("loadDocuments", this._preLoaded);
-    this._loading.fire();
-    this.sharedServices.workspace.DocumentBuilder.update(documents, []);
-  }, 20);
 
   async doProvideCodeActions(params: Lsp.CodeActionParams) {
     // console.log("doProvideCodeActions", params);
@@ -387,6 +390,6 @@ export class AvsLanguageService extends AdvScriptService {
   }
 }
 
-export interface WorkerAccessor<T> {
+export interface IWorkerAccessor<T> {
   (first: Lsp.URI, ...more: Lsp.URI[]): Promise<T>;
 }

@@ -8,7 +8,7 @@ import type * as References from "../references";
 import {
   FeatureCrossReference,
   FeatureKeywordTypedValue,
-  FeatureYieldValue,
+  FeatureYieldValue
 } from "./follow-element-computation";
 import { searchAllAlternatives } from "./searchAllAlternatives";
 import { isSnippetPlaceholderItem, isSnippetReferenceItem, SnippetHelper } from "./SnippetString";
@@ -19,14 +19,14 @@ import {
   ruleFeatures2Element,
   RuleTreeEnumYieldValue,
   toSnippet,
-  WrapContext,
+  WrapContext
 } from "./wrapAllAlternatives";
 
 type Config = Pick<langium.Assignment, "cardinality" | "operator">;
-type CacheConfig<T> = {
+interface CacheConfig<T> {
   names: string[];
   nameMap: Record<string, T>;
-};
+}
 
 type RuleDataType = "string" | "number" | "boolean" | "none" | (string & {});
 
@@ -70,7 +70,7 @@ export class RuleInterpreter extends DefaultRuleInterpreter {
           if (isAbstractElement(data.feature) && data.assignment) {
             const config = {
               cardinality: data.feature.cardinality,
-              operator: data.assignment?.operator,
+              operator: data.assignment?.operator
             };
             if (isRuleCall(data.feature) || isCrossReference(data.feature)) {
               const leafName = data.name;
@@ -79,7 +79,7 @@ export class RuleInterpreter extends DefaultRuleInterpreter {
               if (!leafMap) {
                 leafMap = {
                   names: [],
-                  nameMap: {},
+                  nameMap: {}
                 };
                 this.leafFeatureMap.set(data.feature, leafMap);
               }
@@ -118,11 +118,12 @@ export class RuleInterpreter extends DefaultRuleInterpreter {
         const dataType = this.getRuleType(rule, datas);
         this.dataTypeMap[dataType] = {
           ...this.dataTypeMap[dataType],
-          [ruleName]: true,
+          [ruleName]: true
         };
         arr.push(datas);
       }
-      return (r[ruleName] = arr), r;
+      r[ruleName] = arr;
+      return r;
     }, {});
 
     SuffixAutomaton.buildWithGenerator(this.build());
@@ -134,8 +135,8 @@ export class RuleInterpreter extends DefaultRuleInterpreter {
       if (
         !this.rules[key].fragment &&
         !isTerminalRule(this.rules[key]) &&
-        !(this.rules[key] as langium.ParserRule).entry
-        && !ast.isExpressionNodeKind(key)
+        !(this.rules[key] as langium.ParserRule).entry &&
+        !ast.isExpressionNodeKind(key)
       ) {
         const rule = this.ruleAlternatives[key];
         let ruleIndex = 0;
@@ -158,7 +159,7 @@ export class RuleInterpreter extends DefaultRuleInterpreter {
     rule: langium.AbstractRule,
     features: RuleTreeEnumYieldValue<FeatureData<FeatureKeywordTypedValue>[]>
   ): RuleDataType {
-    if (this.isConstDataTypeRule(rule)) return rule.type || "none";
+    if (this.isConstDataTypeRule(rule)) return ast.getRuleType(rule) || "none";
     return features.nameStack?.length > 0 ? features.nameStack.join(":") : rule.name;
   }
 
@@ -168,10 +169,8 @@ export class RuleInterpreter extends DefaultRuleInterpreter {
 
   isConstDataTypeRule(ruleName: langium.AbstractRule | string): boolean {
     const rule = typeof ruleName === "string" ? this.rules[ruleName] : ruleName;
-    return (
-      (rule && typeof rule.type === "string" && (!this.rules[rule.type] || isTerminalRule(rule))) ||
-      false
-    );
+    const type = ast.getRuleType(rule);
+    return (type && (!this.rules[type] || isTerminalRule(rule))) || false;
   }
 
   isRootRuleCallFeature(
@@ -195,7 +194,7 @@ export class RuleInterpreter extends DefaultRuleInterpreter {
   }
 
   getParserRuleWithRuleCall(feature: langium.RuleCall): langium.ParserRule | undefined {
-    return feature && feature.rule.ref as langium.ParserRule;
+    return feature && (feature.rule.ref as langium.ParserRule);
   }
 
   // getFeatureName(source: string) {
@@ -225,7 +224,7 @@ export class RuleInterpreter extends DefaultRuleInterpreter {
   wrapAllAlternatives = (rule: langium.AbstractRule, context?: WrapContext) => {
     context = {
       ...context,
-      root: context?.root || rule,
+      root: context?.root || rule
     };
     const snippets = [] as {
       value: string;

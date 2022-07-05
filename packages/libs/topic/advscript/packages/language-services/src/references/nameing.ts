@@ -1,3 +1,6 @@
+/* eslint-disable @typescript-eslint/member-ordering */
+/* eslint-disable tsdoc/syntax */
+/* eslint-disable @typescript-eslint/naming-convention */
 import { timeStamp } from "console";
 import {
   AstNode,
@@ -7,7 +10,7 @@ import {
   findNodeForFeature,
   isAstNode,
   isReference,
-  Reference,
+  Reference
 } from "langium";
 import { AdvScriptServices } from "../advscript-module";
 import * as ast from "../ast-utils";
@@ -23,7 +26,7 @@ export class NameProvider extends DefaultNameProvider {
     this.nestRefs = Trie.fromKeysList([
       [ast.Param, ast.Macro],
       [ast.Param, ast.Character],
-      [ast.Modifier, ast.Character],
+      [ast.Modifier, ast.Character]
     ]);
   }
 
@@ -151,7 +154,7 @@ export class NameProvider extends DefaultNameProvider {
           const type = this.getNameStackItemType(node, container);
           return {
             name: node.$refText,
-            type: [type],
+            type: [type]
           };
         }
         if (this.isNamedRefNode(node)) {
@@ -184,9 +187,11 @@ export class NameProvider extends DefaultNameProvider {
     let name: T | T[];
     if (isReference(node)) {
       name = warp(node, container);
-    } else if (ast.isQualifiedName(node)) {
-      return node.name.flatMap((name) => this.getNamesWith(name, warp, node) || []);
-    } else {
+    }
+    // if (ast.isQualifiedName(node)) {
+    //   return node.name.flatMap((name) => this.getNamesWith(name, warp, node) || []);
+    // } else
+    else {
       name = warp(node, isReference(node) && container);
     }
     return name ? (name instanceof Array ? name : [name]) : void 0;
@@ -345,15 +350,15 @@ export class NameProvider extends DefaultNameProvider {
   }
 }
 
-export type NameStackItem = {
+export interface NameStackItem {
   name: string;
   type?: NameStackItemType[];
-};
+}
 
-export type NameStackItemType = {
+export interface NameStackItemType {
   target: string;
   source: string;
-};
-function isNameStackItemType(o: unknown): o is NameStackItemType {
-  return typeof o["target"] === "string" && typeof o["source"] === "string";
+}
+function isNameStackItemType(o: any): o is NameStackItemType {
+  return typeof o.target === "string" && typeof o.source === "string";
 }

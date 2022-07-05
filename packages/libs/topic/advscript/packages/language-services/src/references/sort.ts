@@ -29,6 +29,7 @@ export function compareWithObjectNotNil<T>(a: T, b: T) {
   return compareWithFalse(!a, !b); //,  Number(!a) - Number(!b); // true:1 false:0, 相减为-1则交换顺序;
 }
 export function compareWithNotNil<T>(a: T, b: T) {
+  // eslint-disable-next-line eqeqeq
   return compareWithLogic(a, b, (target) => target != null); //,  Number(!a) - Number(!b); // true:1 false:0, 相减为-1则交换顺序;
 }
 export function compareWithTrue(a: boolean, b: boolean) {

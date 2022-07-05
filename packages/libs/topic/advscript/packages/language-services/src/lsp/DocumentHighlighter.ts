@@ -13,7 +13,7 @@ import { searchAllAlternatives } from "./searchAllAlternatives";
 import { NameProvider } from "../references";
 
 export class DocumentHighlighter extends DefaultDocumentHighlighter {
-  nameProvider: NameProvider;
+  declare nameProvider: NameProvider;
   findHighlights(
     document: langium.LangiumDocument,
     params: LspTypes.DocumentHighlightParams

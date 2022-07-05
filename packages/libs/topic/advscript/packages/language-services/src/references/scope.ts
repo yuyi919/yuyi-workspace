@@ -10,7 +10,7 @@ import {
   Scope,
   getDocument,
   stream,
-  MultiMap,
+  MultiMap
 } from "langium";
 import { CancellationToken } from "vscode-languageserver-protocol";
 import { AdvScriptServices } from "../advscript-module";
@@ -89,10 +89,11 @@ export class SimpleScope implements Scope {
 }
 
 export class ScopeComputation extends DefaultScopeComputation {
+  declare nameProvider: AdvScriptServices["references"]["NameProvider"];
+
   constructor(services: AdvScriptServices) {
     super(services);
   }
-  declare nameProvider: AdvScriptServices["references"]["NameProvider"];
 
   async computeScope(
     document: LangiumDocument,
@@ -116,7 +117,7 @@ export class ScopeComputation extends DefaultScopeComputation {
     for (const element of ast.isDocument(container)
       ? [
           // ...container.defines,
-          ...container.content.contents,
+          ...container.content.contents
         ]
       : container.elements) {
       interruptAndCheck(cancelToken);
@@ -161,7 +162,7 @@ export class ScopeComputation extends DefaultScopeComputation {
         });
         scopes.addAll(element, children);
         // console.log("Dialog", element, children);
-      } 
+      }
       // else if (this.nameProvider.isContainerNode(element)) {
       //   const nestedDescriptions = await this.processContainer(
       //     element,

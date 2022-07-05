@@ -1,19 +1,20 @@
 /* eslint-disable prefer-const */
-import { TokenType } from "chevrotain";
+import { createToken, ITokenConfig, TokenType } from "chevrotain";
 import * as langium from "langium";
 import { CompositeCstNodeImpl } from "langium/lib/parser/cst-node-builder";
 import { cloneDeep } from "lodash";
 
-export type TokenTypeWrapper = {
+export interface TokenTypeWrapper {
   cloneToken: (
     name: string | TokenType,
     merge?: Partial<TokenType> | ((token: TokenType) => Partial<TokenType>)
   ) => TokenType;
-};
+}
 
 export function cloneTokens(
   tokens: Map<string, TokenType>,
-  warp: (helper: TokenTypeWrapper) => TokenType[]
+  warp: (helper: TokenTypeWrapper) => TokenType[],
+  debugName?: string
 ) {
   const clonedTokenMap = new Map<TokenType, TokenType>();
   const result = warp({
@@ -22,27 +23,82 @@ export function cloneTokens(
       merge?: Partial<TokenType> | ((token: TokenType) => Partial<TokenType>)
     ): TokenType {
       const token = typeof name === "string" ? tokens.get(name) : name;
-      // return Object.assign(token, merge);
       const next = (merge instanceof Function ? merge(token) : merge) || {};
-      const clonedToken = {
-        ...token,
-        ...next,
-        get LONGER_ALT() {
-          return (
-            ((next.LONGER_ALT || token.LONGER_ALT) as TokenType[])
-              ?.map((type) => {
-                return clonedTokenMap.get(type) || result.find((o) => o.name === type.name);
-              })
-              .filter(Boolean) || []
-          );
-        },
-      };
-      clonedTokenMap.set(token, clonedToken);
-      return clonedToken;
-    },
+      // return Object.assign(token, merge);
+      try {
+        // const config: ITokenConfig = {
+        //   categories: [token],
+        //   name: next.name ?? token.name,
+        //   group: next.GROUP ?? token.GROUP,
+        //   start_chars_hint: next.START_CHARS_HINT ?? token.START_CHARS_HINT,
+        //   pattern: next.PATTERN ?? token.PATTERN,
+        //   pop_mode: next.POP_MODE ?? token.POP_MODE,
+        //   push_mode: next.PUSH_MODE ?? token.PUSH_MODE,
+        //   line_breaks: next.LINE_BREAKS ?? token.LINE_BREAKS,
+        //   label: next.LABEL ?? token.LABEL,
+        //   longer_alt: next.LONGER_ALT ?? token.LONGER_ALT
+        // };
+        // const categories = next.CATEGORIES?.length
+        //   ? next.CATEGORIES
+        //   : token.CATEGORIES?.length
+        //   ? token.CATEGORIES
+        //   : void 0;
+        // if (categories) {
+        //   config.categories = categories;
+        // }
+        const clonedToken = {
+          ...token,
+          ...next
+        };
+        Object.defineProperties(clonedToken, {
+          LONGER_ALT: {
+            get() {
+              // console.log("getLongerAlt");
+              return (
+                ((next.LONGER_ALT || token.LONGER_ALT) as TokenType[])
+                  ?.map((type) => {
+                    return clonedTokenMap.get(type) || result.find((o) => o.name === type.name);
+                  })
+                  .filter(Boolean) || []
+              );
+            },
+            configurable: true,
+            enumerable: true
+          }
+        });
+        clonedTokenMap.set(token, clonedToken);
+        return clonedToken;
+      } catch (error) {
+        console.error(error, token, next);
+        return token;
+      }
+    }
   }).filter(Boolean);
-  // console.log(result);
-  return cloneDeep(result);
+  // console.log("result:", result);
+  const clonedTokens = result.map((token) => {
+    Object.defineProperty(token, "LONGER_ALT", {
+      value: token.LONGER_ALT
+    });
+    // token.LABEL = debugName
+    setDebuggerName(token, debugName);
+    return token;
+  });
+  // console.log("clonedTokens:", clonedTokens);
+  return clonedTokens;
+}
+
+export function getDebuggerName(token: any): string | undefined {
+  return (token as any).__debuggername;
+}
+
+export function setDebuggerName(token: any, debugName: string) {
+  Object.defineProperties(token, {
+    __debuggername: {
+      value: debugName,
+      enumerable: false,
+      configurable: true
+    }
+  });
 }
 
 export function enum2Array(types: Record<string | number, any>) {
@@ -73,10 +129,10 @@ export function toConstMap<K extends string>(keys: K[]) {
  * This `internal` declared method exists, as we want to find the first child with the specified feature.
  * When the own feature is named the same by accident, we will instead return the input value.
  * Therefore, we skip the first assignment check.
- * @param node The node to traverse/check for the specified feature
- * @param feature The specified feature to find
- * @param element The element of the initial node. Do not process nodes of other elements.
- * @param first Whether this is the first node of the whole check.
+ * @param node - The node to traverse/check for the specified feature
+ * @param feature - The specified feature to find
+ * @param element - The element of the initial node. Do not process nodes of other elements.
+ * @param first - Whether this is the first node of the whole check.
  * @returns A list of all nodes within this node that belong to the specified feature.
  */
 export function findNodesForFeature(
@@ -238,11 +294,11 @@ export function isStringFeature(node: langium.AbstractElement | langium.Abstract
     return node.rule.ref && isStringFeature(node.rule.ref);
   }
   if (langium.isParserRule(node) || langium.isTerminalRule(node)) {
-    return node.type === "string";
+    return node.$type === "string";
   }
   return false;
 }
 export * from "./cst-node-utils";
 
-import * as cstUtils from "./cst-node-utils";
-globalThis.cstUtils = cstUtils;
+// import * as cstUtils from "./cst-node-utils";
+// globalThis.cstUtils = cstUtils;

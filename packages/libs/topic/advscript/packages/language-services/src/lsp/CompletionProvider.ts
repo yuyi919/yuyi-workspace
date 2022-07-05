@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/member-ordering */
 /* eslint-disable no-useless-catch */
 import * as langium from "langium";
 import { AdvScriptServices } from "../advscript-module";
@@ -16,20 +17,20 @@ import {
   generateRuleTreeEnum,
   filterRuleTree,
   toSnippet,
-  ruleFeatures2Element,
+  ruleFeatures2Element
 } from "./wrapAllAlternatives";
 
-globalThis.langium = langium;
-type SuperMatch = {
+// globalThis.langium = langium;
+interface SuperMatch {
   rule: langium.ParserRule;
   node: langium.CstNode;
   feature: langium.RuleCall;
-};
+}
 
-type getCompletionInternalParam = {
+interface getCompletionInternalParam {
   filterFeature?: (node: langium.AbstractElement | langium.CrossReference) => boolean;
   strict?: boolean;
-};
+}
 
 export class CompletionProvider extends langium.DefaultCompletionProvider {
   declare scopeProvider: References.ScopeProvider;
@@ -41,17 +42,17 @@ export class CompletionProvider extends langium.DefaultCompletionProvider {
     this.scopeProvider = services.references.ScopeProvider;
     this.nameProvider = services.references.NameProvider;
     this.reflection = services.shared.AstReflection;
-    globalThis.Grammar = services.Grammar;
-    globalThis.services = services;
-    globalThis.searchAllFeatures = searchAllFeatures;
-    globalThis.searchAllAlternatives = searchAllAlternatives;
-    globalThis.wrapAllAlternatives = this.ruleInterpreter.wrapAllAlternatives;
-    globalThis.currentContext = this.currentContext;
+    // globalThis.Grammar = services.Grammar;
+    // globalThis.services = services;
+    // globalThis.searchAllFeatures = searchAllFeatures;
+    // globalThis.searchAllAlternatives = searchAllAlternatives;
+    // globalThis.wrapAllAlternatives = this.ruleInterpreter.wrapAllAlternatives;
+    // globalThis.currentContext = this.currentContext;
     this.services.shared.AstReflection;
   }
 
   options: LspTypes.CompletionOptions = {
-    triggerCharacters: TRIGGER_CHARACTERS,
+    triggerCharacters: TRIGGER_CHARACTERS
   };
 
   currentContext = new CompletionProviderContext(this);
@@ -82,7 +83,7 @@ export class CompletionProvider extends langium.DefaultCompletionProvider {
   ): langium.MaybePromise<LspTypes.CompletionList> {
     return this.trace("getCompletion", () => {
       this.getCompletionInternal(document, params, {
-        filterFeature: (node) => langium.isCrossReference(node),
+        filterFeature: (node) => langium.isCrossReference(node)
       });
       return this.flushCompletionList();
     });
@@ -108,7 +109,7 @@ export class CompletionProvider extends langium.DefaultCompletionProvider {
     return this.trace("getCompletionInline", async () => {
       await this.getCompletionInternal(document, params, {
         filterFeature: (node) => langium.isCrossReference(node),
-        strict: true,
+        strict: true
       });
       return this.flushInlineCompletionList();
     });
@@ -131,14 +132,14 @@ export class CompletionProvider extends langium.DefaultCompletionProvider {
               label: "a",
               documentation: {
                 kind: _lsp.MarkupKind.Markdown,
-                value: ["# Header", "## Abc"].join("\n"),
-              },
-            },
-          ],
-        },
+                value: ["# Header", "## Abc"].join("\n")
+              }
+            }
+          ]
+        }
       ],
       activeParameter: 0,
-      activeSignature: 0,
+      activeSignature: 0
     } as LspTypes.SignatureHelp;
   }
 
@@ -192,37 +193,39 @@ export class CompletionProvider extends langium.DefaultCompletionProvider {
             node: prevRuleCall ? node : cursorNode,
             triggerNode,
             prevRule: prevRuleCall,
+            containerNode: node
           });
           for (const ref of references) {
             if (!refs[ref.name]) {
               const finded = this.findArrayAssignment(cursorNode, node);
               refs[ref.name] = {
                 ...ref,
-                ...finded,
+                ...finded
               };
               console.log("findArrayAssignment", finded, cursorNode);
             }
           }
           console.log("snippets", snippets);
-          for (const snippet of snippets) {
-            if (!snipValues[snippet.value]) {
-              this.currentContext.acceptor(snippet.value, {
-                label: snippet.preview,
-                kind: _lsp.CompletionItemKind.Snippet,
-                documentation: snippet.preview,
-                insertTextFormat: _lsp.InsertTextFormat.Snippet,
-                insertTextMode: _lsp.InsertTextMode.asIs,
-                sortText: "5",
-                // commitCharacters: [], //[" ", snippet.prefixText?.[0]].filter(Boolean),
-                detail: snippet.label,
-                command: {
-                  title: "",
-                  command: _lsp.COMMAND_ID.TriggerParameterHints,
-                },
-              });
-              snipValues[snippet.value] = true;
-            }
-          }
+          console.log("references", references);
+          // for (const snippet of snippets) {
+          //   if (!snipValues[snippet.value]) {
+          //     this.currentContext.acceptor(snippet.value, {
+          //       label: snippet.preview,
+          //       kind: _lsp.CompletionItemKind.Snippet,
+          //       documentation: snippet.preview,
+          //       insertTextFormat: _lsp.InsertTextFormat.Snippet,
+          //       insertTextMode: _lsp.InsertTextMode.asIs,
+          //       sortText: "5",
+          //       // commitCharacters: [], //[" ", snippet.prefixText?.[0]].filter(Boolean),
+          //       detail: snippet.label,
+          //       command: {
+          //         title: "",
+          //         command: _lsp.COMMAND_ID.TriggerParameterHints
+          //       }
+          //     });
+          //     snipValues[snippet.value] = true;
+          //   }
+          // }
           if (includes && Object.keys(snipValues).length === 0) {
             // break;
           } else {
@@ -230,48 +233,49 @@ export class CompletionProvider extends langium.DefaultCompletionProvider {
             // break;
           }
 
-          const treeEnums = [
-            ...filterRuleTreeEnums(
-              rule,
-              {
-                root: rule,
-                node: prevRuleCall ? node : cursorNode,
-                triggerNode,
-                prevRule: prevRuleCall,
-              },
-              true
-            ),
-          ];
-          const cstNodes = [..._utils.flattenCstGen(node)];
-          console.log("filterRuleTreeEnums", rule.name, references, snippets, treeEnums);
-          console.log(
-            "interpretWithFeatures",
-            [
-              ...filterRuleTree(rule, {
-                root: rule,
-                node: prevRuleCall ? node : cursorNode,
-                triggerNode,
-                prevRule: prevRuleCall,
-              }),
-            ].map((features) => {
-              const r = this.ruleInterpreter.interpretWithFeatures(
-                features,
-                cstNodes,
-                triggerOffset
-              );
-              return Object.assign(
-                toSnippet(
-                  ruleFeatures2Element(r, {
-                    root: rule,
-                    node: prevRuleCall ? node : cursorNode,
-                    triggerNode,
-                    prevRule: prevRuleCall,
-                  })
-                ),
-                { elements: r }
-              );
-            })
-          );
+          // const treeEnums = [
+          //   ...filterRuleTreeEnums(
+          //     rule,
+          //     {
+          //       root: rule,
+          //       node: prevRuleCall ? node : cursorNode,
+          //       triggerNode,
+          //       prevRule: prevRuleCall,
+          //       containerNode: node
+          //     },
+          //     true
+          //   )
+          // ];
+          // const cstNodes = [..._utils.flattenCstGen(node)];
+          // console.log("filterRuleTreeEnums", rule.name, references, snippets, treeEnums);
+          // console.log(
+          //   "interpretWithFeatures",
+          //   [
+          //     ...filterRuleTree(rule, {
+          //       root: rule,
+          //       node: prevRuleCall ? node : cursorNode,
+          //       triggerNode,
+          //       prevRule: prevRuleCall
+          //     })
+          //   ].map((features) => {
+          //     const r = this.ruleInterpreter.interpretWithFeatures(
+          //       features,
+          //       cstNodes,
+          //       triggerOffset
+          //     );
+          //     return Object.assign(
+          //       toSnippet(
+          //         ruleFeatures2Element(r, {
+          //           root: rule,
+          //           node: prevRuleCall ? node : cursorNode,
+          //           triggerNode,
+          //           prevRule: prevRuleCall
+          //         })
+          //       ),
+          //       { elements: r }
+          //     );
+          //   })
+          // );
 
           console.groupEnd();
         }
@@ -438,272 +442,273 @@ export class CompletionProvider extends langium.DefaultCompletionProvider {
     }
     console.groupEnd();
   }
-  protected completionWithFeatures(
-    commonSuperStack: SuperMatch[],
-    commonSuperRule: SuperMatch,
-    config?: getCompletionInternalParam
-  ) {
-    if (commonSuperRule) {
-      const { context, cursorNode, triggerNode, cursorOffset, triggerOffset } = this.currentContext;
-      this.printDebug(commonSuperStack);
-      const superNode = commonSuperStack[0];
-      const containterNode = commonSuperStack[1] || commonSuperRule;
-      console.log(
-        "commonSuperRule",
-        commonSuperRule
-        // findLeafNodeAtOffset(commonSuperRule.node, cursorOffset)
-      );
-      console.groupCollapsed("input features");
-      // const nextNode = _utils.findNextTokenNode(commonSuperRule.node, prevTokenOffset);
-      // console.log("nextNode", nextNode);
-      const stackNode =
-        (_utils.isParserRuleOrCrossReference(cursorNode.feature) &&
-          _utils.findNodeWithFeature(commonSuperRule.node, cursorNode.feature)) ||
-        cursorNode;
-      const featureStack = this.buildFeatureStack(stackNode);
-      // const featureStack2 = this.buildFeatureStack(node);
-      console.log("featureStack", [...featureStack], stackNode, cursorNode);
-      const features = langium.findNextFeatures(featureStack);
-      // const features2 = [...fer.findNextFeatures(featureStack2)];
-      console.log("input features", features);
-      // In some cases, it is possible that we do not have a super rule
-      if (commonSuperRule) {
-        const flattened = Array.from(_utils.flattenCstGen(commonSuperRule.node)).filter(
-          (e) => e.offset < triggerOffset
-        );
-        const possibleFeatures = this.ruleInterpreter.interpretRule(
-          commonSuperRule.rule,
-          [...flattened],
-          cursorOffset
-        );
-        // const tokens = this.services.parser.LangiumParser._wrapper.input.filter(
-        //   (o) => o.endOffset < triggerOffset
-        // );
-        console.log(
-          "getCompletion",
-          cursorOffset,
-          cursorNode.text,
-          flattened //.map((f) => f.feature.$type + ":" + f.text).join("|"),
-          // possibleFeatures
-          // tokens
-          // this.services.parser.LangiumParser._wrapper.computeContentAssist("Document", tokens)
-        );
-        // console.log(
-        //   "findAllFeatures",
-        //   // _utils.findAllFeatures(commonSuperRule.rule),
-        //   // langium.findNextFeatures(this.buildFeatureStack(node)),
-        //   fer.findAllFeatures(commonSuperRule.rule)
-        //   // langium.findAllFeatures(commonSuperRule.rule).byName
-        // );
-        // Remove features which we already identified during parsing
-        const partialMatches = possibleFeatures.filter((e) => {
-          const match = this.ruleInterpreter.featureMatches(
-            e,
-            flattened[flattened.length - 1],
-            triggerOffset
-          );
-          return match === "partial" || match === "both";
-        });
-        // console.log("partialMatches", partialMatches, [...features]);
-        const notMatchingFeatures = possibleFeatures.filter((e) => !partialMatches.includes(e));
-        features.push(...partialMatches);
-        const nextFeatures = langium.findNextFeatures(notMatchingFeatures.flatMap((e) => [e]));
-        // console.log("notMatchingFeatures => nextFeatures", notMatchingFeatures, nextFeatures, [
-        //   ...features,
-        // ]);
-        features.push(...nextFeatures);
-        console.log("nextFeatures", [...features]);
-      }
-      if (
-        cursorNode.end === triggerOffset &&
-        (!langium.isKeyword(cursorNode.feature) ||
-          (cursorNode.text !== cursorNode.feature.value &&
-            cursorNode.text !== context.triggerCharacter))
-      ) {
-        // console.log("push feature", node.feature);
-        features.push(cursorNode.feature);
-      }
-      // const contextNode = this.getCompletetionContext(node);
-      // console.log("contextNode", contextNode);
-      console.groupEnd();
-      this.trace("completionFor", () => {
-        const includesFeature = [];
-        const featureStream: langium.Stream<langium.AbstractElement | langium.CrossReference> =
-          langium.stream(features).distinct((e) => (langium.isKeyword(e) ? e.value : e));
-        for (const feature of featureStream) {
-          includesFeature.push(feature);
-          if (
-            this.isIgnoreFeature(feature) ||
-            (config?.filterFeature && !config.filterFeature(feature))
-          ) {
-            continue;
-          }
-          const parseRule = langium.isRuleCall(feature)
-            ? feature.rule.ref
-            : langium.getContainerOfType(feature, _utils.isParserRuleOrCrossReference);
-          const allowNode = commonSuperStack.find((stack) => {
-            const allRules = Array.from(langium.findAllFeatures(stack.rule).byFeature.keys());
-            return allRules.find(
-              (o) => o === parseRule || (langium.isRuleCall(o) && o.rule?.ref === parseRule)
-            );
-          });
-          // const map = commonSuperStack.map((stack) =>
-          //   this.mapApp(stack.rule, parseRule as langium.ParserRule)
-          // );
-          // const snip = map.filter(Boolean);
-          console.log(
-            "allowNode",
-            feature,
-            allowNode
-            // snip,
-            // snip.map((stacks) => this.to(stacks)),
-            // commonSuperStack.map((stack) => Array.from(searchAllFeatures(stack.node.feature)))
-          );
-          if (parseRule && _utils.isParserRuleOrCrossReference(parseRule)) {
-            // findAllFeatures;
-            const keywordFeatureNode =
-              (allowNode || langium.isCrossReference(parseRule)) &&
-              _utils.findNodeWithFeature(
-                allowNode?.node || commonSuperRule.node,
-                parseRule
-                // cursorOffset
-              );
-            // _utils.findNodesWithFeature(
-            //   commonSuperRule.node.element.$container.$cstNode,
-            //   parseRule
-            // );
-            if (keywordFeatureNode) {
-              if (langium.isCrossReference(parseRule)) {
-                if (keywordFeatureNode.end > triggerOffset) {
-                  console.log("skip overoffset reference", keywordFeatureNode);
-                  continue;
-                }
-                const isReferenceTrigger = langium.isCrossReference(cursorNode.feature);
-                const isCursorTriggerNode =
-                  triggerOffset <= cursorNode.end && triggerOffset > cursorNode.offset;
-                if (isReferenceTrigger && isCursorTriggerNode && cursorNode.feature !== parseRule)
-                  continue;
-                const isCursorReference: boolean =
-                  isReferenceTrigger && isCursorTriggerNode && cursorNode.feature === parseRule;
-                const refId = this.getCrossReferenceProperty(parseRule) as string;
-                const refNode = isCursorReference ? cursorNode : keywordFeatureNode;
-                const finded = this.findArrayAssignment(refNode, superNode.node);
-                console.log("findArrayAssignment", finded, keywordFeatureNode);
-                const reference = refNode.element[refId];
-                const resolvedRef = langium.isReference(reference) && !reference.error;
-                if (finded) {
-                  const { assignment, container } = finded;
-                  const nodeList = (container.element[assignment.feature] || []) as any[];
-                  if (isCursorReference && resolvedRef) {
-                    console.log(
-                      "skip resolved reference",
-                      parseRule.type.$refText,
-                      reference,
-                      keywordFeatureNode
-                    );
-                    continue;
-                  }
-                  const cacheMap = nodeList.reduce((result, node: unknown) => {
-                    const resolvedNode =
-                      langium.isReference(node[refId]) && (node[refId] as langium.Reference).ref;
-                    const name =
-                      resolvedNode &&
-                      this.nameProvider.getQualifiedName(resolvedNode.$container, resolvedNode);
-                    if (name) {
-                      result[name] = true;
-                    }
-                    return result;
-                  }, {});
-                  console.log(
-                    "skip resolved reference",
-                    parseRule.type.$refText,
-                    nodeList,
-                    Object.keys(cacheMap),
-                    container
-                  );
-                  for (const { node, info } of this.forCompletionForCrossReference(
-                    parseRule,
-                    finded?.container.element || containterNode.node.element
-                  )) {
-                    if (
-                      // (node.type === ast.Param || node.type === ast.Character) &&
-                      !cacheMap[node.name]
-                    ) {
-                      // console.log(node, info);
-                      this.currentContext.acceptor(node, info);
-                    }
-                  }
-                } else {
-                  if (resolvedRef) {
-                    // commonSuperStack.find(superNode => {
+  // protected completionWithFeatures(
+  //   commonSuperStack: SuperMatch[],
+  //   commonSuperRule: SuperMatch,
+  //   config?: getCompletionInternalParam
+  // ) {
+  //   if (commonSuperRule) {
+  //     const { context, cursorNode, triggerNode, cursorOffset, triggerOffset } = this.currentContext;
+  //     this.printDebug(commonSuperStack);
+  //     const superNode = commonSuperStack[0];
+  //     const containterNode = commonSuperStack[1] || commonSuperRule;
+  //     console.log(
+  //       "commonSuperRule",
+  //       commonSuperRule
+  //       // findLeafNodeAtOffset(commonSuperRule.node, cursorOffset)
+  //     );
+  //     console.groupCollapsed("input features");
+  //     // const nextNode = _utils.findNextTokenNode(commonSuperRule.node, prevTokenOffset);
+  //     // console.log("nextNode", nextNode);
+  //     const stackNode =
+  //       (_utils.isParserRuleOrCrossReference(cursorNode.feature) &&
+  //         _utils.findNodeWithFeature(commonSuperRule.node, cursorNode.feature)) ||
+  //       cursorNode;
+  //     const featureStack = this.buildFeatureStack(stackNode);
+  //     // const featureStack2 = this.buildFeatureStack(node);
+  //     console.log("featureStack", [...featureStack], stackNode, cursorNode);
+  //     const features = langium.findNextFeatures(featureStack);
+  //     // const features2 = [...fer.findNextFeatures(featureStack2)];
+  //     console.log("input features", features);
+  //     // In some cases, it is possible that we do not have a super rule
+  //     if (commonSuperRule) {
+  //       const flattened = Array.from(_utils.flattenCstGen(commonSuperRule.node)).filter(
+  //         (e) => e.offset < triggerOffset
+  //       );
+  //       const possibleFeatures = this.ruleInterpreter.interpretRule(
+  //         commonSuperRule.rule,
+  //         [...flattened],
+  //         cursorOffset
+  //       );
+  //       // const tokens = this.services.parser.LangiumParser._wrapper.input.filter(
+  //       //   (o) => o.endOffset < triggerOffset
+  //       // );
+  //       console.log(
+  //         "getCompletion",
+  //         cursorOffset,
+  //         cursorNode.text,
+  //         flattened //.map((f) => f.feature.$type + ":" + f.text).join("|"),
+  //         // possibleFeatures
+  //         // tokens
+  //         // this.services.parser.LangiumParser._wrapper.computeContentAssist("Document", tokens)
+  //       );
+  //       // console.log(
+  //       //   "findAllFeatures",
+  //       //   // _utils.findAllFeatures(commonSuperRule.rule),
+  //       //   // langium.findNextFeatures(this.buildFeatureStack(node)),
+  //       //   fer.findAllFeatures(commonSuperRule.rule)
+  //       //   // langium.findAllFeatures(commonSuperRule.rule).byName
+  //       // );
+  //       // Remove features which we already identified during parsing
+  //       const partialMatches = possibleFeatures.filter((e) => {
+  //         const match = this.ruleInterpreter.featureMatches(
+  //           e,
+  //           flattened[flattened.length - 1],
+  //           triggerOffset
+  //         );
+  //         return match === "partial" || match === "both";
+  //       });
+  //       // console.log("partialMatches", partialMatches, [...features]);
+  //       const notMatchingFeatures = possibleFeatures.filter((e) => !partialMatches.includes(e));
+  //       features.push(...partialMatches);
+  //       const nextFeatures = langium.findNextFeatures(notMatchingFeatures.flatMap((e) => [e]));
+  //       // console.log("notMatchingFeatures => nextFeatures", notMatchingFeatures, nextFeatures, [
+  //       //   ...features,
+  //       // ]);
+  //       features.push(...nextFeatures);
+  //       console.log("nextFeatures", [...features]);
+  //     }
+  //     if (
+  //       cursorNode.end === triggerOffset &&
+  //       (!langium.isKeyword(cursorNode.feature) ||
+  //         (cursorNode.text !== cursorNode.feature.value &&
+  //           cursorNode.text !== context.triggerCharacter))
+  //     ) {
+  //       // console.log("push feature", node.feature);
+  //       features.push(cursorNode.feature);
+  //     }
+  //     // const contextNode = this.getCompletetionContext(node);
+  //     // console.log("contextNode", contextNode);
+  //     console.groupEnd();
+  //     this.trace("completionFor", () => {
+  //       const includesFeature = [];
+  //       const featureStream: langium.Stream<langium.AbstractElement | langium.CrossReference> =
+  //         langium.stream(features).distinct((e) => (langium.isKeyword(e) ? e.value : e));
+  //       console.log("completionFor")
+  //       for (const feature of featureStream) {
+  //         includesFeature.push(feature);
+  //         if (
+  //           this.isIgnoreFeature(feature) ||
+  //           (config?.filterFeature && !config.filterFeature(feature))
+  //         ) {
+  //           continue;
+  //         }
+  //         const parseRule = langium.isRuleCall(feature)
+  //           ? feature.rule.ref
+  //           : langium.getContainerOfType(feature, _utils.isParserRuleOrCrossReference);
+  //         const allowNode = commonSuperStack.find((stack) => {
+  //           const allRules = Array.from(langium.findAllFeatures(stack.rule).byFeature.keys());
+  //           return allRules.find(
+  //             (o) => o === parseRule || (langium.isRuleCall(o) && o.rule?.ref === parseRule)
+  //           );
+  //         });
+  //         // const map = commonSuperStack.map((stack) =>
+  //         //   this.mapApp(stack.rule, parseRule as langium.ParserRule)
+  //         // );
+  //         // const snip = map.filter(Boolean);
+  //         console.log(
+  //           "allowNode",
+  //           feature,
+  //           allowNode
+  //           // snip,
+  //           // snip.map((stacks) => this.to(stacks)),
+  //           // commonSuperStack.map((stack) => Array.from(searchAllFeatures(stack.node.feature)))
+  //         );
+  //         if (parseRule && _utils.isParserRuleOrCrossReference(parseRule)) {
+  //           // findAllFeatures;
+  //           const keywordFeatureNode =
+  //             (allowNode || langium.isCrossReference(parseRule)) &&
+  //             _utils.findNodeWithFeature(
+  //               allowNode?.node || commonSuperRule.node,
+  //               parseRule
+  //               // cursorOffset
+  //             );
+  //           // _utils.findNodesWithFeature(
+  //           //   commonSuperRule.node.element.$container.$cstNode,
+  //           //   parseRule
+  //           // );
+  //           if (keywordFeatureNode) {
+  //             if (langium.isCrossReference(parseRule)) {
+  //               if (keywordFeatureNode.end > triggerOffset) {
+  //                 console.log("skip overoffset reference", keywordFeatureNode);
+  //                 continue;
+  //               }
+  //               const isReferenceTrigger = langium.isCrossReference(cursorNode.feature);
+  //               const isCursorTriggerNode =
+  //                 triggerOffset <= cursorNode.end && triggerOffset > cursorNode.offset;
+  //               if (isReferenceTrigger && isCursorTriggerNode && cursorNode.feature !== parseRule)
+  //                 continue;
+  //               const isCursorReference: boolean =
+  //                 isReferenceTrigger && isCursorTriggerNode && cursorNode.feature === parseRule;
+  //               const refId = this.getCrossReferenceProperty(parseRule) as string;
+  //               const refNode = isCursorReference ? cursorNode : keywordFeatureNode;
+  //               const finded = this.findArrayAssignment(refNode, superNode.node);
+  //               console.log("findArrayAssignment", finded, keywordFeatureNode);
+  //               const reference = refNode.element[refId];
+  //               const resolvedRef = langium.isReference(reference) && !reference.error;
+  //               if (finded) {
+  //                 const { assignment, container } = finded;
+  //                 const nodeList = (container.element[assignment.feature] || []) as any[];
+  //                 if (isCursorReference && resolvedRef) {
+  //                   console.log(
+  //                     "skip resolved reference",
+  //                     parseRule.type.$refText,
+  //                     reference,
+  //                     keywordFeatureNode
+  //                   );
+  //                   continue;
+  //                 }
+  //                 const cacheMap = nodeList.reduce((result, node: unknown) => {
+  //                   const resolvedNode =
+  //                     langium.isReference(node[refId]) && (node[refId] as langium.Reference).ref;
+  //                   const name =
+  //                     resolvedNode &&
+  //                     this.nameProvider.getQualifiedName(resolvedNode.$container, resolvedNode);
+  //                   if (name) {
+  //                     result[name] = true;
+  //                   }
+  //                   return result;
+  //                 }, {});
+  //                 console.log(
+  //                   "skip resolved reference",
+  //                   parseRule.type.$refText,
+  //                   nodeList,
+  //                   Object.keys(cacheMap),
+  //                   container
+  //                 );
+  //                 for (const { node, info } of this.forCompletionForCrossReference(
+  //                   parseRule,
+  //                   finded?.container.element || containterNode.node.element
+  //                 )) {
+  //                   if (
+  //                     // (node.type === ast.Param || node.type === ast.Character) &&
+  //                     !cacheMap[node.name]
+  //                   ) {
+  //                     // console.log(node, info);
+  //                     this.currentContext.acceptor(node, info);
+  //                   }
+  //                 }
+  //               } else {
+  //                 if (resolvedRef) {
+  //                   // commonSuperStack.find(superNode => {
 
-                    // })
-                    console.log(
-                      "skip resolved reference",
-                      parseRule.type.$refText,
-                      reference,
-                      keywordFeatureNode
-                    );
-                    continue;
-                  }
-                  this.completionForCrossReference(
-                    parseRule,
-                    finded?.container.element || containterNode.node.element,
-                    this.currentContext.acceptor
-                  );
-                }
-                continue;
-              } else if (!isNaN(keywordFeatureNode.offset)) {
-                const finded = this.findArrayAssignment(cursorNode, superNode.node);
-                console.log("findArrayAssignment", finded, keywordFeatureNode);
-                const group = _utils.getContainerOfTypeUntil(
-                  keywordFeatureNode.feature,
-                  (node): node is langium.Group => {
-                    return (
-                      langium.isGroup(node) &&
-                      (node.cardinality === "*" || node.cardinality === "+")
-                    );
-                  },
-                  (node) => node === containterNode.node.feature
-                );
-                if (langium.isKeyword(feature)) {
-                  if (keywordFeatureNode.text === feature.value && !group) {
-                    console.log("skip keyword", feature, parseRule, keywordFeatureNode);
-                    continue;
-                  }
-                } else {
-                  if (!group) {
-                    console.log("skip exsist feature", feature, parseRule, keywordFeatureNode);
-                    continue;
-                  }
-                }
-              }
-            } else {
-              console.log("not find feature", feature, "in", commonSuperRule.node);
-            }
-            console.log("completionFor", feature);
-            this.completionFor(
-              langium.findRelevantNode(cursorNode),
-              feature,
-              this.currentContext.acceptor
-            );
-            continue;
-          }
-          console.log("completionFor", feature);
-          this.completionFor(
-            langium.findRelevantNode(cursorNode),
-            feature,
-            this.currentContext.acceptor
-          );
-        }
-        console.log("features", includesFeature);
-      });
-    } else {
-      // The entry rule is the first parser rule
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-      // this.completionForRule(undefined, void 0, this.currentContext.acceptor);
-    }
-  }
+  //                   // })
+  //                   console.log(
+  //                     "skip resolved reference",
+  //                     parseRule.type.$refText,
+  //                     reference,
+  //                     keywordFeatureNode
+  //                   );
+  //                   continue;
+  //                 }
+  //                 this.completionForCrossReference(
+  //                   parseRule,
+  //                   finded?.container.element || containterNode.node.element,
+  //                   this.currentContext.acceptor
+  //                 );
+  //               }
+  //               continue;
+  //             } else if (!isNaN(keywordFeatureNode.offset)) {
+  //               const finded = this.findArrayAssignment(cursorNode, superNode.node);
+  //               console.log("findArrayAssignment", finded, keywordFeatureNode);
+  //               const group = _utils.getContainerOfTypeUntil(
+  //                 keywordFeatureNode.feature,
+  //                 (node): node is langium.Group => {
+  //                   return (
+  //                     langium.isGroup(node) &&
+  //                     (node.cardinality === "*" || node.cardinality === "+")
+  //                   );
+  //                 },
+  //                 (node) => node === containterNode.node.feature
+  //               );
+  //               if (langium.isKeyword(feature)) {
+  //                 if (keywordFeatureNode.text === feature.value && !group) {
+  //                   console.log("skip keyword", feature, parseRule, keywordFeatureNode);
+  //                   continue;
+  //                 }
+  //               } else {
+  //                 if (!group) {
+  //                   console.log("skip exsist feature", feature, parseRule, keywordFeatureNode);
+  //                   continue;
+  //                 }
+  //               }
+  //             }
+  //           } else {
+  //             console.log("not find feature", feature, "in", commonSuperRule.node);
+  //           }
+  //           console.log("completionFor", feature);
+  //           this.completionFor(
+  //             langium.findRelevantNode(cursorNode),
+  //             feature,
+  //             this.currentContext.acceptor
+  //           );
+  //           continue;
+  //         }
+  //         console.log("completionFor", feature);
+  //         this.completionFor(
+  //           langium.findRelevantNode(cursorNode),
+  //           feature,
+  //           this.currentContext.acceptor
+  //         );
+  //       }
+  //       console.log("features", includesFeature);
+  //     });
+  //   } else {
+  //     // The entry rule is the first parser rule
+  //     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+  //     // this.completionForRule(undefined, void 0, this.currentContext.acceptor);
+  //   }
+  // }
   protected completionForRule(
     astNode: langium.AstNode | undefined,
     rule: langium.AbstractRule | string = this.grammar.rules.find((e) => langium.isParserRule(e)),
@@ -719,7 +724,7 @@ export class CompletionProvider extends langium.DefaultCompletionProvider {
     const isArrayAssignment = assignment?.operator === "+=";
     if (!isArrayAssignment && assignment) {
       if (langium.isRuleCall(assignment.terminal)) {
-        return assignment.terminal.rule.ref.type === ast.List;
+        return ast.getRuleType(assignment.terminal.rule.ref) === ast.List;
       }
     }
     return isArrayAssignment;
@@ -787,7 +792,7 @@ export class CompletionProvider extends langium.DefaultCompletionProvider {
       if (node.element && this.isContainerExpression(node.element)) {
         if (this.ruleInterpreter.isRootRuleCallFeature(node)) {
           const feature = node.feature;
-          const rule = <langium.ParserRule>feature.rule.ref;
+          const rule = feature.rule.ref as langium.ParserRule;
           features.push({ rule, node, feature });
         }
         prev = node;
@@ -798,19 +803,18 @@ export class CompletionProvider extends langium.DefaultCompletionProvider {
     return features;
   }
 
-  isTopExpression = (item: unknown): item is langium.AstNode => {
+  isTopExpression = (item: langium.AstNode): item is langium.AstNode => {
     return this.isContainerExpression(item) && !this.isContainerExpression(item.$container);
   };
 
-  isContainerExpression = (astNode: unknown): astNode is langium.AstNode => {
+  isContainerExpression = (astNode: langium.AstNode): astNode is langium.AstNode => {
     return (
-      !ast.isBlock(astNode) &&
       !ast.isDocumentContents(astNode) &&
       !ast.isDocument(astNode) &&
-      !ast.isStoryBlock(astNode)
+      astNode.$type !== ast.Block &&
+      astNode.$type !== ast.StoryBlock
     );
   };
-
 
   protected completionFor(
     astNode: langium.AstNode | undefined,
@@ -838,13 +842,13 @@ export class CompletionProvider extends langium.DefaultCompletionProvider {
           kind: _lsp.CompletionItemKind.Keyword,
           detail: type,
           sortText: "3",
-          documentation: name,
+          documentation: name
         });
     }
     return acceptor(keyword.value, {
       kind: _lsp.CompletionItemKind.Keyword,
       detail: "Keyword",
-      sortText: /\w/.test(keyword.value) ? "1" : "2",
+      sortText: /\w/.test(keyword.value) ? "1" : "2"
     });
   }
 
@@ -890,8 +894,8 @@ export class CompletionProvider extends langium.DefaultCompletionProvider {
                 detail: node.type,
                 sortText: "0",
                 commitCharacters: ["="],
-                insertTextFormat: _lsp.InsertTextFormat.PlainText,
-              },
+                insertTextFormat: _lsp.InsertTextFormat.PlainText
+              }
             };
           }
           duplicateStore.add(node.name);
@@ -911,7 +915,7 @@ export class CompletionProvider extends langium.DefaultCompletionProvider {
       const scope = this.scopeProvider.getScope(context, refId);
       const contextNameNode = this.nameProvider.getNameNode(context);
       console.groupCollapsed("completionForCrossReference", crossRef, refId, context, [
-        ...scope.getAllElements(),
+        ...scope.getAllElements()
       ]);
       const duplicateStore = new Set<string>();
       if (
@@ -938,7 +942,7 @@ export class CompletionProvider extends langium.DefaultCompletionProvider {
                   detail: node.type,
                   sortText: "0",
                   commitCharacters: ["="],
-                  insertTextFormat: _lsp.InsertTextFormat.PlainText,
+                  insertTextFormat: _lsp.InsertTextFormat.PlainText
                 });
                 duplicateStore.add(node.name);
               }
@@ -956,7 +960,7 @@ export class CompletionProvider extends langium.DefaultCompletionProvider {
             detail: node.type,
             sortText: "0",
             commitCharacters: ["="],
-            insertTextFormat: _lsp.InsertTextFormat.PlainText,
+            insertTextFormat: _lsp.InsertTextFormat.PlainText
           });
           duplicateStore.add(node.name);
         }
@@ -991,7 +995,7 @@ export const TRIGGER_CHARACTERS = [
   "(",
   // "",
   "%",
-  "$",
+  "$"
 ];
 
 function printCompletionParams(params: LspTypes.CompletionParams) {

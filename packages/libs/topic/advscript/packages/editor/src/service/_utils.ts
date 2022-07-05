@@ -8,12 +8,12 @@ export function createRequest(callback: (key: string) => any, timeout?: number, 
   return {
     clean,
     do(arg: string) {
-      debug && console.log(debug, arg)
+      debug && console.log(debug, arg);
       clean(arg);
       map.set(
         arg,
         setTimeout(
-          (arg) => {
+          (arg: string) => {
             map.delete(arg);
             callback(arg);
           },
@@ -21,6 +21,6 @@ export function createRequest(callback: (key: string) => any, timeout?: number, 
           arg
         ) as unknown as number
       );
-    },
+    }
   };
 }

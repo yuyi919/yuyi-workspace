@@ -8,15 +8,14 @@ import { RenameHandler } from "./RenameHandler";
 import { DocumentSemanticProvider } from "./DocumentSemanticProvider";
 import { CodeActionProvider } from "./CodeActionProvider";
 import { DocumentHighlighter } from "./DocumentHighlighter";
-import { DocumentFormattingEdits } from "./DocumentFormattingEdits"
-import * as uuid from "./uuid";
+import { DocumentFormattingEdits } from "./DocumentFormattingEdits";
 
-export type CompletionProviders = {
+export interface CompletionProviders {
   CompletionProvider: CompletionProvider;
   RuleInterpreter: RuleInterpreter;
-};
+}
 
-export type Providers = {
+export interface Providers {
   HoverProvider: HoverProvider;
   CodeActionProvider: CodeActionProvider;
   DocumentSemanticProvider: DocumentSemanticProvider;
@@ -24,9 +23,9 @@ export type Providers = {
   RenameHandler: RenameHandler;
   DocumentSymbolProvider: DocumentSymbolProvider;
   completion: CompletionProviders;
-  DocumentHighlighter: DocumentHighlighter
-  DocumentFormattingEdits: DocumentFormattingEdits
-};
+  DocumentHighlighter: DocumentHighlighter;
+  DocumentFormattingEdits: DocumentFormattingEdits;
+}
 export * from "./CompletionProvider";
 export * from "./ReferenceFinder";
 export * from "./HoverProvider";
@@ -36,21 +35,23 @@ export * from "./DocumentSemanticProvider";
 export * from "./CodeActionProvider";
 export * from "./RuleInterpreter";
 export * from "./DocumentHighlighter";
-export * from "./DocumentFormattingEdits"
-const time = Date.now();
-Object.assign(globalThis, uuid);
-globalThis.testUuid = () => {
-  let length = 10000 * 1000;
-  console.time("uuid");
-  while (--length > -1) {
-    uuid.uuid(time);
-  }
-  console.timeEnd("uuid");
+export * from "./DocumentFormattingEdits";
 
-  length = 10000 * 1000;
-  console.time("uuid2");
-  while (--length > -1) {
-    uuid.uuid(time);
-  }
-  console.timeEnd("uuid2");
-};
+// import * as uuid from "./uuid";
+// const time = Date.now();
+// Object.assign(globalThis, uuid);
+// globalThis.testUuid = () => {
+//   let length = 10000 * 1000;
+//   console.time("uuid");
+//   while (--length > -1) {
+//     uuid.uuid(time);
+//   }
+//   console.timeEnd("uuid");
+
+//   length = 10000 * 1000;
+//   console.time("uuid2");
+//   while (--length > -1) {
+//     uuid.uuid(time);
+//   }
+//   console.timeEnd("uuid2");
+// };

@@ -3,14 +3,10 @@ import {
   JssmCompileSe,
   JssmCompileSeStart,
   JssmGenericConfig,
-  JssmParseTree,
+  JssmParseTree
 } from "jssm/jssm_types";
+import type { IndentNode, NewLineNode } from "langium/lib/generator/generator-node";
 import { camelCase, upperFirst } from "lodash";
-import type {
-  IndentNode,
-  CompositeGeneratorNode,
-  NewLineNode,
-} from "langium/lib/generator/generator-node";
 import { generateWith } from "./generateWith";
 import type { GeneratorContext } from "./generator";
 
@@ -19,7 +15,7 @@ export function generateNode(text: string, fileName: string, opts: GenerateOptio
   const LightState = {} as Record<string, number>;
   const LightData = generate(text, {
     actions: LightAction,
-    states: LightState,
+    states: LightState
   }) as JssmGenericConfig<any>;
   const ctx = generateWith(LightData, fileName, opts.destination, (ctx) => {
     const { fileNode, NL } = ctx;
@@ -51,14 +47,18 @@ export function generateNode(text: string, fileName: string, opts: GenerateOptio
         ...Object.fromEntries(
           Object.keys(LightAction).map((key) => [
             `${camelCase(key)}()`,
-            node => node.append(`return this.fsm.action(${LightAction[key]} as unknown as string); // ${actionEnumName}.${key}`, NL),
+            (node) =>
+              node.append(
+                `return this.fsm.action(${LightAction[key]} as unknown as string); // ${actionEnumName}.${key}`,
+                NL
+              )
           ])
         ),
         ...Object.fromEntries(
           Object.getOwnPropertyNames(Machine.prototype)
             .filter((key) => key !== "constructor" && !/_/.test(key))
             .map((key) => [`${key}: Machine<T>['${key}']`, `(...args) => this.fsm.${key}(...args)`])
-        ),
+        )
       },
       "export class",
       name + "<T>"
@@ -67,9 +67,9 @@ export function generateNode(text: string, fileName: string, opts: GenerateOptio
   return ctx;
 }
 
-export type GenerateOptions = {
+export interface GenerateOptions {
   destination?: string;
-};
+}
 
 function appendEnumSwitch(
   node: IndentNode,
@@ -143,7 +143,7 @@ export function generate(str: string, context: Context = { actions: {}, states: 
       return {
         ...o,
         from: wrap(o.from, context.states), // instanceof Array ? o.from.map((o) => parseInt(o)) : parseInt(o.from),
-        se: wrapSe(o.se, context),
+        se: wrapSe(o.se, context)
       };
     }
     return o;
@@ -159,15 +159,15 @@ export function generate(str: string, context: Context = { actions: {}, states: 
   return compile(tree);
 }
 
-type Context = {
+interface Context {
   actions: Record<string, number>;
   states: Record<string, number>;
-};
+}
 
 function wrapSe(a: JssmCompileSe, context: Context) {
   const r = {
     ...a,
-    to: wrap(a.to, context.states),
+    to: wrap(a.to, context.states)
   } as JssmCompileSe;
   if (a.l_action) {
     r.l_action = wrap(a.l_action, context.actions, 1);

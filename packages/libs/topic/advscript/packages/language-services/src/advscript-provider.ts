@@ -13,7 +13,7 @@ import {
   isParserRule,
   LangiumDocument,
   LangiumServices,
-  streamAllContents,
+  streamAllContents
 } from "langium";
 import { DefaultAstNodeLocator } from "langium/lib/workspace/ast-node-locator";
 import { CancellationToken } from "vscode-languageserver-protocol";
@@ -27,16 +27,15 @@ export class AstNodeDescriptionProvider extends DefaultAstNodeDescriptionProvide
   }
 
   /**
-   * Exports only types (`DataType or `Entity`) with their qualified names.
+   * Exports only types (`DataType` or `Entity`) with their qualified names.
    */
   async createDescriptions(
     document: LangiumDocument,
     cancelToken = CancellationToken.None
   ): Promise<AstNodeDescription[]> {
     const descr: AstNodeDescription[] = [];
-    for (const content of streamAllContents(document.parseResult.value)) {
+    for (const modelNode of streamAllContents(document.parseResult.value)) {
       await interruptAndCheck(cancelToken);
-      const modelNode = content.node;
       // if (ast.isIdentifierNode(modelNode)) continue;
       const name: string = this.nameProvider.getQualifiedName(modelNode.$container!, modelNode);
       // console.log("createDescriptions", modelNode, name);

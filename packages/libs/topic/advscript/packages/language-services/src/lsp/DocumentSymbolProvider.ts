@@ -25,8 +25,8 @@ export class DocumentSymbolProvider extends DefaultDocumentSymbolProvider {
           range: node.range,
           selectionRange: nameNode.range,
           children: this.getChildSymbols(document, astNode),
-          detail: "(detail)",
-        },
+          detail: "(detail)"
+        }
       ];
     }
     return this.getChildSymbols(document, astNode) || [];
@@ -37,9 +37,9 @@ export class DocumentSymbolProvider extends DefaultDocumentSymbolProvider {
   ): Lsp.DocumentSymbol[] | undefined {
     const children: Lsp.DocumentSymbol[] = [];
     if (!ast.isDialog(astNode)) {
-      for (const child of streamContents(astNode)) {
-        if (!ast.isIdentifierNode(child.node)) {
-          const result = this.getSymbol(document, child.node);
+      for (const node of streamContents(astNode)) {
+        if (!ast.isIdentifierNode(node)) {
+          const result = this.getSymbol(document, node);
           children.push(...result);
         }
       }

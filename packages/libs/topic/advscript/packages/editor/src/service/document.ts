@@ -4,12 +4,19 @@ import { AdvScript, IIncrementRange, ContentKind } from "@yuyi919/advscript-pars
 import { debounce } from "lodash";
 
 class OhmDcocument implements TextDocument {
-  private runtime = new AdvScript();
+  private _runtime = new AdvScript();
   private _uri: Lsp.DocumentUri;
   private _languageId: string;
   private _version: number;
   private _content: string;
   private _lineOffsets: number[] | undefined;
+
+  fireChanges = debounce(function () {
+    const changes = this.changes.splice(0, this.changes.length);
+    console.log("fireChanges", changes);
+    // this.parsedDocument(this._uri, this._content, changes);
+  }, 200);
+  changes: IIncrementRange[] = [];
 
   public constructor(uri: Lsp.DocumentUri, languageId: string, version: number, content: string) {
     this._uri = uri;
@@ -17,16 +24,16 @@ class OhmDcocument implements TextDocument {
     this._version = version;
     this._content = content;
     this._lineOffsets = undefined;
-    this.parsedDocument(uri, content);
+    this._parsedDocument(uri, content);
   }
 
-  private parsedDocument(id: string, file: string, range?: IIncrementRange[]) {
+  private _parsedDocument(id: string, file: string, range?: IIncrementRange[]) {
     try {
       console.groupCollapsed("[Story] parsedDocument");
-      this.runtime.load(id, file, range);
+      this._runtime.load(id, file, range);
       console.time("[Story] run");
       // const lines = [...story];
-      for (const line of this.runtime) {
+      for (const line of this._runtime) {
         // console.log(line)
         if (line.kind === ContentKind.Line) {
           console.debug("call %s", line.command, ...(line.argumentList || []));
@@ -110,7 +117,7 @@ class OhmDcocument implements TextDocument {
         this.changes.push({
           startIdx: startOffset,
           endIdx: endOffset,
-          content: change.text,
+          content: change.text
         });
       } else if (OhmDcocument.isFull(change)) {
         this._content = change.text;
@@ -121,13 +128,6 @@ class OhmDcocument implements TextDocument {
     }
     this._version = version;
   }
-  fireChanges = debounce(function () {
-    const changes = this.changes.splice(0, this.changes.length);
-    console.log("fireChanges", changes);
-    // this.parsedDocument(this._uri, this._content, changes);
-  }, 200);
-  changes: IIncrementRange[] = [];
-
   private getLineOffsets(): number[] {
     if (this._lineOffsets === undefined) {
       this._lineOffsets = computeLineOffsets(this._content, true);
@@ -204,10 +204,10 @@ class OhmDcocument implements TextDocument {
 /**
  * Creates a new text document.
  *
- * @param uri The document's uri.
- * @param languageId  The document's language Id.
- * @param version The document's initial version number.
- * @param content The document's content.
+ * @param uri - The document's uri.
+ * @param languageId - The document's language Id.
+ * @param version - The document's initial version number.
+ * @param content - The document's content.
  */
 export function create(
   uri: Lsp.DocumentUri,
@@ -221,9 +221,9 @@ export function create(
 /**
  * Updates a TextDocument by modifying its content.
  *
- * @param document the document to update. Only documents created by TextDocument.create are valid inputs.
- * @param changes the changes to apply to the document.
- * @param version the changes version for the document.
+ * @param document - the document to update. Only documents created by TextDocument.create are valid inputs.
+ * @param changes - the changes to apply to the document.
+ * @param version - the changes version for the document.
  * @returns The updated TextDocument. Note: That's the same document instance passed in as first parameter.
  *
  */
@@ -310,7 +310,7 @@ enum CharCode {
   /**
    * The `\r` character.
    */
-  CarriageReturn = 13,
+  CarriageReturn = 13
 }
 
 function computeLineOffsets(text: string, isAtLineStart: boolean, textOffset = 0): number[] {

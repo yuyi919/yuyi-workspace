@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/member-ordering */
 import type * as Lsp from "vscode-languageserver-protocol";
 import { TextDocumentIdentifier } from "vscode-languageserver-protocol";
 import { MonacoEditorRegisterAdapter } from "./lib";
@@ -37,6 +38,7 @@ export class MonacoServiceWrapper extends MonacoEditorRegisterAdapter {
     private _languageId: string
   ) {
     super(_monaco);
+    console.log(this._selector);
   }
 
   async initialize(model?: Monaco.editor.ITextModel) {

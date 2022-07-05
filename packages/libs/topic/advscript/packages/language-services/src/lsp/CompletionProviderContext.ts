@@ -40,7 +40,7 @@ export class CompletionProviderContext {
       value,
       {
         ...item,
-        data: this.completionItemData,
+        data: this.completionItemData
       }
     );
     if (completionItem) {
@@ -58,7 +58,7 @@ export class CompletionProviderContext {
       value,
       {
         ...item,
-        data: this.completionItemData,
+        data: this.completionItemData
       }
     );
     if (completionItem) {
@@ -169,7 +169,7 @@ export class CompletionProviderContext {
     }
     const textEdit = this.buildCompletionTextEdit(document, offset, label);
     if (!textEdit) {
-      globalThis.currentDocument = document;
+      // globalThis.currentDocument = document;
       console.log("empty", textEdit, offset, label);
       return undefined;
     }
@@ -177,7 +177,7 @@ export class CompletionProviderContext {
       label: info?.label || (prefix || "") + label,
       textEdit,
       documentation: "documentation",
-      filterText: (prefix || "") + label,
+      filterText: (prefix || "") + label
     } as CompletionItemType;
     if (info) {
       Object.assign(item, info);
@@ -187,8 +187,8 @@ export class CompletionProviderContext {
     const {
       range: {
         start: { line: startLine, character: startCharacter },
-        end: { line: endLine, character: endCharacter },
-      },
+        end: { line: endLine, character: endCharacter }
+      }
     } = textEdit as LspTypes.TextEdit;
     // item.additionalTextEdits = [
     //   ...(item.additionalTextEdits || []),
@@ -249,8 +249,8 @@ export class CompletionProviderContext {
         newText: completion,
         range: {
           start,
-          end,
-        },
+          end
+        }
       };
     }
   }
@@ -291,7 +291,7 @@ export class CompletionProviderContext {
     // ) {
     return {
       left: negativeOffset,
-      right: negativeOffsetRight,
+      right: negativeOffsetRight
     };
     // }
   }
@@ -324,8 +324,8 @@ export class CompletionProviderContext {
           ...(item.additionalTextEdits || []),
           {
             newText: "",
-            range: this.buildDelete(range, invokeText.length),
-          },
+            range: this.buildDelete(range, invokeText.length)
+          }
         ];
         range.end = range.start;
       }
@@ -339,9 +339,9 @@ export class CompletionProviderContext {
     return {
       start: {
         line: range.start.line,
-        character: range.start.character - (length - (range.end.character - range.start.character)),
+        character: range.start.character - (length - (range.end.character - range.start.character))
       },
-      end: range.start,
+      end: range.start
     };
   }
 
@@ -349,9 +349,9 @@ export class CompletionProviderContext {
     return {
       start: {
         line: range.start.line,
-        character: range.start.character - (length - (range.end.character - range.start.character)),
+        character: range.start.character - (length - (range.end.character - range.start.character))
       },
-      end: range.end,
+      end: range.end
     };
   }
 
@@ -362,8 +362,8 @@ export class CompletionProviderContext {
       ...params,
       context: {
         ...params.context,
-        invokeText: undefined,
-      },
+        invokeText: undefined
+      }
     };
     this.document = document;
     this.completionItemData = itemData;
@@ -387,7 +387,7 @@ export class CompletionProviderContext {
             activedOffsetStart: inputNode.offset,
             activeOffset: inputNode.end,
             activedText: context.triggerCharacter,
-            triggerCharacter: context.triggerCharacter,
+            triggerCharacter: context.triggerCharacter
           };
         } else {
           context.invokeText = "";
@@ -397,7 +397,7 @@ export class CompletionProviderContext {
               session.activeOffset = triggerOffset;
               const invokeText = document.textDocument.getText({
                 start: document.textDocument.positionAt(session.activedOffsetStart),
-                end: document.textDocument.positionAt(triggerOffset),
+                end: document.textDocument.positionAt(triggerOffset)
               });
               session.activedText = session.activedText = session.triggerCharacter + invokeText;
             } else {
@@ -428,7 +428,7 @@ export class CompletionProviderContext {
           session.activeOffset = triggerOffset;
           context.invokeText = document.textDocument.getText({
             start: document.textDocument.positionAt(session.activedOffsetStart),
-            end: document.textDocument.positionAt(triggerOffset),
+            end: document.textDocument.positionAt(triggerOffset)
           });
           session.activedText = (session.triggerCharacter || "") + context.invokeText;
         }
@@ -443,7 +443,7 @@ export class CompletionProviderContext {
             session.activeOffset = triggerOffset;
             const invokeText = document.textDocument.getText({
               start: document.textDocument.positionAt(session.activedOffsetStart),
-              end: document.textDocument.positionAt(triggerOffset),
+              end: document.textDocument.positionAt(triggerOffset)
             });
             session.activedText = session.triggerCharacter + invokeText;
           } else {
@@ -451,7 +451,7 @@ export class CompletionProviderContext {
               activedOffsetStart: triggerOffset,
               activeOffset: triggerOffset,
               activedText: context.triggerCharacter,
-              triggerCharacter: context.triggerCharacter,
+              triggerCharacter: context.triggerCharacter
             };
           }
         }
@@ -476,7 +476,7 @@ type CompletionItemData = LspTypes.CompletionParams & {
     invokeText?: string | undefined;
   };
 };
-type CompletionSession = {
+interface CompletionSession {
   /**
    * 从输入触发关键字开始，独立维护一个自动补全的活动语境
    * 持续维护直到触发方式改为Invoked且触发position发生改变
@@ -485,7 +485,7 @@ type CompletionSession = {
   activeOffset: number;
   activedText: string | undefined;
   triggerCharacter: string;
-};
+}
 
 export type CompletionItemType = Omit<LspTypes.CompletionItem, "data"> & {
   data: CompletionItemData;

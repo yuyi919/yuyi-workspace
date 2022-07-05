@@ -12,7 +12,7 @@ import {
   SnippetStringItemKind,
   SnippetVariables,
   isSnippetReferenceItem,
-  isSnippetPlaceholderItem,
+  isSnippetPlaceholderItem
 } from "./SnippetString";
 import { FILTER } from "./searchAllAlternatives";
 import * as _utils from "../_utils";
@@ -25,7 +25,7 @@ export type FeatureData<T extends FeatureKeywordTypedValue = FeatureKeywordTyped
   stack: langium.AbstractElement[];
   loop?: LoopFeature;
 };
-export type WrapContext = {
+export interface WrapContext {
   root?: langium.AbstractRule;
   filter?: FILTER;
   crossrefs?:
@@ -34,7 +34,8 @@ export type WrapContext = {
   node?: CstNode;
   triggerNode?: CstNode;
   prevRule?: langium.RuleCall;
-};
+  containerNode?: CstNode;
+}
 
 // export function wrapAllAlternatives(rule: langium.AbstractRule, context?: WrapContext) {
 //   context = {
@@ -103,7 +104,7 @@ function isTriggeredKeyword(feature: string | SnippetItem, context: WrapContext)
 function wrapDataTypeRule(rule: langium.ParserRule, context: WrapContext) {
   if (
     langium.isTerminalRule(rule) ||
-    (isDataTypeRule(rule) && ["string", "number", "boolean"].includes(rule.type))
+    (isDataTypeRule(rule) && ["string", "number", "boolean"].includes(rule.dataType))
   ) {
     if (rule.name in RULE_PREVIEW) return RULE_PREVIEW[rule.name];
     const data = [...generateRuleTreeEnum(rule, context.root)];
@@ -114,7 +115,7 @@ function wrapDataTypeRule(rule: langium.ParserRule, context: WrapContext) {
         const item = {
           kind: SnippetStringItemKind.Choice,
           values: values.map((v) => v.join("")),
-          name: rule.name,
+          name: rule.name
         } as SnippetItem;
         console.log("wrapDataTypeRule", rule, item);
         return item;
@@ -124,7 +125,7 @@ function wrapDataTypeRule(rule: langium.ParserRule, context: WrapContext) {
     } else {
       return {
         kind: SnippetStringItemKind.Text,
-        value: rule.name,
+        value: rule.name
       } as SnippetItem;
     }
   }
@@ -219,7 +220,8 @@ export function findStartEnd(
   elements: FeatureData<FeatureKeywordTypedValue>[],
   startNode: CstNode,
   prevRule: langium.RuleCall,
-  triggerNode?: CstNode
+  triggerNode?: CstNode,
+  containerNode?: CstNode
 ) {
   const isNewType = isSpaceInput(triggerNode);
   const prevRuleIndex = prevRule
@@ -240,7 +242,7 @@ export function findStartEnd(
     triggerNode && (triggerNode as LeafCstNode).tokenType?.name === ast.WS ? 0 : -1
   );
   if (start > -1) {
-    const endNode = findLastNonHiddenNode(startNode.element.$cstNode as any);
+    const endNode = findLastNonHiddenNode(containerNode || (startNode.element.$cstNode as any));
     if (endNode) {
       const endFeature = endNode.feature as langium.AbstractElement;
       const end = Math.max(
@@ -284,7 +286,7 @@ export function* generateSnippetEnumsWithRule(rule: langium.ParserRule, context:
 export function getSnippetEnumsWithRule(rule: langium.ParserRule, context: WrapContext) {
   context = {
     ...context,
-    root: context?.root || rule,
+    root: context?.root || rule
   };
   return [...generateSnippetEnumsWithRule(rule, context)];
 }
@@ -297,7 +299,14 @@ export function* filterRuleTreeEnums(
   for (const elements of filterRuleTree(rule, context)) {
     const startNode = context.node;
     const pos =
-      context.node && findStartEnd(elements, context.node, context.prevRule, context.triggerNode);
+      context.node &&
+      findStartEnd(
+        elements,
+        context.node,
+        context.prevRule,
+        context.triggerNode,
+        context.containerNode
+      );
     if (pos) {
       // eslint-disable-next-line prefer-const
       const { start, end, startNode, endNode, isNewType } = pos;
@@ -316,7 +325,7 @@ export function* filterRuleTreeEnums(
           ? elements.slice(sliceStart, sliceStart + 1)
           : start === end
           ? elements.slice(sliceStart)
-          : [];
+          : elements.slice(sliceStart, sliceStart + 1);
       if (debug) {
         console.log("filterRuleTreeEnums", rule.name, filtered, elements);
       }
@@ -328,7 +337,7 @@ export function* filterRuleTreeEnums(
           yield Object.assign([ref], {
             nameStack: elements.nameStack,
             replace: endNode && startNode ? endNode.end - startNode.end : void 0,
-            addition: filtered,
+            addition: filtered
           }) as RuleTreeEnumYieldValue<FeatureData[]>;
           continue;
         }
@@ -336,7 +345,7 @@ export function* filterRuleTreeEnums(
       if (filtered.length > 0) {
         yield Object.assign(filtered, {
           nameStack: elements.nameStack,
-          replace: endNode && startNode ? endNode.end - startNode.end : void 0,
+          replace: endNode && startNode ? endNode.end - startNode.end : void 0
         }) as RuleTreeEnumYieldValue<FeatureData[]>;
       }
       continue;
@@ -408,8 +417,8 @@ function* wrapFeatureKeywordValue(
           yield [
             {
               kind: SnippetStringItemKind.Placeholder,
-              name: element.feature.name,
-            } as SnippetPlaceholderItem,
+              name: element.feature.name
+            } as SnippetPlaceholderItem
           ];
           break;
       }
@@ -420,8 +429,8 @@ function* wrapFeatureKeywordValue(
       {
         kind: SnippetStringItemKind.Reference,
         type,
-        data: element,
-      } as SnippetReferenceItem,
+        data: element
+      } as SnippetReferenceItem
     ];
     return;
   } else if (element.kind === langium.RuleCall) {
@@ -437,7 +446,7 @@ function* wrapFeatureKeywordValue(
         ...context,
         node: null,
         triggerNode: null,
-        prevRule: null,
+        prevRule: null
       })) {
         yield o;
       }
@@ -446,7 +455,7 @@ function* wrapFeatureKeywordValue(
     yield {
       kind: SnippetStringItemKind.Placeholder,
       name: `/* ${element.feature.rule.$refText} */`,
-      data: element,
+      data: element
     } as SnippetPlaceholderItem;
     // yield element;
     return;
@@ -469,10 +478,13 @@ function extendRuleTreeEnumYieldValue<T, E>(
   return Object.assign(handle(a), {
     nameStack: a.nameStack,
     replace: a.replace,
-    addition: a.addition && handle(a.addition),
+    addition: a.addition && handle(a.addition)
   }) as RuleTreeEnumYieldValue<E>;
 }
-type AstElementAddition = { assignment?: langium.Assignment; source?: langium.AbstractElement };
+interface AstElementAddition {
+  assignment?: langium.Assignment;
+  source?: langium.AbstractElement;
+}
 type AstElement = langium.AbstractElement & AstElementAddition;
 export interface LoopFeature {
   loopTrigger: langium.AbstractElement;
@@ -553,7 +565,7 @@ export function* generateRuleTreeEnum(
               lists.set(item, {
                 loopTrigger: loopTrigger[0],
                 SpaceTrigger: loopTrigger.some((o) => _utils.isRuleCallType(o, ast.Space)),
-                item: sourceElement || element,
+                item: sourceElement || element
               });
               if (sourceElement) {
                 return children;
@@ -636,7 +648,7 @@ export function* generateRuleTreeEnum(
               {
                 prev: { feature: list[index - 1] },
                 next: { feature: list[index + 1] },
-                stack: nameStack,
+                stack: nameStack
               }
             );
             const group = feature.stack.find((o) => langium.isGroup(o) && lists.has(o));
@@ -667,7 +679,7 @@ export function* generateRuleTreeEnum(
                   item.$type,
                 assignment: (item as AstElement).assignment,
                 stack: item.stack,
-                loop,
+                loop
               } as FeatureData);
             }
           }
@@ -683,7 +695,7 @@ export function* generateRuleTreeEnum(
     yield Object.assign(
       [{ kind: "TerminalRule", feature: rule as langium.TerminalRule, name: rule.name }],
       {
-        nameStack: [rule.name],
+        nameStack: [rule.name]
       }
     ) as RuleTreeEnumYieldValue<FeatureData[]>;
   }
@@ -692,9 +704,9 @@ export function* generateRuleTreeEnum(
     let resolveRule = false;
     let list = [rule.name];
     for (const feature of resolve) {
-      if (langium.isAction(feature) && feature.type !== rule.name) {
+      if (langium.isAction(feature) && feature.type.$refText !== rule.name) {
         resolveRule = true;
-        list.push(feature.type);
+        list.push(feature.type.$refText);
       }
       if (!resolveRule && feature.assignment) {
         const current = getContainerOfType(feature.assignment, langium.isParserRule);
@@ -736,12 +748,12 @@ globalThis.generateRuleTreeEnum = generateRuleTreeEnum;
 globalThis.getSnippetEnumsWithRule = getSnippetEnumsWithRule;
 
 const IgnoreMap = {
-  ..._utils.toConstMap([ast.WS, ast.Pipe, ast.ESCToken, ast.CommonIndent]),
+  ..._utils.toConstMap([ast.WS, ast.Pipe, ast.CommonIndent]),
   // [ast.YamlBlock]: toConstMap([ast.Declare]),
   [ast.Content]: _utils.toConstMap([ast.EOL]),
   [ast.Character]: _utils.toConstMap([ast.EOL]),
   [ast.CharactersDeclare]: _utils.toConstMap([ast.EOL]),
-  [ast.Call]: _utils.toConstMap([ast.MacroParam]),
+  [ast.Call]: _utils.toConstMap([ast.MacroParam])
 };
 const RULE_PREVIEW = {
   [ast.WS]: "",
@@ -753,79 +765,79 @@ const RULE_PREVIEW = {
     '"',
     {
       kind: SnippetStringItemKind.Placeholder,
-      name: "string",
+      name: "string"
     } as SnippetItem,
-    '"',
+    '"'
   ],
   [ast.NUMBER]: {
     kind: SnippetStringItemKind.Placeholder,
-    name: "0",
+    name: "0"
   } as SnippetPlaceholderItem,
   [ast.LabelContent]: {
     kind: SnippetStringItemKind.Placeholder,
-    name: "content",
+    name: "content"
   } as SnippetItem,
   [ast.ID]: {
     kind: SnippetStringItemKind.Placeholder,
-    name: "name",
+    name: "name"
   } as SnippetItem,
   [ast.Identifier]: {
     kind: SnippetStringItemKind.Placeholder,
-    name: "name",
+    name: "name"
   } as SnippetItem,
   [ast.NameIdentifier]: {
     kind: SnippetStringItemKind.Placeholder,
-    name: "name",
+    name: "name"
   } as SnippetItem,
   [ast.INLINE_COMMENT]: [
     "[[",
     {
       kind: SnippetStringItemKind.Placeholder,
-      name: "INLINE_COMMENT",
+      name: "INLINE_COMMENT"
     } as SnippetItem,
-    "]]",
+    "]]"
   ],
   [ast.DocumentContents]: [
     {
       kind: SnippetStringItemKind.Variable,
-      type: SnippetVariables.LINE_COMMENT,
+      type: SnippetVariables.LINE_COMMENT
     } as SnippetItem,
     {
       kind: SnippetStringItemKind.Placeholder,
-      name: " content",
+      name: " content"
     } as SnippetItem,
-    "\r\n",
+    "\r\n"
   ],
   [ast.TopExpression]: [
     {
       kind: SnippetStringItemKind.Placeholder,
-      name: "0",
-    } as SnippetItem,
+      name: "0"
+    } as SnippetItem
   ],
   [ast.Expression]: [
     {
       kind: SnippetStringItemKind.Placeholder,
-      name: "0",
-    } as SnippetItem,
+      name: "0"
+    } as SnippetItem
   ],
   [ast.LiteralExpression]: [
     {
       kind: SnippetStringItemKind.Placeholder,
-      name: "0",
-    } as SnippetItem,
+      name: "0"
+    } as SnippetItem
   ],
   [ast.Content]: [
     {
       kind: SnippetStringItemKind.Placeholder,
-      name: "content...",
+      name: "content..."
     } as SnippetItem,
-    "\r\n",
-  ],
+    "\r\n"
+  ]
 };
-type NodeFilterCursorParam<T> = {
+interface NodeFilterCursorParam<T> {
   feature: T;
   node?: CstNode;
-};
+}
 type NodeFilterCursor = <T>(
   node: NodeFilterCursorParam<T>,
   context: {

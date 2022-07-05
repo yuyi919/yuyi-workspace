@@ -68,7 +68,7 @@ export interface SourceRange {
   lineEnd: number;
   colEnd: number;
 }
-export type Source = SourceNode;
+export type Source = string | SourceNode;
 
 export function createKindNodeFactory<
   Type extends NodeTypeKind,

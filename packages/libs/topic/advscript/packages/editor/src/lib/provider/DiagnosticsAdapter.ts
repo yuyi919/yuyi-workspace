@@ -1,7 +1,7 @@
-import { IDisposable } from "../monaco.export";
+import { monaco, IDisposable } from "../monaco.export";
 import { editor, Editor } from "../monaco.export";
 import { toDiagnostics } from "../provider/_workerUtils";
-import { WorkerAccessor, AvsLanguageService } from "../../service";
+import { IWorkerAccessor, AvsLanguageService } from "../../service";
 
 export class DiagnosticsAdapter {
   private _disposables: IDisposable[] = [];
@@ -9,7 +9,7 @@ export class DiagnosticsAdapter {
 
   constructor(
     private _languageId: string,
-    private _worker: WorkerAccessor<AvsLanguageService>,
+    private _worker: IWorkerAccessor<AvsLanguageService>,
     language: AvsLanguageService
   ) {
     const onModelAdd = (model: monaco.editor.IModel): void => {

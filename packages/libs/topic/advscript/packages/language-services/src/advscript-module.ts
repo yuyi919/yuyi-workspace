@@ -11,7 +11,9 @@ import {
   createDefaultModule,
   DeepPartial,
   LangiumSharedServices,
+  LangiumDocument
 } from "langium";
+import { URI } from "vscode-uri";
 import { AstNodeDescriptionProvider, AstNodeLocator } from "./advscript-provider";
 import { AdvscriptValidationRegistry, AdvscriptValidator } from "./advscript-validator";
 import { AvsAstReflection, astReflection } from "./ast-utils";
@@ -26,7 +28,7 @@ type WrapperLangiumParser<T> = LangiumParser & Omit<T, "">;
 /**
  * Declaration of custom services - add your own service classes here.
  */
-export type AdvscriptAddedServices = {
+export interface AdvscriptAddedServices {
   shared?: {
     AstReflection: AvsAstReflection;
   };
@@ -39,7 +41,7 @@ export type AdvscriptAddedServices = {
   };
   references: References.Providers;
   lsp: Lsp.Providers;
-};
+}
 
 /**
  * Union of Langium default services and your custom services - use this as constructor parameter
@@ -67,29 +69,29 @@ export const AdvscriptModule: Module<
 > = {
   validation: {
     ValidationRegistry: (injector) => new AdvscriptValidationRegistry(injector),
-    AdvscriptValidator: (injector) => new AdvscriptValidator(injector),
+    AdvscriptValidator: (injector) => new AdvscriptValidator(injector)
   },
   references: {
     Linker: (injector) => new References.Linker(injector),
     ScopeComputation: (injector) => new References.ScopeComputation(injector),
     NameProvider: (injector) => new References.NameProvider(injector),
     ScopeProvider: (injector) => new References.ScopeProvider(injector),
-    References: (injector) => new References.References(injector),
+    References: (injector) => new References.References(injector)
   },
   index: {
     AstNodeLocator: () => new AstNodeLocator(),
-    AstNodeDescriptionProvider: (injector) => new AstNodeDescriptionProvider(injector),
+    AstNodeDescriptionProvider: (injector) => new AstNodeDescriptionProvider(injector)
   },
-  serializer: {
-    JsonSerializer: (injector) => new JsonSerializer(injector),
-  },
+  // serializer: {
+  //   JsonSerializer: (injector) => new JsonSerializer(injector)
+  // },
   // parser: {
   //     LangiumParser: (service) => new OhmParser(service) as any,
   // },
   parser: {
     TokenBuilder: () => new CustomTokenBuilder(),
     LangiumParser: (services) =>
-      createCustomParser(services) as unknown as WrapperLangiumParser<CustomParser>,
+      createCustomParser(services) as unknown as WrapperLangiumParser<CustomParser>
   },
   lsp: {
     HoverProvider: (service) => new Lsp.HoverProvider(service),
@@ -102,9 +104,9 @@ export const AdvscriptModule: Module<
     DocumentFormattingEdits: (services) => new Lsp.DocumentFormattingEdits(services),
     completion: {
       CompletionProvider: (services) => new Lsp.CompletionProvider(services),
-      RuleInterpreter: (services) => new Lsp.RuleInterpreter(services),
-    },
-  },
+      RuleInterpreter: (services) => new Lsp.RuleInterpreter(services)
+    }
+  }
 };
 /**
  * Inject the full set of language services by merging three modules:
@@ -118,7 +120,7 @@ export function createAdvscriptServices(context?: DefaultSharedModuleContext): {
 } {
   const shared = inject(createDefaultSharedModule(context), {
     ...AdvScriptGeneratedSharedModule,
-    AstReflection: () => astReflection,
+    AstReflection: () => astReflection
   });
   const advscript = inject(
     createDefaultModule({ shared }),
@@ -136,7 +138,7 @@ export function createBrowerServices<T extends DeepPartial<LangiumSharedServices
   const shared = inject(createDefaultSharedModule(context), {
     ...AdvScriptGeneratedSharedModule,
     AstReflection: () => astReflection,
-    ...module,
+    ...module
   });
   const advscript: AdvScriptServices = inject(
     createDefaultModule({ shared }),
@@ -145,4 +147,35 @@ export function createBrowerServices<T extends DeepPartial<LangiumSharedServices
   );
   shared.ServiceRegistry.register(advscript);
   return { shared, advscript };
+}
+
+export * as ast from "./ast";
+
+import { FileSystemNode, FileSystemProvider } from "langium/lib/workspace/file-system-provider";
+
+export class BrowerFileReader implements FileSystemProvider {
+  static store = new Map<string, string>();
+
+  static writeStore(path: string, content: string) {
+    this.store.set(URI.parse(path).path, content);
+  }
+
+  static getOrCreateDocument<Node extends AstNode>(share: LangiumSharedServices, path: string) {
+    return share.workspace.LangiumDocuments.getOrCreateDocument(
+      URI.file(path)
+    ) as LangiumDocument<Node>;
+  }
+
+  async readFile(uri: URI): Promise<string> {
+    return BrowerFileReader.store.get(uri.path);
+  }
+
+  readFileSync(uri: URI): string {
+    // console.log("readFileSync", uri)
+    return BrowerFileReader.store.get(uri.path);
+  }
+
+  async readDirectory(folderPath: URI): Promise<FileSystemNode[]> {
+    return [];
+  }
 }

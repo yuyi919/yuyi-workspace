@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/member-ordering */
+/* eslint-disable @typescript-eslint/naming-convention */
 import {
   createToken,
   createTokenInstance,
@@ -7,6 +9,7 @@ import {
   TokenType,
   TokenPattern,
   IMultiModeLexerDefinition,
+  EmbeddedActionsParser
 } from "chevrotain";
 import { Grammar } from "langium";
 import { DefaultTokenBuilder, TokenBuilder } from "langium/lib/parser/token-builder";
@@ -15,10 +18,16 @@ import { partialRight, last, isEmpty, findLastIndex } from "lodash";
 import * as ast from "./ast";
 
 export class CustomTokenBuilder extends DefaultTokenBuilder implements TokenBuilder {
-  buildTokens(grammar: Grammar): TokenType[] {
-    const tokens = super.buildTokens(grammar);
-    console.log("CustomTokenBuilder", grammar);
-    return tokens
+  tokensRecords: Record<string, TokenType> = {};
+  tokenArray: TokenType[];
+  buildTokens(
+    grammar: Grammar,
+    options?: {
+      caseInsensitive?: boolean;
+    }
+  ) {
+    const tokens = super.buildTokens(grammar, options) as TokenType[];
+    const tokenArray = tokens
       .map((token) => {
         if (token.name === ast.EOL) {
           return this.wrapEOL(token);
@@ -28,9 +37,9 @@ export class CustomTokenBuilder extends DefaultTokenBuilder implements TokenBuil
           const PATTERN = token.PATTERN as RegExp;
           const pattern =
             // eslint-disable-next-line no-control-regex
-            / +|(([^\x00-\xff]|\w|\W)(([^\x00-\xff]|\w|(?!\[|\]|\\|\{|\}|=|\(|\?|\)|\s|,|:|'|"|\|)\W))*)/;
+            / +|(([^\x00-\xff]|\w|\W)(([^\x00-\xff]|\w|(?!\[|\]|\\|\{|\}|=|\(|\?|\)|\s|;|,|:|'|"|\|)\W))*)/;
           return Object.assign<TokenType, Partial<TokenType>>(token, {
-            PATTERN(text, offset, tokens) {
+            PATTERN: function TESTTTT(text, offset, tokens) {
               const last = tokens[tokens.length - 1];
               const result = new RegExp(pattern.source, "y").exec(text.slice(offset));
               // if (result && last.tokenType.name === ast.OTHER) {
@@ -45,7 +54,7 @@ export class CustomTokenBuilder extends DefaultTokenBuilder implements TokenBuil
               //   payload: {}
               // })
             },
-            LINE_BREAKS: false,
+            LINE_BREAKS: false
           });
         } else {
           if (token.LONGER_ALT instanceof Array) {
@@ -69,6 +78,33 @@ export class CustomTokenBuilder extends DefaultTokenBuilder implements TokenBuil
         }
         return 0;
       });
+    this.tokenArray = tokenArray;
+    console.log("CustomTokenBuilder", grammar);
+    const { tokensRecords } = this;
+    tokenArray.forEach((e) => {
+      // tokens.set(e.name, e);
+      tokensRecords[e.name] = e;
+    });
+    const multiLexer = this.createMultiModeLexerDefinition(
+      new Map(Object.entries(tokensRecords)),
+      tokenArray
+    );
+    console.log(multiLexer);
+    const mult = multiLexer;
+    try {
+      //   console.log(
+      //     new EmbeddedActionsParser(mult, {
+      //       recoveryEnabled: true,
+      //       nodeLocationTracking: "full",
+      //       skipValidations: true,
+      //       maxLookahead: 5
+      //     }),
+      //     mult
+      //   );
+    } catch (error) {
+      console.error(mult);
+    }
+    return multiLexer;
   }
   indentStack = [0];
   newLines: IToken[] = [];
@@ -91,7 +127,7 @@ export class CustomTokenBuilder extends DefaultTokenBuilder implements TokenBuil
     }
     return !!reg.exec(text, offset, tokens, groups);
   }
-  
+
   execAt(
     reg: TokenPattern,
     text: string,
@@ -195,7 +231,7 @@ export class CustomTokenBuilder extends DefaultTokenBuilder implements TokenBuil
     pattern: partialRight(this.matchIndentBase, ast.Indent),
     // custom token patterns should explicitly specify the line_breaks option
     line_breaks: false,
-    start_chars_hint: ["|", " "],
+    start_chars_hint: ["|", " "]
   });
   // customize matchIndentBase to create separate functions of Indent and Outdent.
   Outdent = createToken({
@@ -203,7 +239,7 @@ export class CustomTokenBuilder extends DefaultTokenBuilder implements TokenBuil
     pattern: partialRight(this.matchIndentBase, ast.Outdent),
     // custom token patterns should explicitly specify the line_breaks option
     line_breaks: false,
-    start_chars_hint: ["|", " "],
+    start_chars_hint: ["|", " "]
   });
   EOL: TokenType;
   private matchLogicEnd(
@@ -261,12 +297,12 @@ export class CustomTokenBuilder extends DefaultTokenBuilder implements TokenBuil
           console.log("HiddenToken", matched, text.split(/\r?\n/)[payload.lastToken?.endLine]);
         return matched
           ? Object.assign(matched, {
-              payload,
+              payload
             })
           : matched;
       },
       GROUP: "hidden",
-      START_CHARS_HINT: ["|", " "],
+      START_CHARS_HINT: ["|", " "]
     }));
   }
   matchHiddenIndent(
@@ -348,7 +384,7 @@ export class CustomTokenBuilder extends DefaultTokenBuilder implements TokenBuil
               currIndentLevel,
               prevIndentLevel,
               lastToken,
-              matchIndentLevel,
+              matchIndentLevel
             };
             // }
           } else if (prevIndentLevel > 0) {
@@ -358,7 +394,7 @@ export class CustomTokenBuilder extends DefaultTokenBuilder implements TokenBuil
               currIndentLevel,
               prevIndentLevel,
               lastToken,
-              matchIndentLevel,
+              matchIndentLevel
             };
           }
         } else if (currIndentLevel < prevIndentLevel) {
@@ -462,7 +498,7 @@ export class CustomTokenBuilder extends DefaultTokenBuilder implements TokenBuil
       prevIndentLevel,
       matchIndentLevel,
       match,
-      lastToken,
+      lastToken
     };
   }
 
@@ -518,88 +554,96 @@ export class CustomTokenBuilder extends DefaultTokenBuilder implements TokenBuil
     let preLoader: ReturnType<CustomTokenBuilder["returnTokens"]>;
     return {
       modes: {
-        process: cloneTokens(tokens, ({ cloneToken }) => [
-          createToken({
-            name: "DocumentHeader",
-            pattern: (text, offset, tokens, groups) => {
-              if (tokens.length === 0) {
-                const result = this.execAt(/^(?!\s*---\r?\n)/y, text, offset);
-                if (result && this.testAt(/---\r?\n/, text, result[0].length, tokens, groups))
-                  return result;
-              }
-              return null;
-            },
-            push_mode: "yaml",
-            group: "hidden",
-            line_breaks: false,
-          }),
-          ...((preLoader = this.returnTokens({ cloneToken })), preLoader),
-          cloneToken("---", {
-            PUSH_MODE: "yaml",
-          }),
-          cloneToken(ast.INLINE_COMMENT),
-          cloneToken(ast.ML_COMMENT),
-          cloneToken(ast.SL_COMMENT),
-          cloneToken("@", {
-            PUSH_MODE: "character",
-          }),
-          cloneToken("{{", {
-            PUSH_MODE: "template",
-          }),
-          cloneToken("|let", {
-            PUSH_MODE: "pipe",
-          }),
-          cloneToken("|if", {
-            PUSH_MODE: "pipe",
-          }),
-          cloneToken("|elseif", {
-            PUSH_MODE: "pipe",
-          }),
-          cloneToken("|else", {
-            PUSH_MODE: "pipe",
-          }),
-          cloneToken("|end"),
-          cloneToken("|", {
-            PUSH_MODE: "pipe",
-          }),
-          // cloneToken("[@", {
-          //   PUSH_MODE: "macro",
-          // }),
-          cloneToken("[", {
-            PUSH_MODE: "macro",
-          }),
-          cloneToken(ast.ESC),
-          cloneToken(ast.OTHER),
-        ]),
-        yaml: cloneTokens(tokens, ({ cloneToken }) => [
-          cloneToken(ast.EOL),
-          cloneToken(ast.WS),
-          cloneToken(ast.ML_COMMENT),
-          cloneToken(ast.SL_COMMENT),
-          cloneToken("Characters"),
-          cloneToken("Macros"),
-          cloneToken("true"),
-          cloneToken("false"),
-          cloneToken("---", {
-            POP_MODE: true,
-          }),
-          cloneToken("-"),
-          cloneToken(","),
-          cloneToken("(", {
-            LONGER_ALT: [],
-          }),
-          cloneToken(")"),
-          cloneToken(":"),
-          cloneToken("=", {
-            PUSH_MODE: "inlineExpr",
-            LONGER_ALT: [],
-          }),
-          cloneToken(ast.ESC),
-          cloneToken(ast.OTHER, { name: ast.ID }),
-        ]),
+        process: cloneTokens(
+          tokens,
+          ({ cloneToken }) => [
+            createToken({
+              name: "DocumentHeader",
+              pattern: (text, offset, tokens, groups) => {
+                if (tokens.length === 0) {
+                  const result = this.execAt(/^(?!\s*---\r?\n)/y, text, offset);
+                  if (result && this.testAt(/---\r?\n/, text, result[0].length, tokens, groups))
+                    return result;
+                }
+                return null;
+              },
+              push_mode: "yaml",
+              group: "hidden",
+              line_breaks: false
+            }),
+            ...((preLoader = this.returnTokens({ cloneToken })), preLoader),
+            cloneToken("---", {
+              PUSH_MODE: "yaml"
+            }),
+            cloneToken(ast.INLINE_COMMENT),
+            cloneToken(ast.ML_COMMENT),
+            cloneToken(ast.SL_COMMENT),
+            cloneToken("@", {
+              PUSH_MODE: "character"
+            }),
+            cloneToken("{{", {
+              PUSH_MODE: "template"
+            }),
+            cloneToken("|let", {
+              PUSH_MODE: "pipe"
+            }),
+            cloneToken("|if", {
+              PUSH_MODE: "pipe"
+            }),
+            cloneToken("|elseif", {
+              PUSH_MODE: "pipe"
+            }),
+            cloneToken("|else", {
+              PUSH_MODE: "pipe"
+            }),
+            cloneToken("|end"),
+            cloneToken("|", {
+              PUSH_MODE: "pipe"
+            }),
+            // cloneToken("[@", {
+            //   PUSH_MODE: "macro",
+            // }),
+            cloneToken("[", {
+              PUSH_MODE: "macro"
+            }),
+            cloneToken(ast.ESC),
+            cloneToken(ast.OTHER)
+          ],
+          "process"
+        ),
+        yaml: cloneTokens(
+          tokens,
+          ({ cloneToken }) => [
+            cloneToken(ast.EOL),
+            cloneToken(ast.WS),
+            cloneToken(ast.ML_COMMENT),
+            cloneToken(ast.SL_COMMENT),
+            cloneToken("Characters"),
+            cloneToken("Macros"),
+            cloneToken("true"),
+            cloneToken("false"),
+            cloneToken("---", {
+              POP_MODE: true
+            }),
+            cloneToken("-"),
+            cloneToken(","),
+            cloneToken("(", {
+              LONGER_ALT: []
+            }),
+            cloneToken(")"),
+            cloneToken(":"),
+            cloneToken("=", {
+              PUSH_MODE: "inlineExpr",
+              LONGER_ALT: []
+            }),
+            cloneToken(ast.ESC),
+            cloneToken(ast.OTHER, { name: ast.ID })
+          ],
+          "yaml"
+        ),
         character: cloneTokens(tokens, ({ cloneToken }) => [
           cloneToken(ast.EOL, {
-            POP_MODE: true,
+            POP_MODE: true
           }),
           cloneToken(ast.WS),
           cloneToken(ast.ML_COMMENT),
@@ -609,11 +653,11 @@ export class CustomTokenBuilder extends DefaultTokenBuilder implements TokenBuil
           cloneToken(")"),
           cloneToken("[", {
             PUSH_MODE: "macro",
-            LONGER_ALT: [],
+            LONGER_ALT: []
           }),
-          cloneToken(ast.ID),
-          cloneToken(ast.ESC),
-          cloneToken(ast.OTHER),
+          cloneToken(ast.OTHER, { name: ast.ID }),
+          cloneToken(ast.ESC)
+          // cloneToken(ast.OTHER)
         ]),
         template: cloneTokens(tokens, ({ cloneToken }) =>
           buildTokens.map((token) => {
@@ -668,7 +712,7 @@ export class CustomTokenBuilder extends DefaultTokenBuilder implements TokenBuil
                     }
                   }
                   return token;
-                },
+                }
               }));
             }
             if (token.name === ")") {
@@ -742,9 +786,9 @@ export class CustomTokenBuilder extends DefaultTokenBuilder implements TokenBuil
             }
             return cloneToken(token);
           })
-        ),
+        )
       },
-      defaultMode: "process",
+      defaultMode: "process"
     };
   }
 
@@ -767,7 +811,7 @@ export class CustomTokenBuilder extends DefaultTokenBuilder implements TokenBuil
       },
       // 换行符必须设置为true
       LINE_BREAKS: true,
-      START_CHARS_HINT: ["\r", "\n"],
+      START_CHARS_HINT: ["\r", "\n"]
     });
   }
 }

@@ -15,7 +15,7 @@ enum BinaryExpressionKind {
   Realtion,
   Addition,
   Multiplication,
-  Automic,
+  Automic
 }
 export interface BinaryExpression<Kind extends ExprKinds = ExprKinds> extends BaseExpression {
   kind: ExpressionKind.Binary;
@@ -29,38 +29,38 @@ export interface BinaryExpression<Kind extends ExprKinds = ExprKinds> extends Ba
 }
 
 export enum OrNullOpertaor {
-  "??",
+  "??"
 }
 export enum LogicOpertaor {
   "||",
-  "&&",
+  "&&"
 }
 export enum EqualOpertaor {
   "!=",
-  "==",
+  "=="
 }
 export enum RealtionOpertaor {
   ">=",
   "<=",
   ">",
-  "<",
+  "<"
 }
 export enum AdditionOpertaor {
   "+",
-  "-",
+  "-"
 }
 export enum MultiplicationOpertaor {
   "%",
   "/",
-  "*",
+  "*"
 }
 export enum AutomicOpertaor {
   "^",
-  "!",
+  "!"
 }
 export enum IncrementOpertaor {
   "++",
-  "--",
+  "--"
 }
 export type OperatorKeyword =
   | keyof typeof OrNullOpertaor
@@ -99,8 +99,8 @@ export function createBinaryExpression(
         kind,
         left,
         operator,
-        right,
-      },
+        right
+      }
     } as BinaryExpression,
     source
   );
@@ -120,16 +120,16 @@ export function createIncrementExpression(
       value: before
         ? {
             kind: BinaryExpressionKind.Automic,
-            left: name,
+            left: null,
             operator,
-            right: null,
+            right: name
           }
         : {
             kind: BinaryExpressionKind.Automic,
-            left: null,
+            left: name,
             operator,
-            right: name,
-          },
+            right: null
+          }
     } as BinaryExpression,
     source
   );

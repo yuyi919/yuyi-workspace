@@ -3,23 +3,23 @@ export * as TinyTrie from "./tiny-trie";
 export * from "./hexUtil";
 import { generateNode } from "../cli/generateNode";
 import { processGeneratorNode } from "langium";
-console.log(
-  processGeneratorNode(
-    generateNode(
-      `
-machine_name: "Traffic light";
+// console.log(
+//   processGeneratorNode(
+//     generateNode(
+//       `
+// machine_name: "Traffic light";
 
-Closed 'On' => Red;
-Red 'Next' => Green 'Next' => Yellow 'Next' => Red;
+// Closed 'On' => Red;
+// Red 'Next' => Green 'Next' => Yellow 'Next' => Red;
 
-[Red Yellow Green] 'Off' ~> Closed;
-`,
-      "app.ts",
-      {}
-    ).fileNode,
-    2
-  )
-);
+// [Red Yellow Green] 'Off' ~> Closed;
+// `,
+//       "app.ts",
+//       {}
+//     ).fileNode,
+//     2
+//   )
+// );
 // export enum LightState {
 //   Off,
 //   Red,
@@ -39,4 +39,4 @@ Red 'Next' => Green 'Next' => Yellow 'Next' => Red;
 
 //   [${LightState.Red} ${LightState.Yellow} ${LightState.Green}] '${Action.Off}' ~> ${LightState.Off};
 // `;
-export * from "./fsm"
+export * from "./fsm";

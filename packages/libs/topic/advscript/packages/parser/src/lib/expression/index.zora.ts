@@ -132,12 +132,11 @@ describe("表达式解析", ({ test }) => {
     expect.calc("9*-9", -81, "计算表达式", test);
     expect.calc("4%2", 0, "计算表达式", test);
     expect.calc("11%2", 1, "计算表达式", test);
-    expect.calc("-9*9", -81, "计算表达式", test);
     expect.calc("1 - 2 - 3", -4, "计算表达式", test);
-    expect.calc("1 - 2 + 3", 2, "计算表达式", test);
     expect.calc("1 - (2 + 3)", -4, "计算表达式", test);
+    expect.calc("1 - 2 + 3", 2, "计算表达式", test);
     expect.calc("2 ^ 3", 8, "计算表达式", test);
-    expect.calc("0 ^ -0.5", Math.pow(0, -0.5), "计算表达式", test);
+    expect.calc("2 ^ -0.5", Math.pow(2, -0.5), "计算表达式", test);
     expect.eval("null + null ?? 2", "计算表达式", test);
     expect.eval("null + (null ?? 2)", "计算表达式", test);
     expect.eval("0 / (null ?? 1)", "计算表达式", test);

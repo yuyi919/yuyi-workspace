@@ -1,10 +1,11 @@
+/* eslint-disable @typescript-eslint/no-namespace */
 import {
   AstNode,
   DiagnosticInfo,
   getDocument,
   ValidationAcceptor,
   ValidationCheck,
-  ValidationRegistry,
+  ValidationRegistry
 } from "langium";
 import { template, camelCase } from "lodash";
 import { DiagnosticRelatedInformation, DiagnosticTag } from "vscode-languageserver-protocol";
@@ -42,7 +43,7 @@ export class AdvscriptValidationRegistry extends ValidationRegistry {
             if (ast.isVariable(node.$container) && node.$container === ref) {
               accept("error", "变量初始值不能引用自身", {
                 node: node,
-                property: "ref",
+                property: "ref"
               });
             }
             const target = ref.$cstNode.range.start,
@@ -53,12 +54,12 @@ export class AdvscriptValidationRegistry extends ValidationRegistry {
             ) {
               accept("error", "不能使用未定义的参数", {
                 node: node,
-                property: "ref",
+                property: "ref"
               });
             }
           }
-        },
-      ],
+        }
+      ]
     };
     this.register(checks, validator);
   }
@@ -87,7 +88,7 @@ export class AdvscriptValidator {
     const ruleMap = new Map<string, true>();
     const elements = [
       ...(grammar.elements || []),
-      ...(ast.isMacro(grammar) || ast.isDialog(grammar) ? grammar.modifiers?.elements || [] : []),
+      ...(ast.isMacro(grammar) || ast.isDialog(grammar) ? grammar.modifiers?.elements || [] : [])
     ];
     if (!elements?.length) return;
     const tmpl = template("A ${$type}'s name has to be unique.");
@@ -109,15 +110,15 @@ export class AdvscriptValidator {
             info: {
               node: elm,
               range,
-              tags: [DiagnosticTag.Unnecessary],
-            },
+              tags: [DiagnosticTag.Unnecessary]
+            }
           });
           relatedInformation.push({
             location: {
               range,
-              uri: getDocument(elm).uri.toString(),
+              uri: getDocument(elm).uri.toString()
             },
-            message,
+            message
           });
         } else {
           ruleMap.set(lowerCaseName, true);
@@ -127,7 +128,7 @@ export class AdvscriptValidator {
     for (const { severity, message, info } of messages) {
       accept(severity, message, {
         ...info,
-        relatedInformation: relatedInformation.filter((o) => o.location.range !== info.range),
+        relatedInformation: relatedInformation.filter((o) => o.location.range !== info.range)
       });
     }
   };
@@ -138,7 +139,7 @@ export class AdvscriptValidator {
         accept("warning", target.$type + " name should start with [a-z].", {
           node: target,
           property: "name",
-          code: IssueCodes.identifierNameLowercase,
+          code: IssueCodes.identifierNameLowercase
         });
       }
     }
@@ -150,7 +151,7 @@ export class AdvscriptValidator {
         accept("warning", target.$type + " name should start with [A-Z].", {
           node: target.name,
           property: "text",
-          code: IssueCodes.identifierNameUppercase,
+          code: IssueCodes.identifierNameUppercase
         });
       }
     }

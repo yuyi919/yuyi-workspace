@@ -1,3 +1,4 @@
+/* eslint-disable dot-notation */
 /* eslint-disable prefer-const */
 import {
   CstNode,
@@ -6,7 +7,7 @@ import {
   isRuleCall,
   LangiumDocument,
   MaybePromise,
-  RuleCall,
+  RuleCall
 } from "langium";
 import type * as Lsp from "vscode-languageserver-protocol";
 import { AdvScriptServices } from "../advscript-module";
@@ -29,15 +30,15 @@ enum TTokenTypes {
   "constant.numeric",
   "string",
   "markup.raw",
-  "token",
+  "token"
 }
 enum TTokenModifiers {
-  "ts",
+  "ts"
 }
 // const a = true
 const TOKEN_LEGEND = Object.freeze({
   tokenTypes: TTokenTypes,
-  tokenModifiers: _utils.enum2Array(TTokenModifiers),
+  tokenModifiers: _utils.enum2Array(TTokenModifiers)
 });
 
 export type TokenTypes = keyof typeof TTokenTypes;
@@ -50,14 +51,32 @@ export type TokenModifiers = keyof typeof TTokenModifiers;
 export class DocumentSemanticProvider {
   tokenLegend = TOKEN_LEGEND;
 
+  kindLegend = {
+    [ast.KeyedDeclareKind]: TTokenTypes["keyword.control"],
+    [ast.MacrosDeclareKind]: TTokenTypes["keyword.control"],
+    [ast.CharactersDeclareKind]: TTokenTypes["keyword.control"],
+    [ast.Param]: TTokenTypes["entity.name.tag"],
+    [ast.Modifier]: TTokenTypes["entity.name.type"],
+    [ast.BooleanLiteral]: TTokenTypes["constant.boolean"],
+    [ast.NumberLiteral]: TTokenTypes["constant.numeric"],
+    [ast.StringLiteral]: TTokenTypes["string"],
+    [ast.TextExpression]: TTokenTypes["markup.raw"],
+    [ast.PlainTextExpression]: TTokenTypes["markup.raw"],
+    [ast.Character]: TTokenTypes["entity.name.type"],
+    [ast.Macro]: TTokenTypes["entity.name.function"],
+    [ast.Modifier]: TTokenTypes["constant.property"], // TTokenTypes["storage.type.property"],
+    [ast.MacroDeclare]: TTokenTypes["entity.name.function"],
+    [ast.NameIdentifier]: TTokenTypes["entity.name.type"],
+    [ast.Identifier]: TTokenTypes["entity.name.function"]
+  };
+  constructor(protected readonly services: AdvScriptServices) {}
+
   protected getTokenType(key: TokenTypes) {
     return TTokenTypes[key];
   }
   protected getModifierType(key: TokenModifiers) {
     return TTokenModifiers[key];
   }
-
-  constructor(protected readonly services: AdvScriptServices) {}
 
   getDocumentSemanticTokens(
     document: LangiumDocument<ast.Document>,
@@ -167,7 +186,7 @@ export class DocumentSemanticProvider {
       if (current) {
         const {
           range: { start },
-          length,
+          length
         } = cst;
         const { line, character } = start;
         // console.log({ line, character }, prevPos);
@@ -178,7 +197,7 @@ export class DocumentSemanticProvider {
         ) as Exclude<typeof match, number>;
         const {
           type: tokenType = TTokenTypes["token"],
-          modifier: tokenModifier = TTokenModifiers["ts"],
+          modifier: tokenModifier = TTokenModifiers["ts"]
         } = computed;
         // chunks.push([
         //   currentLine,
@@ -214,7 +233,7 @@ export class DocumentSemanticProvider {
     // );
     // console.log([...flatten(value.$cstNode)]);
     return {
-      data,
+      data
       // : [
       //   [0, 0, 10, 2, -1],
       //   [1, 8, 3, 19, -1],
@@ -223,25 +242,6 @@ export class DocumentSemanticProvider {
       // ].flat(1),
     };
   }
-
-  kindLegend = {
-    [ast.KeyedDeclareKind]: TTokenTypes["keyword.control"],
-    [ast.MacrosDeclareKind]: TTokenTypes["keyword.control"],
-    [ast.CharactersDeclareKind]: TTokenTypes["keyword.control"],
-    [ast.Param]: TTokenTypes["entity.name.tag"],
-    [ast.Modifier]: TTokenTypes["entity.name.type"],
-    [ast.BooleanLiteral]: TTokenTypes["constant.boolean"],
-    [ast.NumberLiteral]: TTokenTypes["constant.numeric"],
-    [ast.StringLiteral]: TTokenTypes["string"],
-    [ast.TextExpression]: TTokenTypes["markup.raw"],
-    [ast.PlainTextExpression]: TTokenTypes["markup.raw"],
-    [ast.Character]: TTokenTypes["entity.name.type"],
-    [ast.Macro]: TTokenTypes["entity.name.function"],
-    [ast.Modifier]: TTokenTypes["constant.property"], // TTokenTypes["storage.type.property"],
-    [ast.MacroDeclare]: TTokenTypes["entity.name.function"],
-    [ast.NameIdentifier]: TTokenTypes["entity.name.type"],
-    [ast.Identifier]: TTokenTypes["entity.name.function"],
-  };
 }
 
 // export function streamContents(node: AstNode): Stream<AstNodeContent> {
