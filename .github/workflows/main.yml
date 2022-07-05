@@ -14,7 +14,7 @@ jobs:
     steps:
       - name: Checkout Code
         uses: actions/checkout@v2
-      - name: Subtree ${{ secrets.SHARED_GITHUB_DEPLOY_KEY }}
+      - name: Subtree deploy
         uses: nxtlvlsoftware/git-subtree-action@1.1
         with:
           repo: "yuyi919/shared"
