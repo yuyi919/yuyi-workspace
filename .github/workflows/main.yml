@@ -15,11 +15,12 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v2
       - name: Subtree ${{ secrets.SHARED_GITHUB_DEPLOY_KEY }}
-        uses: xedi/action-subtree-sync@1.0.0
+        uses: nxtlvlsoftware/git-subtree-action@1.1
         with:
-          subtree: "yuyi919/shared-packages"
-          subtree_deploy_key: ${{ secrets.SHARED_GITHUB_DEPLOY_KEY }}
-          split_prefix: "packages/libs/shared"
+          repo: "yuyi919/shared-packages"
+          path: "packages/libs/shared"
+          deploy_key: ${{ secrets.SHARED_GITHUB_DEPLOY_KEY }}
+          force: true # will force push to the downstream repository
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v2
         with:
